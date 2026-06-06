@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.init_db import log_chat
@@ -11,11 +11,11 @@ router = APIRouter(prefix="/chat", tags=["Chat"])
 
 
 @router.post("", response_model=ChatResponse)
-def chat(request: ChatRequest, db: Session = Depends(get_db)):
-    intent_result = classify_intent(request.message)
-    result = generate_response(request.message, intent_result, db)
+async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+    intent_result = classify_intent(request.message)  # sync → giữ nguyên nếu không dùng db
+    result = await generate_response(request.message, intent_result, db)  # cần sửa thành async nếu nó query db
 
-    log_chat(
+    await log_chat(  # cần sửa thành async nếu nó query db
         db=db,
         user_id=request.user_id,
         user_name=request.user_name,

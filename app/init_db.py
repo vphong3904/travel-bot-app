@@ -1,5 +1,6 @@
 import bcrypt
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from app.database import Base, SessionLocal, engine
 from app.models import ChatLog, Destination, Hotel, KnowledgeEntry, PopularQuery, Ticket, Tour, User
@@ -16,6 +17,7 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 
 def init_db():
+    """Sync — chỉ chạy 1 lần lúc startup, dùng SessionLocal trực tiếp."""
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
@@ -51,13 +53,20 @@ def init_db():
             }
             for e in kb_entries
         ]
-        rag = get_rag_service()
-        rag.initialize(docs)
+        get_rag_service().initialize(docs)
     finally:
         db.close()
 
 
-def log_chat(db: Session, user_id: int, user_name: str, message: str, response: str, intent: str, destination: str = ""):
+async def log_chat(
+    db: AsyncSession,
+    user_id: int,
+    user_name: str,
+    message: str,
+    response: str,
+    intent: str,
+    destination: str = "",
+):
     db.add(ChatLog(
         user_id=user_id,
         user_name=user_name,
@@ -67,9 +76,13 @@ def log_chat(db: Session, user_id: int, user_name: str, message: str, response: 
         destination=destination,
     ))
 
-    existing = db.query(PopularQuery).filter(PopularQuery.query_text == message[:300]).first()
+    result = await db.execute(
+        select(PopularQuery).where(PopularQuery.query_text == message[:300])
+    )
+    existing = result.scalar_one_or_none()
     if existing:
         existing.count += 1
     else:
         db.add(PopularQuery(query_text=message[:300], intent=intent))
-    db.commit()
+
+    await db.commit()

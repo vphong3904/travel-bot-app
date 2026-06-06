@@ -1,7 +1,8 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Query, HTTPException
+from sqlalchemy import select, or_
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import Destination, Hotel, Ticket, Tour
@@ -11,27 +12,45 @@ router = APIRouter(prefix="/destinations", tags=["Destinations"])
 
 
 @router.get("", response_model=list[DestinationResponse])
-def list_destinations(
+async def list_destinations(
     tag: Optional[str] = None,
     search: Optional[str] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
-    query = db.query(Destination)
+    stmt = select(Destination)
+
     if tag:
-        query = query.filter(Destination.tags.ilike(f"%{tag}%"))
+        stmt = stmt.where(Destination.tags.ilike(f"%{tag}%"))
+
     if search:
-        query = query.filter(
-            Destination.name.ilike(f"%{search}%") | Destination.description.ilike(f"%{search}%")
+        stmt = stmt.where(
+            or_(
+                Destination.name.ilike(f"%{search}%"),
+                Destination.description.ilike(f"%{search}%"),
+            )
         )
-    return query.all()
+
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 @router.get("/{dest_id}", response_model=DestinationResponse)
-def get_destination(dest_id: int, db: Session = Depends(get_db)):
-    dest = db.query(Destination).filter(Destination.id == dest_id).first()
+async def get_destination(
+    dest_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Destination).where(Destination.id == dest_id)
+    )
+
+    dest = result.scalar_one_or_none()
+
     if not dest:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Không tìm thấy địa điểm")
+        raise HTTPException(
+            status_code=404,
+            detail="Không tìm thấy địa điểm",
+        )
+
     return dest
 
 
@@ -39,56 +58,121 @@ services_router = APIRouter(prefix="/services", tags=["Services"])
 
 
 @services_router.get("/hotels", response_model=list[HotelResponse])
-def list_hotels(destination: Optional[str] = None, db: Session = Depends(get_db)):
-    query = db.query(Hotel)
+async def list_hotels(
+    destination: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(Hotel)
+
     if destination:
-        query = query.filter(Hotel.destination.ilike(f"%{destination}%"))
-    return query.all()
+        stmt = stmt.where(
+            Hotel.destination.ilike(f"%{destination}%")
+        )
+
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 @services_router.get("/tours", response_model=list[TourResponse])
-def list_tours(destination: Optional[str] = None, db: Session = Depends(get_db)):
-    query = db.query(Tour)
+async def list_tours(
+    destination: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(Tour)
+
     if destination:
-        query = query.filter(Tour.destination.ilike(f"%{destination}%"))
-    return query.all()
+        stmt = stmt.where(
+            Tour.destination.ilike(f"%{destination}%")
+        )
+
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 @services_router.get("/tickets", response_model=list[TicketResponse])
-def list_tickets(destination: Optional[str] = None, db: Session = Depends(get_db)):
-    query = db.query(Ticket)
+async def list_tickets(
+    destination: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(Ticket)
+
     if destination:
-        query = query.filter(Ticket.destination.ilike(f"%{destination}%"))
-    return query.all()
+        stmt = stmt.where(
+            Ticket.destination.ilike(f"%{destination}%")
+        )
+
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
 @services_router.get("/search")
-def search_services(
+async def search_services(
     q: str = Query(""),
     type: Optional[str] = None,
     destination: Optional[str] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
-    results = {"hotels": [], "tours": [], "tickets": []}
+    results = {
+        "hotels": [],
+        "tours": [],
+        "tickets": [],
+    }
+
     if type in (None, "hotel"):
-        hq = db.query(Hotel)
+        stmt = select(Hotel)
+
         if destination:
-            hq = hq.filter(Hotel.destination.ilike(f"%{destination}%"))
+            stmt = stmt.where(
+                Hotel.destination.ilike(f"%{destination}%")
+            )
+
         if q:
-            hq = hq.filter(Hotel.name.ilike(f"%{q}%"))
-        results["hotels"] = [HotelResponse.model_validate(h) for h in hq.limit(10).all()]
+            stmt = stmt.where(
+                Hotel.name.ilike(f"%{q}%")
+            )
+
+        result = await db.execute(stmt.limit(10))
+        results["hotels"] = [
+            HotelResponse.model_validate(x)
+            for x in result.scalars().all()
+        ]
+
     if type in (None, "tour"):
-        tq = db.query(Tour)
+        stmt = select(Tour)
+
         if destination:
-            tq = tq.filter(Tour.destination.ilike(f"%{destination}%"))
+            stmt = stmt.where(
+                Tour.destination.ilike(f"%{destination}%")
+            )
+
         if q:
-            tq = tq.filter(Tour.name.ilike(f"%{q}%"))
-        results["tours"] = [TourResponse.model_validate(t) for t in tq.limit(10).all()]
+            stmt = stmt.where(
+                Tour.name.ilike(f"%{q}%")
+            )
+
+        result = await db.execute(stmt.limit(10))
+        results["tours"] = [
+            TourResponse.model_validate(x)
+            for x in result.scalars().all()
+        ]
+
     if type in (None, "ticket"):
-        tkq = db.query(Ticket)
+        stmt = select(Ticket)
+
         if destination:
-            tkq = tkq.filter(Ticket.destination.ilike(f"%{destination}%"))
+            stmt = stmt.where(
+                Ticket.destination.ilike(f"%{destination}%")
+            )
+
         if q:
-            tkq = tkq.filter(Ticket.name.ilike(f"%{q}%"))
-        results["tickets"] = [TicketResponse.model_validate(t) for t in tkq.limit(10).all()]
+            stmt = stmt.where(
+                Ticket.name.ilike(f"%{q}%")
+            )
+
+        result = await db.execute(stmt.limit(10))
+        results["tickets"] = [
+            TicketResponse.model_validate(x)
+            for x in result.scalars().all()
+        ]
+
     return results

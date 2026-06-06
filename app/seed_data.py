@@ -12,7 +12,7 @@ DESTINATIONS = [
         "budget_low": 2000000,
         "budget_high": 6000000,
         "tags": "núi,nghỉ dưỡng,romantic,khám phá",
-        "image_url": "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
     },
     {
         "name": "Phú Quốc",
@@ -25,7 +25,7 @@ DESTINATIONS = [
         "budget_low": 4000000,
         "budget_high": 15000000,
         "tags": "biển,resort,gia đình,cặp đôi",
-        "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1559592413-7cec025d7d8e?w=800",
     },
     {
         "name": "Hà Giang",
@@ -38,7 +38,7 @@ DESTINATIONS = [
         "budget_low": 3000000,
         "budget_high": 8000000,
         "tags": "núi,khám phá,solo,phiêu lưu",
-        "image_url": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
     },
     {
         "name": "Hội An",
@@ -51,7 +51,7 @@ DESTINATIONS = [
         "budget_low": 2500000,
         "budget_high": 7000000,
         "tags": "văn hóa,cặp đôi,ẩm thực,khám phá",
-        "image_url": "https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1559592413-7cec025d7d8e?w=800",
     },
     {
         "name": "Nha Trang",
@@ -64,7 +64,7 @@ DESTINATIONS = [
         "budget_low": 3000000,
         "budget_high": 10000000,
         "tags": "biển,gia đình,resort",
-        "image_url": "https://images.unsplash.com/photo-1559592413-7cec025d7d8e?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1559592413-7cec025d7d8e?w=800",
     },
     {
         "name": "Sa Pa",
@@ -77,7 +77,7 @@ DESTINATIONS = [
         "budget_low": 2500000,
         "budget_high": 7000000,
         "tags": "núi,khám phá,solo,phiêu lưu",
-        "image_url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+        "image_url": "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
     },
 ]
 

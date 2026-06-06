@@ -1,45 +1,50 @@
-# Python cache
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyo
 
-# Virtual environment
+# Virtual Environment
 venv/
-.env/
 .venv/
 
-# Environment variables
+# Environment Variables
 .env
-.env.*
+.env.local
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
 
 # Logs
 *.log
 
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Testing
+# Cache
 .pytest_cache/
-.coverage
-htmlcov/
+.mypy_cache/
+.ruff_cache/
+.cache/
 
 # Build
 build/
 dist/
 *.egg-info/
 
-# Mypy
-.mypy_cache/
+# HuggingFace Models
+models/
+hf_cache/
+huggingface/
 
-# Ruff
-.ruff_cache/
+# FAISS / Embeddings
+vector_store/
+embeddings/
+*.faiss
+
+# Temporary files
+temp/
+tmp/
+
+# OS
+.DS_Store
+Thumbs.db
