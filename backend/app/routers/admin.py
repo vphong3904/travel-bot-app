@@ -2,18 +2,14 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import ChatLog, KnowledgeEntry, PopularQuery, User
 from app.schemas import (
-    ChatLogResponse,
-    KBEntryCreate,
-    KBEntryResponse,
-    KBEntryUpdate,
-    StatsResponse,
-    UserResponse,
+    ChatLogResponse, KBEntryCreate, KBEntryResponse,
+    KBEntryUpdate, StatsResponse, UserResponse,
 )
 from app.services.rag_service import get_rag_service
 
@@ -21,37 +17,46 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
 @router.get("/stats", response_model=StatsResponse)
-def get_stats(db: Session = Depends(get_db)):
-    total_users = db.query(User).count()
-    total_chats = db.query(ChatLog).count()
-    total_kb = db.query(KnowledgeEntry).count()
+async def get_stats(db: AsyncSession = Depends(get_db)):
+    total_users = (await db.execute(select(func.count(User.id)))).scalar()
+    total_chats = (await db.execute(select(func.count(ChatLog.id)))).scalar()
+    total_kb = (await db.execute(select(func.count(KnowledgeEntry.id)))).scalar()
 
+    popular_questions_result = await db.execute(
+        select(PopularQuery).order_by(PopularQuery.count.desc()).limit(10)
+    )
     popular_questions = [
         {"query": q.query_text, "count": q.count, "intent": q.intent}
-        for q in db.query(PopularQuery).order_by(PopularQuery.count.desc()).limit(10).all()
+        for q in popular_questions_result.scalars().all()
     ]
 
-    popular_destinations = [
-        {"destination": d.destination or "Không xác định", "count": d.count}
-        for d in db.query(ChatLog.destination, func.count(ChatLog.id).label("count"))
+    popular_dest_result = await db.execute(
+        select(ChatLog.destination, func.count(ChatLog.id).label("count"))
         .filter(ChatLog.destination != "")
         .group_by(ChatLog.destination)
         .order_by(func.count(ChatLog.id).desc())
         .limit(10)
-        .all()
+    )
+    popular_destinations = [
+        {"destination": d.destination or "Không xác định", "count": d.count}
+        for d in popular_dest_result.all()
     ]
 
+    intent_result = await db.execute(
+        select(ChatLog.intent, func.count(ChatLog.id).label("count"))
+        .group_by(ChatLog.intent)
+    )
     intent_distribution = [
         {"intent": i.intent or "unknown", "count": i.count}
-        for i in db.query(ChatLog.intent, func.count(ChatLog.id).label("count"))
-        .group_by(ChatLog.intent)
-        .all()
+        for i in intent_result.all()
     ]
 
     daily = []
     for day_offset in range(6, -1, -1):
         day = datetime.utcnow().date() - timedelta(days=day_offset)
-        count = db.query(ChatLog).filter(func.date(ChatLog.created_at) == day).count()
+        count = (await db.execute(
+            select(func.count(ChatLog.id)).filter(func.date(ChatLog.created_at) == day)
+        )).scalar()
         daily.append({"date": day.isoformat(), "count": count})
 
     return StatsResponse(
@@ -66,77 +71,84 @@ def get_stats(db: Session = Depends(get_db)):
 
 
 @router.get("/users", response_model=list[UserResponse])
-def list_users(db: Session = Depends(get_db)):
-    return db.query(User).order_by(User.created_at.desc()).all()
+async def list_users(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).order_by(User.created_at.desc()))
+    return result.scalars().all()
 
 
 @router.patch("/users/{user_id}/toggle")
-def toggle_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
+async def toggle_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="Không tìm thấy user")
     user.is_active = not user.is_active
-    db.commit()
+    await db.commit()
     return {"id": user.id, "is_active": user.is_active}
 
 
 @router.get("/chat-logs", response_model=list[ChatLogResponse])
-def list_chat_logs(
+async def list_chat_logs(
     limit: int = 50,
     intent: Optional[str] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
-    query = db.query(ChatLog).order_by(ChatLog.created_at.desc())
+    q = select(ChatLog).order_by(ChatLog.created_at.desc()).limit(limit)
     if intent:
-        query = query.filter(ChatLog.intent == intent)
-    return query.limit(limit).all()
+        q = q.where(ChatLog.intent == intent)
+    result = await db.execute(q)
+    return result.scalars().all()
 
 
 @router.get("/kb", response_model=list[KBEntryResponse])
-def list_kb(category: Optional[str] = None, db: Session = Depends(get_db)):
-    query = db.query(KnowledgeEntry).order_by(KnowledgeEntry.updated_at.desc())
+async def list_kb(category: Optional[str] = None, db: AsyncSession = Depends(get_db)):
+    q = select(KnowledgeEntry).order_by(KnowledgeEntry.updated_at.desc())
     if category:
-        query = query.filter(KnowledgeEntry.category == category)
-    return query.all()
+        q = q.where(KnowledgeEntry.category == category)
+    result = await db.execute(q)
+    return result.scalars().all()
 
 
 @router.post("/kb", response_model=KBEntryResponse)
-def create_kb(data: KBEntryCreate, db: Session = Depends(get_db)):
+async def create_kb(data: KBEntryCreate, db: AsyncSession = Depends(get_db)):
     entry = KnowledgeEntry(**data.model_dump())
     db.add(entry)
-    db.commit()
-    db.refresh(entry)
-    _rebuild_rag(db)
+    await db.commit()
+    await db.refresh(entry)
+    await _rebuild_rag(db)
     return entry
 
 
 @router.put("/kb/{entry_id}", response_model=KBEntryResponse)
-def update_kb(entry_id: int, data: KBEntryUpdate, db: Session = Depends(get_db)):
-    entry = db.query(KnowledgeEntry).filter(KnowledgeEntry.id == entry_id).first()
+async def update_kb(entry_id: int, data: KBEntryUpdate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(KnowledgeEntry).where(KnowledgeEntry.id == entry_id))
+    entry = result.scalar_one_or_none()
     if not entry:
         raise HTTPException(status_code=404, detail="Không tìm thấy entry")
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(entry, key, value)
     entry.updated_at = datetime.utcnow()
-    db.commit()
-    db.refresh(entry)
-    _rebuild_rag(db)
+    await db.commit()
+    await db.refresh(entry)
+    await _rebuild_rag(db)
     return entry
 
 
 @router.delete("/kb/{entry_id}")
-def delete_kb(entry_id: int, db: Session = Depends(get_db)):
-    entry = db.query(KnowledgeEntry).filter(KnowledgeEntry.id == entry_id).first()
+async def delete_kb(entry_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(KnowledgeEntry).where(KnowledgeEntry.id == entry_id))
+    entry = result.scalar_one_or_none()
     if not entry:
         raise HTTPException(status_code=404, detail="Không tìm thấy entry")
-    db.delete(entry)
-    db.commit()
-    _rebuild_rag(db)
+    await db.delete(entry)
+    await db.commit()
+    await _rebuild_rag(db)
     return {"ok": True}
 
 
-def _rebuild_rag(db: Session):
-    kb_entries = db.query(KnowledgeEntry).all()
+async def _rebuild_rag(db: AsyncSession):
+    result = await db.execute(select(KnowledgeEntry))
+    kb_entries = result.scalars().all()
     docs = [
         {
             "id": e.id,

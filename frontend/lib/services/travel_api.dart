@@ -101,27 +101,31 @@ class AdminService {
     return [];
   }
 
-  static Future<void> createKB(Map<String, dynamic> data) async {
-    await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/admin/kb'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-  }
+  static Future<bool> createKB(Map<String, dynamic> data) async {
+  final res = await http.post(
+    Uri.parse('${ApiConfig.baseUrl}/admin/kb'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
+  );
+  return res.statusCode == 200 || res.statusCode == 201;
+}
 
-  static Future<void> updateKB(int id, Map<String, dynamic> data) async {
-    await http.put(
-      Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-  }
+static Future<bool> updateKB(int id, Map<String, dynamic> data) async {
+  final res = await http.put(
+    Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
+  );
+  return res.statusCode == 200;
+}
 
-  static Future<void> deleteKB(int id) async {
-    await http.delete(Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'));
-  }
+static Future<bool> deleteKB(int id) async {
+  final res = await http.delete(Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'));
+  return res.statusCode == 200;
+}
 
-  static Future<void> toggleUser(int id) async {
-    await http.patch(Uri.parse('${ApiConfig.baseUrl}/admin/users/$id/toggle'));
-  }
+static Future<bool> toggleUser(int id) async {
+  final res = await http.patch(Uri.parse('${ApiConfig.baseUrl}/admin/users/$id/toggle'));
+  return res.statusCode == 200;
+}
 }

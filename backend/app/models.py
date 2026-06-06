@@ -1,104 +1,89 @@
-from datetime import datetime
-
-from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, Text
-
+# models.py
+from sqlalchemy import (
+    Column, Integer, String, Text, Boolean,
+    Float, DateTime, func
+)
 from app.database import Base
-
 
 class User(Base):
     __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(120), nullable=False)
-    email = Column(String(120), unique=True, index=True, nullable=False)
+    id            = Column(Integer, primary_key=True, index=True)
+    name          = Column(String(120), nullable=False)
+    email         = Column(String(120), nullable=False, unique=True, index=True)
     password_hash = Column(String(255), nullable=False)
-    role = Column(String(20), default="user")  # user | admin
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-
-class KnowledgeEntry(Base):
-    __tablename__ = "knowledge_entries"
-
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(200), nullable=False)
-    category = Column(String(50), nullable=False)
-    destination = Column(String(100), default="")
-    content = Column(Text, nullable=False)
-    tags = Column(String(300), default="")
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    role          = Column(String(20), default="user")
+    is_active     = Column(Boolean, default=True)
+    created_at    = Column(DateTime, server_default=func.now())
 
 class Destination(Base):
     __tablename__ = "destinations"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    region = Column(String(100), default="")
+    id          = Column(Integer, primary_key=True, index=True)
+    name        = Column(String(100), nullable=False)
+    region      = Column(String(100))
     description = Column(Text, nullable=False)
-    highlights = Column(Text, default="")
-    best_season = Column(String(100), default="")
-    weather = Column(String(200), default="")
-    cuisine = Column(Text, default="")
-    budget_low = Column(Integer, default=2000000)
-    budget_high = Column(Integer, default=8000000)
-    tags = Column(String(200), default="")
-    image_url = Column(String(500), default="")
-
+    highlights  = Column(Text)
+    best_season = Column(String(100))
+    weather     = Column(String(200))
+    cuisine     = Column(Text)
+    budget_low  = Column(Integer)
+    budget_high = Column(Integer)
+    tags        = Column(String(200))
+    image_url   = Column(String(500))
 
 class Hotel(Base):
     __tablename__ = "hotels"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(200), nullable=False)
-    destination = Column(String(100), nullable=False)
-    type = Column(String(50), default="hotel")
-    price_per_night = Column(Integer, default=0)
-    rating = Column(Float, default=4.0)
-    address = Column(String(300), default="")
-    amenities = Column(String(300), default="")
-
+    id             = Column(Integer, primary_key=True, index=True)
+    name           = Column(String(200), nullable=False)
+    destination    = Column(String(100), nullable=False)
+    type           = Column(String(50))
+    price_per_night= Column(Integer)
+    rating         = Column(Float)
+    address        = Column(String(300))
+    amenities      = Column(String(300))
 
 class Tour(Base):
     __tablename__ = "tours"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(200), nullable=False)
+    id          = Column(Integer, primary_key=True, index=True)
+    name        = Column(String(200), nullable=False)
     destination = Column(String(100), nullable=False)
-    duration = Column(String(50), default="1 ngày")
-    price = Column(Integer, default=0)
-    description = Column(Text, default="")
-    includes = Column(Text, default="")
-
+    duration    = Column(String(50))
+    price       = Column(Integer)
+    description = Column(Text)
+    includes    = Column(Text)
 
 class Ticket(Base):
     __tablename__ = "tickets"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(200), nullable=False)
+    id          = Column(Integer, primary_key=True, index=True)
+    name        = Column(String(200), nullable=False)
     destination = Column(String(100), nullable=False)
-    price = Column(Integer, default=0)
-    description = Column(Text, default="")
+    price       = Column(Integer)
+    description = Column(Text)
 
+class KnowledgeEntry(Base):
+    __tablename__ = "knowledge_entries"
+    id          = Column(Integer, primary_key=True, index=True)
+    title       = Column(String(200), nullable=False)
+    category    = Column(String(50), nullable=False)
+    destination = Column(String(100))
+    content     = Column(Text, nullable=False)
+    tags        = Column(String(300))
+    created_at  = Column(DateTime, server_default=func.now())
+    updated_at  = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
 class ChatLog(Base):
     __tablename__ = "chat_logs"
-
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, default=0)
-    user_name = Column(String(120), default="Khách")
-    message = Column(Text, nullable=False)
-    response = Column(Text, nullable=False)
-    intent = Column(String(50), default="")
-    destination = Column(String(100), default="")
-    created_at = Column(DateTime, default=datetime.utcnow)
-
+    id          = Column(Integer, primary_key=True, index=True)
+    user_id     = Column(Integer)
+    user_name   = Column(String(120))
+    message     = Column(Text, nullable=False)
+    response    = Column(Text, nullable=False)
+    intent      = Column(String(50))
+    destination = Column(String(100))
+    created_at  = Column(DateTime, server_default=func.now())
 
 class PopularQuery(Base):
     __tablename__ = "popular_queries"
-
-    id = Column(Integer, primary_key=True, index=True)
+    id         = Column(Integer, primary_key=True, index=True)
     query_text = Column(String(300), nullable=False)
-    count = Column(Integer, default=1)
-    intent = Column(String(50), default="")
+    count      = Column(Integer, default=1)
+    intent     = Column(String(50))

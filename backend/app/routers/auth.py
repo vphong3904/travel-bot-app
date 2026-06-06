@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
 from jose import jwt
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from app.config import settings
 from app.database import get_db
@@ -11,7 +12,6 @@ from app.models import User
 from app.schemas import TokenResponse, UserCreate, UserLogin, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
-
 ALGORITHM = "HS256"
 
 
@@ -26,8 +26,9 @@ def create_token(user: User) -> str:
 
 
 @router.post("/register", response_model=TokenResponse)
-def register(data: UserCreate, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == data.email).first():
+async def register(data: UserCreate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.email == data.email))
+    if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email đã tồn tại")
     user = User(
         name=data.name,
@@ -36,8 +37,8 @@ def register(data: UserCreate, db: Session = Depends(get_db)):
         role="user",
     )
     db.add(user)
-    db.commit()
-    db.refresh(user)
+    await db.commit()
+    await db.refresh(user)
     return TokenResponse(
         access_token=create_token(user),
         user=UserResponse.model_validate(user),
@@ -45,8 +46,9 @@ def register(data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(data: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == data.email).first()
+async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
     if not user or not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Email hoặc mật khẩu không đúng")
     return TokenResponse(

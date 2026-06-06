@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+.venv/
+
+# Environment Variables
+.env
+.env.local
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# HuggingFace Models
+models/
+hf_cache/
+huggingface/
+
+# FAISS / Embeddings
+vector_store/
+embeddings/
+*.faiss
+
+# Temporary files
+temp/
+tmp/
+
+# OS
+.DS_Store
+Thumbs.db
