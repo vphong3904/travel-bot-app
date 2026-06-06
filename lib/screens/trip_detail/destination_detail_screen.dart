@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
-import '../../widgets/network_image_widget.dart';
 import '../chat/chatbot_screen.dart';
 
 class DestinationDetailScreen extends StatelessWidget {
@@ -12,90 +10,106 @@ class DestinationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = destination['name'] ?? '';
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 240,
+            expandedHeight: 220,
             pinned: true,
-            backgroundColor: AppColors.primary,
-            leading: Padding(
-              padding: const EdgeInsets.all(8),
-              child: AppBackButton(
-                iconColor: Colors.white,
-                backgroundColor: Colors.white.withValues(alpha: 0.2),
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              background: Image.network(
+                destination['image_url'] ?? '',
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppNetworkImage(url: destination['image_url'], fit: BoxFit.cover),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withValues(alpha: 0.55)],
-                      ),
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, size: 16, color: AppColors.muted),
+                      const SizedBox(width: 4),
+                      Text(destination['region'] ?? '', style: TextStyle(color: AppColors.muted)),
+                    ],
                   ),
-                  Positioned(
-                    left: 20,
-                    bottom: 20,
-                    right: 20,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name, style: AppTheme.heading(size: 32, color: Colors.white)),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on_outlined, size: 14, color: Colors.white70),
-                            const SizedBox(width: 4),
-                            Text(destination['region'] ?? '', style: AppTheme.body(size: 14, color: Colors.white.withValues(alpha: 0.9))),
-                          ],
-                        ),
-                      ],
+                  const SizedBox(height: 16),
+                  Text(destination['description'] ?? '', style: const TextStyle(height: 1.6)),
+                  const SizedBox(height: 20),
+                  _InfoCard(icon: Icons.wb_sunny_outlined, title: 'Thời tiết', content: destination['weather'] ?? ''),
+                  _InfoCard(icon: Icons.calendar_month, title: 'Mùa du lịch lý tưởng', content: destination['best_season'] ?? ''),
+                  _InfoCard(icon: Icons.restaurant, title: 'Ẩm thực', content: destination['cuisine'] ?? ''),
+                  _InfoCard(icon: Icons.star, title: 'Điểm nổi bật', content: destination['highlights'] ?? ''),
+                  _InfoCard(
+                    icon: Icons.attach_money,
+                    title: 'Chi phí tham khảo',
+                    content: '${formatCurrency(destination['budget_low'] ?? 0)} - ${formatCurrency(destination['budget_high'] ?? 0)}/người',
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ChatBotScreen(initialMessage: 'Cho tôi biết thông tin chi tiết về $name'),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.smart_toy),
+                      label: const Text('Hỏi AI về địa điểm này'),
+                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(50)),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Text(destination['description'] ?? '', style: AppTheme.body(size: 14, color: const Color(0xFF475569))),
-            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String content;
+
+  const _InfoCard({required this.icon, required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+            child: Icon(icon, color: AppColors.primary, size: 20),
           ),
-          SliverToBoxAdapter(
+          const SizedBox(width: 12),
+          Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppInfoCard(icon: Icons.wb_sunny_outlined, label: 'Thời tiết', value: destination['weather'] ?? ''),
-                AppInfoCard(icon: Icons.calendar_month_outlined, label: 'Mùa lý tưởng', value: destination['best_season'] ?? ''),
-                AppInfoCard(icon: Icons.restaurant_outlined, label: 'Ẩm thực', value: destination['cuisine'] ?? ''),
-                AppInfoCard(icon: Icons.star_outline_rounded, label: 'Điểm nổi bật', value: destination['highlights'] ?? ''),
-                AppInfoCard(
-                  icon: Icons.payments_outlined,
-                  label: 'Chi phí tham khảo',
-                  value: '${formatCurrency(destination['budget_low'] ?? 0)} - ${formatCurrency(destination['budget_high'] ?? 0)}/người',
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-                  child: AppPrimaryButton(
-                    label: 'Hỏi AI chi tiết về địa điểm này',
-                    icon: Icons.support_agent_rounded,
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ChatBotScreen(initialMessage: 'Cho tôi biết thông tin chi tiết về $name'),
-                      ),
-                    ),
-                  ),
-                ),
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 4),
+                Text(content, style: TextStyle(color: AppColors.muted, height: 1.4)),
               ],
             ),
           ),

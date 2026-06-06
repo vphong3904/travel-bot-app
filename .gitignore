@@ -1,5 +1,23 @@
+# Flutter/Dart
 .dart_tool/
-build/
+.packages
 .flutter-plugins
 .flutter-plugins-dependencies
-.packages
+
+# Build outputs
+build/
+
+# IDE
+.idea/
+.vscode/
+
+# Android Studio
+*.iml
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db

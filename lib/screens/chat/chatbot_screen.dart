@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
 import '../../services/travel_api.dart';
-import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 import '../trip_detail/trip_details_screen.dart';
 
@@ -24,10 +23,11 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   bool _useMock = false;
 
   final quickPrompts = [
-    'Thời tiết Đà Lạt?',
-    'Tour Phú Quốc',
-    'Khách sạn Hội An',
-    'Ẩm thực Hà Nội',
+    'Thời tiết Đà Lạt tháng 12?',
+    'Gợi ý điểm đến biển ngân sách tầm trung',
+    'Lịch trình Phú Quốc 3 ngày 2 đêm gia đình',
+    'Tìm khách sạn Phú Quốc giá rẻ',
+    'Ẩm thực Hà Giang có gì đặc sắc?',
   ];
 
   @override
@@ -35,7 +35,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     super.initState();
     _messages.add({
       'sender': 'ai',
-      'text': 'Xin chào! Tôi là Trợ lý du lịch AI.\n\nTôi có thể tư vấn điểm đến, gợi ý lịch trình, tra cứu khách sạn và tour cho bạn!',
+      'text': 'Xin chào! Tôi là Trợ lý du lịch AI 🤖\n\nTôi có thể:\n• Trả lời thông tin du lịch (FAQ)\n• Tư vấn điểm đến phù hợp\n• Gợi ý lịch trình\n• Tra cứu khách sạn, tour, vé\n\nHệ thống RAG + NLP đang hoạt động!',
       'hasItinerary': false,
       'intent': '',
     });
@@ -47,13 +47,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         _sendMessage(widget.initialMessage!);
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _scrollCtrl.dispose();
-    super.dispose();
   }
 
   Future<void> _sendMessage(String text) async {
@@ -96,14 +89,14 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     Future.delayed(const Duration(milliseconds: 1200), () {
       if (!mounted) return;
       final lower = text.toLowerCase();
-      final hasItinerary = lower.contains('lịch trình') || lower.contains('ngày');
+      bool hasItinerary = lower.contains('lịch trình') || lower.contains('ngày');
       setState(() {
         _isGenerating = false;
         _messages.add({
           'sender': 'ai',
           'text': hasItinerary
-              ? 'Tôi đã thiết kế lịch trình mẫu cho bạn. (Kết nối backend tại localhost:8000 để dùng RAG thật)'
-              : 'Đây là câu trả lời mẫu. Khởi động backend FastAPI để trả lời từ Knowledge Base.',
+              ? '✨ Demo mode: Tôi đã thiết kế lịch trình mẫu cho bạn. (Kết nối backend tại localhost:8000 để dùng RAG thật)'
+              : '🔍 Demo mode: Đây là câu trả lời mẫu. Khởi động backend FastAPI để trả lời từ Knowledge Base.',
           'hasItinerary': hasItinerary,
           'intent': hasItinerary ? 'itinerary' : 'faq_info',
           'itinerary': hasItinerary
@@ -114,9 +107,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   'budget_low': 4000000,
                   'budget_high': 10000000,
                   'days': [
-                    {'day': 1, 'title': 'Ngày 1: Khởi hành', 'activities': ['Đáp sân bay', 'Grand World', 'Chợ đêm Dinh Cậu']},
-                    {'day': 2, 'title': 'Ngày 2: Biển & Vui chơi', 'activities': ['Bãi Sao', 'VinWonders', 'Hải sản']},
-                    {'day': 3, 'title': 'Ngày 3: Về nhà', 'activities': ['Nhà tù Phú Quốc', 'Mua quà', 'Trả phòng']},
+                    {'day': 1, 'title': 'Ngày 1', 'activities': ['Đáp sân bay', 'Grand World', 'Chợ đêm Dinh Cậu']},
+                    {'day': 2, 'title': 'Ngày 2', 'activities': ['Bãi Sao', 'VinWonders']},
+                    {'day': 3, 'title': 'Ngày 3', 'activities': ['Nhà tù Phú Quốc', 'Về']},
                   ],
                 }
               : null,
@@ -136,48 +129,40 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: AppColors.primaryGradient),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Icon(Icons.support_agent_rounded, color: Colors.white, size: 22),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Trợ Lý AI Du Lịch', style: AppTheme.heading(size: 16)),
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: _useMock ? AppColors.accent : AppColors.success,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(_useMock ? 'Demo Mode' : 'RAG Active', style: AppTheme.body(size: 11, color: AppColors.success, weight: FontWeight.w600)),
-                    ],
-                  ),
-                ],
-              ),
+            const Text('Trợ Lý AI Du Lịch', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Container(width: 8, height: 8, decoration: BoxDecoration(color: _useMock ? AppColors.secondary : AppColors.success, shape: BoxShape.circle)),
+                const SizedBox(width: 6),
+                Text(_useMock ? 'Demo Mode' : 'RAG Active', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+              ],
             ),
           ],
         ),
       ),
       body: Column(
         children: [
+          if (_messages.length <= 1)
+            SizedBox(
+              height: 44,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                itemCount: quickPrompts.length,
+                itemBuilder: (_, i) => Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ActionChip(
+                    label: Text(quickPrompts[i], style: const TextStyle(fontSize: 12)),
+                    onPressed: () => _sendMessage(quickPrompts[i]),
+                  ),
+                ),
+              ),
+            ),
           Expanded(
             child: ListView.builder(
               controller: _scrollCtrl,
@@ -185,179 +170,100 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
               itemCount: _messages.length + (_isGenerating ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == _messages.length) {
-                  return _buildTypingIndicator();
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary)),
+                          SizedBox(width: 10),
+                          Text('AI đang suy nghĩ...', style: TextStyle(color: AppColors.muted, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  );
                 }
-                return _buildMessage(_messages[index]);
+                final msg = _messages[index];
+                final isUser = msg['sender'] == 'user';
+                return Align(
+                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.82),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: isUser ? AppColors.primary : Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: const Radius.circular(16),
+                        topRight: const Radius.circular(16),
+                        bottomLeft: Radius.circular(isUser ? 16 : 4),
+                        bottomRight: Radius.circular(isUser ? 4 : 16),
+                      ),
+                      boxShadow: isUser ? null : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!isUser && (msg['intent'] ?? '').isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(intentIcon(msg['intent']), size: 14, color: AppColors.secondary),
+                                const SizedBox(width: 4),
+                                Text(intentLabel(msg['intent']), style: TextStyle(fontSize: 11, color: AppColors.secondary, fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        Text(msg['text'], style: TextStyle(color: isUser ? Colors.white : AppColors.dark, height: 1.5)),
+                        if (msg['hasItinerary'] == true) ...[
+                          const SizedBox(height: 10),
+                          ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => TripDetailsScreen(itinerary: msg['itinerary'])),
+                            ),
+                            icon: const Icon(Icons.map, size: 18),
+                            label: const Text('Xem Lịch Trình Chi Tiết'),
+                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary, foregroundColor: Colors.white),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
               },
             ),
           ),
           Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: SizedBox(
-              height: 40,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: quickPrompts.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (_, i) => GestureDetector(
-                  onTap: () => _sendMessage(quickPrompts[i]),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF0F9FF),
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: const Color(0xFFE0F2FE)),
-                    ),
-                    child: Text(quickPrompts[i], style: AppTheme.body(size: 12, color: AppColors.primaryDark, weight: FontWeight.w600)),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            decoration: const BoxDecoration(color: Colors.white, border: Border(top: BorderSide(color: Color(0xFFF1F5F9)))),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, -2))]),
             child: SafeArea(
-              top: false,
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: _controller,
                       decoration: InputDecoration(
-                        hintText: 'Hỏi về du lịch, lịch trình...',
+                        hintText: 'Hỏi về du lịch, điểm đến, lịch trình...',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none),
                         filled: true,
-                        fillColor: const Color(0xFFF1F5F9),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                        fillColor: AppColors.bg,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       ),
                       onSubmitted: _sendMessage,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: AppColors.primaryGradient),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
-                    ),
-                    child: IconButton(
-                      onPressed: () => _sendMessage(_controller.text),
-                      icon: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
-                    ),
+                  const SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: AppColors.primary,
+                    child: IconButton(icon: const Icon(Icons.send, color: Colors.white, size: 20), onPressed: () => _sendMessage(_controller.text)),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTypingIndicator() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16, left: 38),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
-            bottomRight: Radius.circular(16),
-            bottomLeft: Radius.circular(4),
-          ),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 12)],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary)),
-            const SizedBox(width: 10),
-            Text('AI đang suy nghĩ', style: AppTheme.body(size: 13, color: AppColors.muted, weight: FontWeight.w600)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMessage(Map<String, dynamic> msg) {
-    final isUser = msg['sender'] == 'user';
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!isUser) ...[
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: AppColors.primaryGradient),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(Icons.support_agent_rounded, color: Colors.white, size: 14),
-            ),
-            const SizedBox(width: 10),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                gradient: isUser ? const LinearGradient(colors: AppColors.primaryGradient) : null,
-                color: isUser ? null : Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: Radius.circular(isUser ? 16 : 4),
-                  bottomRight: Radius.circular(isUser ? 4 : 16),
-                ),
-                boxShadow: isUser ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.2), blurRadius: 12)] : [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 12)],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!isUser && (msg['intent'] ?? '').isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF0F9FF),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: const Color(0xFFE0F2FE)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(intentIcon(msg['intent']), size: 12, color: AppColors.primaryDark),
-                          const SizedBox(width: 4),
-                          Text(intentLabel(msg['intent']), style: AppTheme.body(size: 11, color: AppColors.primaryDark, weight: FontWeight.w700)),
-                        ],
-                      ),
-                    ),
-                  Text(msg['text'], style: AppTheme.body(color: isUser ? Colors.white : AppColors.mid)),
-                  if (msg['hasItinerary'] == true) ...[
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => TripDetailsScreen(itinerary: msg['itinerary'])),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accent,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        child: Text('Xem Lịch Trình Chi Tiết', style: AppTheme.body(size: 13, color: Colors.white, weight: FontWeight.w700)),
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),

@@ -1,9 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../services/travel_api.dart';
-import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
-import '../../widgets/web_layout.dart';
 import 'kb_management_screen.dart';
 import 'user_management_screen.dart';
 import 'chat_logs_screen.dart';
@@ -33,77 +31,79 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WebAdminShell(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC),
-        appBar: AppBar(
-          title: Text('Quản trị hệ thống', style: AppTheme.heading(size: 18)),
-          actions: [IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _load)],
-        ),
-        body: loading
-            ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
-            : RefreshIndicator(
-                color: AppColors.primary,
-                onRefresh: _load,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          _StatCard(title: 'Người dùng', value: '${stats['total_users'] ?? 0}', icon: Icons.people_outline_rounded, color: AppColors.primary),
-                          const SizedBox(width: 12),
-                          _StatCard(title: 'Hội thoại', value: '${stats['total_chats'] ?? 0}', icon: Icons.chat_bubble_outline_rounded, color: AppColors.accent),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      _StatCard(title: 'KB Entries', value: '${stats['total_kb_entries'] ?? 0}', icon: Icons.library_books_outlined, color: AppColors.success, fullWidth: true),
-                      const SizedBox(height: 24),
-                      Text('Quản lý nhanh', style: AppTheme.heading(size: 18)),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(child: _QuickAction(icon: Icons.library_books_outlined, label: 'Knowledge Base', onTap: () => _open(const KBManagementScreen()))),
-                          const SizedBox(width: 12),
-                          Expanded(child: _QuickAction(icon: Icons.people_outline_rounded, label: 'Người dùng', onTap: () => _open(const UserManagementScreen()))),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      _QuickAction(icon: Icons.history_rounded, label: 'Log hội thoại chatbot', onTap: () => _open(const ChatLogsScreen()), fullWidth: true),
-                      const SizedBox(height: 24),
-                      SectionTitle(title: 'Thống kê hội thoại 7 ngày'),
-                      const SizedBox(height: 12),
-                      _DailyChart(data: (stats['daily_chats'] as List?) ?? []),
-                      const SizedBox(height: 24),
-                      SectionTitle(title: 'Phân bố Intent (NLP)'),
-                      const SizedBox(height: 12),
-                      _IntentChart(data: (stats['intent_distribution'] as List?) ?? []),
-                      const SizedBox(height: 24),
-                      SectionTitle(title: 'Câu hỏi phổ biến'),
-                      const SizedBox(height: 8),
-                      ...((stats['popular_questions'] as List?) ?? []).take(5).map((q) => _ListTile(
-                            title: q['query'] ?? '',
-                            trailing: '${q['count']}',
-                          )),
-                      const SizedBox(height: 24),
-                      SectionTitle(title: 'Điểm đến được quan tâm'),
-                      const SizedBox(height: 8),
-                      ...((stats['popular_destinations'] as List?) ?? []).map((d) => _ListTile(
-                            title: d['destination'] ?? '',
-                            trailing: '${d['count']} lượt',
-                            icon: Icons.place_outlined,
-                          )),
-                    ],
-                  ),
+    return Scaffold(
+      backgroundColor: AppColors.bg,
+      appBar: AppBar(
+        title: const Text('Quản trị hệ thống', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: _load)],
+      ),
+      body: loading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: _load,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        _StatCard(title: 'Người dùng', value: '${stats['total_users'] ?? 0}', icon: Icons.people, color: AppColors.primary),
+                        const SizedBox(width: 12),
+                        _StatCard(title: 'Hội thoại', value: '${stats['total_chats'] ?? 0}', icon: Icons.chat, color: AppColors.secondary),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _StatCard(title: 'KB Entries', value: '${stats['total_kb_entries'] ?? 0}', icon: Icons.library_books, color: AppColors.success, fullWidth: true),
+                    const SizedBox(height: 24),
+                    const SectionTitle(title: 'Thống kê hội thoại 7 ngày'),
+                    const SizedBox(height: 12),
+                    _DailyChart(data: (stats['daily_chats'] as List?) ?? []),
+                    const SizedBox(height: 24),
+                    const SectionTitle(title: 'Phân bố Intent (NLP)'),
+                    const SizedBox(height: 12),
+                    _IntentChart(data: (stats['intent_distribution'] as List?) ?? []),
+                    const SizedBox(height: 24),
+                    const SectionTitle(title: 'Câu hỏi phổ biến'),
+                    const SizedBox(height: 8),
+                    ...((stats['popular_questions'] as List?) ?? []).take(5).map((q) => Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(q['query'] ?? '', style: const TextStyle(fontSize: 13))),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+                                child: Text('${q['count']}', style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          ),
+                        )),
+                    const SizedBox(height: 24),
+                    const SectionTitle(title: 'Điểm đến được quan tâm'),
+                    const SizedBox(height: 8),
+                    ...((stats['popular_destinations'] as List?) ?? []).map((d) => ListTile(
+                          tileColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          leading: const Icon(Icons.place, color: AppColors.secondary),
+                          title: Text(d['destination'] ?? ''),
+                          trailing: Text('${d['count']} lượt', style: TextStyle(color: AppColors.muted)),
+                        )),
+                    const SizedBox(height: 24),
+                    const SectionTitle(title: 'Quản lý'),
+                    const SizedBox(height: 12),
+                    _AdminMenuItem(icon: Icons.library_books, title: 'Knowledge Base', subtitle: 'Quản lý dữ liệu du lịch', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KBManagementScreen()))),
+                    _AdminMenuItem(icon: Icons.people, title: 'Người dùng', subtitle: 'Quản lý tài khoản', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementScreen()))),
+                    _AdminMenuItem(icon: Icons.history, title: 'Log hội thoại', subtitle: 'Xem lịch sử chatbot', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChatLogsScreen()))),
+                  ],
                 ),
               ),
-      ),
+            ),
     );
   }
-
-  void _open(Widget screen) => Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
 }
 
 class _StatCard extends StatelessWidget {
@@ -122,95 +122,28 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 12)],
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8)],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
             child: Icon(icon, color: color),
           ),
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTheme.body(size: 12, color: AppColors.muted)),
-              Text(value, style: AppTheme.heading(size: 22)),
+              Text(title, style: TextStyle(color: AppColors.muted, fontSize: 12)),
+              Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ],
           ),
         ],
       ),
     );
     return fullWidth ? card : Expanded(child: card);
-  }
-}
-
-class _QuickAction extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool fullWidth;
-
-  const _QuickAction({required this.icon, required this.label, required this.onTap, this.fullWidth = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFF1F5F9)),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.primary),
-              const SizedBox(width: 10),
-              Expanded(child: Text(label, style: AppTheme.body(size: 14, weight: FontWeight.w600))),
-              const Icon(Icons.chevron_right_rounded, color: AppColors.muted),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ListTile extends StatelessWidget {
-  final String title;
-  final String trailing;
-  final IconData icon;
-
-  const _ListTile({required this.title, required this.trailing, this.icon = Icons.help_outline_rounded});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFF1F5F9))),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: AppColors.primary),
-          const SizedBox(width: 10),
-          Expanded(child: Text(title, style: AppTheme.body(size: 13))),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-            child: Text(trailing, style: AppTheme.body(size: 12, color: AppColors.primary, weight: FontWeight.w700)),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -221,14 +154,12 @@ class _DailyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
-      return SizedBox(height: 100, child: Center(child: Text('Chưa có dữ liệu', style: AppTheme.body(color: AppColors.muted))));
-    }
+    if (data.isEmpty) return const SizedBox(height: 100, child: Center(child: Text('Chưa có dữ liệu')));
     final maxY = data.map((d) => (d['count'] as num?)?.toDouble() ?? 0).reduce((a, b) => a > b ? a : b);
     return Container(
       height: 180,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFF1F5F9))),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
       child: BarChart(
         BarChartData(
           maxY: maxY + 2,
@@ -245,11 +176,11 @@ class _DailyChart extends StatelessWidget {
                 getTitlesWidget: (v, _) {
                   if (v.toInt() >= data.length) return const SizedBox();
                   final date = data[v.toInt()]['date']?.toString() ?? '';
-                  return Text(date.length >= 5 ? date.substring(5) : date, style: AppTheme.body(size: 10, color: AppColors.muted));
+                  return Text(date.length >= 5 ? date.substring(5) : date, style: const TextStyle(fontSize: 10));
                 },
               ),
             ),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 28, getTitlesWidget: (v, _) => Text('${v.toInt()}', style: AppTheme.body(size: 10, color: AppColors.muted)))),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 28, getTitlesWidget: (v, _) => Text('${v.toInt()}', style: const TextStyle(fontSize: 10)))),
             topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
@@ -269,14 +200,12 @@ class _IntentChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) return const SizedBox();
-    final colors = [AppColors.primary, AppColors.accent, AppColors.success, AppColors.gradEnd];
+    final colors = [AppColors.primary, AppColors.secondary, AppColors.success, Colors.purple];
     final total = data.fold<int>(0, (s, d) => s + ((d['count'] as num?)?.toInt() ?? 0));
-    if (total == 0) return const SizedBox();
-
     return Container(
       height: 160,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFF1F5F9))),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
       child: Row(
         children: [
           Expanded(
@@ -286,13 +215,7 @@ class _IntentChart extends StatelessWidget {
                 centerSpaceRadius: 30,
                 sections: List.generate(data.length, (i) {
                   final count = (data[i]['count'] as num?)?.toDouble() ?? 0;
-                  return PieChartSectionData(
-                    value: count,
-                    title: '${(count / total * 100).toStringAsFixed(0)}%',
-                    color: colors[i % colors.length],
-                    radius: 40,
-                    titleStyle: AppTheme.body(size: 10, color: Colors.white, weight: FontWeight.w700),
-                  );
+                  return PieChartSectionData(value: count, title: '${(count / total * 100).toStringAsFixed(0)}%', color: colors[i % colors.length], radius: 40, titleStyle: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold));
                 }),
               ),
             ),
@@ -307,13 +230,37 @@ class _IntentChart extends StatelessWidget {
                   children: [
                     Container(width: 10, height: 10, decoration: BoxDecoration(color: colors[e.key % colors.length], shape: BoxShape.circle)),
                     const SizedBox(width: 6),
-                    Text(intentLabel(e.value['intent'] ?? ''), style: AppTheme.body(size: 11)),
+                    Text(intentLabel(e.value['intent'] ?? ''), style: const TextStyle(fontSize: 11)),
                   ],
                 ),
               );
             }).toList(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AdminMenuItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _AdminMenuItem({required this.icon, required this.title, required this.subtitle, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Icon(icon, color: AppColors.primary),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+        subtitle: Text(subtitle, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
       ),
     );
   }

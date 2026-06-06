@@ -1,155 +1,256 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../widgets/common_widgets.dart';
+import '../../widgets/common_widgets.dart';
 
-/// Font có subset Vietnamese trên Google Fonts.
-class AppFonts {
+// ─────────────────────────────────────────────
+//  TEXT STYLES
+// ─────────────────────────────────────────────
+class AppTheme {
+  AppTheme._();
+
+  // Display / Heading
   static TextStyle heading({
-    double size = 22,
+    double size = 16,
     Color color = AppColors.dark,
     FontWeight weight = FontWeight.w700,
-  }) =>
-      GoogleFonts.plusJakartaSans(
-        fontSize: size,
-        fontWeight: weight,
-        color: color,
-        height: 1.25,
-      );
-
-  static TextStyle body({
-    double size = 14,
-    Color color = AppColors.dark,
-    FontWeight weight = FontWeight.w500,
     double? height,
   }) =>
-      GoogleFonts.beVietnamPro(
+      TextStyle(
+        fontFamily: 'Nunito',
         fontSize: size,
         fontWeight: weight,
         color: color,
-        height: height ?? 1.45,
+        height: height ?? 1.3,
+        letterSpacing: -0.3,
       );
 
-  static TextStyle label({Color color = AppColors.muted}) => GoogleFonts.beVietnamPro(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
+  // Body / Label
+  static TextStyle body({
+    double size = 14,
+    Color color = AppColors.mid,
+    FontWeight weight = FontWeight.w400,
+    double? height,
+  }) =>
+      TextStyle(
+        fontFamily: 'Nunito',
+        fontSize: size,
+        fontWeight: weight,
+        color: color,
+        height: height ?? 1.5,
+      );
+
+  // Caption
+  static TextStyle caption({
+    double size = 11,
+    Color color = AppColors.muted,
+    FontWeight weight = FontWeight.w500,
+  }) =>
+      TextStyle(
+        fontFamily: 'Nunito',
+        fontSize: size,
+        fontWeight: weight,
         color: color,
         letterSpacing: 0.2,
-        height: 1.3,
+      );
+
+  // ─── ThemeData ───────────────────────────────
+  static ThemeData get lightTheme => ThemeData(
+        useMaterial3: true,
+        fontFamily: 'Nunito',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          secondary: AppColors.accent,
+          error: AppColors.error,
+          surface: AppColors.surface,
+          onPrimary: AppColors.white,
+          onSecondary: AppColors.white,
+          onSurface: AppColors.dark,
+        ),
+        scaffoldBackgroundColor: AppColors.surface,
+
+        // AppBar
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.dark,
+          elevation: 0,
+          scrolledUnderElevation: 0.5,
+          shadowColor: AppColors.border,
+          centerTitle: false,
+          titleTextStyle: heading(size: 18),
+          iconTheme: const IconThemeData(color: AppColors.mid),
+          actionsIconTheme: const IconThemeData(color: AppColors.mid),
+          surfaceTintColor: Colors.transparent,
+        ),
+
+        // Card
+        cardTheme: CardThemeData(
+          color: AppColors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppColors.border),
+          ),
+          margin: EdgeInsets.zero,
+        ),
+
+        // FloatingActionButton
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
+          elevation: 4,
+          shape: CircleBorder(),
+        ),
+
+        // Chip / FilterChip
+        chipTheme: ChipThemeData(
+          backgroundColor: AppColors.white,
+          selectedColor: AppColors.primary.withValues(alpha: 0.12),
+          side: const BorderSide(color: AppColors.border),
+          labelStyle: body(size: 12, weight: FontWeight.w600),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          checkmarkColor: AppColors.primary,
+        ),
+
+        // Input / TextField
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: AppColors.surface,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.border),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.error),
+          ),
+          labelStyle: body(size: 13, color: AppColors.muted),
+          hintStyle: body(size: 13, color: AppColors.muted),
+          floatingLabelStyle: body(size: 12, color: AppColors.primary, weight: FontWeight.w600),
+        ),
+
+        // ElevatedButton
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.white,
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            textStyle: body(size: 15, weight: FontWeight.w700),
+          ),
+        ),
+
+        // TextButton
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            textStyle: body(size: 14, weight: FontWeight.w600),
+          ),
+        ),
+
+        // OutlinedButton
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.primary,
+            side: const BorderSide(color: AppColors.primary),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          ),
+        ),
+
+        // ListTile
+        listTileTheme: ListTileThemeData(
+          tileColor: AppColors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          titleTextStyle: body(size: 15, weight: FontWeight.w600, color: AppColors.dark),
+          subtitleTextStyle: body(size: 12, color: AppColors.muted),
+        ),
+
+        // BottomSheet
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+        ),
+
+        // Dialog
+        dialogTheme: DialogThemeData(
+          backgroundColor: AppColors.white,
+          elevation: 8,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          titleTextStyle: heading(size: 17),
+          contentTextStyle: body(size: 14, color: AppColors.mid),
+        ),
+
+        // Snackbar
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: AppColors.dark,
+          contentTextStyle: body(size: 13, color: AppColors.white),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+
+        // Divider
+        dividerTheme: const DividerThemeData(
+          color: AppColors.border,
+          thickness: 1,
+          space: 1,
+        ),
+
+        // PopupMenu
+        popupMenuTheme: PopupMenuThemeData(
+          color: AppColors.white,
+          elevation: 8,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          labelTextStyle: WidgetStateProperty.all(body(size: 14)),
+        ),
+
+        // Progress indicator
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: AppColors.primary,
+        ),
       );
 }
 
-class AppTheme {
-  static ThemeData build() {
-    final base = ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        secondary: AppColors.accent,
-        surface: Colors.white,
-      ),
-      scaffoldBackgroundColor: AppColors.bg,
-      fontFamily: GoogleFonts.beVietnamPro().fontFamily,
-    );
+// ─────────────────────────────────────────────
+//  DECORATION HELPERS
+// ─────────────────────────────────────────────
+class AppDecorations {
+  AppDecorations._();
 
-    final bodyTheme = GoogleFonts.beVietnamProTextTheme(base.textTheme).apply(
-      bodyColor: AppColors.dark,
-      displayColor: AppColors.dark,
-    );
+  static BoxDecoration card({
+    Color color = AppColors.white,
+    double radius = 20,
+    bool withShadow = true,
+  }) =>
+      BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: AppColors.border),
+        boxShadow: withShadow
+            ? [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 12, offset: const Offset(0, 2))]
+            : null,
+      );
 
-    final textTheme = bodyTheme.copyWith(
-      headlineLarge: AppFonts.heading(size: 28, weight: FontWeight.w800),
-      headlineMedium: AppFonts.heading(size: 24, weight: FontWeight.w700),
-      headlineSmall: AppFonts.heading(size: 20, weight: FontWeight.w700),
-      titleLarge: AppFonts.heading(size: 18, weight: FontWeight.w700),
-      titleMedium: AppFonts.heading(size: 16, weight: FontWeight.w700),
-      titleSmall: AppFonts.body(size: 14, weight: FontWeight.w600),
-      bodyLarge: AppFonts.body(size: 16),
-      bodyMedium: AppFonts.body(size: 14),
-      bodySmall: AppFonts.body(size: 12, color: AppColors.muted),
-      labelLarge: AppFonts.body(size: 14, weight: FontWeight.w600),
-      labelMedium: AppFonts.label(),
-      labelSmall: AppFonts.label(color: AppColors.muted),
-    );
+  static BoxDecoration iconBadge(Color color, {double radius = 12}) => BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(radius),
+      );
 
-    return base.copyWith(
-      textTheme: textTheme,
-      primaryTextTheme: textTheme,
-      appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: AppColors.dark,
-        elevation: 0,
-        centerTitle: false,
-        titleTextStyle: AppFonts.heading(size: 18),
-        toolbarTextStyle: AppFonts.body(size: 14),
-      ),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: Colors.white.withValues(alpha: 0.95),
-        indicatorColor: AppColors.primary.withValues(alpha: 0.12),
-        labelTextStyle: WidgetStateProperty.resolveWith((states) {
-          final selected = states.contains(WidgetState.selected);
-          return AppFonts.body(
-            size: 10,
-            weight: FontWeight.w600,
-            color: selected ? AppColors.primary : AppColors.muted,
-          );
-        }),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          textStyle: AppFonts.heading(size: 15, weight: FontWeight.w700),
-        ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: const Color(0xFFF8FAFC),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        hintStyle: AppFonts.body(size: 14, color: const Color(0xFF94A3B8)),
-        labelStyle: AppFonts.label(color: const Color(0xFF475569)),
-      ),
-      chipTheme: ChipThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        side: const BorderSide(color: Color(0xFFE2E8F0)),
-        labelStyle: AppFonts.body(size: 13, weight: FontWeight.w500),
-      ),
-      tabBarTheme: TabBarThemeData(
-        labelStyle: AppFonts.body(size: 13, weight: FontWeight.w600),
-        unselectedLabelStyle: AppFonts.body(size: 13, weight: FontWeight.w500, color: AppColors.muted),
-      ),
-      listTileTheme: ListTileThemeData(
-        titleTextStyle: AppFonts.body(size: 15, weight: FontWeight.w600),
-        subtitleTextStyle: AppFonts.body(size: 12, color: AppColors.muted),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        contentTextStyle: AppFonts.body(size: 14, color: Colors.white),
-      ),
-      dialogTheme: DialogThemeData(
-        titleTextStyle: AppFonts.heading(size: 18),
-        contentTextStyle: AppFonts.body(size: 14, color: AppColors.mid),
-      ),
-    );
-  }
-
-  static TextStyle heading({double size = 22, Color color = AppColors.dark, FontWeight weight = FontWeight.w700}) =>
-      AppFonts.heading(size: size, color: color, weight: weight);
-
-  static TextStyle body({double size = 14, Color color = AppColors.dark, FontWeight weight = FontWeight.w500}) =>
-      AppFonts.body(size: size, color: color, weight: weight);
-
-  static TextStyle label({Color color = AppColors.muted}) => AppFonts.label(color: color);
+  static BoxDecoration pill(Color color) => BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(100),
+      );
 }
