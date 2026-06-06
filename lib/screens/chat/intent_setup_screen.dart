@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'chatbot_screen.dart';
-import '../../main_navigation.dart';
+import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import 'chatbot_screen.dart';
 
 class IntentSetupScreen extends StatefulWidget {
   const IntentSetupScreen({super.key});
@@ -11,8 +11,8 @@ class IntentSetupScreen extends StatefulWidget {
 }
 
 class _IntentSetupScreenState extends State<IntentSetupScreen> {
-  final _fromCtrl = TextEditingController(text: 'Hồ Chí Minh');
-  final _destCtrl = TextEditingController(text: 'Phú Quốc');
+  String selectedFrom = 'Hồ Chí Minh';
+  String selectedDest = 'Phú Quốc';
   String selectedDuration = '3 ngày 2 đêm';
   String selectedBudget = 'Tầm trung';
   String selectedGroup = 'Gia đình';
@@ -21,97 +21,165 @@ class _IntentSetupScreenState extends State<IntentSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      appBar: AppBar(title: const Text('Cài đặt chuyến đi cùng AI', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Cung cấp thông tin để AI thiết kế lịch trình cá nhân hóa qua RAG + NLP.', style: TextStyle(color: AppColors.muted, fontSize: 13)),
-            const SizedBox(height: 24),
-            TextField(controller: _fromCtrl, decoration: const InputDecoration(labelText: 'Điểm xuất phát', prefixIcon: Icon(Icons.location_on_outlined))),
-            const SizedBox(height: 16),
-            TextField(controller: _destCtrl, decoration: const InputDecoration(labelText: 'Bạn muốn đi đâu?', prefixIcon: Icon(Icons.flight_land_rounded))),
-            const SizedBox(height: 24),
-            const Text('Thời gian', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: ['2 ngày 1 đêm', '3 ngày 2 đêm', '4 ngày 3 đêm'].map((d) {
-                return ChoiceChip(
-                  label: Text(d),
-                  selected: selectedDuration == d,
-                  onSelected: (_) => setState(() => selectedDuration = d),
-                );
-              }).toList(),
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.fromLTRB(12, 12, 20, 12),
+            child: SafeArea(
+              bottom: false,
+              child: Row(
+                children: [
+                  const AppBackButton(),
+                  const SizedBox(width: 12),
+                  Text('Cài Đặt Chuyến Đi', style: AppTheme.heading(size: 18)),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            const Text('Ngân sách', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: ['Tiết kiệm', 'Tầm trung', 'Cao cấp'].map((b) {
-                return ChoiceChip(
-                  label: Text(b),
-                  selected: selectedBudget == b,
-                  onSelected: (_) => setState(() => selectedBudget = b),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 20),
-            const Text('Nhóm đi', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: ['Gia đình', 'Cặp đôi', 'Solo', 'Nhóm bạn'].map((g) {
-                return ChoiceChip(
-                  label: Text(g),
-                  selected: selectedGroup == g,
-                  onSelected: (_) => setState(() => selectedGroup = g),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 20),
-            const Text('Sở thích', style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: ['Biển', 'Núi', 'Nghỉ dưỡng', 'Khám phá', 'Ẩm thực'].map((p) {
-                final selected = preferences.contains(p);
-                return FilterChip(
-                  label: Text(p),
-                  selected: selected,
-                  onSelected: (v) => setState(() => v ? preferences.add(p) : preferences.remove(p)),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 32),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MainNavigationScreen())),
-                    child: const Text('Bỏ qua'),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _fieldLabel('Điểm xuất phát'),
+                  _selectField(selectedFrom, Icons.location_on_outlined),
+                  _fieldLabel('Bạn muốn đi đâu?'),
+                  _selectField(selectedDest, Icons.place_outlined),
+                  _fieldLabel('Thời gian'),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: ['2 ngày 1 đêm', '3 ngày 2 đêm', '4 ngày 3 đêm'].map((d) {
+                      return AppChoiceChip(
+                        label: d,
+                        selected: selectedDuration == d,
+                        onTap: () => setState(() => selectedDuration = d),
+                      );
+                    }).toList(),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      final prompt = 'Lên lịch trình đi ${_destCtrl.text} $selectedDuration cho nhóm $selectedGroup, ngân sách $selectedBudget, sở thích ${preferences.join(", ")}';
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => ChatBotScreen(initialMessage: prompt)));
-                    },
-                    icon: const Icon(Icons.auto_awesome),
-                    label: const Text('Tạo lịch trình AI'),
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary, foregroundColor: Colors.white, minimumSize: const Size.fromHeight(48)),
+                  const SizedBox(height: 24),
+                  _fieldLabel('Ngân sách'),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: ['Tiết kiệm', 'Tầm trung', 'Cao cấp'].map((b) {
+                      return AppChoiceChip(
+                        label: b,
+                        selected: selectedBudget == b,
+                        onTap: () => setState(() => selectedBudget = b),
+                      );
+                    }).toList(),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 24),
+                  _fieldLabel('Nhóm đi'),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: ['Gia đình', 'Cặp đôi', 'Solo', 'Nhóm bạn'].map((g) {
+                      return AppChoiceChip(
+                        label: g,
+                        selected: selectedGroup == g,
+                        onTap: () => setState(() => selectedGroup = g),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 24),
+                  _fieldLabel('Sở thích'),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: ['Biển', 'Núi', 'Nghỉ dưỡng', 'Khám phá', 'Ẩm thực'].map((p) {
+                      return AppChoiceChip(
+                        label: p,
+                        selected: preferences.contains(p),
+                        onTap: () => setState(() {
+                          if (preferences.contains(p)) {
+                            preferences.remove(p);
+                          } else {
+                            preferences.add(p);
+                          }
+                        }),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 28),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(52),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          ),
+                          child: Text('Bỏ qua', style: AppTheme.heading(size: 15, color: AppColors.mid)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        flex: 2,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: AppColors.accentGradient),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [BoxShadow(color: AppColors.accent.withValues(alpha: 0.3), blurRadius: 24, offset: const Offset(0, 8))],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final prompt =
+                                  'Lên lịch trình đi $selectedDest $selectedDuration cho nhóm $selectedGroup, ngân sách $selectedBudget, sở thích ${preferences.join(", ")}';
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => ChatBotScreen(initialMessage: prompt)),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              minimumSize: const Size.fromHeight(52),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            ),
+                            child: Text('Tạo Lịch Trình', style: AppTheme.heading(size: 16, color: Colors.white)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _fieldLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Text(text.toUpperCase(), style: AppTheme.label(color: AppColors.mid)),
+    );
+  }
+
+  Widget _selectField(String value, IconData icon) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.02), blurRadius: 8)],
+      ),
+      child: Row(
+        children: [
+          Expanded(child: Text(value, style: AppTheme.body(size: 15, weight: FontWeight.w600))),
+          Icon(icon, size: 18, color: AppColors.muted),
+        ],
       ),
     );
   }

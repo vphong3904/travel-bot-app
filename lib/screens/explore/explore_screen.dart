@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/app_state.dart';
 import '../../services/travel_api.dart';
+import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/network_image_widget.dart';
 import '../chat/intent_setup_screen.dart';
 import '../trip_detail/destination_detail_screen.dart';
 
@@ -32,6 +36,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
     _load();
   }
 
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
   Future<void> _load({String? tag}) async {
     setState(() => loading = true);
     final data = await DestinationService.getDestinations(tag: tag?.isEmpty == true ? null : tag);
@@ -55,114 +65,126 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userName = context.watch<AppState>().user?.name ?? 'Lữ khách';
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 120,
-            floating: true,
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
-              title: Column(
-                mainAxisSize: MainAxisSize.min,
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Xin chào, Lữ khách! 👋', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.dark)),
-                  Text('Hôm nay bạn muốn đi đâu?', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                  Text('Xin chào, $userName', style: AppTheme.heading(size: 22)),
+                  const SizedBox(height: 2),
+                  Text('Hôm nay bạn muốn đi đâu?', style: AppTheme.body(size: 13, color: AppColors.muted)),
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
+            child: AppSearchBar(
+              controller: _searchCtrl,
+              hint: 'Tìm địa điểm, món ăn, khách sạn...',
+              onChanged: _search,
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: _searchCtrl,
-                    onChanged: _search,
-                    decoration: InputDecoration(
-                      hintText: 'Tìm địa điểm, món ăn, khách sạn...',
-                      prefixIcon: const Icon(Icons.search, color: AppColors.muted),
-                      suffixIcon: _searchCtrl.text.isNotEmpty
-                          ? IconButton(icon: const Icon(Icons.clear), onPressed: () { _searchCtrl.clear(); _search(''); })
-                          : null,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GradientCard(
+                padding: const EdgeInsets.all(20),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned(
+                      right: -8,
+                      bottom: -16,
+                      child: Icon(Icons.auto_awesome_rounded, size: 72, color: Colors.white.withValues(alpha: 0.2)),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  GradientCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Row(
-                            children: [
-                              Icon(Icons.auto_awesome, color: Colors.white, size: 22),
-                              SizedBox(width: 8),
-                              Text('Lên lịch trình thông minh bằng AI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                            ],
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.25),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          const SizedBox(height: 8),
-                          const Text('Nhập sở thích, ngân sách & thời gian — AI thiết kế chuyến đi tối ưu trong vài giây.', style: TextStyle(color: Colors.white70, fontSize: 13)),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IntentSetupScreen())),
-                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary, foregroundColor: Colors.white),
-                            child: const Text('Thử ngay với AI'),
+                          child: Text('AI POWERED', style: AppTheme.body(size: 11, color: Colors.white, weight: FontWeight.w700)),
+                        ),
+                        const SizedBox(height: 10),
+                        Text('Lên lịch trình thông minh cùng AI', style: AppTheme.heading(size: 18, color: Colors.white)),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Nhập sở thích, ngân sách & thời gian — AI thiết kế chuyến đi tối ưu.',
+                          style: AppTheme.body(size: 12, color: Colors.white.withValues(alpha: 0.9)),
+                        ),
+                        const SizedBox(height: 14),
+                        ElevatedButton(
+                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const IntentSetupScreen())),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: AppColors.primary,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                        ],
-                      ),
+                          child: Text('Thử ngay', style: AppTheme.body(size: 13, color: AppColors.primary, weight: FontWeight.w700)),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (_, i) {
-                        final cat = categories[i];
-                        final selected = selectedCat == i;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: FilterChip(
-                            label: Text(cat['label']!),
-                            selected: selected,
-                            onSelected: (_) {
-                              setState(() => selectedCat = i);
-                              _load(tag: cat['tag']);
-                            },
-                            selectedColor: AppColors.primary.withValues(alpha: 0.15),
-                            checkmarkColor: AppColors.primary,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const SectionTitle(title: 'Điểm đến nổi bật'),
-                  const SizedBox(height: 12),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 60,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                itemCount: categories.length,
+                itemBuilder: (_, i) {
+                  final cat = categories[i];
+                  final selected = selectedCat == i;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: AppChoiceChip(
+                      label: cat['label']!,
+                      selected: selected,
+                      onTap: () {
+                        setState(() => selectedCat = i);
+                        _load(tag: cat['tag']);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 12),
+              child: SectionTitle(title: 'Điểm đến nổi bật', action: 'Xem thêm'),
+            ),
+          ),
           if (loading)
-            const SliverFillRemaining(child: Center(child: CircularProgressIndicator()))
+            const SliverFillRemaining(child: Center(child: CircularProgressIndicator(color: AppColors.primary)))
           else if (filtered.isEmpty)
-            const SliverFillRemaining(child: Center(child: Text('Không tìm thấy địa điểm')))
+            SliverFillRemaining(child: Center(child: Text('Không tìm thấy địa điểm', style: AppTheme.body(color: AppColors.muted))))
           else
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 88),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.72,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (_, i) => _DestinationCard(
@@ -176,7 +198,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               ),
             ),
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
       ),
     );
@@ -196,40 +217,65 @@ class _DestinationCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 4))],
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 16, offset: const Offset(0, 4))],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.network(
-                  dest['image_url'] ?? '',
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    child: const Icon(Icons.landscape, size: 48, color: AppColors.primary),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  AppNetworkImage(
+                    url: dest['image_url'],
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
                   ),
-                ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.92),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.star_rounded, size: 12, color: Color(0xFFFBBF24)),
+                          const SizedBox(width: 2),
+                          Text('4.8', style: AppTheme.body(size: 11, weight: FontWeight.w700)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(dest['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
-                    Text(dest['region'] ?? '', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                    Text(dest['name'] ?? '', style: AppTheme.heading(size: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on_outlined, size: 12, color: AppColors.muted),
+                        const SizedBox(width: 2),
+                        Expanded(
+                          child: Text(dest['region'] ?? '', style: AppTheme.body(size: 11, color: AppColors.muted), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
                     const Spacer(),
                     Text(
-                      '${formatCurrency(dest['budget_low'] ?? 0)} - ${formatCurrency(dest['budget_high'] ?? 0)}',
-                      style: const TextStyle(fontSize: 10, color: AppColors.secondary, fontWeight: FontWeight.w600),
+                      '${formatCurrency(dest['budget_low'] ?? 0)} - ${formatCurrency(dest['budget_high'] ?? 0)}/người',
+                      style: AppTheme.body(size: 12, color: AppColors.accent, weight: FontWeight.w700),
                     ),
                   ],
                 ),
