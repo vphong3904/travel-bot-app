@@ -11,7 +11,9 @@ class TripDetailsScreen extends StatelessWidget {
     final dest = itinerary?['destination'] ?? 'Phú Quốc';
     final duration = itinerary?['duration'] ?? '3 ngày 2 đêm';
     final group = itinerary?['group'] ?? 'gia đình';
-    final days = (itinerary?['days'] as List?) ?? _defaultDays(dest);
+    final rawDays = itinerary?['days'];
+    final List<dynamic> days =
+        rawDays is List ? rawDays : _defaultDays(dest);
     final budgetLow = itinerary?['budget_low'] ?? 4000000;
     final budgetHigh = itinerary?['budget_high'] ?? 10000000;
 

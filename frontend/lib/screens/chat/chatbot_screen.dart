@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/app_state.dart';
 import '../../services/travel_api.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/itinerary_card.dart';
 import '../trip_detail/trip_details_screen.dart';
 
 class ChatBotScreen extends StatefulWidget {
@@ -61,23 +62,52 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
     try {
       final appState = context.read<AppState>();
-      final res = await ChatService.sendMessage(
+      final stream = ChatService.sendMessageStream(
         message: text,
         userId: appState.user?.id ?? 0,
         userName: appState.user?.name ?? 'Khách',
       );
-      if (!mounted) return;
-      setState(() {
-        _isGenerating = false;
-        _messages.add({
-          'sender': 'ai',
-          'text': res['text'] ?? '',
-          'hasItinerary': res['has_itinerary'] ?? false,
-          'intent': res['intent'] ?? '',
-          'itinerary': res['itinerary'],
-          'sources': res['sources'] ?? [],
-        });
-      });
+
+      await for (final res in stream) {
+        if (!mounted) return;
+        final type = res['type'] as String? ?? 'response';
+
+        if (type == 'typing') {
+          setState(() {
+            _isGenerating = true;
+          });
+          continue;
+        }
+
+        if (type == 'response') {
+          setState(() {
+            _isGenerating = false;
+            debugPrint("========== RESPONSE ==========");
+            debugPrint(res.toString());
+            debugPrint("sources: ${res['sources']}");
+            debugPrint("sources type: ${res['sources']?.runtimeType}");
+            debugPrint("itinerary type: ${res['itinerary']?.runtimeType}");
+            debugPrint("=============================");
+          _messages.add({
+            'sender': 'ai',
+            'text': res['text']?.toString() ?? '',
+            'hasItinerary': res['has_itinerary'] == true,
+            'intent': res['intent']?.toString() ?? '',
+            'confidence': (res['confidence'] is num)
+                ? res['confidence']
+                : 0.0,
+            'itinerary': res['itinerary'] is Map<String, dynamic>
+                ? res['itinerary']
+                : null,
+            'sources': res['sources'] is List
+                ? List<dynamic>.from(res['sources'])
+                : [],
+          });
+          });
+        } else if (type == 'error') {
+          throw Exception(res['text'] ?? 'Lỗi chat server');
+        }
+      }
     } catch (_) {
       _useMock = true;
       _sendMockResponse(text);
@@ -189,6 +219,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                 }
                 final msg = _messages[index];
                 final isUser = msg['sender'] == 'user';
+                final sources = msg['sources'] is List ? msg['sources'] as List : [];
                 return Align(
                   alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
@@ -205,6 +236,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                       ),
                       boxShadow: isUser ? null : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
                     ),
+                    
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -220,7 +252,36 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                               ],
                             ),
                           ),
+                          
                         Text(msg['text'], style: TextStyle(color: isUser ? Colors.white : AppColors.dark, height: 1.5)),
+                                if (!isUser && (msg['confidence'] ?? 0) > 0) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            'Độ tin cậy: ${(msg['confidence'] * 100).toStringAsFixed(0)}%',
+                            style: TextStyle(fontSize: 11, color: AppColors.muted),
+                          ),
+                        ],
+
+                        if (!isUser && sources.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: sources.map((source) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.08),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Text(source, style: const TextStyle(fontSize: 12, color: AppColors.primary)),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                        if (msg['hasItinerary'] == true && msg['itinerary'] != null) ...[
+                          ItineraryCard(itinerary: Map<String, dynamic>.from(msg['itinerary'] as Map<String, dynamic>)),
+                        ],
                         if (msg['hasItinerary'] == true) ...[
                           const SizedBox(height: 10),
                           ElevatedButton.icon(

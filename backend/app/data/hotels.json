@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Misty Hill Hotel",
+    "destination": "Đà Lạt",
+    "type": "Boutique",
+    "price_per_night": 850000,
+    "rating": 4.6,
+    "address": "Số 12, đường Hoàng Diệu, Đà Lạt",
+    "amenities": ["WiFi", "sân thượng", "view đồi thông", "buffet sáng", "nhà hàng", "bar"]
+  },
+  {
+    "name": "Dalat Palace Heritage Hotel",
+    "destination": "Đà Lạt",
+    "type": "Resort 5 sao",
+    "price_per_night": 2500000,
+    "rating": 4.8,
+    "address": "Trần Phú, Đà Lạt",
+    "amenities": ["spa", "hồ bơi", "view hồ Xuân Hương", "nhà hàng pháp", "concierge 24/7"]
+  },
+  {
+    "name": "Seaside Resort Phú Quốc",
+    "destination": "Phú Quốc",
+    "type": "Resort 4 sao",
+    "price_per_night": 2200000,
+    "rating": 4.7,
+    "address": "Bãi Trường, An Thới, Phú Quốc",
+    "amenities": ["bể bơi", "spa", "bãi biển riêng", "nhà hàng hải sản", "yoga", "wifi"]
+  },
+  {
+    "name": "JW Marriott Phu Quoc",
+    "destination": "Phú Quốc",
+    "type": "Resort 5 sao",
+    "price_per_night": 8500000,
+    "rating": 4.9,
+    "address": "Bãi Khem, Phú Quốc",
+    "amenities": ["bãi biển riêng", "spa cao cấp", "nhà hàng sushi", "gym", "kids club", "butler service"]
+  },
+  {
+    "name": "Ancient Town Villa",
+    "destination": "Hội An",
+    "type": "Homestay",
+    "price_per_night": 650000,
+    "rating": 4.4,
+    "address": "Phố cổ Hội An, tỉnh Quảng Nam",
+    "amenities": ["xe đạp miễn phí", "vườn trong nhà", "đèn lồng", "buffet sáng", "tầng thượng view"]
+  },
+  {
+    "name": "Riverside Boutique Resort Hoian",
+    "destination": "Hội An",
+    "type": "Boutique 4 sao",
+    "price_per_night": 1800000,
+    "rating": 4.7,
+    "address": "Sông Hoài, Hội An",
+    "amenities": ["bể bơi", "spa", "nhà hàng", "tour", "xe đạp", "view sông"]
+  },
+  {
+    "name": "Highland Trek Lodge",
+    "destination": "Hà Giang",
+    "type": "Khách sạn 3 sao",
+    "price_per_night": 450000,
+    "rating": 4.2,
+    "address": "Đường 4C, thành phố Hà Giang",
+    "amenities": ["điều hoà", "wifi", "tour đèo", "dịch vụ thuê xe máy", "nhà hàng"]
+  },
+  {
+    "name": "Sapa Rooms Homestay",
+    "destination": "Sa Pa",
+    "type": "Homestay",
+    "price_per_night": 350000,
+    "rating": 4.3,
+    "address": "Thị trấn Sa Pa, Lào Cai",
+    "amenities": ["sưởi", "mác đặc biệt", "xe máy", "trekking tour", "phòng ấm áp"]
+  },
+  {
+    "name": "Fansipan Resort Sa Pa",
+    "destination": "Sa Pa",
+    "type": "Resort 4 sao",
+    "price_per_night": 1600000,
+    "rating": 4.6,
+    "address": "Sa Pa, Lào Cai",
+    "amenities": ["nhà hàng", "spa", "trekking guide", "xe máy", "view núi"]
+  },
+  {
+    "name": "Nha Trang Bay Resort",
+    "destination": "Nha Trang",
+    "type": "Resort 4 sao",
+    "price_per_night": 1950000,
+    "rating": 4.5,
+    "address": "Tắc Nha Trang, Khánh Hòa",
+    "amenities": ["bãi biển riêng", "bể bơi", "lặn biển", "nhà hàng hải sản", "spa"]
+  },
+  {
+    "name": "Cham Resort Nha Trang",
+    "destination": "Nha Trang",
+    "type": "Khách sạn 3 sao",
+    "price_per_night": 750000,
+    "rating": 4.1,
+    "address": "Tắng Lêm, Nha Trang",
+    "amenities": ["bể bơi", "nhà hàng", "tour du lịch", "lặn", "xe máy"]
+  },
+  {
+    "name": "Danang Beach Hotel",
+    "destination": "Đà Nẵng",
+    "type": "Khách sạn 3 sao",
+    "price_per_night": 850000,
+    "rating": 4.2,
+    "address": "Bãi Biển Mỹ Khê, Đà Nẵng",
+    "amenities": ["bãi biển", "hồ bơi", "nhà hàng", "tour", "xe máy"]
+  },
+  {
+    "name": "Furama Resort Danang",
+    "destination": "Đà Nẵng",
+    "type": "Resort 5 sao",
+    "price_per_night": 3500000,
+    "rating": 4.8,
+    "address": "Bãi Biển Mỹ Khê, Đà Nẵng",
+    "amenities": ["bãi biển riêng", "spa", "nhà hàng đa quốc gia", "gym", "kids club"]
+  },
+  {
+    "name": "Hanoi Old Quarter Hotel",
+    "destination": "Hà Nội",
+    "type": "Boutique 3 sao",
+    "price_per_night": 600000,
+    "rating": 4.3,
+    "address": "Phố cổ 36 phố phường, Hà Nội",
+    "amenities": ["wifi", "phòng thoáng", "nhà hàng", "tour", "tầng thượng"]
+  },
+  {
+    "name": "Metropole Hanoi Hotel",
+    "destination": "Hà Nội",
+    "type": "Resort 5 sao",
+    "price_per_night": 4200000,
+    "rating": 4.9,
+    "address": "Hoàn Kiếm, Hà Nội",
+    "amenities": ["spa", "hồ bơi", "nhà hàng pháp", "butler", "lounge"]
+  },
+  {
+    "name": "Saigon Riverside Hotel",
+    "destination": "Hồ Chí Minh",
+    "type": "Khách sạn 4 sao",
+    "price_per_night": 1500000,
+    "rating": 4.4,
+    "address": "Sông Sài Gòn, Quận 1",
+    "amenities": ["bể bơi", "nhà hàng", "spa", "gym", "tour"]
+  },
+  {
+    "name": "New World Saigon Hotel",
+    "destination": "Hồ Chí Minh",
+    "type": "Resort 5 sao",
+    "price_per_night": 3800000,
+    "rating": 4.8,
+    "address": "Quận 1, TP. Hồ Chí Minh",
+    "amenities": ["bể bơi", "spa", "nhà hàng", "butler", "gym premium"]
+  },
+  {
+    "name": "Ninh Binh Garden Resort",
+    "destination": "Ninh Bình",
+    "type": "Resort 3 sao",
+    "price_per_night": 800000,
+    "rating": 4.2,
+    "address": "Giáp Bát, Ninh Bình",
+    "amenities": ["bể bơi", "tour Tam Cốc", "xe máy", "nhà hàng", "gym"]
+  },
+  {
+    "name": "Ha Long View Hotel",
+    "destination": "Hạ Long",
+    "type": "Khách sạn 3 sao",
+    "price_per_night": 950000,
+    "rating": 4.1,
+    "address": "Hạ Long, Quảng Ninh",
+    "amenities": ["view vịnh", "hồ bơi", "nhà hàng hải sản", "tour du thuyền", "xe máy"]
+  },
+  {
+    "name": "Tuan Chau Island Resort",
+    "destination": "Hạ Long",
+    "type": "Resort 4 sao",
+    "price_per_night": 2200000,
+    "rating": 4.6,
+    "address": "Đảo Tuần Châu, Hạ Long",
+    "amenities": ["bãi biển", "spa", "nhà hàng", "tour đảo", "gym", "kids club"]
+  }
+]

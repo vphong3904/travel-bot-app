@@ -5,6 +5,7 @@ from jose import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from app.auth import CurrentUser, get_current_user
 from app.config import settings
 from app.database import get_db
 from app.init_db import hash_password, verify_password
@@ -55,3 +56,15 @@ async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
         access_token=create_token(user),
         user=UserResponse.model_validate(user),
     )
+
+@router.get("/me", response_model=UserResponse)
+async def me(
+    current_user: CurrentUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Trả về thông tin user hiện tại dựa trên Bearer token."""
+    result = await db.execute(select(User).where(User.id == current_user.id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="Không tìm thấy user")
+    return UserResponse.model_validate(user)

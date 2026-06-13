@@ -1,4 +1,4 @@
 # Full RAG stack (install after base requirements if you have compatible Python/wheels)
 numpy>=1.26.0
-faiss-cpu>=1.8.0
 sentence-transformers>=3.0.0
+pyvi>=0.1.1

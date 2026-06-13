@@ -1,18 +1,17 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.config import settings
+from app.seed_data import DESTINATIONS, HOTELS, KNOWLEDGE_ENTRIES, TICKETS, TOURS, USERS
+from app.models import Base, Destination, Hotel, KnowledgeEntry, Tour, User
 from app.init_db import init_db
+from app.config import settings
 from app.routers import admin, auth, chat, destinations
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Seed DB + khởi tạo RAG index
     init_db()
     yield
-
 
 app = FastAPI(
     title=settings.app_name,
@@ -29,12 +28,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Routers
 app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
 app.include_router(destinations.router, prefix="/api")
 app.include_router(destinations.services_router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
-
 
 @app.get("/")
 def root():
@@ -43,7 +42,6 @@ def root():
         "docs": "/docs",
         "features": ["NLP", "Intent Recognition", "RAG", "Knowledge Base"],
     }
-
 
 @app.get("/health")
 def health():

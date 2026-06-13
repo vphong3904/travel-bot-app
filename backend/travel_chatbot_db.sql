@@ -482,3 +482,424 @@ INSERT INTO popular_queries (query_text, count, intent) VALUES
 ('có khách sạn nào gần giá rẻ ko',                        1, 'service_search'),
 ('tôi đi biển ở đâu đẹp',                                 1, 'faq_info'),
 ('Lên lịch trình đi Phú Quốc 3 ngày 2 đêm cho nhóm bạn', 1, 'itinerary');
+-- =============================================================================
+-- 12. PDTRIP_AI_SPEC EXTENSION
+-- Bổ sung schema theo backend/PDTRIP_AI_SPEC.md.
+-- Giữ nguyên các bảng demo hiện tại (destinations/hotels/tours/tickets/KB)
+-- để không phá backend đang chạy, đồng thời thêm các bảng production/social.
+-- =============================================================================
+
+-- USERS: mở rộng theo spec roles, premium, soft delete, timestamps
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
+ALTER TABLE users
+    ADD CONSTRAINT users_role_check
+    CHECK (role IN ('guest', 'free', 'premium', 'creator', 'admin', 'user'));
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS phone VARCHAR(30),
+    ADD COLUMN IF NOT EXISTS display_name VARCHAR(120),
+    ADD COLUMN IF NOT EXISTS avatar VARCHAR(500),
+    ADD COLUMN IF NOT EXISTS bio TEXT,
+    ADD COLUMN IF NOT EXISTS is_premium BOOLEAN NOT NULL DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS trial_used BOOLEAN NOT NULL DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+UPDATE users
+SET display_name = COALESCE(display_name, name),
+    role = CASE WHEN role = 'user' THEN 'free' ELSE role END,
+    is_premium = CASE WHEN role IN ('premium', 'creator', 'admin') THEN TRUE ELSE is_premium END
+WHERE display_name IS NULL OR role = 'user';
+
+DROP TRIGGER IF EXISTS trg_users_updated_at ON users;
+CREATE TRIGGER trg_users_updated_at
+    BEFORE UPDATE ON users
+    FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
+
+-- LOCATIONS: bảng explore chính theo spec. Seed từ destinations hiện có.
+CREATE TABLE IF NOT EXISTS locations (
+    id          SERIAL PRIMARY KEY,
+    name        VARCHAR(150) NOT NULL,
+    type        VARCHAR(50)  NOT NULL DEFAULT 'destination',
+    address     VARCHAR(300),
+    province    VARCHAR(100),
+    lat         DOUBLE PRECISION,
+    lng         DOUBLE PRECISION,
+    hours       VARCHAR(200),
+    rating_avg  NUMERIC(3, 2) NOT NULL DEFAULT 0,
+    verified    BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_locations_name_province ON locations (name, province);
+CREATE INDEX IF NOT EXISTS ix_locations_type ON locations (type);
+CREATE INDEX IF NOT EXISTS ix_locations_province ON locations (province);
+CREATE INDEX IF NOT EXISTS ix_locations_lat_lng ON locations (lat, lng);
+
+INSERT INTO locations (name, type, address, province, lat, lng, hours, rating_avg, verified, created_at)
+SELECT
+    d.name,
+    'destination',
+    d.region,
+    d.region,
+    CASE d.name
+        WHEN 'Đà Lạt' THEN 11.9404
+        WHEN 'Phú Quốc' THEN 10.2899
+        WHEN 'Hội An' THEN 15.8801
+        WHEN 'Hà Giang' THEN 22.8026
+        WHEN 'Nha Trang' THEN 12.2388
+        WHEN 'Sa Pa' THEN 22.3364
+        WHEN 'Đà Nẵng' THEN 16.0544
+        WHEN 'Hạ Long' THEN 20.9712
+        ELSE NULL
+    END,
+    CASE d.name
+        WHEN 'Đà Lạt' THEN 108.4583
+        WHEN 'Phú Quốc' THEN 103.9840
+        WHEN 'Hội An' THEN 108.3380
+        WHEN 'Hà Giang' THEN 104.9784
+        WHEN 'Nha Trang' THEN 109.1967
+        WHEN 'Sa Pa' THEN 103.8438
+        WHEN 'Đà Nẵng' THEN 108.2022
+        WHEN 'Hạ Long' THEN 107.0448
+        ELSE NULL
+    END,
+    'Mở cửa cả ngày',
+    4.6,
+    TRUE,
+    NOW()
+FROM destinations d
+ON CONFLICT (name, province) DO NOTHING;
+
+-- SOCIAL: posts, reviews, checkins, follows, likes, comments
+CREATE TABLE IF NOT EXISTS posts (
+    id          SERIAL PRIMARY KEY,
+    user_id     INTEGER NOT NULL REFERENCES users(id),
+    type        VARCHAR(20) NOT NULL DEFAULT 'image' CHECK (type IN ('text', 'image', 'video')),
+    visibility  VARCHAR(20) NOT NULL DEFAULT 'public' CHECK (visibility IN ('public', 'followers', 'private')),
+    content     TEXT,
+    location_id INTEGER REFERENCES locations(id),
+    rating      NUMERIC(2, 1) CHECK (rating IS NULL OR (rating >= 0 AND rating <= 5)),
+    cost        INTEGER,
+    media       TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_deleted  BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX IF NOT EXISTS ix_posts_user_id ON posts(user_id);
+CREATE INDEX IF NOT EXISTS ix_posts_location_id ON posts(location_id);
+CREATE INDEX IF NOT EXISTS ix_posts_created_at ON posts(created_at DESC);
+
+DROP TRIGGER IF EXISTS trg_posts_updated_at ON posts;
+CREATE TRIGGER trg_posts_updated_at
+    BEFORE UPDATE ON posts
+    FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
+
+CREATE TABLE IF NOT EXISTS reviews (
+    id             SERIAL PRIMARY KEY,
+    user_id        INTEGER NOT NULL REFERENCES users(id),
+    location_id    INTEGER NOT NULL REFERENCES locations(id),
+    rating_overall NUMERIC(2, 1) NOT NULL CHECK (rating_overall >= 1 AND rating_overall <= 5),
+    rating_detail  JSONB NOT NULL DEFAULT '{}'::JSONB,
+    content        TEXT NOT NULL,
+    created_at     TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at     TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_deleted     BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX IF NOT EXISTS ix_reviews_location_id ON reviews(location_id);
+CREATE INDEX IF NOT EXISTS ix_reviews_rating ON reviews(rating_overall DESC);
+
+DROP TRIGGER IF EXISTS trg_reviews_updated_at ON reviews;
+CREATE TRIGGER trg_reviews_updated_at
+    BEFORE UPDATE ON reviews
+    FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
+
+CREATE TABLE IF NOT EXISTS checkins (
+    id          SERIAL PRIMARY KEY,
+    user_id     INTEGER NOT NULL REFERENCES users(id),
+    location_id INTEGER NOT NULL REFERENCES locations(id),
+    lat         DOUBLE PRECISION NOT NULL,
+    lng         DOUBLE PRECISION NOT NULL,
+    verified    BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS ix_checkins_user_id ON checkins(user_id);
+CREATE INDEX IF NOT EXISTS ix_checkins_location_id ON checkins(location_id);
+
+CREATE TABLE IF NOT EXISTS follows (
+    follower_id  INTEGER NOT NULL REFERENCES users(id),
+    following_id INTEGER NOT NULL REFERENCES users(id),
+    created_at   TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (follower_id, following_id),
+    CHECK (follower_id <> following_id)
+);
+
+CREATE TABLE IF NOT EXISTS likes (
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    post_id    INTEGER NOT NULL REFERENCES posts(id),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, post_id)
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id          SERIAL PRIMARY KEY,
+    post_id     INTEGER NOT NULL REFERENCES posts(id),
+    user_id     INTEGER NOT NULL REFERENCES users(id),
+    parent_id   INTEGER REFERENCES comments(id),
+    content     TEXT NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_deleted  BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX IF NOT EXISTS ix_comments_post_id ON comments(post_id);
+CREATE INDEX IF NOT EXISTS ix_comments_parent_id ON comments(parent_id);
+
+DROP TRIGGER IF EXISTS trg_comments_updated_at ON comments;
+CREATE TRIGGER trg_comments_updated_at
+    BEFORE UPDATE ON comments
+    FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
+
+-- BOOKMARKS / COLLECTIONS
+CREATE TABLE IF NOT EXISTS collections (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    name       VARCHAR(120) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, name)
+);
+
+CREATE TABLE IF NOT EXISTS bookmarks (
+    user_id       INTEGER NOT NULL REFERENCES users(id),
+    location_id   INTEGER NOT NULL REFERENCES locations(id),
+    collection_id INTEGER REFERENCES collections(id),
+    created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, location_id)
+);
+
+CREATE INDEX IF NOT EXISTS ix_bookmarks_collection_id ON bookmarks(collection_id);
+
+-- CHAT HISTORY + RATE LIMIT
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER REFERENCES users(id),
+    title      VARCHAR(200) NOT NULL DEFAULT 'Cuộc trò chuyện mới',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX IF NOT EXISTS ix_chat_sessions_user_id ON chat_sessions(user_id);
+
+DROP TRIGGER IF EXISTS trg_chat_sessions_updated_at ON chat_sessions;
+CREATE TRIGGER trg_chat_sessions_updated_at
+    BEFORE UPDATE ON chat_sessions
+    FOR EACH ROW EXECUTE FUNCTION fn_set_updated_at();
+
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id                SERIAL PRIMARY KEY,
+    session_id        INTEGER NOT NULL REFERENCES chat_sessions(id),
+    role              VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content           TEXT NOT NULL,
+    sources           JSONB NOT NULL DEFAULT '[]'::JSONB,
+    intent            VARCHAR(50),
+    prompt_tokens     INTEGER NOT NULL DEFAULT 0,
+    completion_tokens INTEGER NOT NULL DEFAULT 0,
+    created_at        TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS ix_chat_messages_session_id ON chat_messages(session_id);
+CREATE INDEX IF NOT EXISTS ix_chat_messages_created_at ON chat_messages(created_at);
+
+CREATE TABLE IF NOT EXISTS ai_usage (
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    date    DATE NOT NULL,
+    count   INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (user_id, date)
+);
+
+-- NOTIFICATIONS / BADGES / PREMIUM
+CREATE TABLE IF NOT EXISTS notifications (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    type       VARCHAR(50) NOT NULL,
+    ref_id     INTEGER,
+    read       BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS ix_notifications_user_id_read ON notifications(user_id, read);
+
+CREATE TABLE IF NOT EXISTS badges (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    badge_type VARCHAR(50) NOT NULL,
+    earned_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (user_id, badge_type)
+);
+
+CREATE TABLE IF NOT EXISTS premium_subscriptions (
+    id         SERIAL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    plan       VARCHAR(30) NOT NULL DEFAULT 'premium',
+    status     VARCHAR(30) NOT NULL DEFAULT 'active',
+    started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    ends_at    TIMESTAMP,
+    trial      BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS ix_premium_subscriptions_user_id ON premium_subscriptions(user_id);
+
+
+-- -----------------------------------------------------------------------------
+-- SPEC SEED DATA: social/reviews/chat history/rate limit/premium
+-- -----------------------------------------------------------------------------
+INSERT INTO posts (user_id, type, visibility, content, location_id, rating, cost, media, created_at)
+SELECT
+    2,
+    'image',
+    'public',
+    'Da Lat buoi sang se lanh, hop de di cafe view doi va dao ho Xuan Huong.',
+    l.id,
+    4.8,
+    1200000,
+    ARRAY['https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800'],
+    NOW()
+FROM locations l
+WHERE lower(unaccent(l.name)) LIKE '%da lat%'
+LIMIT 1;
+
+INSERT INTO reviews (user_id, location_id, rating_overall, rating_detail, content, created_at)
+SELECT
+    2,
+    l.id,
+    5.0,
+    '{"service": 4.8, "food": 4.5, "cleanliness": 4.7}'::JSONB,
+    'Trai nghiem tot, khi hau mat va nhieu diem check-in. Phu hop cap doi va gia dinh.',
+    NOW()
+FROM locations l
+WHERE lower(unaccent(l.name)) LIKE '%da lat%'
+LIMIT 1;
+
+INSERT INTO checkins (user_id, location_id, lat, lng, verified, created_at)
+SELECT 2, l.id, COALESCE(l.lat, 11.9404), COALESCE(l.lng, 108.4583), TRUE, NOW()
+FROM locations l
+WHERE lower(unaccent(l.name)) LIKE '%da lat%'
+LIMIT 1;
+
+INSERT INTO follows (follower_id, following_id)
+VALUES (2, 1)
+ON CONFLICT (follower_id, following_id) DO NOTHING;
+
+INSERT INTO likes (user_id, post_id)
+SELECT 1, p.id
+FROM posts p
+WHERE p.user_id = 2
+ORDER BY p.id DESC
+LIMIT 1
+ON CONFLICT (user_id, post_id) DO NOTHING;
+
+INSERT INTO comments (post_id, user_id, content)
+SELECT p.id, 1, 'Bai review huu ich, minh se luu lai cho chuyen di sap toi.'
+FROM posts p
+WHERE p.user_id = 2
+ORDER BY p.id DESC
+LIMIT 1;
+
+INSERT INTO collections (user_id, name)
+VALUES (2, 'Muon di')
+ON CONFLICT (user_id, name) DO NOTHING;
+
+INSERT INTO bookmarks (user_id, location_id, collection_id)
+SELECT 2, l.id, c.id
+FROM locations l
+JOIN collections c ON c.user_id = 2 AND c.name = 'Muon di'
+WHERE lower(unaccent(l.name)) LIKE '%phu quoc%'
+LIMIT 1
+ON CONFLICT (user_id, location_id) DO NOTHING;
+
+INSERT INTO chat_sessions (user_id, title, created_at, updated_at)
+VALUES (2, 'Tu van Phu Quoc 3 ngay 2 dem', NOW(), NOW());
+
+INSERT INTO chat_messages (session_id, role, content, sources, intent, prompt_tokens, completion_tokens, created_at)
+SELECT s.id, 'user', 'Len lich trinh Phu Quoc 3 ngay 2 dem', '[]'::JSONB, 'itinerary', 0, 0, NOW()
+FROM chat_sessions s
+WHERE s.user_id = 2 AND s.title = 'Tu van Phu Quoc 3 ngay 2 dem'
+ORDER BY s.id DESC
+LIMIT 1;
+
+INSERT INTO chat_messages (session_id, role, content, sources, intent, prompt_tokens, completion_tokens, created_at)
+SELECT
+    s.id,
+    'assistant',
+    'Ngay 1: Grand World va cho dem. Ngay 2: Bai Sao va VinWonders. Ngay 3: mua qua va ra san bay.',
+    '[{"title": "Lich trinh Phu Quoc 3 ngay 2 dem gia dinh"}]'::JSONB,
+    'itinerary',
+    350,
+    180,
+    NOW()
+FROM chat_sessions s
+WHERE s.user_id = 2 AND s.title = 'Tu van Phu Quoc 3 ngay 2 dem'
+ORDER BY s.id DESC
+LIMIT 1;
+
+INSERT INTO ai_usage (user_id, date, count)
+VALUES (2, CURRENT_DATE, 3)
+ON CONFLICT (user_id, date) DO UPDATE SET count = EXCLUDED.count;
+
+INSERT INTO notifications (user_id, type, ref_id, read, created_at)
+VALUES (2, 'review_suggestion', 1, FALSE, NOW());
+
+INSERT INTO badges (user_id, badge_type, earned_at)
+VALUES (1, 'admin', NOW()), (2, 'early_user', NOW())
+ON CONFLICT (user_id, badge_type) DO NOTHING;
+
+INSERT INTO premium_subscriptions (user_id, plan, status, started_at, ends_at, trial)
+VALUES (1, 'admin_unlimited', 'active', NOW(), NULL, FALSE);
+
+-- ============================================================
+-- Migration: Thêm bảng chat_sessions và cột session_id
+-- Chạy 1 lần trên PostgreSQL
+-- ============================================================
+
+-- 1. Tạo bảng chat_sessions
+CREATE TABLE IF NOT EXISTS chat_sessions (
+    id          SERIAL PRIMARY KEY,
+    user_id     INTEGER NOT NULL,
+    user_name   VARCHAR(120) NOT NULL DEFAULT 'Khách',
+    title       VARCHAR(300),
+    summary     TEXT,
+    created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS ix_chat_sessions_user_id ON chat_sessions(user_id);
+
+-- 2. Thêm cột session_id vào chat_logs (nullable để không phá data cũ)
+ALTER TABLE chat_logs
+    ADD COLUMN IF NOT EXISTS session_id INTEGER
+    REFERENCES chat_sessions(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS ix_chat_logs_session_id ON chat_logs(session_id);
+
+-- 3. Trigger tự động cập nhật updated_at khi chat_logs được thêm
+CREATE OR REPLACE FUNCTION update_session_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE chat_sessions
+    SET updated_at = NOW()
+    WHERE id = NEW.session_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_session_ts ON chat_logs;
+CREATE TRIGGER trg_update_session_ts
+    AFTER INSERT ON chat_logs
+    FOR EACH ROW
+    WHEN (NEW.session_id IS NOT NULL)
+    EXECUTE FUNCTION update_session_timestamp();

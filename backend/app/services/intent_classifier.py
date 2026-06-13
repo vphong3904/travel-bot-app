@@ -1,95 +1,179 @@
-import re
+# app/services/intent_classifier.py
+# ============================================================
+#  Intent Classifier — phát hiện ý định từ câu hỏi tiếng Việt
+# ============================================================
+
+from __future__ import annotations
 from dataclasses import dataclass
+import re
 
 
 @dataclass
 class IntentResult:
     intent: str
     confidence: float
-    entities: dict
+    destination: str = ""
+    extra: dict = None
+
+    def __post_init__(self):
+        if self.extra is None:
+            self.extra = {}
 
 
-INTENT_PATTERNS = {
+# Danh sách điểm đến được nhận diện
+KNOWN_DESTINATIONS = [
+    "đà lạt", "dalat", "da lat",
+    "phú quốc", "phu quoc",
+    "hội an", "hoi an",
+    "hà giang", "ha giang",
+    "sa pa", "sapa",
+    "đà nẵng", "da nang",
+    "hạ long", "ha long",
+    "nha trang",
+    "hà nội", "ha noi",
+    "hồ chí minh", "sài gòn", "saigon", "tphcm",
+    "huế", "hue",
+    "ninh bình", "ninh binh",
+    "quy nhơn", "quy nhon",
+    "phú yên", "phu yen",
+    "côn đảo", "con dao",
+    "vũng tàu", "vung tau",
+    "mũi né", "mui ne",
+    "bến tre", "ben tre",
+    "mù cang chải", "mu cang chai",
+]
+
+# Ánh xạ intent → danh sách keyword
+INTENT_PATTERNS: dict[str, list[str]] = {
+    "weather": [
+        "thời tiết", "khí hậu", "mưa", "nắng", "mùa", "lạnh", "nóng",
+        "tháng mấy", "khi nào đẹp", "mùa du lịch", "mùa mưa", "mùa khô",
+        "nhiệt độ", "sương mù", "lúa chín",
+    ],
+    "budget": [
+        "chi phí", "bao nhiêu tiền", "ngân sách", "giá cả", "tốn bao nhiêu",
+        "hết bao nhiêu", "tiết kiệm", "rẻ", "giá tour", "giá vé", "chi tiêu", "tiền",
+    ],
+    "cuisine": [
+        "ăn gì", "ẩm thực", "món ngon", "đặc sản", "quán ăn", "nhà hàng",
+        "đồ ăn", "hải sản", "thức uống", "bánh", "phở", "bún",
+    ],
     "itinerary": [
-        r"lịch trình", r"kế hoạch", r"itinerary", r"\d+\s*ngày", r"ngày\s*\d+\s*đêm",
-        r"đi\s+\w+\s+\d+\s*ngày", r"lên\s+plan", r"thu\s+xếp\s+chuyến",
+        "lịch trình", "hành trình", "ngày mấy", "mấy ngày", "kế hoạch",
+        "đi những đâu", "gợi ý đi", "tour mấy ngày", "2 ngày", "3 ngày",
+        "4 ngày", "1 tuần",
     ],
-    "service_search": [
-        r"khách sạn", r"homestay", r"resort", r"chỗ\s+nghỉ", r"book\s+phòng",
-        r"tour", r"vé\s+tham quan", r"vé\s+", r"đặt\s+tour", r"tra\s+cứu\s+dịch vụ",
+    "hotel": [
+        "khách sạn", "homestay", "resort", "nơi ở", "chỗ ở", "nhà nghỉ",
+        "villa", "glamping", "đặt phòng", "phòng",
     ],
-    "destination_advice": [
-        r"nên\s+đi\s+đâu", r"gợi\s+ý\s+điểm", r"tư\s+vấn\s+điểm", r"đi\s+đâu\s+cho",
-        r"phù\s+hợp", r"theo\s+ngân\s+sách", r"theo\s+sở\s+thích", r"biển\s+hay\s+núi",
-        r"recommend", r"gợi\s+ý\s+địa\s+điểm",
+    "transport": [
+        "di chuyển", "phương tiện", "xe máy", "ô tô", "máy bay", "tàu hỏa",
+        "xe khách", "cách đi", "đường đi", "vé", "giá vé", "vé tham quan", "ticket", "bus", "grab",
     ],
-    "faq_info": [
-        r"thời\s+tiết", r"mùa\s+du\s+lịch", r"ẩm\s+thực", r"món\s+ăn", r"đặc\s+sản",
-        r"chi\s+phí", r"giá", r"ngân\s+sách", r"kinh\s+nghiệm", r"tips", r"lưu\s+ý",
-        r"di\s+chuyển", r"phương\s+tiện", r"thông\s+tin", r"có\s+gì\s+ở",
+    "tips": [
+        "kinh nghiệm", "lưu ý", "tips", "cần biết", "nên", "không nên",
+        "chú ý", "lời khuyên", "bí quyết", "chuẩn bị",
+    ],
+    "recommendation": [
+        "gợi ý", "đề xuất", "nên đi đâu", "điểm đến", "địa điểm nào",
+        "nơi nào đẹp", "chỗ nào hay", "muốn đi", "thích biển", "thích núi",
+        "đi biển", "đi chơi", "đi đâu", "du lịch biển", "du lịch núi",
+    ],
+    "visa": [
+        "visa", "hộ chiếu", "nhập cảnh", "e-visa", "xuất cảnh", "thị thực",
+        "giấy tờ", "passport",
+    ],
+    "greeting": [
+        "xin chào", "hello", "hi", "chào", "alo", "hey",
     ],
 }
 
-DESTINATIONS = ["đà lạt", "phú quốc", "hà giang", "hội an", "nha trang", "sa pa", "sapa", "đà nẵng", "ninh bình", "vũng tàu"]
-BUDGET_KEYWORDS = {"tiết kiệm": "low", "rẻ": "low", "bình dân": "low", "tầm trung": "mid", "trung bình": "mid", "cao cấp": "high", "luxury": "high", "sang": "high"}
-PREFERENCE_KEYWORDS = {"biển": "biển", "núi": "núi", "nghỉ dưỡng": "nghỉ dưỡng", "khám phá": "khám phá", "phiêu lưu": "khám phá", "gia đình": "gia đình", "cặp đôi": "cặp đôi", "solo": "solo"}
-GROUP_KEYWORDS = {"gia đình": "gia đình", "cặp đôi": "cặp đôi", "solo": "solo", "nhóm bạn": "nhóm bạn", "một mình": "solo"}
+# intent_classifier.py
+
+# Định nghĩa mapping một lần
+_MAP = str.maketrans({
+    "à": "a", "á": "a", "ạ": "a", "ả": "a", "ã": "a",
+    "â": "a", "ầ": "a", "ấ": "a", "ậ": "a", "ẩ": "a", "ẫ": "a",
+    "ă": "a", "ằ": "a", "ắ": "a", "ặ": "a", "ẳ": "a", "ẵ": "a",
+    "è": "e", "é": "e", "ẹ": "e", "ẻ": "e", "ẽ": "e",
+    "ê": "e", "ề": "e", "ế": "e", "ệ": "e", "ể": "e", "ễ": "e",
+    "ì": "i", "í": "i", "ị": "i", "ỉ": "i", "ĩ": "i",
+    "ò": "o", "ó": "o", "ọ": "o", "ỏ": "o", "õ": "o",
+    "ô": "o", "ồ": "o", "ố": "o", "ộ": "o", "ổ": "o", "ỗ": "o",
+    "ơ": "o", "ờ": "o", "ớ": "o", "ợ": "o", "ở": "o", "ỡ": "o",
+    "ù": "u", "ú": "u", "ụ": "u", "ủ": "u", "ũ": "u",
+    "ư": "u", "ừ": "u", "ứ": "u", "ự": "u", "ử": "u", "ữ": "u",
+    "ỳ": "y", "ý": "y", "ỵ": "y", "ỷ": "y", "ỹ": "y",
+    "đ": "d"
+})
+
+def _normalize(text: str) -> str:
+    text = text.lower().strip()
+    return text.translate(_MAP)
+
+
+def _detect_destination(text_lower: str) -> str:
+    """Trả về tên điểm đến (viết hoa chuẩn) nếu tìm thấy trong câu."""
+    CANONICAL = {
+        "da lat": "Đà Lạt", "dalat": "Đà Lạt",
+        "phu quoc": "Phú Quốc",
+        "hoi an": "Hội An",
+        "ha giang": "Hà Giang",
+        "sapa": "Sa Pa", "sa pa": "Sa Pa",
+        "da nang": "Đà Nẵng",
+        "ha long": "Hạ Long",
+        "nha trang": "Nha Trang",
+        "ha noi": "Hà Nội",
+        "saigon": "TP. Hồ Chí Minh", "sai gon": "TP. Hồ Chí Minh",
+        "hue": "Huế",
+        "ninh binh": "Ninh Bình",
+        "quy nhon": "Quy Nhơn",
+        "phu yen": "Phú Yên",
+        "con dao": "Côn Đảo",
+        "vung tau": "Vũng Tàu",
+        "mui ne": "Mũi Né",
+        "ben tre": "Bến Tre",
+    }
+    norm = _normalize(text_lower)
+    for key, canonical in CANONICAL.items():
+        if key in norm:
+            return canonical
+    return ""
 
 
 def classify_intent(message: str) -> IntentResult:
-    text = message.lower().strip()
-    scores = {intent: 0.0 for intent in INTENT_PATTERNS}
+    """
+    Phân loại ý định từ câu hỏi tiếng Việt.
+    Trả về IntentResult với intent, confidence, destination.
+    """
+    lower = message.lower()
+    norm = _normalize(lower)
+    destination = _detect_destination(lower)
 
-    for intent, patterns in INTENT_PATTERNS.items():
-        for pattern in patterns:
-            if re.search(pattern, text):
-                scores[intent] += 1.0
+    scores: dict[str, int] = {}
+    for intent, keywords in INTENT_PATTERNS.items():
+        score = 0
+        for kw in keywords:
+            kw_norm = _normalize(kw)
+            if kw_norm in norm:
+                score += 2 if len(kw) > 6 else 1
+        if score > 0:
+            scores[intent] = score
 
-    if max(scores.values()) == 0:
-        best_intent = "faq_info"
-        confidence = 0.5
-    else:
-        best_intent = max(scores, key=scores.get)
-        confidence = min(0.95, 0.5 + scores[best_intent] * 0.15)
+    if not scores:
+        return IntentResult(
+            intent="general",
+            confidence=0.5,
+            destination=destination,
+        )
 
-    entities = _extract_entities(text)
-    return IntentResult(intent=best_intent, confidence=confidence, entities=entities)
+    best_intent = max(scores, key=lambda k: scores[k])
+    total = sum(scores.values())
+    confidence = round(min(scores[best_intent] / max(total, 1), 1.0), 2)
 
-
-def _extract_entities(text: str) -> dict:
-    entities: dict = {}
-
-    for dest in DESTINATIONS:
-        if dest in text:
-            entities["destination"] = dest.title().replace("Sapa", "Sa Pa")
-            break
-
-    duration_match = re.search(r"(\d+)\s*ngày\s*(\d+)?\s*đêm?", text)
-    if duration_match:
-        days = duration_match.group(1)
-        nights = duration_match.group(2) or str(int(days) - 1)
-        entities["duration"] = f"{days} ngày {nights} đêm"
-
-    for kw, level in BUDGET_KEYWORDS.items():
-        if kw in text:
-            entities["budget"] = level
-            break
-
-    for kw, pref in PREFERENCE_KEYWORDS.items():
-        if kw in text:
-            entities["preference"] = pref
-            break
-
-    for kw, group in GROUP_KEYWORDS.items():
-        if kw in text:
-            entities["group"] = group
-            break
-
-    if "khách sạn" in text or "homestay" in text or "resort" in text:
-        entities["service_type"] = "hotel"
-    elif "tour" in text:
-        entities["service_type"] = "tour"
-    elif "vé" in text:
-        entities["service_type"] = "ticket"
-
-    return entities
+    return IntentResult(
+        intent=best_intent,
+        confidence=confidence,
+        destination=destination,
+    )

@@ -86,6 +86,11 @@ class _IntentSetupScreenState extends State<IntentSetupScreen> {
                 );
               }).toList(),
             ),
+            const SizedBox(height: 20),
+            Text(
+              'AI sẽ tự động chọn intent phù hợp và fallback khi độ tin cậy thấp để đảm bảo trả lời chính xác hơn.',
+              style: TextStyle(color: AppColors.muted, fontSize: 13, height: 1.4),
+            ),
             const SizedBox(height: 32),
             Row(
               children: [

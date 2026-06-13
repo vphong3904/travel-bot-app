@@ -73,6 +73,7 @@ class KnowledgeEntry(Base):
 class ChatLog(Base):
     __tablename__ = "chat_logs"
     id          = Column(Integer, primary_key=True, index=True)
+    session_id  = Column(Integer, nullable=True, index=True)
     user_id     = Column(Integer)
     user_name   = Column(String(120))
     message     = Column(Text, nullable=False)
@@ -87,3 +88,24 @@ class PopularQuery(Base):
     query_text = Column(String(300), nullable=False)
     count      = Column(Integer, default=1)
     intent     = Column(String(50))
+
+class ChatSession(Base):
+    """Một cuộc hội thoại (session) gồm nhiều tin nhắn."""
+    __tablename__ = "chat_sessions"
+ 
+    id          = Column(Integer, primary_key=True, index=True)
+    user_id     = Column(Integer, nullable=False, index=True)
+    user_name   = Column(String(120), nullable=False, default="Khách")
+    title       = Column(String(300), nullable=True)   # auto-generated từ tin nhắn đầu
+    summary     = Column(Text, nullable=True)          # tóm tắt ngắn (optional)
+    created_at  = Column(DateTime, server_default=func.now())
+    updated_at  = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+class AiUsage(Base):
+    """Đếm số lượt chat AI theo user/ngày, dùng cho rate limiting (FREE = 20/ngày)."""
+    __tablename__ = "ai_usage"
+
+    id      = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, nullable=False, index=True)
+    date    = Column(String(10), nullable=False, index=True)  # 'YYYY-MM-DD' (UTC)
+    count   = Column(Integer, default=0)

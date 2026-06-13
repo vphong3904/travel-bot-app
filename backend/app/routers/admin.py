@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth import require_admin
 from app.database import get_db
 from app.models import ChatLog, KnowledgeEntry, PopularQuery, User
 from app.schemas import (
@@ -13,7 +14,8 @@ from app.schemas import (
 )
 from app.services.rag_service import get_rag_service
 
-router = APIRouter(prefix="/admin", tags=["Admin"])
+# Toàn bộ router /admin yêu cầu Bearer JWT với role = "admin"
+router = APIRouter(prefix="/admin", tags=["Admin"], dependencies=[Depends(require_admin)])
 
 
 @router.get("/stats", response_model=StatsResponse)

@@ -1,0 +1,119 @@
+[
+  {
+    "name": "Vé tham quan phố cổ Hội An",
+    "destination": "Hội An",
+    "price": 120000,
+    "description": "Vé tham quan 5 điểm di tích trong phố cổ, có hiệu lực 24 giờ.",
+    "includes": "Chùa Cầu, hội quán Phúc Kiến, phòng truyện thơ, nhà cổ, phòng trưng bày",
+    "duration": "24 giờ",
+    "rating": 4.7
+  },
+  {
+    "name": "Vé tham quan Thung lũng Tình Yêu Đà Lạt",
+    "destination": "Đà Lạt",
+    "price": 100000,
+    "description": "Vé vào Thung lũng Tình Yêu - thung lũng đẹp nhất Đà Lạt.",
+    "includes": "Tham quan toàn thung lũng, chèo thuyền lúp lên, ngắm view",
+    "duration": "3 giờ",
+    "rating": 4.5
+  },
+  {
+    "name": "Vé lên Langbiang Đà Lạt",
+    "destination": "Đà Lạt",
+    "price": 50000,
+    "description": "Vé lên núi Langbiang 1500m, ngắm toàn cảnh Đà Lạt.",
+    "includes": "Vé lên xuống cáp treo hoặc trekking",
+    "duration": "4 giờ",
+    "rating": 4.6
+  },
+  {
+    "name": "Vé tham quan VinWonders Phú Quốc",
+    "destination": "Phú Quốc",
+    "price": 600000,
+    "description": "Vé tham quan công viên giải trí lớn nhất Phú Quốc.",
+    "includes": "Tất cả các trò chơi, show, nhà hàng buffet",
+    "duration": "Cả ngày",
+    "rating": 4.8
+  },
+  {
+    "name": "Vé Fansipan cáp treo Sa Pa",
+    "destination": "Sa Pa",
+    "price": 650000,
+    "description": "Vé cáp treo lên Fansipan cao 3143m từ Sa Pa.",
+    "includes": "Cáp treo khứ hồi, ăn sáng, guide",
+    "duration": "2-3 giờ",
+    "rating": 4.7
+  },
+  {
+    "name": "Vé tour Bà Nà Hills Đà Nẵng",
+    "destination": "Đà Nẵng",
+    "price": 450000,
+    "description": "Vé vào Bà Nà Hills gồm Golden Bridge, gardens, BBQ buffet.",
+    "includes": "Cáp treo khứ hồi, Golden Bridge, Sun Wheel, buffet",
+    "duration": "Cả ngày",
+    "rating": 4.9
+  },
+  {
+    "name": "Vé tour hang Sửng Sốt Hạ Long",
+    "destination": "Hạ Long",
+    "price": 500000,
+    "description": "Vé tour du thuyền tham quan hang Sửng Sốt nổi tiếng.",
+    "includes": "Du thuyền, hướng dẫn, ăn trưa, lặn biển",
+    "duration": "1 ngày",
+    "rating": 4.8
+  },
+  {
+    "name": "Vé Bảo tàng Chứng tích Chiến tranh TP.HCM",
+    "destination": "Hồ Chí Minh",
+    "price": 150000,
+    "description": "Vé vào bảo tàng lịch sử quan trọng của Sài Gòn.",
+    "includes": "Tham quan tất cả các gian, hướng dẫn (tùy chọn)",
+    "duration": "2-3 giờ",
+    "rating": 4.6
+  },
+  {
+    "name": "Vé tham quan tháp Chàm Ponagar Nha Trang",
+    "destination": "Nha Trang",
+    "price": 100000,
+    "description": "Vé vào di tích tháp Chàm cổ kính.",
+    "includes": "Tham quan tháp, giải thích lịch sử",
+    "duration": "1 giờ",
+    "rating": 4.4
+  },
+  {
+    "name": "Vé chùa Long Sơn Nha Trang",
+    "destination": "Nha Trang",
+    "price": 30000,
+    "description": "Vé vào chùa Long Sơn nổi tiếng với tượng Phật 24m.",
+    "includes": "Tham quan chùa, tượng Phật, ngắm view",
+    "duration": "1-2 giờ",
+    "rating": 4.5
+  },
+  {
+    "name": "Vé Chùa Bái Đính Ninh Bình",
+    "destination": "Ninh Bình",
+    "price": 100000,
+    "description": "Vé vào Chùa Bái Đính - ngôi chùa lớn nhất Việt Nam.",
+    "includes": "Tham quan chùa chính, các gian phụ, cáp treo",
+    "duration": "3-4 giờ",
+    "rating": 4.7
+  },
+  {
+    "name": "Vé Tam Cốc thuyền Ninh Bình",
+    "destination": "Ninh Bình",
+    "price": 200000,
+    "description": "Vé chèo thuyền Tam Cốc - Disneyland của vùng nông cổ.",
+    "includes": "Chèo thuyền, hướng dẫn, ăn nhẹ",
+    "duration": "2-3 giờ",
+    "rating": 4.8
+  },
+  {
+    "name": "Vé Tràng An thuyền Ninh Bình",
+    "destination": "Ninh Bình",
+    "price": 250000,
+    "description": "Vé chèo thuyền Tràng An - khu du lịch sinh thái lớn.",
+    "includes": "Chèo thuyền, hang động, ăn trưa",
+    "duration": "3-4 giờ",
+    "rating": 4.9
+  }
+]
