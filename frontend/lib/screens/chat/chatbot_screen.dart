@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/app_state.dart';
-import '../../services/travel_api.dart';
 import '../../widgets/common_widgets.dart';
+import '../../providers/app_state.dart';
+import '../../models/chat_message.dart';
+import '../services/chat_service.dart';
 import '../../widgets/itinerary_card.dart';
 import '../trip_detail/trip_details_screen.dart';
 
@@ -17,11 +19,12 @@ class ChatBotScreen extends StatefulWidget {
 }
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
-  final List<Map<String, dynamic>> _messages = [];
+  final List<ChatMessage> _messages = [];
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollCtrl = ScrollController();
-  bool _isGenerating = false;
-  bool _useMock = false;
+  late ChatService _chatService;
+  bool _isConnected = false;
+  bool _isTyping = false;
 
   final quickPrompts = [
     'Thời tiết Đà Lạt tháng 12?',
@@ -34,12 +37,36 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   @override
   void initState() {
     super.initState();
-    _messages.add({
-      'sender': 'ai',
-      'text': 'Xin chào! Tôi là Trợ lý du lịch AI 🤖\n\nTôi có thể:\n• Trả lời thông tin du lịch (FAQ)\n• Tư vấn điểm đến phù hợp\n• Gợi ý lịch trình\n• Tra cứu khách sạn, tour, vé\n\nHệ thống RAG + NLP đang hoạt động!',
-      'hasItinerary': false,
-      'intent': '',
+    
+    final appState = context.read<AppState>();
+    _chatService = ChatService(
+      userId: appState.user?.id ?? '',
+      userName: appState.user?.displayName ?? 'Khách',
+    );
+
+    _chatService.messages.listen((msg) {
+      if (!mounted) return;
+      setState(() => _messages.add(msg));
+      _scrollToBottom();
     });
+
+    _chatService.typingStream.listen((typing) {
+      if (!mounted) return;
+      setState(() => _isTyping = typing);
+      if (typing) _scrollToBottom();
+    });
+
+    _chatService.connectionState.listen((state) {
+      if (!mounted) return;
+      setState(() => _isConnected = state == ChatConnectionState.connected);
+    });
+
+    _chatService.connect();
+
+    _messages.add(const ChatMessage(
+      sender: 'ai',
+      text: 'Xin chào! Tôi là Trợ lý du lịch AI 🤖\nTôi có thể tư vấn điểm đến và lên lịch trình RAG!',
+    ));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.autoPrompt) {
@@ -50,102 +77,20 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     });
   }
 
-  Future<void> _sendMessage(String text) async {
-    if (text.trim().isEmpty || _isGenerating) return;
-
-    setState(() {
-      _messages.add({'sender': 'user', 'text': text, 'hasItinerary': false});
-      _isGenerating = true;
-    });
-    _controller.clear();
-    _scrollToBottom();
-
-    try {
-      final appState = context.read<AppState>();
-      final stream = ChatService.sendMessageStream(
-        message: text,
-        userId: appState.user?.id ?? 0,
-        userName: appState.user?.name ?? 'Khách',
-      );
-
-      await for (final res in stream) {
-        if (!mounted) return;
-        final type = res['type'] as String? ?? 'response';
-
-        if (type == 'typing') {
-          setState(() {
-            _isGenerating = true;
-          });
-          continue;
-        }
-
-        if (type == 'response') {
-          setState(() {
-            _isGenerating = false;
-            debugPrint("========== RESPONSE ==========");
-            debugPrint(res.toString());
-            debugPrint("sources: ${res['sources']}");
-            debugPrint("sources type: ${res['sources']?.runtimeType}");
-            debugPrint("itinerary type: ${res['itinerary']?.runtimeType}");
-            debugPrint("=============================");
-          _messages.add({
-            'sender': 'ai',
-            'text': res['text']?.toString() ?? '',
-            'hasItinerary': res['has_itinerary'] == true,
-            'intent': res['intent']?.toString() ?? '',
-            'confidence': (res['confidence'] is num)
-                ? res['confidence']
-                : 0.0,
-            'itinerary': res['itinerary'] is Map<String, dynamic>
-                ? res['itinerary']
-                : null,
-            'sources': res['sources'] is List
-                ? List<dynamic>.from(res['sources'])
-                : [],
-          });
-          });
-        } else if (type == 'error') {
-          throw Exception(res['text'] ?? 'Lỗi chat server');
-        }
-      }
-    } catch (_) {
-      _useMock = true;
-      _sendMockResponse(text);
-    }
-    _scrollToBottom();
+  @override
+  void dispose() {
+    _chatService.dispose();
+    _controller.dispose();
+    _scrollCtrl.dispose();
+    super.dispose();
   }
 
-  void _sendMockResponse(String text) {
-    Future.delayed(const Duration(milliseconds: 1200), () {
-      if (!mounted) return;
-      final lower = text.toLowerCase();
-      bool hasItinerary = lower.contains('lịch trình') || lower.contains('ngày');
-      setState(() {
-        _isGenerating = false;
-        _messages.add({
-          'sender': 'ai',
-          'text': hasItinerary
-              ? '✨ Demo mode: Tôi đã thiết kế lịch trình mẫu cho bạn. (Kết nối backend tại localhost:8000 để dùng RAG thật)'
-              : '🔍 Demo mode: Đây là câu trả lời mẫu. Khởi động backend FastAPI để trả lời từ Knowledge Base.',
-          'hasItinerary': hasItinerary,
-          'intent': hasItinerary ? 'itinerary' : 'faq_info',
-          'itinerary': hasItinerary
-              ? {
-                  'destination': 'Phú Quốc',
-                  'duration': '3 ngày 2 đêm',
-                  'group': 'gia đình',
-                  'budget_low': 4000000,
-                  'budget_high': 10000000,
-                  'days': [
-                    {'day': 1, 'title': 'Ngày 1', 'activities': ['Đáp sân bay', 'Grand World', 'Chợ đêm Dinh Cậu']},
-                    {'day': 2, 'title': 'Ngày 2', 'activities': ['Bãi Sao', 'VinWonders']},
-                    {'day': 3, 'title': 'Ngày 3', 'activities': ['Nhà tù Phú Quốc', 'Về']},
-                  ],
-                }
-              : null,
-        });
-      });
-    });
+  void _sendMessage(String text) {
+    if (text.trim().isEmpty) return;
+    final sent = _chatService.send(text);
+    _controller.clear();
+    if (!sent) _chatService.connect();
+    _scrollToBottom();
   }
 
   void _scrollToBottom() {
@@ -167,9 +112,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             const Text('Trợ Lý AI Du Lịch', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             Row(
               children: [
-                Container(width: 8, height: 8, decoration: BoxDecoration(color: _useMock ? AppColors.secondary : AppColors.success, shape: BoxShape.circle)),
+                Container(width: 8, height: 8, decoration: BoxDecoration(color: _isConnected ? AppColors.success : Colors.orange, shape: BoxShape.circle)),
                 const SizedBox(width: 6),
-                Text(_useMock ? 'Demo Mode' : 'RAG Active', style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                Text(_isConnected ? 'RAG Active' : 'Connecting...', style: TextStyle(fontSize: 11, color: AppColors.muted)),
               ],
             ),
           ],
@@ -197,9 +142,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             child: ListView.builder(
               controller: _scrollCtrl,
               padding: const EdgeInsets.all(16),
-              itemCount: _messages.length + (_isGenerating ? 1 : 0),
+              itemCount: _messages.length + (_isTyping ? 1 : 0),
               itemBuilder: (context, index) {
-                if (index == _messages.length) {
+                if (_isTyping && index == _messages.length) {
                   return Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
@@ -218,8 +163,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   );
                 }
                 final msg = _messages[index];
-                final isUser = msg['sender'] == 'user';
-                final sources = msg['sources'] is List ? msg['sources'] as List : [];
+                final isUser = msg.sender == 'user';
+                final sources = msg.sources;
                 return Align(
                   alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
@@ -240,24 +185,24 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (!isUser && (msg['intent'] ?? '').isNotEmpty)
+                        if (!isUser && (msg.intent).isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(bottom: 6),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(intentIcon(msg['intent']), size: 14, color: AppColors.secondary),
+                                Icon(intentIcon(msg.intent), size: 14, color: AppColors.secondary),
                                 const SizedBox(width: 4),
-                                Text(intentLabel(msg['intent']), style: TextStyle(fontSize: 11, color: AppColors.secondary, fontWeight: FontWeight.w600)),
+                                Text(intentLabel(msg.intent), style: TextStyle(fontSize: 11, color: AppColors.secondary, fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
                           
-                        Text(msg['text'], style: TextStyle(color: isUser ? Colors.white : AppColors.dark, height: 1.5)),
-                                if (!isUser && (msg['confidence'] ?? 0) > 0) ...[
+                        Text(msg.text, style: TextStyle(color: isUser ? Colors.white : AppColors.dark, height: 1.5)),
+                                if (!isUser && (msg.confidence) > 0) ...[
                           const SizedBox(height: 8),
                           Text(
-                            'Độ tin cậy: ${(msg['confidence'] * 100).toStringAsFixed(0)}%',
+                            'Độ tin cậy: ${(msg.confidence * 100).toStringAsFixed(0)}%',
                             style: TextStyle(fontSize: 11, color: AppColors.muted),
                           ),
                         ],
@@ -271,7 +216,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                               return Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.08),
+                                  color: AppColors.primary.withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Text(source, style: const TextStyle(fontSize: 12, color: AppColors.primary)),
@@ -279,15 +224,15 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                             }).toList(),
                           ),
                         ],
-                        if (msg['hasItinerary'] == true && msg['itinerary'] != null) ...[
-                          ItineraryCard(itinerary: Map<String, dynamic>.from(msg['itinerary'] as Map<String, dynamic>)),
+                        if (msg.hasItinerary && msg.itinerary != null) ...[
+                          ItineraryCard(itinerary: Map<String, dynamic>.from(msg.itinerary!)),
                         ],
-                        if (msg['hasItinerary'] == true) ...[
+                        if (msg.hasItinerary) ...[
                           const SizedBox(height: 10),
                           ElevatedButton.icon(
                             onPressed: () => Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => TripDetailsScreen(itinerary: msg['itinerary'])),
+                              MaterialPageRoute(builder: (_) => TripDetailsScreen(itinerary: msg.itinerary)),
                             ),
                             icon: const Icon(Icons.map, size: 18),
                             label: const Text('Xem Lịch Trình Chi Tiết'),

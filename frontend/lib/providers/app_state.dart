@@ -1,58 +1,131 @@
-import 'dart:convert';
+// lib/providers/app_state.dart
+// ─────────────────────────────────────────────────────────────────────────────
+// AppState — quản lý session người dùng (access token + refresh token + user).
+//
+// Storage: SharedPreferences (nên migrate sang flutter_secure_storage sau)
+// ─────────────────────────────────────────────────────────────────────────────
 
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class AppUser {
-  final int id;
-  final String name;
-  final String email;
-  final String role;
-
-  AppUser({required this.id, required this.name, required this.email, required this.role});
-  bool get isAdmin => role == 'admin';
-
-  factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        id: json['id'],
-        name: json['name'],
-        email: json['email'],
-        role: json['role'] ?? 'user',
-      );
-
-  Map<String, dynamic> toJson() => {'id': id, 'name': name, 'email': email, 'role': role};
-}
+import '../models/app_user.dart';
+import '../services/api_service.dart';
+import '../services/auth_api_service.dart';
 
 class AppState extends ChangeNotifier {
-  AppUser? user;
-  String? token;
+  AppUser? _user;
+  String? _accessToken;
+  String? _refreshToken;
 
-  bool get isLoggedIn => user != null;
+  AppUser? get user => _user;
+  String? get token => _accessToken;      // dùng trong ApiClient
+  String? get accessToken => _accessToken;
+  String? get refreshToken => _refreshToken;
+  bool get isLoggedIn => _user != null && _accessToken != null;
+
+  /// ApiClient đã inject token, dùng cho mọi service call
+  ApiClient get apiClient => ApiClient(token: _accessToken);
+
+  // ── Load session từ storage ────────────────────────────────────────────────
 
   Future<void> loadSession() async {
     final prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('token');
+    _accessToken = prefs.getString('access_token');
+    _refreshToken = prefs.getString('refresh_token');
     final userJson = prefs.getString('user');
     if (userJson != null) {
-      user = AppUser.fromJson(jsonDecode(userJson));
+      try {
+        _user = AppUser.fromJson(jsonDecode(userJson));
+      } catch (_) {
+        // JSON cũ không hợp lệ → xóa
+        await _clearPrefs(prefs);
+      }
     }
+
+    // Nếu có token nhưng chưa có user (ví dụ app restart) → thử load lại
+    if (_accessToken != null && _user == null) {
+      try {
+        _user = await AuthApiService.me(_accessToken!);
+        await prefs.setString('user', jsonEncode(_user!.toJson()));
+      } catch (_) {
+        // Token hết hạn → xóa
+        await _clearPrefs(prefs);
+      }
+    }
+
     notifyListeners();
   }
 
-  Future<void> setSession(String newToken, AppUser newUser) async {
-    token = newToken;
-    user = newUser;
+  // ── Lưu session sau login ──────────────────────────────────────────────────
+
+  Future<void> setSession({
+    required String accessToken,
+    required String refreshToken,
+    required AppUser user,
+  }) async {
+    _accessToken = accessToken;
+    _refreshToken = refreshToken;
+    _user = user;
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', newToken);
-    await prefs.setString('user', jsonEncode(newUser.toJson()));
+    await prefs.setString('access_token', accessToken);
+    await prefs.setString('refresh_token', refreshToken);
+    await prefs.setString('user', jsonEncode(user.toJson()));
+
     notifyListeners();
   }
+
+  // ── Cập nhật user info (sau updateProfile) ────────────────────────────────
+
+  Future<void> updateUser(AppUser updatedUser) async {
+    _user = updatedUser;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(updatedUser.toJson()));
+    notifyListeners();
+  }
+
+  // ── Refresh access token ───────────────────────────────────────────────────
+
+  Future<bool> refreshAccessToken() async {
+    if (_refreshToken == null) return false;
+    try {
+      final tokens = await AuthApiService.refresh(_refreshToken!);
+      _accessToken = tokens.accessToken;
+      _refreshToken = tokens.refreshToken;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('access_token', tokens.accessToken);
+      await prefs.setString('refresh_token', tokens.refreshToken);
+
+      notifyListeners();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // ── Logout ────────────────────────────────────────────────────────────────
 
   Future<void> logout() async {
-    user = null;
-    token = null;
+    // Revoke refresh token trên server (best effort)
+    if (_refreshToken != null) {
+      await AuthApiService.logout(_refreshToken!);
+    }
+
+    _user = null;
+    _accessToken = null;
+    _refreshToken = null;
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('user');
+    await _clearPrefs(prefs);
     notifyListeners();
+  }
+
+  Future<void> _clearPrefs(SharedPreferences prefs) async {
+    await prefs.remove('access_token');
+    await prefs.remove('refresh_token');
+    await prefs.remove('user');
+    // Xóa key cũ (backward compat)
+    await prefs.remove('token');
   }
 }

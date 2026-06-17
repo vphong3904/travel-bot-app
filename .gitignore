@@ -4,6 +4,8 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/*.db
 backend/.env
+backend\all_endpoint.txt
+backend\tree.txt
 *.pyc
 *.pyo
 .Python
@@ -33,3 +35,16 @@ Thumbs.db
 
 # Logs
 *.log
+
+backend_tree.txt
+endpoint api.txt
+Cách chạy postgresql trên docker desktop mà không cần tải.txt
+FRONTEND_ARCHITECTURE.md
+frontend_tree.txt
+HƯỚNG_DẪN_CHẠY.md
+README_FULL.md
+
+#Scripts
+scripts/
+*.ps1
+*.md

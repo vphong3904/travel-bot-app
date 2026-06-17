@@ -1,51 +1,82 @@
+// lib/services/sse_client.dart
+// ─────────────────────────────────────────────────────────────────────────────
+// SseClient — parse Server-Sent Events từ StreamedResponse.
+//
+// Backend stream format:
+//   data: {"type": "chunk", "content": "..."}
+//   data: {"type": "done", "message_id": "uuid", "sources": [...]}
+//   data: {"type": "error", "detail": "..."}
+//
+// Mỗi SSE event là một Map<String, dynamic> được yield ra.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 
 class SseClient {
-  static Stream<Map<String, dynamic>> parse(http.StreamedResponse response) async* {
-    final lines = response.stream.transform(utf8.decoder).transform(const LineSplitter());
+  /// Parse SSE stream từ http.StreamedResponse.
+  ///
+  /// Yield từng event dưới dạng Map<String, dynamic>.
+  /// Bỏ qua comment lines (bắt đầu bằng `:`) và empty lines.
+  static Stream<Map<String, dynamic>> parse(
+      http.StreamedResponse response) async* {
+    final lines = response.stream
+        .transform(utf8.decoder)
+        .transform(const LineSplitter());
+
     final buffer = StringBuffer();
 
-    await for (final rawLine in lines) {
-      final line = rawLine.trimRight();
-      if (line.isEmpty) {
-        if (buffer.isNotEmpty) {
-          final payload = buffer.toString();
-          buffer.clear();
-          final event = _parseSsePayload(payload);
-          if (event != null) {
-            yield event;
-          }
-        }
+    await for (final line in lines) {
+      if (line.startsWith(':')) {
+        // Comment / keep-alive — bỏ qua
         continue;
       }
 
-      if (line.startsWith('data:')) {
-        if (buffer.isNotEmpty) buffer.writeln();
-        buffer.write(line.substring(5).trim());
+      if (line.isEmpty) {
+        // Blank line = end of event → process buffer
+        final raw = buffer.toString().trim();
+        buffer.clear();
+
+        if (raw.isEmpty) continue;
+
+        // Xử lý "data: ..." prefix
+        String jsonStr = raw;
+        if (raw.startsWith('data:')) {
+          jsonStr = raw.substring(5).trim();
+        }
+
+        if (jsonStr.isEmpty || jsonStr == '[DONE]') continue;
+
+        try {
+          final decoded = jsonDecode(jsonStr);
+          if (decoded is Map<String, dynamic>) {
+            yield decoded;
+          }
+        } catch (_) {
+          // Payload không phải JSON hợp lệ — wrap lại
+          yield {'type': 'chunk', 'content': jsonStr};
+        }
+      } else {
+        // Tiếp tục append vào buffer
+        if (buffer.isNotEmpty) buffer.write('\n');
+        buffer.write(line);
       }
     }
 
-    if (buffer.isNotEmpty) {
-      final payload = buffer.toString();
-      final event = _parseSsePayload(payload);
-      if (event != null) {
-        yield event;
+    // Xử lý nốt nếu stream kết thúc không có blank line cuối
+    final remaining = buffer.toString().trim();
+    if (remaining.isNotEmpty) {
+      String jsonStr = remaining;
+      if (remaining.startsWith('data:')) {
+        jsonStr = remaining.substring(5).trim();
       }
-    }
-  }
-
-  static Map<String, dynamic>? _parseSsePayload(String payload) {
-    try {
-      final data = jsonDecode(payload);
-      if (data is Map<String, dynamic>) {
-        return data;
+      if (jsonStr.isNotEmpty && jsonStr != '[DONE]') {
+        try {
+          final decoded = jsonDecode(jsonStr);
+          if (decoded is Map<String, dynamic>) yield decoded;
+        } catch (_) {}
       }
-      return {'type': 'response', 'text': payload};
-    } catch (_) {
-      return {'type': 'response', 'text': payload};
     }
   }
 }

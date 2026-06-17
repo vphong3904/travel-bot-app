@@ -1,0 +1,62 @@
+AUTH
+POST /auth/register Đăng ký
+POST /auth/login Đăng nhập → JWT
+POST /auth/refresh Làm mới token
+POST /auth/logout Thu hồi token
+GET /auth/me Thông tin user
+PATCH /auth/me Cập nhật profile
+
+CHAT SESSIONS
+POST /chat/sessions Tạo session
+GET /chat/sessions Danh sách
+GET /chat/sessions/:id Chi tiết
+PATCH /chat/sessions/:id Đổi title / pin
+DEL /chat/sessions/:id
+
+CHAT MESSAGES (RAG)
+GET /chat/sessions/:id/messages Lịch sử
+POST /chat/sessions/:id/messages Gửi → AI trả lời
+POST /chat/sessions/:id/messages/stream SSE stream
+PATCH /chat/messages/:id/feedback 👍 👎
+
+DESTINATIONS
+GET /travel/destinations Danh sách + filter
+GET /travel/destinations/:id Chi tiết
+GET /travel/destinations/:id/hotels Khách sạn
+GET /travel/destinations/:id/tours Tours
+GET /travel/destinations/:id/tickets Vé tham quan
+GET /travel/destinations/:id/events Lễ hội
+GET /travel/destinations/:id/transport Di chuyển
+GET /travel/destinations/:id/shopping Mua sắm
+
+TRIP PLANS
+POST /trips Tạo lịch trình
+GET /trips Danh sách của tôi
+GET /trips/:id Chi tiết + items
+PATCH /trips/:id Cập nhật
+DEL /trips/:id Xoá
+POST /trips/:id/items Thêm item
+PATCH /trips/:id/items/:item_id Sửa item
+DEL /trips/:id/items/:item_id Xoá item
+
+SEARCH
+GET /search Tìm kiếm chung
+GET /search/history Lịch sử tìm kiếm
+DEL /search/history Xoá lịch sử
+
+ADMIN
+Knowledge Base
+GET /admin/knowledge
+POST /admin/knowledge
+PATCH /admin/knowledge/:id
+DEL /admin/knowledge/:id
+Thống kê
+GET /admin/stats/questions
+GET /admin/stats/destinations
+GET /admin/stats/chatbot
+GET /admin/stats/users
+Quản lý
+GET /admin/users
+PATCH /admin/users/:id
+GET /admin/chat-logs
+GET /admin/embedding-jobs

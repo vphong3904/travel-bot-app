@@ -1,0 +1,110 @@
+🔑 AUTH
+POST /auth/register → Đăng ký
+
+POST /auth/login → Đăng nhập (trả JWT)
+
+POST /auth/refresh → Làm mới token
+
+POST /auth/logout → Thu hồi token
+
+GET /auth/me → Lấy thông tin user
+
+PATCH /auth/me → Cập nhật profile
+
+💬 CHAT
+Sessions
+
+POST /chat/sessions → Tạo session
+
+GET /chat/sessions → Danh sách session
+
+GET /chat/sessions/:id → Chi tiết session
+
+PATCH /chat/sessions/:id → Đổi title / pin
+
+DEL /chat/sessions/:id → Xoá session
+
+Messages (RAG)
+
+GET /chat/sessions/:id/messages → Lịch sử hội thoại
+
+POST /chat/sessions/:id/messages → Gửi tin nhắn → AI trả lời
+
+POST /chat/sessions/:id/messages/stream → SSE stream (chat realtime)
+
+PATCH /chat/messages/:id/feedback → Feedback 👍 👎
+
+🌍 TRAVEL DATA
+Destinations
+
+GET /travel/destinations → Danh sách + filter
+
+GET /travel/destinations/:id → Chi tiết
+
+GET /travel/destinations/:id/hotels → Khách sạn
+
+GET /travel/destinations/:id/tours → Tours
+
+GET /travel/destinations/:id/tickets → Vé tham quan
+
+GET /travel/destinations/:id/events → Lễ hội
+
+GET /travel/destinations/:id/transport → Di chuyển
+
+GET /travel/destinations/:id/shopping → Mua sắm
+
+Trip Plans
+
+POST /trips → Tạo lịch trình
+
+GET /trips → Danh sách lịch trình của tôi
+
+GET /trips/:id → Chi tiết + items
+
+PATCH /trips/:id → Cập nhật
+
+DEL /trips/:id → Xoá
+
+POST /trips/:id/items → Thêm item
+
+PATCH /trips/:id/items/:item_id → Sửa item
+
+DEL /trips/:id/items/:item_id → Xoá item
+
+🔍 SEARCH
+GET /search → Tìm kiếm chung
+
+GET /search/history → Lịch sử tìm kiếm
+
+DEL /search/history → Xoá lịch sử
+
+⚙️ ADMIN
+Knowledge Base
+
+GET /admin/knowledge → Danh sách
+
+POST /admin/knowledge → Thêm
+
+PATCH /admin/knowledge/:id → Sửa
+
+DEL /admin/knowledge/:id → Xoá
+
+Stats
+
+GET /admin/stats/questions → Thống kê câu hỏi phổ biến
+
+GET /admin/stats/destinations → Điểm đến được quan tâm
+
+GET /admin/stats/chatbot → Thống kê chatbot
+
+GET /admin/stats/users → Thống kê người dùng
+
+Quản lý
+
+GET /admin/users → Danh sách user
+
+PATCH /admin/users/:id → Cập nhật user
+
+GET /admin/chat-logs → Log hội thoại
+
+GET /admin/embedding-jobs → Job tạo embedding

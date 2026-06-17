@@ -1,0 +1,58 @@
+lib/
+├── main.dart
+├── main_navigation.dart
+│
+├── models/
+│   ├── user.dart
+│   ├── chat_session.dart
+│   ├── chat_message.dart
+│   ├── destination.dart
+│   ├── trip.dart
+│   └── search_history.dart
+│
+├── providers/
+│   ├── auth_provider.dart
+│   ├── chat_provider.dart
+│   ├── destination_provider.dart
+│   ├── trip_provider.dart
+│   └── search_provider.dart
+│
+├── screens/
+│   ├── auth/
+│   │   ├── login_screen.dart
+│   │   ├── register_screen.dart
+│   │   └── profile_screen.dart   # thêm vào đây
+│   │
+│   ├── chat/
+│   │   ├── chat_screen.dart
+│   │   └── chat_session_list.dart
+│   │
+│   ├── travel/
+│   │   ├── destination_list.dart
+│   │   └── destination_detail.dart
+│   │
+│   ├── trips/
+│   │   ├── trip_list.dart
+│   │   └── trip_detail.dart
+│   │
+│   └── search/
+│       ├── search_screen.dart
+│       └── search_history_screen.dart
+│
+├── services/
+│   ├── api_services.dart
+│   ├── auth_service.dart
+│   ├── chat_service.dart
+│   ├── travel_service.dart
+│   ├── trip_service.dart
+│   └── search_service.dart
+│
+├── theme/
+│   ├── app_theme.dart
+│   └── app_colors.dart
+│
+└── widgets/
+    ├── custom_button.dart
+    ├── custom_card.dart
+    ├── message_bubble.dart
+    └── loading_spinner.dart

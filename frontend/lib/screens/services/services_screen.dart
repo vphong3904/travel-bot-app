@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../services/travel_api.dart';
+
+import '../../models/service.dart';
+import '../../services/service_repository.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/loading_state_widgets.dart';
+import '../../widgets/service_card.dart';
 
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
@@ -9,23 +13,70 @@ class ServicesScreen extends StatefulWidget {
   State<ServicesScreen> createState() => _ServicesScreenState();
 }
 
-class _ServicesScreenState extends State<ServicesScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabCtrl;
+class _ServicesScreenState extends State<ServicesScreen> {
   final _searchCtrl = TextEditingController();
-  Map<String, dynamic> results = {'hotels': [], 'tours': [], 'tickets': []};
-  bool loading = true;
+
+  List<Service> _allServices = [];
+  List<Service> _filteredServices = [];
+  bool _loading = true;
+  String? _error;
+  int _selectedType = 0;
+
+  final serviceTypes = ['Tất cả', 'Khách sạn', 'Tour', 'Vé'];
+  final serviceTypeValues = ['', 'hotel', 'tour', 'ticket'];
 
   @override
   void initState() {
     super.initState();
-    _tabCtrl = TabController(length: 3, vsync: this);
-    _load();
+    _loadServices();
+    _searchCtrl.addListener(() => _filterServices());
   }
 
-  Future<void> _load({String q = ''}) async {
-    setState(() => loading = true);
-    final data = await ServicesApi.search(q: q);
-    if (mounted) setState(() { results = data; loading = false; });
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadServices({String? type}) async {
+    setState(() => _loading = true);
+    try {
+      final services = await ServiceRepository.searchServices(type: type);
+      if (!mounted) return;
+
+      setState(() {
+        _allServices = services;
+        _filteredServices = services;
+        _error = null;
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = 'Lỗi khi tải dịch vụ: $e';
+        _loading = false;
+      });
+    }
+  }
+
+  void _filterServices() {
+    final query = _searchCtrl.text.toLowerCase().trim();
+    setState(() {
+      if (query.isEmpty) {
+        _filteredServices = [..._allServices];
+      } else {
+        _filteredServices = _allServices.where((service) {
+          final content = '${service.name} ${service.description} ${service.location}'.toLowerCase();
+          return content.contains(query);
+        }).toList();
+      }
+    });
+  }
+
+  void _selectType(int index) {
+    setState(() => _selectedType = index);
+    final type = serviceTypeValues[index];
+    _loadServices(type: type.isEmpty ? null : type);
   }
 
   @override
@@ -33,126 +84,81 @@ class _ServicesScreenState extends State<ServicesScreen> with SingleTickerProvid
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: const Text('Tra cứu dịch vụ', style: TextStyle(fontWeight: FontWeight.bold)),
-        bottom: TabBar(
-          controller: _tabCtrl,
-          tabs: const [
-            Tab(icon: Icon(Icons.hotel), text: 'Khách sạn'),
-            Tab(icon: Icon(Icons.tour), text: 'Tour'),
-            Tab(icon: Icon(Icons.confirmation_number), text: 'Vé'),
+        title: const Text('Tra cứu dịch vụ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.white,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AppSearchBar(
+                controller: _searchCtrl,
+                hint: 'Tìm khách sạn, tour, vé...',
+              ),
+            ),
+            SizedBox(
+              height: 48,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: serviceTypes.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final selected = _selectedType == index;
+                  return ChoiceChip(
+                    label: Text(serviceTypes[index]),
+                    selected: selected,
+                    onSelected: (_) => _selectType(index),
+                    selectedColor: AppColors.primary.withValues(alpha: 0.16),
+                    backgroundColor: Colors.white,
+                    labelStyle: TextStyle(
+                      color: selected ? AppColors.primary : AppColors.dark,
+                      fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _loading
+                  ? const LoadingScreen(message: 'Đang tải dịch vụ...')
+                  : _error != null
+                      ? ErrorScreen(
+                          message: _error ?? 'Có lỗi xảy ra',
+                          onRetry: () => _loadServices(),
+                        )
+                      : _filteredServices.isEmpty
+                          ? EmptyScreen(
+                              title: 'Không có dịch vụ',
+                              message: 'Hãy thử tìm kiếm hoặc lọc khác',
+                              icon: Icons.search_outlined,
+                              onRetry: () => _loadServices(),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              itemCount: _filteredServices.length,
+                              itemBuilder: (context, index) {
+                                final service = _filteredServices[index];
+                                return ServiceCard(
+                                  service: service,
+                                  onTap: () {
+                                    // Chi tiết dịch vụ - tính năng placeholder
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Chi tiết: ${service.name}')),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+            ),
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              controller: _searchCtrl,
-              decoration: InputDecoration(
-                hintText: 'Tìm theo tên, địa điểm...',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(icon: const Icon(Icons.search), onPressed: () => _load(q: _searchCtrl.text)),
-              ),
-              onSubmitted: (q) => _load(q: q),
-            ),
-          ),
-          Expanded(
-            child: loading
-                ? const Center(child: CircularProgressIndicator())
-                : TabBarView(
-                    controller: _tabCtrl,
-                    children: [
-                      _ServiceList(items: results['hotels'] ?? [], type: 'hotel'),
-                      _ServiceList(items: results['tours'] ?? [], type: 'tour'),
-                      _ServiceList(items: results['tickets'] ?? [], type: 'ticket'),
-                    ],
-                  ),
-          ),
-        ],
-      ),
     );
   }
 }
 
-class _ServiceList extends StatelessWidget {
-  final List<dynamic> items;
-  final String type;
-
-  const _ServiceList({required this.items, required this.type});
-
-  @override
-  Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return Center(child: Text('Không có dữ liệu. Khởi động backend để tải dịch vụ.', style: TextStyle(color: AppColors.muted)));
-    }
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: items.length,
-      itemBuilder: (_, i) {
-        final item = items[i];
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8)],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      type == 'hotel' ? Icons.hotel : type == 'tour' ? Icons.tour : Icons.confirmation_number,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(item['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                        Text(item['destination'] ?? '', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              if (type == 'hotel') ...[
-                Row(
-                  children: [
-                    Icon(Icons.star, size: 16, color: Colors.amber),
-                    Text(' ${item['rating']} ', style: const TextStyle(fontWeight: FontWeight.w600)),
-                    Text('• ${item['type']}', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text('${formatCurrency(item['price_per_night'] ?? 0)}/đêm', style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold)),
-                if ((item['address'] ?? '').isNotEmpty) Text('📍 ${item['address']}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
-              ],
-              if (type == 'tour') ...[
-                Text('⏱ ${item['duration']}', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                Text('${formatCurrency(item['price'] ?? 0)}', style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold)),
-                if ((item['description'] ?? '').isNotEmpty) Text(item['description'], style: TextStyle(fontSize: 13, color: AppColors.muted)),
-              ],
-              if (type == 'ticket') ...[
-                Text('${formatCurrency(item['price'] ?? 0)}', style: const TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold)),
-                if ((item['description'] ?? '').isNotEmpty) Text(item['description'], style: TextStyle(fontSize: 13, color: AppColors.muted)),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
