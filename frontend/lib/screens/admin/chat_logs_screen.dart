@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../services/travel_api.dart';
+import 'package:provider/provider.dart';
+import '../../providers/app_state.dart';
+import '../../services/admin_api_service.dart';
 import '../../widgets/common_widgets.dart';
 
 class ChatLogsScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class ChatLogsScreen extends StatefulWidget {
 }
 
 class _ChatLogsScreenState extends State<ChatLogsScreen> {
+  late AdminApiService _api;
   List<dynamic> logs = [];
   bool loading = true;
   String? filterIntent;
@@ -17,19 +20,33 @@ class _ChatLogsScreenState extends State<ChatLogsScreen> {
   @override
   void initState() {
     super.initState();
+    final token = context.read<AppState>().token;
+    _api = AdminApiService(token: token);
     _load();
   }
 
   Future<void> _load() async {
     setState(() => loading = true);
-    final data = await AdminService.getChatLogs(intent: filterIntent);
-    if (mounted) setState(() { logs = data; loading = false; });
+    try {
+      final data = await _api.getChatLogs(intent: filterIntent);
+      if (mounted) setState(() { logs = data; loading = false; });
+    } catch (e) {
+      if (mounted) setState(() { loading = false; });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Log hội thoại', style: TextStyle(fontWeight: FontWeight.bold))),
+      appBar: AppBar(
+        title: const Text('Log hội thoại', style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: _load)],
+      ),
       body: Column(
         children: [
           SizedBox(
@@ -38,11 +55,25 @@ class _ChatLogsScreenState extends State<ChatLogsScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               children: [
-                FilterChip(label: const Text('Tất cả'), selected: filterIntent == null, onSelected: (_) { filterIntent = null; _load(); }),
+                FilterChip(
+                  label: const Text('Tất cả'),
+                  selected: filterIntent == null,
+                  onSelected: (_) {
+                    setState(() => filterIntent = null);
+                    _load();
+                  },
+                ),
                 ...['faq_info', 'destination_advice', 'itinerary', 'service_search'].map((intent) => Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: FilterChip(label: Text(intentLabel(intent)), selected: filterIntent == intent, onSelected: (_) { filterIntent = intent; _load(); }),
-                    )),
+                  padding: const EdgeInsets.only(left: 6),
+                  child: FilterChip(
+                    label: Text(intentLabel(intent)),
+                    selected: filterIntent == intent,
+                    onSelected: (_) {
+                      setState(() => filterIntent = intent);
+                      _load();
+                    },
+                  ),
+                )),
               ],
             ),
           ),

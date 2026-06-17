@@ -18,11 +18,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _searchCtrl = TextEditingController();
   final categories = [
-    {'label': 'Tất cả', 'tag': ''},
-    {'label': 'Biển', 'tag': 'biển'},
-    {'label': 'Núi', 'tag': 'núi'},
-    {'label': 'Nghỉ dưỡng', 'tag': 'nghỉ dưỡng'},
-    {'label': 'Khám phá', 'tag': 'khám phá'},
+    {'label': 'Tất cả', 'slug': ''},
+    {'label': 'Biển', 'slug': 'beach'},
+    {'label': 'Núi', 'slug': 'mountain'},
+    {'label': 'Nghỉ dưỡng', 'slug': 'resort'},
+    {'label': 'Khám phá', 'slug': 'adventure'},
   ];
 
   List<Destination> _allDestinations = [];
@@ -43,16 +43,31 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _loadDestinations({String? tag}) async {
+  Future<void> _loadDestinations({String? category}) async {
     setState(() => _loading = true);
-    final data = await DestinationRepository.fetchDestinations(tag: tag);
-    if (!mounted) return;
 
-    setState(() {
-      _allDestinations = data;
-      _filteredDestinations = data;
-      _loading = false;
-    });
+    try {
+      final data = await DestinationRepository.fetchDestinations(
+        category: category,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _allDestinations = data;
+        _filteredDestinations = data;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi tải dữ liệu: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   void _search(String query) {
@@ -71,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _selectCategory(int index) {
     setState(() => _selectedCategory = index);
-    _loadDestinations(tag: categories[index]['tag'] as String?);
+    _loadDestinations(category: categories[index]['slug']?.toString());
   }
 
   @override
@@ -126,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (_) => const ChatBotScreen(autoPrompt: true)),
+                                  MaterialPageRoute(builder: (_) => const ChatBotScreen(initialMessage: 'Lên kế hoạch đi Phú Quốc 3 ngày 2 đêm giúp tôi.')),
                                 );
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: AppColors.primary),

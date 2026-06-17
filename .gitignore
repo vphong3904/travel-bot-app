@@ -4,8 +4,8 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/*.db
 backend/.env
-backend\all_endpoint.txt
-backend\tree.txt
+backend/all_endpoint.txt
+backend/tree.txt
 *.pyc
 *.pyo
 .Python
@@ -46,5 +46,3 @@ README_FULL.md
 
 #Scripts
 scripts/
-*.ps1
-*.md

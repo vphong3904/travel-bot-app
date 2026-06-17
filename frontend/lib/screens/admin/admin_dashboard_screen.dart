@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import '../../services/travel_api.dart';
+import 'package:provider/provider.dart';
+import '../../providers/app_state.dart';
+import '../../services/admin_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import 'kb_management_screen.dart';
 import 'user_management_screen.dart';
@@ -14,19 +16,31 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+  late AdminApiService _api;
   Map<String, dynamic> stats = {};
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
+    final token = context.read<AppState>().token;
+    _api = AdminApiService(token: token);
     _load();
   }
 
   Future<void> _load() async {
     setState(() => loading = true);
-    final data = await AdminService.getStats();
-    if (mounted) setState(() { stats = data; loading = false; });
+    try {
+      final data = await _api.getStats();
+      if (mounted) setState(() { stats = data; loading = false; });
+    } catch (e) {
+      if (mounted) setState(() { loading = false; });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   @override

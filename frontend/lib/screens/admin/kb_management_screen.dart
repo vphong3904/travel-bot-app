@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../services/travel_api.dart';
+import 'package:provider/provider.dart';
+import '../../providers/app_state.dart';
+import '../../services/admin_api_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/web_layout.dart';
@@ -12,6 +14,7 @@ class KBManagementScreen extends StatefulWidget {
 }
 
 class _KBManagementScreenState extends State<KBManagementScreen> {
+  late AdminApiService _api;
   List<dynamic> entries = [];
   List<dynamic> filtered = [];
   bool loading = true;
@@ -23,6 +26,8 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
   @override
   void initState() {
     super.initState();
+    final token = context.read<AppState>().token;
+    _api = AdminApiService(token: token);
     _load();
   }
 
@@ -34,13 +39,22 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
 
   Future<void> _load() async {
     setState(() => loading = true);
-    final data = await AdminService.getKB(category: filterCategory);
-    if (mounted) {
-      setState(() {
-        entries = data;
-        _applyFilter();
-        loading = false;
-      });
+    try {
+      final data = await _api.getKB(category: filterCategory);
+      if (mounted) {
+        setState(() {
+          entries = data;
+          _applyFilter();
+          loading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() { loading = false; });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: ${e.toString()}')),
+        );
+      }
     }
   }
 
@@ -130,8 +144,8 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
                       return;
                     }
                     final ok = entry == null
-                        ? await AdminService.createKB(data)
-                        : await AdminService.updateKB(entry['id'], data);
+                        ? await _api.createKB(data)
+                        : await _api.updateKB((entry['id'] ?? '').toString(), data);
                     if (!ctx.mounted) return;
                     Navigator.pop(ctx);
                     if (!mounted) return;
@@ -160,6 +174,7 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
         backgroundColor: const Color(0xFFF8FAFC),
         appBar: AppBar(
           title: Text('Knowledge Base', style: AppTheme.heading(size: 18)),
+          actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: _load)],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showForm(),
@@ -186,7 +201,6 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
                   FilterChip(
                     label: const Text('Tất cả'),
                     selected: filterCategory == null,
-                    // FIX use_of_void_result: tách thành block, không gán kết quả _load()
                     onSelected: (_) {
                       setState(() => filterCategory = null);
                       _load();
@@ -249,7 +263,7 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
                                   onSelected: (v) async {
                                     if (v == 'edit') _showForm(entry: e);
                                     if (v == 'delete') {
-                                      final ok = await AdminService.deleteKB(e['id']);
+                                      final ok = await _api.deleteKB((e['id'] ?? '').toString());
                                       if (!mounted) return;
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
@@ -260,24 +274,6 @@ class _KBManagementScreenState extends State<KBManagementScreen> {
                                       _load();
                                     }
                                   },
-                                ),
-                                onTap: () => showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    title: Text(e['title'] ?? '', style: AppTheme.heading(size: 16)),
-                                    content: SingleChildScrollView(
-                                      child: Text(
-                                        e['content'] ?? '',
-                                        style: AppTheme.body(size: 14, color: AppColors.mid),
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('Đóng'),
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               ),
                             );

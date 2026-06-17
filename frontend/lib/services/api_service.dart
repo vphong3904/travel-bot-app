@@ -85,7 +85,6 @@ class ApiClient {
   }
 
   Future<dynamic> post(String path, [Map<String, dynamic>? body]) async {
-    print(_uri(path)); // thêm dòng này
     final res = await http
         .post(_uri(path), headers: _headers, body: body != null ? jsonEncode(body) : null)
         .timeout(ApiConfig.timeout);

@@ -104,36 +104,205 @@ CREATE INDEX idx_reftokens_active  ON refresh_tokens(revoked, expires_at)
     WHERE revoked = FALSE;
 
 -- ============================================================
+-- [TRAVEL] CATEGORIES
+-- Phân loại điểm đến: biển, núi, nghỉ dưỡng, khám phá, văn hóa, ẩm thực…
+-- ============================================================
+CREATE TABLE categories (
+    id          UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    name        VARCHAR(100) NOT NULL UNIQUE,
+    slug        VARCHAR(100) NOT NULL UNIQUE,
+    icon        VARCHAR(100),
+    description TEXT,
+    is_active   BOOLEAN DEFAULT TRUE,
+    created_at  TIMESTAMPTZ DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_categories_active
+    ON categories(is_active)
+    WHERE is_active = TRUE;
+
+SELECT _attach_updated_at('categories');
+
+-- ============================================================
 -- [TRAVEL] DESTINATIONS
 -- Điểm đến du lịch (Đà Lạt, Phú Quốc, Hà Giang…)
 -- ============================================================
+-- =========================
+-- DESTINATIONS TABLE
+-- =========================
 CREATE TABLE destinations (
     id          UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     name        VARCHAR(200) NOT NULL,
     province    VARCHAR(100),
-    region      VARCHAR(50)
-                CHECK (region IN ('Miền Bắc', 'Miền Trung', 'Miền Nam', 'Tây Nguyên')),
+    region      VARCHAR(50) CHECK (region IN ('Miền Bắc', 'Miền Trung', 'Miền Nam', 'Tây Nguyên')),
     description TEXT,
-    best_season VARCHAR(200),   -- "Tháng 11–4 (mùa khô)"
-    weather     TEXT,           -- Mô tả khí hậu
-    cuisine     TEXT,           -- Ẩm thực đặc trưng
-    budget_low  INT             CHECK (budget_low >= 0),
-    budget_high INT             CHECK (budget_high >= 0),
+    best_season VARCHAR(200),
+    weather     TEXT,
+    cuisine     TEXT,
+    budget_low  INT CHECK (budget_low >= 0),
+    budget_high INT CHECK (budget_high >= 0),
     CHECK (budget_high IS NULL OR budget_high >= budget_low),
-    travel_type TEXT[],         -- ['biển', 'núi', 'nghỉ dưỡng', 'khám phá']
     image_url   TEXT,
-    is_active   BOOLEAN         DEFAULT TRUE,
-    created_at  TIMESTAMPTZ     DEFAULT NOW(),
-    updated_at  TIMESTAMPTZ     DEFAULT NOW()
+    special     TEXT,
+
+    -- ranking / social stats
+    rating_avg     DECIMAL(2,1) DEFAULT 0,
+    review_count    INT DEFAULT 0,
+    favorite_count  INT DEFAULT 0,
+    view_count INT DEFAULT 0,
+
+    is_active   BOOLEAN DEFAULT TRUE,
+    created_at  TIMESTAMPTZ DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- =========================
+-- INDEXES
+-- =========================
 CREATE INDEX idx_dest_region   ON destinations(region);
 CREATE INDEX idx_dest_province ON destinations(province);
 CREATE INDEX idx_dest_budget   ON destinations(budget_low, budget_high);
 CREATE INDEX idx_dest_active   ON destinations(is_active) WHERE is_active = TRUE;
-CREATE INDEX idx_dest_fts      ON destinations
-    USING GIN(to_tsvector('simple',
-        name || ' ' || COALESCE(province,'') || ' ' || COALESCE(description,'')));
-SELECT _attach_updated_at('destinations');
+
+CREATE INDEX idx_dest_fts ON destinations
+USING GIN (
+    to_tsvector(
+        'simple',
+        name || ' ' || COALESCE(province,'') || ' ' || COALESCE(description,'')
+    )
+);
+
+-- =========================
+-- USER FAVORITES TABLE
+-- =========================
+CREATE TABLE user_favorites (
+    user_id UUID NOT NULL,
+    destination_id UUID NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    PRIMARY KEY (user_id, destination_id),
+
+    FOREIGN KEY (destination_id)
+        REFERENCES destinations(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_fav_dest ON user_favorites(destination_id);
+CREATE INDEX idx_fav_user ON user_favorites(user_id);
+
+-- =========================
+-- REVIEWS TABLE
+-- =========================
+CREATE TABLE reviews (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
+    user_id UUID NOT NULL,
+    destination_id UUID NOT NULL,
+
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    content TEXT,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    FOREIGN KEY (destination_id)
+        REFERENCES destinations(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_review_dest ON reviews(destination_id);
+
+-- =========================
+-- FAVORITE COUNT TRIGGERS
+-- =========================
+CREATE OR REPLACE FUNCTION increase_favorite()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE destinations
+    SET favorite_count = favorite_count + 1
+    WHERE id = NEW.destination_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION decrease_favorite()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE destinations
+    SET favorite_count = GREATEST(favorite_count - 1, 0)
+    WHERE id = OLD.destination_id;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_favorite_insert
+AFTER INSERT ON user_favorites
+FOR EACH ROW EXECUTE FUNCTION increase_favorite();
+
+CREATE TRIGGER trg_favorite_delete
+AFTER DELETE ON user_favorites
+FOR EACH ROW EXECUTE FUNCTION decrease_favorite();
+
+-- =========================
+-- REVIEW STATS TRIGGER
+-- =========================
+CREATE OR REPLACE FUNCTION update_review_stats()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE destinations
+    SET review_count = review_count + 1,
+        rating_avg = (
+            SELECT COALESCE(AVG(rating), 0)
+            FROM reviews
+            WHERE destination_id = NEW.destination_id
+        )
+    WHERE id = NEW.destination_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_review_insert
+AFTER INSERT ON reviews
+FOR EACH ROW EXECUTE FUNCTION update_review_stats();
+
+-- =========================
+-- UPDATED_AT TRIGGER (OPTIONAL)
+-- =========================
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_dest_updated
+BEFORE UPDATE ON destinations
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- ============================================================
+-- [TRAVEL] DESTINATION CATEGORIES
+-- Một destination có thể thuộc nhiều category
+-- ============================================================
+CREATE TABLE destination_categories (
+    destination_id UUID NOT NULL
+        REFERENCES destinations(id) ON DELETE CASCADE,
+
+    category_id UUID NOT NULL
+        REFERENCES categories(id) ON DELETE CASCADE,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    PRIMARY KEY(destination_id, category_id)
+);
+
+CREATE INDEX idx_dest_cat_destination
+    ON destination_categories(destination_id);
+
+CREATE INDEX idx_dest_cat_category
+    ON destination_categories(category_id);
 
 -- ============================================================
 -- [TRAVEL] LOCATIONS
@@ -563,26 +732,40 @@ DROP FUNCTION _attach_updated_at(TEXT);
 -- [AUTH] USERS — 1 admin + 2 user mẫu
 -- password_hash dưới đây là placeholder, hãy thay bằng bcrypt hash thật
 -- ============================================================
-INSERT INTO users (username, email, password_hash, full_name, role) VALUES
-('admin', 'admin@pdtrip.vn', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Quản trị viên', 'admin'),
-('tranlan', 'tranlan@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Trần Lan', 'user'),
-('minhhieu', 'minhhieu@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Minh Hiếu', 'user'),
-('ngochuong', 'ngochuong@gmail.com', '$2b$12$placeholderHashUser0000000000000000002', 'Ngọc Hương', 'user'),
-('quangkhai', 'quangkhai@gmail.com', '$2b$12$placeholderHashUser0000000000000000003', 'Quang Khải', 'user'),
-('thuylinh', 'thuylinh@gmail.com', '$2b$12$placeholderHashUser0000000000000000004', 'Thùy Linh', 'user');
+INSERT INTO users (id, username, email, password_hash, full_name, role) VALUES
+('11111111-1111-1111-1111-111111111111', 'admin', 'admin@pdtrip.vn', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Quản trị viên', 'admin'),
+('22222222-2222-2222-2222-222222222222', 'tranlan', 'tranlan@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Trần Lan', 'user'),
+('33333333-3333-3333-3333-333333333333', 'minhhieu', 'minhhieu@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Minh Hiếu', 'user'),
+('44444444-4444-4444-4444-444444444444', 'ngochuong', 'ngochuong@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Ngọc Hương', 'user'),
+('55555555-5555-5555-5555-555555555555', 'quangkhai', 'quangkhai@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Quang Khải', 'user'),
+('66666666-6666-6666-6666-666666666666', 'thuylinh', 'thuylinh@gmail.com', '$2a$12$9AlNwb7FystnU1gST7pLlOU42gb4.KF1KT50isbMraGDArJsUhoOq', 'Thùy Linh', 'user');
+
+-- ============================================================
+-- [TRAVEL] Categories — 10 loại hình du lịch phổ biến
+-- ============================================================
+INSERT INTO categories (id, name, slug, icon) VALUES
+('c1111111-1111-1111-1111-111111111111', 'Beach',       'beach',       'beach_access'),
+('c2222222-2222-2222-2222-222222222222', 'Mountain',    'mountain',    'terrain'),
+('c3333333-3333-3333-3333-333333333333', 'Resort',      'resort',      'spa'),
+('c4444444-4444-4444-4444-444444444444', 'Adventure',   'adventure',   'hiking'),
+('c5555555-5555-5555-5555-555555555555', 'Food',        'food',        'restaurant'),
+('c6666666-6666-6666-6666-666666666666', 'Culture',     'culture',     'museum'),
+('c7777777-7777-7777-7777-777777777777', 'Nature',      'nature',      'forest'),
+('c8888888-8888-8888-8888-888888888888', 'Photography', 'photography', 'camera'),
+('c9999999-9999-9999-9999-999999999999', 'Family',      'family',      'family_restroom'),
+('caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Luxury',      'luxury',      'diamond');
 
 -- ============================================================
 -- [TRAVEL] DESTINATIONS — 5 điểm đến phổ biến
 -- ============================================================
-INSERT INTO destinations (id, name, province, region, description, best_season, weather, cuisine, budget_low, budget_high, travel_type, image_url) VALUES
+INSERT INTO destinations (id, name, province, region, description, best_season, weather, cuisine, budget_low, budget_high, image_url, special, rating_avg, review_count, view_count) VALUES
 ('11111111-1111-1111-1111-111111111111', 'Đà Lạt',  'Lâm Đồng',   'Tây Nguyên',
  'Thành phố ngàn hoa với khí hậu mát mẻ quanh năm, nổi tiếng với đồi chè, thác nước và kiến trúc Pháp cổ.',
  'Tháng 11–4 (mùa khô, ít mưa)',
  'Mát mẻ quanh năm, nhiệt độ 15–24°C, mùa mưa từ tháng 5–10',
  'Bánh tráng nướng, lẩu gà lá é, sữa đậu nành nóng, dâu tây, atiso',
  1500000, 4000000,
- ARRAY['núi','nghỉ dưỡng','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/dalat.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/dalat.jpg', 'Thành phố ngàn hoa, khí hậu mát mẻ quanh năm, nổi tiếng với đồi chè, thác nước và kiến trúc Pháp cổ', 4.5, 120, 5000),
 
 ('22222222-2222-2222-2222-222222222222', 'Phú Quốc', 'Kiên Giang', 'Miền Nam',
  'Đảo ngọc lớn nhất Việt Nam với bãi biển trong xanh, hải sản tươi sống và các khu nghỉ dưỡng cao cấp.',
@@ -590,8 +773,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Nóng ẩm, 25–32°C, mùa mưa tháng 5–10 có bão nhẹ',
  'Hải sản, nước mắm Phú Quốc, gỏi cá trích, nhum nướng mỡ hành',
  3000000, 8000000,
- ARRAY['biển','nghỉ dưỡng'],
- 'https://cdn.pdtrip.vn/destinations/phuquoc.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/phuquoc.jpg', 'Đảo ngọc với biển xanh và resort cao cấp', 4.7, 150, 6000),
 
 ('33333333-3333-3333-3333-333333333333', 'Hà Giang', 'Hà Giang',   'Miền Bắc',
  'Vùng núi đá hùng vĩ với cung đường đèo Mã Pí Lèng, ruộng bậc thang và văn hóa dân tộc đặc sắc.',
@@ -599,8 +781,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Lạnh về đêm, 10–25°C, có thể có sương mù và rét đậm vào mùa đông',
  'Thắng cố, mèn mén, rượu ngô, cháo ấu tẩu, thịt trâu khô',
  1500000, 5000000,
- ARRAY['núi','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/hagiang.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/hagiang.jpg', 'Vùng núi đá hùng vĩ với cung đường đèo Mã Pí Lèng, cao nguyên đá Đồng Văn và văn hóa dân tộc đặc sắc', 4.3, 90, 4000),
 
 ('44444444-4444-4444-4444-444444444444', 'Hội An',  'Quảng Nam',  'Miền Trung',
  'Phố cổ di sản UNESCO với kiến trúc cổ kính, đèn lồng rực rỡ và ẩm thực đường phố nổi tiếng.',
@@ -608,8 +789,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Nóng vào hè (28–35°C), mùa mưa bão tháng 9–12',
  'Cao lầu, mì Quảng, cơm gà, bánh mì Phượng, bánh bao bánh vạc',
  1000000, 3500000,
- ARRAY['nghỉ dưỡng','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/hoian.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/hoian.jpg', 'Phố cổ di sản UNESCO và lễ hội đèn lồng rực rỡ', 4.6, 110, 5500),
 
 ('55555555-5555-5555-5555-555555555555', 'Sa Pa',   'Lào Cai',    'Miền Bắc',
  'Thị trấn trong mây với ruộng bậc thang, đỉnh Fansipan và văn hóa các dân tộc H''Mông, Dao, Tày.',
@@ -617,16 +797,14 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Lạnh, 10–20°C, có thể có băng giá vào tháng 12–1',
  'Thắng cố, lợn cắp nách, cá hồi Sa Pa, rau cải mèo, rượu táo mèo',
  1500000, 4500000,
- ARRAY['núi','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/sapa.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/sapa.jpg', 'Thị trấn trong mây với ruộng bậc thang và đỉnh Fansipan', 4.8, 200, 7000),
 ('66666666-6666-6666-6666-666666666666', 'Vịnh Hạ Long', 'Quảng Ninh', 'Miền Bắc',
  'Di sản thiên nhiên thế giới với hàng nghìn đảo đá vôi nhô lên từ mặt biển xanh ngọc.',
  'Tháng 3–5 và Tháng 10–11 (ít mưa, biển êm)',
  'Mát mẻ mùa xuân/thu 20–28°C, nóng ẩm mùa hè, có bão tháng 7–9',
  'Chả mực Hạ Long, sam biển, ngán, sá sùng, bánh cuốn chả mực',
  2000000, 6000000,
- ARRAY['biển','nghỉ dưỡng','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/halong.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/halong.jpg', 'Di sản thiên nhiên thế giới với hàng nghìn đảo đá vôi nhô lên từ mặt biển xanh ngọc', 4.9, 250, 8000),
  
 ('77777777-7777-7777-7777-777777777777', 'Huế', 'Thừa Thiên Huế', 'Miền Trung',
  'Cố đô triều Nguyễn với hệ thống lăng tẩm, đại nội cổ kính và sông Hương thơ mộng.',
@@ -634,8 +812,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Mùa hè nóng 30–38°C, mùa mưa bão tháng 9–11',
  'Bún bò Huế, cơm hến, bánh bèo, bánh khoái, chè Huế',
  1200000, 3500000,
- ARRAY['khám phá','nghỉ dưỡng'],
- 'https://cdn.pdtrip.vn/destinations/hue.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/hue.jpg', 'Cố đô triều Nguyễn với hệ thống lăng tẩm, đại nội cổ kính và sông Hương thơ mộng', 4.5, 120, 5000),
  
 ('88888888-8888-8888-8888-888888888888', 'Nha Trang', 'Khánh Hòa', 'Miền Trung',
  'Thành phố biển sôi động với các đảo san hô, hoạt động lặn biển và ẩm thực hải sản phong phú.',
@@ -643,8 +820,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Nóng 25–34°C quanh năm, mùa mưa tháng 9–12',
  'Bún cá, nem nướng Ninh Hòa, bánh căn, hải sản tươi sống',
  2000000, 5500000,
- ARRAY['biển','nghỉ dưỡng'],
- 'https://cdn.pdtrip.vn/destinations/nhatrang.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/nhatrang.jpg', 'Thành phố biển sôi động với các đảo san hô, hoạt động lặn biển và ẩm thực hải sản phong phú.', 4.6, 140, 6000),
  
 ('99999999-9999-9999-9999-999999999999', 'Mũi Né', 'Bình Thuận', 'Miền Nam',
  'Thiên đường đồi cát và lướt ván diều, nổi tiếng với Đồi Cát Bay và Suối Tiên.',
@@ -652,8 +828,7 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Nóng khô 26–33°C, gió mạnh quanh năm đặc trưng vùng duyên hải',
  'Hải sản nướng, bánh căn, gỏi cá mai, nước mắm Phan Thiết',
  1500000, 4000000,
- ARRAY['biển','khám phá'],
- 'https://cdn.pdtrip.vn/destinations/muine.jpg'),
+ 'https://cdn.pdtrip.vn/destinations/muine.jpg', 'Thiên đường đồi cát và lướt ván diều, nổi tiếng với Đồi Cát Bay và Suối Tiên.', 4.4, 100, 4500),
  
 ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Ninh Bình', 'Ninh Bình', 'Miền Bắc',
  'Vịnh Hạ Long trên cạn với Tam Cốc, Tràng An và quần thể hang động sông nước hữu tình.',
@@ -661,8 +836,121 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Mát mẻ mùa thu 22–28°C, lạnh nhẹ mùa đông, nóng ẩm mùa hè',
  'Cơm cháy, dê núi, ốc núi, rượu Kim Sơn, nem chua Yên Mạc',
  800000, 2800000,
- ARRAY['khám phá','núi'],
- 'https://cdn.pdtrip.vn/destinations/ninhbinh.jpg');
+ 'https://cdn.pdtrip.vn/destinations/ninhbinh.jpg', 'Vịnh Hạ Long trên cạn với Tam Cốc, Tràng An và quần thể hang động sông nước hữu tình.', 4.7, 130, 5500);
+
+-- ============================================================
+-- [TRAVEL] Destination Categories — Mỗi điểm đến có 4–5 category
+-- ============================================================
+ INSERT INTO destination_categories(destination_id, category_id) VALUES
+('11111111-1111-1111-1111-111111111111','c2222222-2222-2222-2222-222222222222'), -- Mountain
+('11111111-1111-1111-1111-111111111111','c3333333-3333-3333-3333-333333333333'), -- Resort
+('11111111-1111-1111-1111-111111111111','c4444444-4444-4444-4444-444444444444'), -- Adventure
+('11111111-1111-1111-1111-111111111111','c5555555-5555-5555-5555-555555555555'), -- Food
+('11111111-1111-1111-1111-111111111111','c8888888-8888-8888-8888-888888888888'); -- Photography
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('22222222-2222-2222-2222-222222222222','c1111111-1111-1111-1111-111111111111'), -- Beach
+('22222222-2222-2222-2222-222222222222','c3333333-3333-3333-3333-333333333333'), -- Resort
+('22222222-2222-2222-2222-222222222222','c5555555-5555-5555-5555-555555555555'), -- Food
+('22222222-2222-2222-2222-222222222222','c9999999-9999-9999-9999-999999999999'), -- Family
+('22222222-2222-2222-2222-222222222222','caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'); -- Luxury
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('33333333-3333-3333-3333-333333333333','c2222222-2222-2222-2222-222222222222'),
+('33333333-3333-3333-3333-333333333333','c4444444-4444-4444-4444-444444444444'),
+('33333333-3333-3333-3333-333333333333','c7777777-7777-7777-7777-777777777777'),
+('33333333-3333-3333-3333-333333333333','c8888888-8888-8888-8888-888888888888');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('44444444-4444-4444-4444-444444444444','c5555555-5555-5555-5555-555555555555'),
+('44444444-4444-4444-4444-444444444444','c6666666-6666-6666-6666-666666666666'),
+('44444444-4444-4444-4444-444444444444','c8888888-8888-8888-8888-888888888888'),
+('44444444-4444-4444-4444-444444444444','c9999999-9999-9999-9999-999999999999');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('55555555-5555-5555-5555-555555555555','c2222222-2222-2222-2222-222222222222'),
+('55555555-5555-5555-5555-555555555555','c4444444-4444-4444-4444-444444444444'),
+('55555555-5555-5555-5555-555555555555','c7777777-7777-7777-7777-777777777777'),
+('55555555-5555-5555-5555-555555555555','c8888888-8888-8888-8888-888888888888');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('66666666-6666-6666-6666-666666666666','c1111111-1111-1111-1111-111111111111'),
+('66666666-6666-6666-6666-666666666666','c7777777-7777-7777-7777-777777777777'),
+('66666666-6666-6666-6666-666666666666','c8888888-8888-8888-8888-888888888888'),
+('66666666-6666-6666-6666-666666666666','c9999999-9999-9999-9999-999999999999');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('77777777-7777-7777-7777-777777777777','c5555555-5555-5555-5555-555555555555'),
+('77777777-7777-7777-7777-777777777777','c6666666-6666-6666-6666-666666666666'),
+('77777777-7777-7777-7777-777777777777','c9999999-9999-9999-9999-999999999999');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('88888888-8888-8888-8888-888888888888','c1111111-1111-1111-1111-111111111111'),
+('88888888-8888-8888-8888-888888888888','c3333333-3333-3333-3333-333333333333'),
+('88888888-8888-8888-8888-888888888888','c5555555-5555-5555-5555-555555555555'),
+('88888888-8888-8888-8888-888888888888','c9999999-9999-9999-9999-999999999999');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('99999999-9999-9999-9999-999999999999','c1111111-1111-1111-1111-111111111111'),
+('99999999-9999-9999-9999-999999999999','c4444444-4444-4444-4444-444444444444'),
+('99999999-9999-9999-9999-999999999999','c7777777-7777-7777-7777-777777777777');
+INSERT INTO destination_categories(destination_id, category_id) VALUES
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c7777777-7777-7777-7777-777777777777'),
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c6666666-6666-6666-6666-666666666666'),
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c8888888-8888-8888-8888-888888888888'),
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c9999999-9999-9999-9999-999999999999');
+
+-- ============================================================
+-- [TRAVEL] USER FAVORITES — user lưu điểm đến yêu thích
+-- ============================================================
+INSERT INTO user_favorites (user_id, destination_id) VALUES
+-- Trần Lan thích Đà Lạt + Phú Quốc + Hội An
+('11111111-1111-1111-1111-111111111112', '11111111-1111-1111-1111-111111111111'),
+('11111111-1111-1111-1111-111111111112', '22222222-2222-2222-2222-222222222222'),
+('11111111-1111-1111-1111-111111111112', '44444444-4444-4444-4444-444444444444'),
+
+-- Minh Hiếu thích Hà Giang + Sa Pa + Hạ Long
+('11111111-1111-1111-1111-111111111113', '33333333-3333-3333-3333-333333333333'),
+('11111111-1111-1111-1111-111111111113', '55555555-5555-5555-5555-555555555555'),
+('11111111-1111-1111-1111-111111111113', '66666666-6666-6666-6666-666666666666'),
+
+-- Ngọc Hương thích Hội An + Huế
+('11111111-1111-1111-1111-111111111114', '44444444-4444-4444-4444-444444444444'),
+('11111111-1111-1111-1111-111111111114', '77777777-7777-7777-7777-777777777777'),
+
+-- Quang Khải thích biển (Phú Quốc + Nha Trang + Mũi Né)
+('11111111-1111-1111-1111-111111111115', '22222222-2222-2222-2222-222222222222'),
+('11111111-1111-1111-1111-111111111115', '88888888-8888-8888-8888-888888888888'),
+('11111111-1111-1111-1111-111111111115', '99999999-9999-9999-9999-999999999999');
+
+-- ============================================================
+-- [TRAVEL] REVIEWS — user đánh giá điểm đến
+-- ============================================================
+INSERT INTO reviews (user_id, destination_id, rating, content) VALUES
+
+-- Đà Lạt
+('22222222-2222-2222-2222-222222222222','11111111-1111-1111-1111-111111111111',5,'Không khí rất chill, đi hoài không chán'),
+('44444444-4444-4444-4444-444444444444','11111111-1111-1111-1111-111111111111',4,'Đẹp nhưng hơi đông khách'),
+
+-- Phú Quốc
+('55555555-5555-5555-5555-555555555555','22222222-2222-2222-2222-222222222222',5,'Biển xanh đẹp, resort rất ok'),
+('22222222-2222-2222-2222-222222222222','22222222-2222-2222-2222-222222222222',4,'Đồ ăn ngon nhưng hơi đắt'),
+
+-- Hà Giang
+('33333333-3333-3333-3333-333333333333','33333333-3333-3333-3333-333333333333',5,'Cung đường quá đẹp, đáng đi'),
+('44444444-4444-4444-4444-444444444444','33333333-3333-3333-3333-333333333333',4,'Khá lạnh nhưng cảnh rất hùng vĩ'),
+
+-- Hội An
+('55555555-5555-5555-5555-555555555555','44444444-4444-4444-4444-444444444444',5,'Phố cổ rất đẹp về đêm'),
+('33333333-3333-3333-3333-333333333333','44444444-4444-4444-4444-444444444444',5,'Rất nhiều góc chụp ảnh đẹp'),
+
+-- Sa Pa
+('44444444-4444-4444-4444-444444444444','55555555-5555-5555-5555-555555555555',5,'Sương mù rất đẹp, khí hậu mát'),
+('22222222-2222-2222-2222-222222222222','55555555-5555-5555-5555-555555555555',4,'Đi trekking hơi mệt nhưng đáng'),
+
+-- Hạ Long
+('33333333-3333-3333-3333-333333333333','66666666-6666-6666-6666-666666666666',5,'Cảnh vịnh quá đẹp, nên đi cruise'),
+
+-- Huế
+('22222222-2222-2222-2222-222222222222','77777777-7777-7777-7777-777777777777',4,'Yên bình, nhiều di tích lịch sử'),
+
+-- Nha Trang
+('33333333-3333-3333-3333-333333333333','88888888-8888-8888-8888-888888888888',4,'Biển đẹp nhưng hơi đông du khách'),
+
+-- Mũi Né
+('55555555-5555-5555-5555-555555555555','99999999-9999-9999-9999-999999999999',5,'Đồi cát rất đặc biệt, đáng trải nghiệm');
 
 -- ============================================================
 -- [TRAVEL] LOCATIONS — địa điểm cụ thể tại từng destination

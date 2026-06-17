@@ -35,20 +35,21 @@ class ChatMessage {
         intent: 'error',
       );
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
-        sender: 'ai',
-        text: json['text'] as String? ?? '',
-        hasItinerary: json['has_itinerary'] as bool? ?? false,
-        itinerary: json['itinerary'] as Map<String, dynamic>?,
-        destinations: json['destinations'] as List<dynamic>?,
-        services: json['services'] as List<dynamic>?,
-        sources: (json['sources'] as List<dynamic>?)
-                ?.map((e) => e.toString())
-                .toList() ??
-            [],
-        intent: json['intent'] as String? ?? '',
-        confidence: (json['confidence'] as num?)?.toDouble() ?? 0,
-      );
+  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+    final rawText = json['text'] ?? json['content'] ?? '';
+    final rawSources = json['sources'] as List<dynamic>?;
+    return ChatMessage(
+      sender: json['sender']?.toString() ?? 'ai',
+      text: rawText.toString(),
+      hasItinerary: json['has_itinerary'] as bool? ?? false,
+      itinerary: json['itinerary'] as Map<String, dynamic>?,
+      destinations: json['destinations'] as List<dynamic>?,
+      services: json['services'] as List<dynamic>?,
+      sources: rawSources?.map((e) => e.toString()).toList() ?? [],
+      intent: json['intent'] as String? ?? '',
+      confidence: (json['confidence'] as num?)?.toDouble() ?? 0,
+    );
+  }
 
   ChatMessage copyWith({String? text, bool? isTyping}) => ChatMessage(
         sender: sender,

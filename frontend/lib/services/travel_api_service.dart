@@ -70,32 +70,21 @@ class ChatService {
     return [];
   }
 
-  static Map<String, dynamic>? _parseSseData(String rawData) {
-    try {
-      final decoded = jsonDecode(rawData);
-      if (decoded is Map<String, dynamic>) {
-        return decoded;
-      }
-      return {'type': 'response', 'text': rawData};
-    } catch (_) {
-      return {'type': 'response', 'text': rawData};
-    }
-  }
 }
 
 class DestinationService {
-  static Future<List<dynamic>> getDestinations({String? search, String? tag}) async {
+  static Future<List<dynamic>> getDestinations({String? search, String? category}) async {
     final params = <String, String>{};
     if (search != null && search.isNotEmpty) params['search'] = search;
-    if (tag != null && tag.isNotEmpty) params['tag'] = tag;
-    final uri = Uri.parse('${ApiConfig.baseUrl}/destinations').replace(queryParameters: params);
+    if (category != null && category.isNotEmpty) params['category'] = category;
+    final uri = Uri.parse('${ApiConfig.baseUrl}/travel/destinations').replace(queryParameters: params);
     final res = await http.get(uri);
     if (res.statusCode == 200) return jsonDecode(res.body);
     return [];
   }
 
-  static Future<Map<String, dynamic>?> getDestination(int id) async {
-    final res = await http.get(Uri.parse('${ApiConfig.baseUrl}/destinations/$id'));
+  static Future<Map<String, dynamic>?> getDestination(String id) async {
+    final res = await http.get(Uri.parse('${ApiConfig.baseUrl}/travel/destinations/$id'));
     if (res.statusCode == 200) return jsonDecode(res.body);
     return null;
   }
@@ -104,12 +93,12 @@ class DestinationService {
 class ServicesApi {
   static Future<Map<String, dynamic>> search({String q = '', String? type, String? destination}) async {
     final params = <String, String>{'q': q};
-    if (type != null) params['type'] = type;
-    if (destination != null) params['destination'] = destination;
-    final uri = Uri.parse('${ApiConfig.baseUrl}/services/search').replace(queryParameters: params);
+    if (type != null && type.isNotEmpty) params['type'] = type;
+    if (destination != null && destination.isNotEmpty) params['destination'] = destination;
+    final uri = Uri.parse('${ApiConfig.baseUrl}/search').replace(queryParameters: params);
     final res = await http.get(uri);
     if (res.statusCode == 200) return jsonDecode(res.body);
-    return {'hotels': [], 'tours': [], 'tickets': []};
+    return {'destinations': [], 'hotels': [], 'tours': []};
   }
 }
 

@@ -15,6 +15,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.api.deps import get_db, get_current_user_optional
 from app.db.models.travel import (
@@ -26,8 +27,10 @@ from app.db.models.travel import (
     TransportOption,
     ShoppingPlace,
     Location,
+    Category,
 )
 from app.db.schemas.travel import (
+    CategoryOut,
     DestinationOut,
     DestinationListOut,
     HotelOut,
@@ -46,20 +49,22 @@ router = APIRouter(tags=["travel"])
 async def list_destinations(
     region: Optional[str] = Query(None, description="Miền Bắc | Miền Trung | Miền Nam | Tây Nguyên"),
     budget_max: Optional[int] = Query(None, description="Ngân sách tối đa (VND/ngày)"),
-    travel_type: Optional[str] = Query(None, description="biển | núi | nghỉ dưỡng | khám phá"),
+    category: Optional[str] = Query(None, description="Tên hoặc slug category"),
     q: Optional[str] = Query(None, description="Tìm kiếm fulltext"),
     skip: int = 0,
     limit: int = 20,
     db: AsyncSession = Depends(get_db),
 ):
-    stmt = select(Destination).where(Destination.is_active.is_(True))
+    stmt = select(Destination).options(selectinload(Destination.categories)).where(Destination.is_active.is_(True))
 
     if region:
         stmt = stmt.where(Destination.region == region)
     if budget_max:
         stmt = stmt.where(Destination.budget_low <= budget_max)
-    if travel_type:
-        stmt = stmt.where(Destination.travel_type.any(travel_type))
+    if category:
+        stmt = stmt.join(Destination.categories).where(
+            or_(Category.slug == category, Category.name == category)
+        ).distinct()
     if q:
         stmt = stmt.where(
             func.to_tsvector("simple",
@@ -80,7 +85,17 @@ async def get_destination(
     destination_id: UUID,
     db: AsyncSession = Depends(get_db),
 ):
-    dest = await _get_dest_or_404(db, destination_id)
+    result = await db.execute(
+        select(Destination)
+        .options(selectinload(Destination.categories))
+        .where(
+            Destination.id == destination_id,
+            Destination.is_active.is_(True),
+        )
+    )
+    dest = result.scalar_one_or_none()
+    if not dest:
+        raise HTTPException(status_code=404, detail="Destination not found")
     return dest
 
 

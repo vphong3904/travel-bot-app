@@ -1,264 +1,142 @@
-// lib/services/travel_api_service.dart
+// lib/services/chat_api_service.dart
 // ─────────────────────────────────────────────────────────────────────────────
-// TravelApiService — /travel/destinations + sub-resources
-// SearchApiService — /search
-// AdminApiService  — /admin/*  (cần role admin)
+// ChatSessionApiService — wrap toàn bộ các call tới /chat/sessions/* và
+// /chat/messages/* (RAG thật, không phải WebSocket).
+//
+// Backend không hỗ trợ WebSocket — toàn bộ chat đi qua REST + SSE stream:
+//   POST   /chat/sessions                       → tạo session mới
+//   GET    /chat/sessions                       → danh sách session
+//   GET    /chat/sessions/:id                   → chi tiết session
+//   PATCH  /chat/sessions/:id                   → đổi title / pin
+//   DEL    /chat/sessions/:id                   → xoá (soft delete)
+//   GET    /chat/sessions/:id/messages           → lịch sử hội thoại
+//   POST   /chat/sessions/:id/messages           → gửi tin nhắn (chờ đủ câu trả lời)
+//   POST   /chat/sessions/:id/messages/stream     → gửi tin nhắn, nhận SSE stream
+//   PATCH  /chat/messages/:id/feedback            → 👍 / 👎
 // ─────────────────────────────────────────────────────────────────────────────
 
-import '../models/destination.dart';
+import 'dart:convert';
+
+import '../models/chat_session_model.dart';
 import 'api_service.dart';
+import 'sse_client.dart';
 
-// ═════════════════════════════════════════════════════════════════════════════
-// TRAVEL
-// ═════════════════════════════════════════════════════════════════════════════
-
-class TravelApiService {
+class ChatSessionApiService {
   final String? token;
 
-  TravelApiService({this.token});
+  ChatSessionApiService({this.token});
 
   ApiClient get _client => ApiClient(token: token);
 
-  // ── Destinations ───────────────────────────────────────────────────────────
+  // ── Sessions ──────────────────────────────────────────────────────────────
 
-  Future<List<Destination>> getDestinations({
-    String? search,
-    String? region,
-    String? tag,
+  Future<List<ChatSessionModel>> listSessions({
+    bool pinnedOnly = false,
     int skip = 0,
-    int limit = 20,
+    int limit = 30,
   }) async {
     final params = <String, String>{
       'skip': '$skip',
       'limit': '$limit',
+      if (pinnedOnly) 'pinned_only': 'true',
     };
-    if (search != null && search.isNotEmpty) params['search'] = search;
-    if (region != null && region.isNotEmpty) params['region'] = region;
-    if (tag != null && tag.isNotEmpty) params['tag'] = tag;
-
-    final data =
-        await _client.get('/travel/destinations', params) as List<dynamic>;
+    final data = await _client.get('/chat/sessions', params) as List<dynamic>;
     return data
-        .map((e) => Destination.fromJson(e as Map<String, dynamic>))
+        .map((e) => ChatSessionModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
-  Future<Destination?> getDestination(dynamic id) async {
-    try {
-      final data = await _client.get('/travel/destinations/$id')
-          as Map<String, dynamic>;
-      return Destination.fromJson(data);
-    } on ApiException catch (e) {
-      if (e.statusCode == 404) return null;
-      rethrow;
-    }
+  Future<ChatSessionModel> createSession({String? title, String? modelName}) async {
+    final body = <String, dynamic>{
+      if (title != null && title.isNotEmpty) 'title': title,
+      if (modelName != null && modelName.isNotEmpty) 'model_name': modelName,
+    };
+    final data = await _client.post('/chat/sessions', body) as Map<String, dynamic>;
+    return ChatSessionModel.fromJson(data);
   }
 
-  Future<List<dynamic>> getHotels(dynamic destinationId) async {
-    final data = await _client
-        .get('/travel/destinations/$destinationId/hotels') as List<dynamic>;
-    return data;
+  Future<ChatSessionModel> getSession(String sessionId) async {
+    final data = await _client.get('/chat/sessions/$sessionId') as Map<String, dynamic>;
+    return ChatSessionModel.fromJson(data);
   }
 
-  Future<List<dynamic>> getTours(dynamic destinationId) async {
-    final data = await _client
-        .get('/travel/destinations/$destinationId/tours') as List<dynamic>;
-    return data;
-  }
-
-  Future<List<dynamic>> getTickets(dynamic destinationId) async {
-    final data = await _client
-        .get('/travel/destinations/$destinationId/tickets') as List<dynamic>;
-    return data;
-  }
-
-  Future<List<dynamic>> getEvents(dynamic destinationId) async {
-    final data = await _client
-        .get('/travel/destinations/$destinationId/events') as List<dynamic>;
-    return data;
-  }
-
-  Future<List<dynamic>> getTransport(dynamic destinationId) async {
-    final data = await _client
-        .get('/travel/destinations/$destinationId/transport') as List<dynamic>;
-    return data;
-  }
-}
-
-// ═════════════════════════════════════════════════════════════════════════════
-// TRIPS
-// ═════════════════════════════════════════════════════════════════════════════
-
-class TripApiService {
-  final String token;
-
-  TripApiService({required this.token});
-
-  ApiClient get _client => ApiClient(token: token);
-
-  Future<List<dynamic>> getTrips() async {
-    final data = await _client.get('/trips') as List<dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> getTrip(String tripId) async {
-    final data = await _client.get('/trips/$tripId') as Map<String, dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> createTrip(Map<String, dynamic> body) async {
-    final data = await _client.post('/trips', body) as Map<String, dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> updateTrip(
-      String tripId, Map<String, dynamic> body) async {
-    final data =
-        await _client.patch('/trips/$tripId', body) as Map<String, dynamic>;
-    return data;
-  }
-
-  Future<void> deleteTrip(String tripId) async {
-    await _client.delete('/trips/$tripId');
-  }
-
-  Future<Map<String, dynamic>> addItem(
-      String tripId, Map<String, dynamic> body) async {
-    final data = await _client.post('/trips/$tripId/items', body)
-        as Map<String, dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> updateItem(
-      String tripId, String itemId, Map<String, dynamic> body) async {
-    final data = await _client.patch('/trips/$tripId/items/$itemId', body)
-        as Map<String, dynamic>;
-    return data;
-  }
-
-  Future<void> deleteItem(String tripId, String itemId) async {
-    await _client.delete('/trips/$tripId/items/$itemId');
-  }
-}
-
-// ═════════════════════════════════════════════════════════════════════════════
-// SEARCH
-// ═════════════════════════════════════════════════════════════════════════════
-
-class SearchApiService {
-  final String? token;
-
-  SearchApiService({this.token});
-
-  ApiClient get _client => ApiClient(token: token);
-
-  Future<List<dynamic>> search({
-    required String q,
-    String? type,
-    String? destination,
+  Future<ChatSessionModel> updateSession(
+    String sessionId, {
+    String? title,
+    bool? pinned,
   }) async {
-    final params = <String, String>{'q': q};
-    if (type != null && type.isNotEmpty) params['type'] = type;
-    if (destination != null && destination.isNotEmpty)
-      params['destination'] = destination;
+    final body = <String, dynamic>{
+      if (title != null) 'title': title,
+      if (pinned != null) 'pinned': pinned,
+    };
+    final data =
+        await _client.patch('/chat/sessions/$sessionId', body) as Map<String, dynamic>;
+    return ChatSessionModel.fromJson(data);
+  }
 
-    final data = await _client.get('/search', params);
-    if (data is List) return data;
-    // Một số backend trả {'results': [...]}
-    if (data is Map && data.containsKey('results')) {
-      return data['results'] as List<dynamic>;
+  Future<void> deleteSession(String sessionId) async {
+    await _client.delete('/chat/sessions/$sessionId');
+  }
+
+  // ── Messages ──────────────────────────────────────────────────────────────
+
+  Future<List<ChatMessageModel>> listMessages(
+    String sessionId, {
+    int skip = 0,
+    int limit = 50,
+  }) async {
+    final params = <String, String>{'skip': '$skip', 'limit': '$limit'};
+    final data = await _client
+        .get('/chat/sessions/$sessionId/messages', params) as List<dynamic>;
+    return data
+        .map((e) => ChatMessageModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// Gửi tin nhắn, chờ AI trả lời đầy đủ (không stream).
+  Future<ChatMessageModel> sendMessage(String sessionId, String content) async {
+    final data = await _client.post(
+      '/chat/sessions/$sessionId/messages',
+      {'content': content},
+    ) as Map<String, dynamic>;
+    return ChatMessageModel.fromJson(data);
+  }
+
+  /// Gửi tin nhắn, nhận phản hồi dạng SSE stream.
+  ///
+  /// Yield các event dạng:
+  ///   {"type": "chunk", "content": "..."}
+  ///   {"type": "done", "message_id": "...", "sources": [...]}
+  ///   {"type": "error", "detail": "..."}
+  Stream<Map<String, dynamic>> sendMessageStream(
+    String sessionId,
+    String content,
+  ) async* {
+    final response = await _client.postStream(
+      '/chat/sessions/$sessionId/messages/stream',
+      {'content': content},
+    );
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      final body = await response.stream.bytesToString();
+      String detail = 'Không thể gửi tin nhắn (${response.statusCode})';
+      try {
+        final decoded = jsonDecode(body);
+        if (decoded is Map && decoded['detail'] != null) {
+          detail = decoded['detail'].toString();
+        }
+      } catch (_) {}
+      throw ApiException(response.statusCode, detail);
     }
-    return [];
+
+    yield* SseClient.parse(response);
   }
 
-  Future<List<dynamic>> getHistory() async {
-    if (token == null) return [];
-    final data = await _client.get('/search/history');
-    if (data is List) return data;
-    return [];
-  }
-
-  Future<void> clearHistory() async {
-    if (token == null) return;
-    await _client.delete('/search/history');
-  }
-}
-
-// ═════════════════════════════════════════════════════════════════════════════
-// ADMIN (cần role: admin)
-// ═════════════════════════════════════════════════════════════════════════════
-
-class AdminApiService {
-  final String token;
-
-  AdminApiService({required this.token});
-
-  ApiClient get _client => ApiClient(token: token);
-
-  // ── Stats ──────────────────────────────────────────────────────────────────
-
-  Future<Map<String, dynamic>> getStatsQuestions() async =>
-      await _client.get('/admin/stats/questions') as Map<String, dynamic>;
-
-  Future<Map<String, dynamic>> getStatsDestinations() async =>
-      await _client.get('/admin/stats/destinations') as Map<String, dynamic>;
-
-  Future<Map<String, dynamic>> getStatsChatbot() async =>
-      await _client.get('/admin/stats/chatbot') as Map<String, dynamic>;
-
-  Future<Map<String, dynamic>> getStatsUsers() async =>
-      await _client.get('/admin/stats/users') as Map<String, dynamic>;
-
-  // ── Users ──────────────────────────────────────────────────────────────────
-
-  Future<List<dynamic>> getUsers() async {
-    final data = await _client.get('/admin/users') as List<dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> updateUser(
-      String userId, Map<String, dynamic> body) async {
-    return await _client.patch('/admin/users/$userId', body)
-        as Map<String, dynamic>;
-  }
-
-  // ── Knowledge Base ─────────────────────────────────────────────────────────
-
-  Future<List<dynamic>> getKnowledge({String? category}) async {
-    final params = category != null ? {'category': category} : null;
-    final data = await _client.get('/admin/knowledge', params) as List<dynamic>;
-    return data;
-  }
-
-  Future<Map<String, dynamic>> createKnowledge(
-      Map<String, dynamic> body) async {
-    return await _client.post('/admin/knowledge', body) as Map<String, dynamic>;
-  }
-
-  Future<Map<String, dynamic>> updateKnowledge(
-      String id, Map<String, dynamic> body) async {
-    return await _client.patch('/admin/knowledge/$id', body)
-        as Map<String, dynamic>;
-  }
-
-  Future<void> deleteKnowledge(String id) async {
-    await _client.delete('/admin/knowledge/$id');
-  }
-
-  // ── Chat Logs ──────────────────────────────────────────────────────────────
-
-  Future<List<dynamic>> getChatLogs({String? intent}) async {
-    final params = intent != null ? {'intent': intent} : null;
-    final data =
-        await _client.get('/admin/chat-logs', params) as List<dynamic>;
-    return data;
-  }
-
-  // ── Embedding Jobs ─────────────────────────────────────────────────────────
-
-  Future<List<dynamic>> getEmbeddingJobs() async {
-    final data =
-        await _client.get('/admin/embedding-jobs') as List<dynamic>;
-    return data;
+  Future<ChatMessageModel> updateFeedback(String messageId, int feedback) async {
+    final data = await _client.patch(
+      '/chat/messages/$messageId/feedback',
+      {'feedback': feedback},
+    ) as Map<String, dynamic>;
+    return ChatMessageModel.fromJson(data);
   }
 }

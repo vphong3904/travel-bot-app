@@ -6,12 +6,12 @@ import '../models/destination.dart';
 import 'api_service.dart';
 
 class DestinationRepository {
-  static Future<List<Destination>> fetchDestinations({String? search, String? tag}) async {
+  static Future<List<Destination>> fetchDestinations({String? search, String? category}) async {
     final params = <String, String>{};
-    if (search != null && search.isNotEmpty) params['search'] = search;
-    if (tag != null && tag.isNotEmpty) params['tag'] = tag;
+    if (search != null && search.isNotEmpty) params['q'] = search;
+    if (category != null && category.isNotEmpty) params['category'] = category;
 
-    final uri = Uri.parse('${ApiConfig.baseUrl}/destinations').replace(queryParameters: params);
+    final uri = Uri.parse('${ApiConfig.baseUrl}/travel/destinations').replace(queryParameters: params);
     final response = await http.get(uri);
     if (response.statusCode != 200) return [];
 
@@ -26,8 +26,8 @@ class DestinationRepository {
     return [];
   }
 
-  static Future<Destination?> fetchDestination(int id) async {
-    final response = await http.get(Uri.parse('${ApiConfig.baseUrl}/destinations/$id'));
+  static Future<Destination?> fetchDestination(String id) async {
+    final response = await http.get(Uri.parse('${ApiConfig.baseUrl}/travel/destinations/$id'));
     if (response.statusCode != 200) return null;
 
     final decoded = jsonDecode(response.body);

@@ -80,7 +80,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   }
 
   Future<void> _doLogin(String email, String password) async {
-    final result = await AuthApiService.login(email, password);
+        final result = await AuthApiService.login(email, password);
     if (!mounted) return;
     await context.read<AppState>().setSession(
           accessToken: result.tokens.accessToken,

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from . import auth, chat_sessions, chat_messages, travel, trips, search, admin
+from . import auth, chat_sessions, chat_messages, travel, trips, search, admin, reviews, favorites
 
 api_router = APIRouter(prefix="/api")
 
@@ -15,6 +15,12 @@ api_router.include_router(chat_messages.router, tags=["chat"])
 
 # Travel: /travel/*
 api_router.include_router(travel.router, prefix="/travel", tags=["travel"])
+
+# Reviews: /travel/destinations/:id/reviews
+api_router.include_router(reviews.router, prefix="/travel", tags=["reviews"])
+
+# Favorites: /travel/favorites/*
+api_router.include_router(favorites.router, prefix="/travel", tags=["favorites"])
 
 # Trips: /trips/*
 api_router.include_router(trips.router, prefix="/trips", tags=["trips"])

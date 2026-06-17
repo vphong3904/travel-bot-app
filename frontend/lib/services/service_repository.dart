@@ -15,7 +15,8 @@ class ServiceRepository {
     if (type != null && type.isNotEmpty) params['type'] = type;
     if (destination != null && destination.isNotEmpty) params['destination'] = destination;
 
-    final uri = Uri.parse('${ApiConfig.baseUrl}/services/search').replace(queryParameters: params);
+    // Backend route is /search, not /services/search
+    final uri = Uri.parse('${ApiConfig.baseUrl}/search').replace(queryParameters: params);
 
     try {
       final response = await http.get(uri).timeout(const Duration(seconds: 10));
@@ -24,7 +25,7 @@ class ServiceRepository {
       final decoded = jsonDecode(response.body);
       final services = <Service>[];
 
-      // Parse hotels
+      // Parse hotels from search results
       if (decoded['hotels'] is List) {
         services.addAll((decoded['hotels'] as List).map((item) {
           if (item is Map<String, dynamic>) return Service.fromJson({...item, 'type': 'hotel'});
@@ -32,7 +33,7 @@ class ServiceRepository {
         }));
       }
 
-      // Parse tours
+      // Parse tours from search results
       if (decoded['tours'] is List) {
         services.addAll((decoded['tours'] as List).map((item) {
           if (item is Map<String, dynamic>) return Service.fromJson({...item, 'type': 'tour'});
@@ -40,11 +41,22 @@ class ServiceRepository {
         }));
       }
 
-      // Parse tickets
-      if (decoded['tickets'] is List) {
-        services.addAll((decoded['tickets'] as List).map((item) {
-          if (item is Map<String, dynamic>) return Service.fromJson({...item, 'type': 'ticket'});
-          return Service.fromJson({...Map<String, dynamic>.from(item), 'type': 'ticket'});
+      // Parse destinations as services
+      if (decoded['destinations'] is List) {
+        services.addAll((decoded['destinations'] as List).map((item) {
+          if (item is Map<String, dynamic>) {
+            return Service.fromJson({
+              'id': item['id'],
+              'name': item['name'],
+              'type': 'destination',
+              'description': item['region'] ?? '',
+              'location': item['province'] ?? '',
+              'rating': 4.5,
+              'reviews': 0,
+              'price': 0,
+            });
+          }
+          return Service.fromJson({...Map<String, dynamic>.from(item), 'type': 'destination'});
         }));
       }
 

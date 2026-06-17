@@ -69,8 +69,8 @@ API docs: http://localhost:8000/docs
 ### Tài khoản demo
 | Email | Password | Role |
 |-------|----------|------|
-| admin@travel.ai | admin123 | Admin |
-| user@travel.ai | user123 | User |
+| admin@pdtrip.vn | 12345678 | Admin |
+| user@travel.ai | 12345678 | User |
 
 ## Chạy Frontend
 
