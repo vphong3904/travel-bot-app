@@ -27,6 +27,7 @@ class DestinationListOut(BaseModel):
     rating_avg: Optional[Decimal]
     review_count: Optional[int]
     favorite_count: Optional[int]
+    view_count: Optional[int]      # thêm để card ngoài Home hiển thị được lượt xem
 
     model_config = {"from_attributes": True}
 
@@ -38,9 +39,9 @@ class DestinationOut(BaseModel):
     region: Optional[str]
     description: Optional[str]
     best_season: Optional[str]
+    best_months: Optional[list[int]]   # [11,12,1,2,...] — tháng đẹp nhất
     weather: Optional[str]
     cuisine: Optional[str]
-    highlights: Optional[str]
     special: Optional[str]
     budget_low: Optional[int]
     budget_high: Optional[int]

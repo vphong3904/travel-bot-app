@@ -25,12 +25,12 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Qdrant không sẵn sàng khi startup: {e}")
 
-    logger.info("🚀 PDTrip Chatbot API started")
+    logger.info("PDTrip Chatbot API started")
     yield
 
     # ── Shutdown ──
     await engine.dispose()
-    logger.info("🛑 PDTrip Chatbot API stopped")
+    logger.info("PDTrip Chatbot API stopped")
 
 
 app = FastAPI(

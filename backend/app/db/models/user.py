@@ -2,9 +2,10 @@ from datetime import datetime
 
 from sqlalchemy import Column, String, Boolean, Text, TIMESTAMP, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 import uuid
 from app.db.database import Base
+from app.db.models.chat import ChatSession
 
 class User(Base):
     __tablename__ = "users"
@@ -29,7 +30,9 @@ class User(Base):
         server_onupdate=func.now(),
         nullable=False,
     )
-
+    sessions: Mapped[list["ChatSession"]] = relationship(  # noqa: F821
+        "ChatSession", back_populates="user", lazy="noload"
+    )
     refresh_tokens = relationship("RefreshToken", back_populates="user")
     otp_codes = relationship("OtpCode", back_populates="user")
 

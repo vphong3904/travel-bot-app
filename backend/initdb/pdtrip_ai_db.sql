@@ -138,6 +138,7 @@ CREATE TABLE destinations (
     region      VARCHAR(50) CHECK (region IN ('Miền Bắc', 'Miền Trung', 'Miền Nam', 'Tây Nguyên')),
     description TEXT,
     best_season VARCHAR(200),
+    best_months SMALLINT[],                -- tháng đẹp nhất để đi, vd: ARRAY[11,12,1,2,3,4]
     weather     TEXT,
     cuisine     TEXT,
     budget_low  INT CHECK (budget_low >= 0),
@@ -837,6 +838,21 @@ INSERT INTO destinations (id, name, province, region, description, best_season, 
  'Cơm cháy, dê núi, ốc núi, rượu Kim Sơn, nem chua Yên Mạc',
  800000, 2800000,
  'https://cdn.pdtrip.vn/destinations/ninhbinh.jpg', 'Vịnh Hạ Long trên cạn với Tam Cốc, Tràng An và quần thể hang động sông nước hữu tình.', 4.7, 130, 5500);
+
+-- ============================================================
+-- [TRAVEL] DESTINATIONS — Seed dữ liệu best_months
+-- Cột best_months SMALLINT[] đã được khai báo trong CREATE TABLE destinations ở trên.
+-- ============================================================
+UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Đà Lạt';
+UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Phú Quốc';
+UPDATE destinations SET best_months = ARRAY[9,10,11,3,4,5] WHERE name = 'Hà Giang';
+UPDATE destinations SET best_months = ARRAY[2,3,4]          WHERE name = 'Hội An';
+UPDATE destinations SET best_months = ARRAY[9,10,11,3,4,5] WHERE name = 'Sa Pa';
+UPDATE destinations SET best_months = ARRAY[3,4,5,10,11]   WHERE name = 'Vịnh Hạ Long';
+UPDATE destinations SET best_months = ARRAY[1,2,3,4]       WHERE name = 'Huế';
+UPDATE destinations SET best_months = ARRAY[1,2,3,4,5,6,7,8] WHERE name = 'Nha Trang';
+UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Mũi Né';
+UPDATE destinations SET best_months = ARRAY[9,10,11,1,2,3] WHERE name = 'Ninh Bình';
 
 -- ============================================================
 -- [TRAVEL] Destination Categories — Mỗi điểm đến có 4–5 category

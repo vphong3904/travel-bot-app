@@ -1,38 +1,47 @@
-from sqlalchemy import Column, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey
+from sqlalchemy import Column, DateTime, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.sql import func
 import uuid
 from app.db.database import Base
 
 
 class KnowledgeEntry(Base):
     __tablename__ = "knowledge_entries"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    title = Column(String(300), nullable=False)
-    category = Column(String(100))
-    destination_id = Column(
-        UUID(as_uuid=True),
-        ForeignKey("destinations.id", ondelete="SET NULL"),
-        nullable=True,
+ 
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True)
+    title: Mapped[str] = mapped_column(String(300), nullable=False)
+    category: Mapped[str] = mapped_column(String(50), nullable=False)
+    destination_id: Mapped[str | None] = mapped_column(
+        UUID(as_uuid=False), ForeignKey("destinations.id", ondelete="SET NULL")
     )
-    content = Column(Text, nullable=False)
-    tags = Column(ARRAY(Text), default=[])
-    source = Column(String(300))
-    is_active = Column(Boolean, default=True)
-    created_at = Column(TIMESTAMP(timezone=True))
-    updated_at = Column(TIMESTAMP(timezone=True))
-
-
+    content: Mapped[str] = mapped_column(Text, nullable=False)
+    tags: Mapped[list | None] = mapped_column(ARRAY(String), default=list)
+    source: Mapped[str | None] = mapped_column(String(100))
+    qdrant_id: Mapped[str | None] = mapped_column(UUID(as_uuid=False))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+ 
+ 
 class EmbeddingJob(Base):
     __tablename__ = "embedding_jobs"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    entity_type = Column(String(50), nullable=False)   # "knowledge_entry"
-    entity_id = Column(UUID(as_uuid=True), nullable=False)
-    status = Column(String(20), default="pending")     # pending / processing / done / failed
-    error = Column(Text)
-    created_at = Column(TIMESTAMP(timezone=True))
-    updated_at = Column(TIMESTAMP(timezone=True))
+ 
+    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True)
+    entity_type: Mapped[str] = mapped_column(String(50), default="knowledge_entry")
+    entity_id: Mapped[str] = mapped_column(UUID(as_uuid=False), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default="pending")
+    error: Mapped[str | None] = mapped_column(Text)
+    created_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
 
 class SearchHistory(Base):

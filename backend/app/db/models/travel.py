@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey, DECIMAL, UniqueConstraint
+from sqlalchemy import Column, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey, DECIMAL, UniqueConstraint, SmallInteger
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 import uuid
@@ -12,6 +12,7 @@ class Destination(Base):
     region = Column(String(50))
     description = Column(Text)
     best_season = Column(String(200))
+    best_months = Column(ARRAY(SmallInteger))   # [11,12,1,2,...] — tháng đẹp nhất
     weather = Column(Text)
     cuisine = Column(Text)
     budget_low = Column(Integer)

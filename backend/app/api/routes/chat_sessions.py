@@ -3,8 +3,9 @@ Routes: /chat/sessions
 CRUD cho chat sessions + pin/unpin + soft delete
 """
 from uuid import UUID
+from app.utils.uuid_v7 import uuid_v7
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, update, delete, func
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user
@@ -20,7 +21,6 @@ from app.db.schemas.chat import (
 router = APIRouter(tags=["chat-sessions"])
 
 
-# ── List sessions ─────────────────────────────────────────────────────────────
 @router.get("/", response_model=list[ChatSessionListOut])
 async def list_sessions(
     pinned_only: bool = False,
@@ -29,11 +29,10 @@ async def list_sessions(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Lấy danh sách session (pinned trước, sau đó mới nhất)."""
     stmt = (
         select(ChatSession)
         .where(
-            ChatSession.user_id == current_user.id,
+            ChatSession.user_id == str(current_user.id),
             ChatSession.is_deleted.is_(False),
         )
     )
@@ -46,11 +45,9 @@ async def list_sessions(
     ).offset(skip).limit(limit)
 
     result = await db.execute(stmt)
-    sessions = result.scalars().all()
-    return sessions
+    return result.scalars().all()
 
 
-# ── Create session ────────────────────────────────────────────────────────────
 @router.post("/", response_model=ChatSessionOut, status_code=status.HTTP_201_CREATED)
 async def create_session(
     payload: ChatSessionCreate,
@@ -58,9 +55,10 @@ async def create_session(
     current_user: User = Depends(get_current_user),
 ):
     session = ChatSession(
-        user_id=current_user.id,
+        id=str(uuid_v7()),            # ✅ set trong constructor luôn
+        user_id=str(current_user.id),
         title=payload.title,
-        model_name=payload.model_name or "gemini-1.5-flash",
+        model_name=payload.model_name or "gemini-2.0-flash",
     )
     db.add(session)
     await db.commit()
@@ -68,18 +66,15 @@ async def create_session(
     return session
 
 
-# ── Get session detail ────────────────────────────────────────────────────────
 @router.get("/{session_id}", response_model=ChatSessionOut)
 async def get_session(
     session_id: UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    session = await _get_session_or_404(db, session_id, current_user.id)
-    return session
+    return await _get_session_or_404(db, session_id, current_user.id)
 
 
-# ── Update session (title / pin) ──────────────────────────────────────────────
 @router.patch("/{session_id}", response_model=ChatSessionOut)
 async def update_session(
     session_id: UUID,
@@ -88,17 +83,13 @@ async def update_session(
     current_user: User = Depends(get_current_user),
 ):
     session = await _get_session_or_404(db, session_id, current_user.id)
-
-    update_data = payload.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
+    for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(session, field, value)
-
     await db.commit()
     await db.refresh(session)
     return session
 
 
-# ── Soft delete session ───────────────────────────────────────────────────────
 @router.delete("/{session_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_session(
     session_id: UUID,
@@ -110,14 +101,11 @@ async def delete_session(
     await db.commit()
 
 
-# ── Helper ────────────────────────────────────────────────────────────────────
-async def _get_session_or_404(
-    db: AsyncSession, session_id: UUID, user_id: UUID
-) -> ChatSession:
+async def _get_session_or_404(db: AsyncSession, session_id: UUID, user_id) -> ChatSession:
     result = await db.execute(
         select(ChatSession).where(
-            ChatSession.id == session_id,
-            ChatSession.user_id == user_id,
+            ChatSession.id == str(session_id),
+            ChatSession.user_id == str(user_id),
             ChatSession.is_deleted.is_(False),
         )
     )
