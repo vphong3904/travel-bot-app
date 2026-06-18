@@ -31,8 +31,6 @@ build/
 dist/
 *.egg-info/
 
-# HuggingFace Models
-models/
 hf_cache/
 huggingface/
 
