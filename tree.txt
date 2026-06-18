@@ -1,0 +1,52 @@
+backend/
+├── app/
+│   ├── main.py                # entrypoint FastAPI
+│   ├── core/
+│   │   ├── config.py           # cấu hình app, DB URL, JWT secret
+│   │   ├── security.py         # JWT utils, password hashing
+│   │   └── sse.py              # StreamingResponse SSE helper
+│   ├── db/
+│   │   ├── database.py         # kết nối PostgreSQL (SQLAlchemy)
+│   │   ├── models/             # ORM models
+│   │   │   ├── user.py
+│   │   │   ├── chat.py
+│   │   │   ├── travel.py
+│   │   │   ├── trip.py
+│   │   │   ├── admin.py
+│   │   │   └── __init__.py
+│   │   ├── schemas/            # Pydantic schemas
+│   │   │   ├── auth.py
+│   │   │   ├── chat.py
+│   │   │   ├── travel.py
+│   │   │   ├── trip.py
+│   │   │   ├── admin.py
+│   │   │   └── __init__.py
+│   │   └── migrations/         # alembic migrations
+│   ├── api/
+│   │   ├── routes/             # chia theo module
+│   │   │   ├── auth.py
+│   │   │   ├── chat_sessions.py
+│   │   │   ├── chat_messages.py
+│   │   │   ├── travel.py
+│   │   │   ├── trips.py
+│   │   │   ├── search.py
+│   │   │   ├── admin.py
+│   │   │   └── __init__.py
+│   │   └── deps.py             # dependency injection (current_user, db session)
+│   ├── services/
+│   │   ├── rag_pipeline.py     # chunking, embedding, reranker, LLM call
+│   │   ├── embedding_jobs.py   # quản lý job tạo embedding
+│   │   ├── knowledge.py        # CRUD knowledge base
+│   │   └── __init__.py
+│   └── utils/
+│       ├── uuid_v7.py          # hàm generate UUID v7
+│       ├── logger.py           # logging setup
+│       └── __init__.py
+├── tests/                      # unit tests
+│   ├── test_auth.py
+│   ├── test_chat.py
+│   ├── test_travel.py
+│   └── test_admin.py
+├── requirements.txt            # dependencies
+├── alembic.ini                 # alembic config
+└── schema.sql                  # file SQL init PostgreSQL (users, chats, destinations…)

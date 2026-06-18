@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: travel_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pdtrip_ai_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
