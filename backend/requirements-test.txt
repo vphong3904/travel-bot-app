@@ -1,0 +1,12 @@
+# ─────────────────────────────────────────────────────────────
+# Test dependencies — cài thêm sau requirements.txt
+#   pip install -r requirements.txt
+#   pip install -r requirements-test.txt
+#   pytest -v   (chạy từ thư mục backend/)
+# ─────────────────────────────────────────────────────────────
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+
+# Dùng cho integration test gọi thử FastAPI app qua ASGI transport
+# (xem tests/test_api_chat_flow.py) — không cần server thật chạy sẵn.
+httpx>=0.28.0

@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-005",
+    "status": "complete",
+    "missing_fields": ["price.amount"],
+    "data_sources": ["Klook Việt Nam (06/2026)", "Traveloka (06/2026)"]
+  },
+  "data": [
+    {
+      "id": "019ef658-6c00-7501-8501-e12345678914",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Tour Trekking Bản Lao Chải - Tả Van 1 Ngày",
+      "duration": "1 ngày (khoảng 6 - 7 tiếng)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": "Nhóm nhỏ từ 4 - 10 người",
+      "description": "Hành trình đi bộ xuyên qua thung lũng Mường Hoa, ngắm ruộng bậc thang và tìm hiểu đời sống người Giáy, H'Mông.",
+      "includes": ["Hướng dẫn viên bản địa", "Bữa trưa tại homestay", "Vé tham quan tuyến bản", "Nước uống"],
+      "excludes": ["Chi phí mua sắm cá nhân", "Tiền tip cho hướng dẫn viên"],
+      "difficulty": "moderate"
+    },
+    {
+      "id": "019ef658-6c00-7502-8502-e12345678915",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Tour Chinh Phục Đỉnh Fansipan Bằng Cáp Treo",
+      "duration": "Nửa ngày (4 tiếng)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": "Tour ghép đoàn linh hoạt",
+      "description": "Trải nghiệm tuyến cáp treo ba dây đạt kỷ lục thế giới, băng qua thung lũng để chạm tay vào cột mốc 3.143m.",
+      "includes": ["Xe đưa đón từ trung tâm thị trấn", "Vé cáp treo khứ hồi", "Vé tàu hỏa leo núi đỉnh"],
+      "excludes": ["Ăn uống tại ga đỉnh", "Hướng dẫn viên đi kèm suốt tuyến"],
+      "difficulty": "easy"
+    },
+    {
+      "id": "019ef658-6c00-7503-8503-e12345678916",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Tour Khám Phá Bản Tả Phìn Đắm Mình Thuốc Dao Đỏ",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": "Theo yêu cầu riêng của đoàn",
+      "description": "Ghé thăm bản làng cổ kính của người Dao Đỏ, check-in tu viện cổ đổ nát và trải nghiệm tắm lá thuốc hồi phục sức khỏe.",
+      "includes": ["Xe ô tô vận chuyển", "Vé tắm lá thuốc truyền thống chuẩn bản", "Bữa tối đặc sản"],
+      "excludes": ["Đồ uống gọi thêm trong bữa ăn"],
+      "difficulty": "easy"
+    }
+  ]
+}

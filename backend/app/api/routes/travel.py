@@ -12,15 +12,22 @@ GET /travel/destinations/:id/shopping          → shopping
 """
 from uuid import UUID
 from typing import Optional, Literal
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, func, or_, update
+from sqlalchemy import select, func, or_, update, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import get_db, get_current_user_optional
+from app.api.deps import get_db, get_current_user_optional, CurrentUser, DB
+from sqlalchemy.exc import IntegrityError
+from app.services import log_service
+from app.utils import get_logger
+
+logger = get_logger("travel")
 from app.db.models.travel import (
     Destination,
+    DestinationViewLog,
     Hotel,
     Tour,
     Ticket,
@@ -138,17 +145,52 @@ async def get_destination(
     if not dest:
         raise HTTPException(status_code=404, detail="Destination not found")
 
-    # Tăng view_count atomic — không chặn trùng theo user (đủ cho demo/đồ án)
-    await db.execute(
-        update(Destination)
-        .where(Destination.id == destination_id)
-        .values(view_count=Destination.view_count + 1)
-    )
-    await db.commit()
-
-    # Refresh để trả view_count mới nhất
-    await db.refresh(dest)
     return dest
+
+
+# ── Track view (dedup theo user + ngày) ────────────────────────────────────────
+@router.post("/destinations/{destination_id}/view", status_code=204)
+async def track_destination_view(
+    destination_id: UUID,
+    current_user: CurrentUser,
+    db: DB,
+):
+    """
+    Tăng view_count cho destination.
+    Mỗi user chỉ được đếm 1 lần / destination / ngày (dedup qua destination_view_logs).
+    """
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # Thử INSERT vào log; nếu vi phạm unique constraint → bỏ qua (đã xem hôm nay)
+    try:
+        await db.execute(
+            insert(DestinationViewLog).values(
+                user_id=current_user.id,
+                destination_id=destination_id,
+                view_date=today,
+            )
+        )
+        # Chỉ increment khi INSERT thành công (lần đầu xem hôm nay)
+        await db.execute(
+            update(Destination)
+            .where(Destination.id == destination_id)
+            .values(view_count=Destination.view_count + 1)
+        )
+        await db.commit()
+        # Ghi behavior log vào MongoDB (non-blocking, không ảnh hưởng response)
+        await log_service.log_behavior(
+            user_id=str(current_user.id),
+            event_type="view_destination",
+            entity_type="destination",
+            entity_id=str(destination_id),
+        )
+    except IntegrityError:
+        # UniqueViolationError: user đã xem hôm nay — dedup, bỏ qua bình thường
+        await db.rollback()
+    except Exception as e:
+        # Lỗi không mong đợi (mất kết nối DB, v.v.) — log để phát hiện kịp thời
+        await db.rollback()
+        logger.warning(f"[track_destination_view] Lỗi không mong đợi: {e}")
 
 
 # ── Hotels ────────────────────────────────────────────────────────────────────

@@ -1,163 +1,306 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+// lib/services/travel_api_service.dart (bổ sung endpoints dịch vụ)
+// ---------------------------------------------------------------------------
+// TravelApiService — toàn bộ endpoints trang dịch vụ / khám phá:
+//
+//   GET  /travel/destinations     → Danh sách điểm đến (có filter, paginate)
+//   GET  /travel/destinations/:id → Chi tiết điểm đến
+//   GET  /travel/hotels           → Danh sách khách sạn
+//   GET  /travel/hotels/:id       → Chi tiết khách sạn
+//   GET  /travel/tours            → Danh sách tour
+//   GET  /travel/tours/:id        → Chi tiết tour
+//   GET  /search                  → Tìm kiếm tổng hợp (hotels + tours + destinations)
+//
+//   Favorites:
+//   GET  /favorites               → Danh sách yêu thích (cần auth)
+//   POST /favorites               → Thêm yêu thích (cần auth)
+//   DELETE /favorites/:id         → Xoá yêu thích (cần auth)
+//
+//   Reviews:
+//   GET  /reviews?destination_id= → Reviews của 1 điểm đến
+//   POST /reviews                 → Tạo review (cần auth)
+//
+//   Trips:
+//   GET  /trips                   → Lịch trình của user (cần auth)
+//   POST /trips                   → Tạo lịch trình (cần auth)
+//   GET  /trips/:id               → Chi tiết lịch trình
+//   PATCH /trips/:id              → Cập nhật lịch trình
+//   DELETE /trips/:id             → Xóa lịch trình
+// ---------------------------------------------------------------------------
+
+import '../models/destination.dart';
+import '../models/review.dart';
+import '../models/service.dart';
 import 'api_service.dart';
-import 'sse_client.dart';
 
-class AuthService {
-  static Future<Map<String, dynamic>> login(String email, String password) async {
-    final res = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/auth/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    throw Exception(jsonDecode(res.body)['detail'] ?? 'Đăng nhập thất bại');
-  }
+// ─────────────────────────────────────────────────────────────────────────────
+// Search result
+// ─────────────────────────────────────────────────────────────────────────────
 
-  static Future<Map<String, dynamic>> register(String name, String email, String password) async {
-    final res = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/auth/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'name': name, 'email': email, 'password': password}),
-    );
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    throw Exception(jsonDecode(res.body)['detail'] ?? 'Đăng ký thất bại');
-  }
+class SearchResult {
+  final List<Service> hotels;
+  final List<Service> tours;
+  final List<Service> destinations;
+
+  const SearchResult({
+    required this.hotels,
+    required this.tours,
+    required this.destinations,
+  });
+
+  List<Service> get all => [...hotels, ...tours, ...destinations];
 }
 
-class ChatService {
-  static Future<Map<String, dynamic>> sendMessage({
-    required String message,
-    String userId = '',
-    String userName = 'Khách',
+// ─────────────────────────────────────────────────────────────────────────────
+
+class TravelApiService {
+  final ApiClient _client;
+
+  TravelApiService({String? accessToken, TokenProvider? tokenProvider})
+      : _client = ApiClient(
+          token: accessToken,
+          tokenProvider: tokenProvider,
+        );
+
+  // ── Destinations ─────────────────────────────────────────────────────────
+
+  Future<List<Destination>> getDestinations({
+    String? province,
+    String? region,
+    int page = 1,
+    int pageSize = 20,
   }) async {
-    final res = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/chat'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'message': message, 'user_id': userId, 'user_name': userName}),
-    );
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    throw Exception('Không thể gửi tin nhắn');
+    final params = <String, String>{
+      'page': '$page',
+      'page_size': '$pageSize',
+      if (province != null) 'province': province,
+      if (region != null) 'region': region,
+    };
+    final data = await _client.get('/travel/destinations', params);
+    if (data == null) return [];
+    final list = (data['items'] ?? data) as List;
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map(Destination.fromJson)
+        .toList();
   }
 
-  static Stream<Map<String, dynamic>> sendMessageStream({
-    required String message,
-    String userId = '',
-    String userName = 'Khách',
-  }) async* {
-    final request = http.Request('POST', Uri.parse('${ApiConfig.baseUrl}/chat'));
-    request.headers['Content-Type'] = 'application/json';
-    request.body = jsonEncode({'message': message, 'user_id': userId, 'user_name': userName});
+  Future<Destination?> getDestinationById(int id) async {
+    try {
+      final data = await _client.get('/travel/destinations/$id');
+      if (data == null) return null;
+      return Destination.fromJson(data as Map<String, dynamic>);
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) return null;
+      rethrow;
+    }
+  }
 
-    final response = await request.send();
-    if (response.statusCode != 200) {
-      final errorBody = await response.stream.bytesToString();
-      throw Exception('Không thể gửi tin nhắn: ${response.statusCode} ${errorBody}');
+  // ── Hotels ────────────────────────────────────────────────────────────────
+
+  Future<List<Service>> getHotels({
+    String? destinationId,
+    String? province,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    final params = <String, String>{
+      'page': '$page',
+      'page_size': '$pageSize',
+      if (destinationId != null) 'destination_id': destinationId,
+      if (province != null) 'province': province,
+    };
+    final data = await _client.get('/travel/hotels', params);
+    if (data == null) return [];
+    final list = (data['items'] ?? data) as List;
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map((j) => Service.fromJson({...j, 'type': 'hotel'}))
+        .toList();
+  }
+
+  Future<Service?> getHotelById(int id) async {
+    try {
+      final data = await _client.get('/travel/hotels/$id');
+      if (data == null) return null;
+      return Service.fromJson({...(data as Map<String, dynamic>), 'type': 'hotel'});
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  // ── Tours ─────────────────────────────────────────────────────────────────
+
+  Future<List<Service>> getTours({
+    String? destinationId,
+    String? province,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    final params = <String, String>{
+      'page': '$page',
+      'page_size': '$pageSize',
+      if (destinationId != null) 'destination_id': destinationId,
+      if (province != null) 'province': province,
+    };
+    final data = await _client.get('/travel/tours', params);
+    if (data == null) return [];
+    final list = (data['items'] ?? data) as List;
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map((j) => Service.fromJson({...j, 'type': 'tour'}))
+        .toList();
+  }
+
+  Future<Service?> getTourById(int id) async {
+    try {
+      final data = await _client.get('/travel/tours/$id');
+      if (data == null) return null;
+      return Service.fromJson({...(data as Map<String, dynamic>), 'type': 'tour'});
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  // ── Search tổng hợp ───────────────────────────────────────────────────────
+
+  Future<SearchResult> search({
+    String q = '',
+    String? type,        // 'hotel' | 'tour' | 'destination' | null (tất cả)
+    String? province,
+    int limit = 10,
+  }) async {
+    final params = <String, String>{
+      'q': q,
+      'limit': '$limit',
+      if (type != null) 'type': type,
+      if (province != null) 'province': province,
+    };
+    final data = await _client.get('/search', params);
+    if (data == null) {
+      return const SearchResult(hotels: [], tours: [], destinations: []);
     }
 
-    yield* SseClient.parse(response);
+    List<Service> parseList(String key, String serviceType) {
+      final list = data[key];
+      if (list is! List) return [];
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map((j) => Service.fromJson({...j, 'type': serviceType}))
+          .toList();
+    }
+
+    return SearchResult(
+      hotels:       parseList('hotels', 'hotel'),
+      tours:        parseList('tours', 'tour'),
+      destinations: parseList('destinations', 'destination'),
+    );
   }
 
-  static Future<List<dynamic>> getUserHistory(String userId) async {
+  // ── Favorites (cần auth) ──────────────────────────────────────────────────
+
+  Future<List<Map<String, dynamic>>> getFavorites() async {
+    final data = await _client.get('/favorites');
+    if (data == null) return [];
+    return (data as List).whereType<Map<String, dynamic>>().toList();
+  }
+
+  Future<void> addFavorite({
+    required int destinationId,
+    String? note,
+  }) async {
+    await _client.post('/favorites', {
+      'destination_id': destinationId,
+      if (note != null) 'note': note,
+    });
+  }
+
+  Future<void> removeFavorite(int favoriteId) async {
+    await _client.delete('/favorites/$favoriteId');
+  }
+
+  // ── Reviews ───────────────────────────────────────────────────────────────
+
+  Future<List<Review>> getReviews({
+    int? destinationId,
+    int page = 1,
+    int pageSize = 10,
+  }) async {
+    final params = <String, String>{
+      'page': '$page',
+      'page_size': '$pageSize',
+      if (destinationId != null) 'destination_id': '$destinationId',
+    };
+    final data = await _client.get('/reviews', params);
+    if (data == null) return [];
+    final list = (data['items'] ?? data) as List;
+    return list.whereType<Map<String, dynamic>>().map(Review.fromJson).toList();
+  }
+
+  Future<void> createReview({
+    required int destinationId,
+    required double rating,
+    String? comment,
+  }) async {
+    await _client.post('/reviews', {
+      'destination_id': destinationId,
+      'rating': rating,
+      if (comment != null && comment.isNotEmpty) 'comment': comment,
+    });
+  }
+
+  // ── Trips / Lịch trình (cần auth) ─────────────────────────────────────────
+
+  Future<List<Map<String, dynamic>>> getTrips() async {
+    final data = await _client.get('/trips');
+    if (data == null) return [];
+    return (data as List).whereType<Map<String, dynamic>>().toList();
+  }
+
+  Future<Map<String, dynamic>?> getTripById(String tripId) async {
     try {
-      final res = await http.get(
-        Uri.parse('${ApiConfig.baseUrl}/chat/history/$userId'),
-        headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 10));
-      if (res.statusCode == 200) return jsonDecode(res.body);
-    } catch (_) {}
-    return [];
+      final data = await _client.get('/trips/$tripId');
+      return data as Map<String, dynamic>?;
+    } on ApiException catch (e) {
+      if (e.statusCode == 404) return null;
+      rethrow;
+    }
   }
 
-}
-
-class DestinationService {
-  static Future<List<dynamic>> getDestinations({String? search, String? category}) async {
-    final params = <String, String>{};
-    if (search != null && search.isNotEmpty) params['search'] = search;
-    if (category != null && category.isNotEmpty) params['category'] = category;
-    final uri = Uri.parse('${ApiConfig.baseUrl}/travel/destinations').replace(queryParameters: params);
-    final res = await http.get(uri);
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return [];
+  Future<Map<String, dynamic>> createTrip({
+    required String title,
+    String? description,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final data = await _client.post('/trips', {
+      'title': title,
+      if (description != null) 'description': description,
+      if (startDate != null) 'start_date': startDate.toIso8601String(),
+      if (endDate != null) 'end_date': endDate.toIso8601String(),
+    });
+    return data as Map<String, dynamic>;
   }
 
-  static Future<Map<String, dynamic>?> getDestination(String id) async {
-    final res = await http.get(Uri.parse('${ApiConfig.baseUrl}/travel/destinations/$id'));
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return null;
-  }
-}
+  Future<Map<String, dynamic>> updateTrip(
+    String tripId, {
+    String? title,
+    String? description,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final body = <String, dynamic>{};
+    if (title != null) body['title'] = title;
+    if (description != null) body['description'] = description;
+    if (startDate != null) body['start_date'] = startDate.toIso8601String();
+    if (endDate != null) body['end_date'] = endDate.toIso8601String();
 
-class ServicesApi {
-  static Future<Map<String, dynamic>> search({String q = '', String? type, String? destination}) async {
-    final params = <String, String>{'q': q};
-    if (type != null && type.isNotEmpty) params['type'] = type;
-    if (destination != null && destination.isNotEmpty) params['destination'] = destination;
-    final uri = Uri.parse('${ApiConfig.baseUrl}/search').replace(queryParameters: params);
-    final res = await http.get(uri);
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return {'destinations': [], 'hotels': [], 'tours': []};
-  }
-}
-
-class AdminService {
-  static Future<Map<String, dynamic>> getStats() async {
-    final res = await http.get(Uri.parse('${ApiConfig.baseUrl}/admin/stats'));
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return {};
+    final data = await _client.patch('/trips/$tripId', body);
+    return data as Map<String, dynamic>;
   }
 
-  static Future<List<dynamic>> getUsers() async {
-    final res = await http.get(Uri.parse('${ApiConfig.baseUrl}/admin/users'));
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return [];
+  Future<void> deleteTrip(String tripId) async {
+    await _client.delete('/trips/$tripId');
   }
-
-  static Future<List<dynamic>> getChatLogs({String? intent}) async {
-    final uri = Uri.parse('${ApiConfig.baseUrl}/admin/chat-logs').replace(
-      queryParameters: intent != null ? {'intent': intent} : {},
-    );
-    final res = await http.get(uri);
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return [];
-  }
-
-  static Future<List<dynamic>> getKB({String? category}) async {
-    final uri = Uri.parse('${ApiConfig.baseUrl}/admin/kb').replace(
-      queryParameters: category != null ? {'category': category} : {},
-    );
-    final res = await http.get(uri);
-    if (res.statusCode == 200) return jsonDecode(res.body);
-    return [];
-  }
-
-  static Future<bool> createKB(Map<String, dynamic> data) async {
-  final res = await http.post(
-    Uri.parse('${ApiConfig.baseUrl}/admin/kb'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(data),
-  );
-  return res.statusCode == 200 || res.statusCode == 201;
-}
-
-static Future<bool> updateKB(int id, Map<String, dynamic> data) async {
-  final res = await http.put(
-    Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(data),
-  );
-  return res.statusCode == 200;
-}
-
-static Future<bool> deleteKB(int id) async {
-  final res = await http.delete(Uri.parse('${ApiConfig.baseUrl}/admin/kb/$id'));
-  return res.statusCode == 200;
-}
-
-static Future<bool> toggleUser(int id) async {
-  final res = await http.patch(Uri.parse('${ApiConfig.baseUrl}/admin/users/$id/toggle'));
-  return res.statusCode == 200;
-}
 }

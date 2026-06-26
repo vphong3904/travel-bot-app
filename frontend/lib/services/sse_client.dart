@@ -2,15 +2,21 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // SseClient — parse Server-Sent Events từ StreamedResponse.
 //
-// Backend stream format:
+// Backend stream format (chuẩn):
+//   event: message
 //   data: {"type": "chunk", "content": "..."}
-//   data: {"type": "done", "message_id": "uuid", "sources": [...]}
-//   data: {"type": "error", "detail": "..."}
 //
-// Mỗi SSE event là một Map<String, dynamic> được yield ra.
+//   event: message
+//   data: {"type": "done", "message_id": "uuid", "sources": [...]}
+//
+// LƯU Ý: một số proxy/dev-server có thể làm mất dòng trống ("\n\n") ngăn
+// cách giữa các event, hoặc network chunk có thể cắt giữa 1 dòng JSON.
+// Vì vậy parser KHÔNG dựa vào dòng trống hay LineSplitter — nó quét trực
+// tiếp trên buffer ký tự, tìm "data:" rồi tự đếm dấu { } cân bằng (có để ý
+// tới string/escape) để cắt ra đúng 1 JSON object, bất kể object đó có dính
+// liền với event kế tiếp hay bị chia làm nhiều chunk mạng.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -18,35 +24,44 @@ class SseClient {
   /// Parse SSE stream từ http.StreamedResponse.
   ///
   /// Yield từng event dưới dạng Map<String, dynamic>.
-  /// Bỏ qua comment lines (bắt đầu bằng `:`) và empty lines.
   static Stream<Map<String, dynamic>> parse(
       http.StreamedResponse response) async* {
-    final lines = response.stream
-        .transform(utf8.decoder)
-        .transform(const LineSplitter());
+    final decoder = response.stream.transform(utf8.decoder);
 
-    final buffer = StringBuffer();
+    String buffer = '';
 
-    await for (final line in lines) {
-      if (line.startsWith(':')) {
-        // Comment / keep-alive — bỏ qua
-        continue;
-      }
+    await for (final part in decoder) {
+      buffer += part;
 
-      if (line.isEmpty) {
-        // Blank line = end of event → process buffer
-        final raw = buffer.toString().trim();
-        buffer.clear();
-
-        if (raw.isEmpty) continue;
-
-        // Xử lý "data: ..." prefix
-        String jsonStr = raw;
-        if (raw.startsWith('data:')) {
-          jsonStr = raw.substring(5).trim();
+      while (true) {
+        final dataIdx = buffer.indexOf('data:');
+        if (dataIdx == -1) {
+          // Không có "data:" nào trong buffer hiện tại → giữ lại chờ thêm
+          // (nhưng nếu buffer quá dài và toàn rác, cắt bớt để tránh phình vô hạn)
+          if (buffer.length > 1 << 16) buffer = '';
+          break;
         }
 
-        if (jsonStr.isEmpty || jsonStr == '[DONE]') continue;
+        final braceStart = buffer.indexOf('{', dataIdx);
+        if (braceStart == -1) {
+          // Có "data:" nhưng chưa thấy "{" → có thể là "data: [DONE]" hoặc
+          // chưa nhận đủ byte. Nếu không phải [DONE], chờ thêm dữ liệu.
+          final after = buffer.substring(dataIdx + 5).trimLeft();
+          if (after.startsWith('[DONE]')) {
+            buffer = buffer.substring(dataIdx + 5 + after.indexOf('[DONE]') + 6);
+            continue;
+          }
+          break;
+        }
+
+        final closeIdx = _findMatchingBrace(buffer, braceStart);
+        if (closeIdx == null) {
+          // JSON chưa đầy đủ (bị cắt giữa chunk mạng) → chờ thêm dữ liệu
+          break;
+        }
+
+        final jsonStr = buffer.substring(braceStart, closeIdx + 1);
+        buffer = buffer.substring(closeIdx + 1);
 
         try {
           final decoded = jsonDecode(jsonStr);
@@ -54,29 +69,43 @@ class SseClient {
             yield decoded;
           }
         } catch (_) {
-          // Payload không phải JSON hợp lệ — wrap lại
-          yield {'type': 'chunk', 'content': jsonStr};
+          // JSON lỗi thật (không phải do cắt thiếu) → bỏ qua, không dump raw text
         }
-      } else {
-        // Tiếp tục append vào buffer
-        if (buffer.isNotEmpty) buffer.write('\n');
-        buffer.write(line);
       }
     }
+  }
 
-    // Xử lý nốt nếu stream kết thúc không có blank line cuối
-    final remaining = buffer.toString().trim();
-    if (remaining.isNotEmpty) {
-      String jsonStr = remaining;
-      if (remaining.startsWith('data:')) {
-        jsonStr = remaining.substring(5).trim();
+  /// Tìm vị trí dấu '}' khớp với dấu '{' tại [start], có tính tới
+  /// chuỗi string (bỏ qua { } nằm trong "...") và ký tự escape \" .
+  /// Trả về null nếu chưa đủ dữ liệu để tìm thấy dấu đóng tương ứng.
+  static int? _findMatchingBrace(String s, int start) {
+    int depth = 0;
+    bool inString = false;
+    bool escape = false;
+
+    for (int i = start; i < s.length; i++) {
+      final ch = s[i];
+
+      if (inString) {
+        if (escape) {
+          escape = false;
+        } else if (ch == '\\') {
+          escape = true;
+        } else if (ch == '"') {
+          inString = false;
+        }
+        continue;
       }
-      if (jsonStr.isNotEmpty && jsonStr != '[DONE]') {
-        try {
-          final decoded = jsonDecode(jsonStr);
-          if (decoded is Map<String, dynamic>) yield decoded;
-        } catch (_) {}
+
+      if (ch == '"') {
+        inString = true;
+      } else if (ch == '{') {
+        depth++;
+      } else if (ch == '}') {
+        depth--;
+        if (depth == 0) return i;
       }
     }
+    return null; // chưa đủ dữ liệu
   }
 }

@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "city": "ca-mau",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Tên tour và lộ trình xác minh qua kiến thức địa lý thực tế. Giá tour ghi null — cần xác nhận từ Klook hoặc công ty lữ hành địa phương.",
+    "missing_fields": [
+      "price.amount (cần xác nhận từ Klook hoặc Vietravel)",
+      "group_size cụ thể",
+      "image_url"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Klook.com/vi (tên tour, loại hình)",
+      "Vietravel.com (tour mẫu)",
+      "Sở Du lịch Cà Mau: camau.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "id": "37b11d9d-9dd8-401c-ad1e-ee2e1b55e16a",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Tour Mũi Cà Mau – Rừng đước Năm Căn",
+      "duration": "2 ngày 1 đêm",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price_note": "// TODO: xác nhận tại Klook hoặc công ty lữ hành Cà Mau",
+      "group_size": null,
+      "description": "Tour đặc trưng nhất Cà Mau: xuất phát từ TP. Cà Mau, di chuyển bằng tàu cao tốc qua huyện Năm Căn ngắm rừng đước, dừng chợ nổi Năm Căn, tiếp tục vào Đất Mũi, đặt chân lên cột mốc quốc gia số 0 — điểm cực Nam Tổ quốc. Đêm nghỉ tại nhà nghỉ Đất Mũi hoặc quay về Năm Căn.",
+      "includes": ["vé tàu cao tốc", "hướng dẫn viên địa phương", "bữa trưa hải sản", "vé tham quan Mũi"],
+      "excludes": ["vé máy bay/xe đến Cà Mau", "bữa tối và sáng", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "16b1b635-ee85-4291-8a22-1b5835777dbf",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Tour Khám phá Vườn Quốc gia U Minh Hạ",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price_note": "// TODO: xác nhận tại Klook hoặc Ban quản lý VQG U Minh Hạ",
+      "group_size": null,
+      "description": "Hành trình vào lòng rừng tràm U Minh Hạ bằng thuyền chèo, khám phá hệ sinh thái đất than bùn độc đáo, quan sát chim và động vật hoang dã. Thăm cơ sở nuôi ong mật và thưởng thức mật ong tươi ngay tại rừng. Phù hợp cho người yêu thiên nhiên và eco-tourism.",
+      "includes": ["vé vào rừng", "thuyền + người chèo thuyền", "hướng dẫn viên sinh thái", "bữa trưa"],
+      "excludes": ["vé xe đến U Minh", "thức uống riêng", "chi phí mua mật ong"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "30cd55bd-0f2e-4837-94a4-034bf6420074",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Tour Cà Mau – Bạc Liêu: Điện gió & Di tích",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price_note": "// TODO: xác nhận tại Vietravel hoặc công ty lữ hành địa phương",
+      "group_size": null,
+      "description": "Tour kết hợp hai điểm du lịch của tỉnh Cà Mau sau sáp nhập: tham quan cánh đồng điện gió biển Bạc Liêu — cảnh quan kỳ vĩ turbine giữa biển, thăm nhà Công tử Bạc Liêu, khu lưu niệm Cao Văn Lầu, Khu du lịch sinh thái Hồ Nam — trong ngày từ TP. Cà Mau.",
+      "includes": ["xe đưa đón TP. Cà Mau – Bạc Liêu", "vé tham quan", "hướng dẫn viên", "bữa trưa"],
+      "excludes": ["chi phí mua sắm", "thức uống riêng"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "33aea316-2a01-4436-93fd-cd9207420543",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Tour Đầm Thị Tường ngắm chim buổi sáng",
+      "duration": "Nửa ngày (4–6 tiếng)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price_note": "// TODO: xác nhận giá tour tại Sở Du lịch Cà Mau",
+      "group_size": null,
+      "description": "Khởi hành lúc 4:30–5:00 sáng để đến Đầm Thị Tường trước bình minh, thuê thuyền nhỏ tiến sâu vào đầm quan sát hàng nghìn con chim nước bay lên khi mặt trời mọc. Trải nghiệm đặc biệt chỉ có từ tháng 11 đến tháng 3 khi chim di cư về trú đông.",
+      "includes": ["xe đưa đón", "thuyền tham quan đầm", "hướng dẫn viên chim địa phương"],
+      "excludes": ["ống nhòm (nên mang theo)", "bữa sáng"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

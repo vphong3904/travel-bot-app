@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "city": "can-tho",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (chưa xác minh giá cụ thể — ghi null cho các món)"
+    ],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
+      "Foody.vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "name": "Bánh xèo miền Tây",
+      "local_name": "Bánh xèo",
+      "category": "main_dish",
+      "description": "Bánh xèo miền Tây to hơn và dày hơn bánh xèo miền Trung, nhân tôm thịt hoặc hải sản, ăn kèm rau sống (lá điều, lá lốt, giá...) và nước mắm chua ngọt pha loãng. Cách ăn đặc trưng là cuốn bánh vào lá điều hay lá lốt trước khi chấm.",
+      "where_to_eat": ["Quán bánh xèo Mười Xinh (Quận Ninh Kiều)", "Chợ đêm Ninh Kiều", "Các quán dọc đường Đề Thám"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "miền-tây", "phổ-biến"]
+    },
+    {
+      "name": "Lẩu mắm miền Tây",
+      "local_name": "Lẩu mắm",
+      "category": "main_dish",
+      "description": "Lẩu nấu từ mắm cá linh hoặc mắm sặc — đặc sản miền Tây Nam Bộ có vị ngọt ngào và thơm đặc trưng không nơi nào có được. Ăn cùng cá lóc, tôm, mực, thịt heo quay và nhiều loại rau đặc trưng như bông súng, rau muống, chuối xanh.",
+      "where_to_eat": ["Nhà hàng Mekong (khu Ninh Kiều)", "Các nhà hàng nổi trên sông Bình Thủy", "Chợ đêm Ninh Kiều"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "miền-tây", "lẩu", "truyền-thống"]
+    },
+    {
+      "name": "Nem nướng Cái Răng",
+      "local_name": "Nem nướng",
+      "category": "main_dish",
+      "description": "Nem nướng Cần Thơ nổi tiếng với thịt heo xay viên nướng than hoa, ăn cùng bánh tráng, bún, rau sống, chuối xanh, dưa leo và nước chấm từ mắm nêm. Cái Răng (quận cách trung tâm ~5km) là nơi được coi là cái nôi của món này.",
+      "where_to_eat": ["Các quán nem nướng khu Cái Răng", "Đường Phan Đình Phùng (Ninh Kiều)"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "nướng", "cái-răng"]
+    },
+    {
+      "name": "Cá lóc nướng trui",
+      "local_name": "Cá lóc nướng trui",
+      "category": "main_dish",
+      "description": "Cá lóc đồng (cá rô đồng) được nướng nguyên con bằng lửa rơm không cần ướp gia vị, khi chín lột da bỏ đi còn lại phần thịt trắng ngần thơm ngon. Ăn cuốn với bánh tráng, rau sống và mắm nêm — là món ăn dân dã đặc trưng nhất của người miền Tây.",
+      "where_to_eat": ["Các nhà hàng sân vườn ven sông", "Khu ẩm thực Bình Thủy"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc-sản", "nướng", "truyền-thống", "miền-tây"]
+    },
+    {
+      "name": "Hủ tiếu Nam Vang Cần Thơ",
+      "local_name": "Hủ tiếu Nam Vang",
+      "category": "main_dish",
+      "description": "Hủ tiếu phong cách Campuchia (Nam Vang) được biến tấu theo khẩu vị miền Tây — nước dùng trong, ngọt từ xương heo và mực khô, ăn kèm thịt heo xay, tôm, lòng heo và nhiều rau giá. Cần Thơ có nhiều quán hủ tiếu Nam Vang nổi tiếng lâu đời.",
+      "where_to_eat": ["Hủ tiếu Nam Vang Mỹ Khánh (Phong Điền)", "Các quán sáng sớm ven kênh Ninh Kiều"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["sáng", "hủ-tiếu", "phổ-biến"]
+    },
+    {
+      "name": "Bánh tráng nướng miền Tây",
+      "local_name": "Bánh tráng nướng",
+      "category": "snack",
+      "description": "Bánh tráng (bánh đa) nướng trên lửa than, phết mỡ hành, trứng cút và các loại topping như tôm khô, nem chà bông. Món ăn vặt đường phố rất phổ biến ở Cần Thơ, đặc biệt tại các chợ đêm và bến Ninh Kiều.",
+      "where_to_eat": ["Chợ đêm Ninh Kiều", "Vỉa hè đường Hai Bà Trưng"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["ăn-vặt", "đường-phố", "buổi-tối"]
+    },
+    {
+      "name": "Chè bưởi / chè đậu miền Tây",
+      "local_name": "Chè",
+      "category": "dessert",
+      "description": "Các loại chè miền Tây phong phú: chè bưởi (múi bưởi ngâm siro cùng thạch dừa, nước cốt dừa), chè đậu xanh lá dứa, chè thập cẩm... Vị ngọt dịu, béo nhẹ từ nước cốt dừa là điểm đặc trưng của chè Nam Bộ.",
+      "where_to_eat": ["Chợ đêm Ninh Kiều", "Các quán chè dọc đường Đề Thám"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["tráng-miệng", "ngọt", "miền-tây"]
+    }
+  ]
+}

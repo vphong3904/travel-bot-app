@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "city": "lam-dong-da-lat",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-013",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["vietnamtourism.gov.vn (06/2026)"]
+  },
+  "data": [
+    {
+      "id": "dalat-2n1d-couple",
+      "title": "2 Ngày 1 Đêm: Sương Mù Lãng Mạn",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "couple",
+      "travel_style": "relax",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Mùa Đông", "Mùa Xuân"],
+      "summary": "Hành trình nghỉ dưỡng nhẹ nhàng cho cặp đôi, tập trung vào những địa điểm nội đô bình yên và các món ngon giữ ấm.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Nhịp Thở Nơi Trung Tâm",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Ăn sáng đặc sản",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef504-6d4d-78e0-9047-1ad9d8d08753",
+                "name": "Quán Bánh Căn Lệ"
+              },
+              "estimated_cost": null,
+              "notes": "Hẻm nhỏ nên đỗ xe gọn gàng."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "15:00",
+              "activity": "Tản bộ ven hồ đón gió",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef504-6d4d-72f3-bf9f-67be815fc6a6",
+                "name": "Hồ Xuân Hương"
+              },
+              "estimated_cost": null,
+              "notes": "Thuê xe đạp đôi quanh hồ."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Thưởng thức lẩu nóng sưởi ấm",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef504-6d4d-7641-875b-bbcaad1aaee7",
+                "name": "Lẩu Gà Lá É Tao Ngộ"
+              },
+              "estimated_cost": null,
+              "notes": null
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Rừng Thông Reo",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:30",
+              "activity": "Săn mây mặt hồ, chèo thuyền",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef504-6d4d-7053-bdfc-10189a881146",
+                "name": "Hồ Tuyền Lâm"
+              },
+              "estimated_cost": null,
+              "notes": "Mặc áo khoác dày vì sương ngoại ô rất lạnh."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["Lãng mạn", "Nghỉ dưỡng"]
+    },
+    {
+      "id": "dalat-1day-adventure",
+      "title": "1 Ngày: Vượt Giới Hạn Mạo Hiểm",
+      "duration_days": 1,
+      "duration_nights": 0,
+      "audience": "solo",
+      "travel_style": "adventure",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Mùa Khô"],
+      "summary": "Tập trung thể lực cho những cung bậc cảm xúc mạnh giữa thiên nhiên thác nước và đại ngàn Langbiang.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Xuyên Rừng Vượt Thác",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Chinh phục vách đá thác nước",
+              "location_ref": {
+                "type": "tour",
+                "id": "019ef504-6d4d-7f45-b6a7-cdc86330f9ca",
+                "name": "Tour Canyoning (Đu dây vượt thác) Datanla"
+              },
+              "estimated_cost": null,
+              "notes": "Đã bao gồm thiết bị an toàn, cần có sức khỏe tốt."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Đạp chân mây trên nóc nhà Đà Lạt",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef504-6d4d-769a-a46a-a1545cd6a505",
+                "name": "Núi Langbiang"
+              },
+              "estimated_cost": null,
+              "notes": "Hoặc đổi sang tour Trekking Langbiang nếu đi từ sáng."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["Mạo hiểm", "Thể lực"]
+    }
+  ]
+}

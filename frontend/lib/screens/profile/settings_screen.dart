@@ -1,9 +1,19 @@
+// lib/screens/profile/settings_screen.dart
+//
+// SettingsScreen — Màn hình cài đặt
+//
+// FIX: Sau logout → pushAndRemoveUntil về LoginRegisterScreen
+//      (giống profile_screen, vì settings cũng có thể được mở từ profile)
+// ---------------------------------------------------------------------------
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/app_user.dart';
 import '../../providers/app_state.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/dialog_helpers.dart';
+import '../auth/login_register_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -16,15 +26,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   bool _darkModeEnabled = false;
   String _selectedLanguage = 'vi';
+  bool _loggingOut = false;
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
+    final user = appState.user;
 
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: const Text('Cài đặt', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        title: const Text('Cài đặt',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.white,
@@ -33,19 +46,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // Section: Hiển thị
-            _SectionHeader(title: 'HIỂN THỊ'),
+            // ── User info card ─────────────────────────────────────────────
+            if (appState.isLoggedIn && user != null) ...[
+              _UserInfoCard(user: user),
+              const SizedBox(height: 24),
+            ],
+
+            // ── Hiển thị ──────────────────────────────────────────────────
+            const _SectionHeader(title: 'HIỂN THỊ'),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.dark_mode_outlined,
               title: 'Chế độ tối',
               trailing: Switch(
                 value: _darkModeEnabled,
-                activeThumbColor: AppColors.primary,
-                onChanged: (value) {
-                  setState(() => _darkModeEnabled = value);
-                  // Tính năng placeholder
-                },
+                activeTrackColor: AppColors.primary,
+                activeThumbColor: Colors.white,
+                onChanged: (v) => setState(() => _darkModeEnabled = v),
               ),
             ),
             _SettingsTile(
@@ -56,19 +73,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Section: Thông báo
-            _SectionHeader(title: 'THÔNG BÁO'),
+            // ── Thông báo ─────────────────────────────────────────────────
+            const _SectionHeader(title: 'THÔNG BÁO'),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.notifications_outlined,
               title: 'Bật thông báo',
               trailing: Switch(
                 value: _notificationsEnabled,
-                activeThumbColor: AppColors.primary,
-                onChanged: (value) {
-                  setState(() => _notificationsEnabled = value);
-                  // Tính năng placeholder
-                },
+                activeTrackColor: AppColors.primary,
+                activeThumbColor: Colors.white,
+                onChanged: (v) => setState(() => _notificationsEnabled = v),
               ),
             ),
             _SettingsTile(
@@ -78,18 +93,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Section: Dữ liệu
-            _SectionHeader(title: 'DỮ LIỆU'),
+            // ── Dữ liệu ───────────────────────────────────────────────────
+            const _SectionHeader(title: 'DỮ LIỆU'),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.history_outlined,
               title: 'Xóa lịch sử tìm kiếm',
               subtitle: 'Xóa tất cả các tìm kiếm trước đây',
-              onTap: () => _showConfirmDialog(
+              onTap: () => _confirmAction(
                 'Xóa lịch sử?',
                 'Hành động này không thể hoàn tác.',
                 () {
-                  // Tính năng placeholder
                   Navigator.pop(context);
                   showInfoSnackBar(context, 'Lịch sử đã xóa');
                 },
@@ -99,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.delete_outline,
               title: 'Xóa tất cả yêu thích',
               subtitle: 'Loại bỏ các địa điểm đã lưu',
-              onTap: () => _showConfirmDialog(
+              onTap: () => _confirmAction(
                 'Xóa tất cả yêu thích?',
                 'Bạn sẽ mất các địa điểm đã lưu.',
                 () {
@@ -110,45 +124,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Section: Về ứng dụng
-            _SectionHeader(title: 'VỀ ỨNG DỤNG'),
+            // ── Về ứng dụng ───────────────────────────────────────────────
+            const _SectionHeader(title: 'VỀ ỨNG DỤNG'),
             const SizedBox(height: 8),
-            _SettingsTile(
+            const _SettingsTile(
               icon: Icons.info_outline,
               title: 'Phiên bản',
-              subtitle: 'AI Travel Advisor v1.0.0',
+              subtitle: 'PDTrip v1.0.0',
             ),
             _SettingsTile(
               icon: Icons.description_outlined,
               title: 'Điều khoản dịch vụ',
-              onTap: () {
-                _showDialog('Điều khoản dịch vụ', 'Đây là demo của đồ án tốt nghiệp.');
-              },
+              onTap: () => _showDialog('Điều khoản dịch vụ',
+                  'Đây là demo của đồ án tốt nghiệp.'),
             ),
             _SettingsTile(
               icon: Icons.privacy_tip_outlined,
               title: 'Chính sách bảo mật',
-              onTap: () {
-                _showDialog('Chính sách bảo mật', 'Chúng tôi bảo vệ dữ liệu người dùng.');
-              },
+              onTap: () => _showDialog(
+                  'Chính sách bảo mật', 'Chúng tôi bảo vệ dữ liệu người dùng.'),
             ),
             const SizedBox(height: 24),
 
-            // Section: Tài khoản
+            // ── Tài khoản / Đăng xuất ─────────────────────────────────────
             if (appState.isLoggedIn) ...[
-              _SectionHeader(title: 'TÀI KHOẢN'),
+              const _SectionHeader(title: 'TÀI KHOẢN'),
               const SizedBox(height: 8),
-              _SettingsTile(
-                icon: Icons.logout,
-                title: 'Đăng xuất',
-                titleStyle: const TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
-                onTap: () => _showConfirmDialog(
-                  'Đăng xuất?',
-                  'Bạn sẽ cần đăng nhập lại để tiếp tục.',
-                  () async {
-                    await appState.logout();
-                    if (context.mounted) Navigator.pop(context);
-                  },
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                      color: AppColors.error.withValues(alpha: 0.3)),
+                ),
+                child: ListTile(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.error.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: _loggingOut
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: AppColors.error),
+                          )
+                        : const Icon(Icons.logout,
+                            size: 20, color: AppColors.error),
+                  ),
+                  title: const Text('Đăng xuất',
+                      style: TextStyle(
+                          color: AppColors.error,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15)),
+                  subtitle: Text(
+                    appState.user?.email ?? '',
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                  ),
+                  onTap: _loggingOut ? null : _confirmLogout,
                 ),
               ),
             ],
@@ -159,34 +197,78 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showLanguageDialog() {
+  // ── Logout ─────────────────────────────────────────────────────────────────
+
+  void _confirmLogout() {
+    _confirmAction(
+      'Đăng xuất?',
+      'Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng.',
+      () async {
+        Navigator.pop(context); // đóng dialog
+        await _doLogout();
+      },
+      confirmLabel: 'Đăng xuất',
+    );
+  }
+
+  Future<void> _doLogout() async {
+    setState(() => _loggingOut = true);
+    try {
+      // 1. Revoke token trên server + xóa SharedPreferences
+      await context.read<AppState>().logout();
+
+      if (!mounted) return;
+      // 2. Navigate về màn Login, xóa toàn bộ stack
+      Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const LoginRegisterScreen(),
+          transitionsBuilder: (_, anim, __, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 350),
+        ),
+        (route) => false,
+      );
+    } catch (e) {
+      if (mounted) {
+        setState(() => _loggingOut = false);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Đăng xuất thất bại: ${e.toString()}'),
+          backgroundColor: AppColors.error,
+        ));
+      }
+    }
+  }
+
+  // ── Dialogs ────────────────────────────────────────────────────────────────
+
+  void _confirmAction(
+    String title,
+    String content,
+    VoidCallback onConfirm, {
+    String confirmLabel = 'Xác nhận',
+  }) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Chọn ngôn ngữ'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              value: 'vi',
-              title: const Text('Tiếng Việt'),
-              selected: _selectedLanguage == 'vi',
-              onChanged: (value) {
-                setState(() => _selectedLanguage = value ?? 'vi');
-                Navigator.pop(context);
-              },
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Hủy'),
+          ),
+          ElevatedButton(
+            onPressed: onConfirm,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
-            RadioListTile<String>(
-              value: 'en',
-              title: const Text('English'),
-              selected: _selectedLanguage == 'en',
-              onChanged: (value) {
-                setState(() => _selectedLanguage = value ?? 'en');
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+            child: Text(confirmLabel),
+          ),
+        ],
       ),
     );
   }
@@ -194,31 +276,121 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showDialog(String title, String content) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Đóng')),
-        ],
-      ),
-    );
-  }
-
-  void _showConfirmDialog(String title, String content, VoidCallback onConfirm) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(title),
         content: Text(content),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Hủy'),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Đóng'),
           ),
-          ElevatedButton(
-            onPressed: onConfirm,
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text('Xác nhận', style: TextStyle(color: Colors.white)),
+        ],
+      ),
+    );
+  }
+
+  void _showLanguageDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Chọn ngôn ngữ'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              value: 'vi',
+              groupValue: _selectedLanguage,
+              title: const Text('🇻🇳  Tiếng Việt'),
+              onChanged: (v) {
+                setState(() => _selectedLanguage = v ?? 'vi');
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<String>(
+              value: 'en',
+              groupValue: _selectedLanguage,
+              title: const Text('🇬🇧  English'),
+              onChanged: (v) {
+                setState(() => _selectedLanguage = v ?? 'en');
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── User Info Card ───────────────────────────────────────────────────────────
+
+class _UserInfoCard extends StatelessWidget {
+  final AppUser user;
+  const _UserInfoCard({required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.75)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4)),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Avatar
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.25),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: user.avatarUrl != null && user.avatarUrl!.isNotEmpty
+                ? ClipOval(
+                    child: Image.network(user.avatarUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _Initial(name: user.displayName)),
+                  )
+                : _Initial(name: user.displayName),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  user.displayName,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 3),
+                Text(user.email,
+                    style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85), fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 6),
+                _RoleBadge(role: user.role),
+              ],
+            ),
           ),
         ],
       ),
@@ -226,24 +398,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  final String title;
+class _Initial extends StatelessWidget {
+  final String name;
+  const _Initial({required this.name});
 
-  const _SectionHeader({required this.title});
+  @override
+  Widget build(BuildContext context) => Center(
+        child: Text(
+          name.isNotEmpty ? name[0].toUpperCase() : '?',
+          style: const TextStyle(
+              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+      );
+}
+
+class _RoleBadge extends StatelessWidget {
+  final String role;
+  const _RoleBadge({required this.role});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.bold,
-        color: AppColors.muted,
-        letterSpacing: 0.8,
+    String label;
+    switch (role) {
+      case 'admin':
+        label = '⚡ Admin';
+        break;
+      case 'moderator':
+        label = '🛡 Moderator';
+        break;
+      default:
+        label = '✈ Thành viên';
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(20),
       ),
+      child: Text(label,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
     );
   }
 }
+
+// ─── Section header ───────────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) => Text(
+        title,
+        style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: AppColors.muted,
+            letterSpacing: 1.0),
+      );
+}
+
+// ─── Settings tile ────────────────────────────────────────────────────────────
 
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -272,18 +488,28 @@ class _SettingsTile extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(8),
-          ),
+              color: AppColors.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8)),
           child: Icon(icon, size: 20, color: AppColors.primary),
         ),
-        title: Text(title, style: titleStyle ?? const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-        subtitle: subtitle != null ? Text(subtitle!, style: TextStyle(fontSize: 12, color: AppColors.muted)) : null,
-        trailing: trailing,
+        title: Text(title,
+            style: titleStyle ??
+                const TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 15)),
+        subtitle: subtitle != null
+            ? Text(subtitle!,
+                style: const TextStyle(fontSize: 12, color: AppColors.muted))
+            : null,
+        trailing: trailing ??
+            (onTap != null
+                ? Icon(Icons.chevron_right,
+                    color: Colors.grey.shade400, size: 20)
+                : null),
         onTap: onTap,
       ),
     );

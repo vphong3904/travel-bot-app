@@ -1,0 +1,52 @@
+{
+    "_meta":  {
+                  "city":  "lam-dong-da-lat",
+                  "last_updated":  "2026-06-23",
+                  "agent_task":  "T-006",
+                  "status":  "complete",
+                  "missing_fields":  [
+
+                                     ],
+                  "data_sources":  [
+                                       "manual_curated"
+                                   ]
+              },
+    "data":  [
+                 {
+                     "id":  "019ef504-6d4d-728b-ad3a-c88d47085637",
+                     "city_id":  "019ef504-6d4c-7eb7-885f-583deab45385",
+                     "name":  "Festival Hoa Đà Lạt",
+                     "event_date":  "Tháng 12 (Tổ chức 2 năm 1 lần)",
+                     "location_text":  "Toàn thành phố, trung tâm là Quảng trường Lâm Viên",
+                     "cost":  "Vào cửa tự do các không gian hoa",
+                     "description":  "Sự kiện văn hóa du lịch lớn nhất tôn vinh các loài hoa và người trồng hoa tại Đà Lạt.",
+                     "annual":  false,
+                     "highlight":  true,
+                     "source":  "manual_curated"
+                 },
+                 {
+                     "id":  "019ef504-6d4d-7a70-8abf-a6b940c4612d",
+                     "city_id":  "019ef504-6d4c-7eb7-885f-583deab45385",
+                     "name":  "Giao lưu văn hóa Cồng chiêng Tây Nguyên",
+                     "event_date":  "Hàng đêm",
+                     "location_text":  "Khu vực chân núi Langbiang",
+                     "cost":  null,
+                     "description":  "Hoạt động trải nghiệm lửa trại, uống rượu cần và nhảy múa cùng đồng bào K\u0027Ho.",
+                     "annual":  true,
+                     "highlight":  false,
+                     "source":  "manual_curated"
+                 },
+                 {
+                     "id":  "019ef504-6d4d-7b10-bebe-92d42304ec2f",
+                     "city_id":  "019ef504-6d4c-7eb7-885f-583deab45385",
+                     "name":  "Lễ hội Mai Anh Đào",
+                     "event_date":  "Cuối tháng 1 - Tháng 2 (Tùy thời tiết)",
+                     "location_text":  "Khu vực Hồ Tuyền Lâm và nội đô",
+                     "cost":  "Miễn phí",
+                     "description":  "Lễ hội tự nhiên khi hoa mai anh đào nở rộ rực hồng khắp các nẻo đường sương mù.",
+                     "annual":  true,
+                     "highlight":  true,
+                     "source":  "manual_curated"
+                 }
+             ]
+}

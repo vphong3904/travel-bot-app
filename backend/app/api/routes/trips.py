@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_current_user
 from app.db.models.user import User
 from app.db.models.trip import TripPlan, TripPlanItem
+from app.services import log_service
 from app.db.schemas.trip import (
     TripPlanCreate,
     TripPlanUpdate,
@@ -65,6 +66,13 @@ async def create_trip(
     db.add(trip)
     await db.commit()
     await db.refresh(trip)
+    # Ghi behavior log vào MongoDB
+    await log_service.log_behavior(
+        user_id=str(current_user.id),
+        event_type="save_trip",
+        entity_type="trip",
+        entity_id=str(trip.id),
+    )
     return trip
 
 

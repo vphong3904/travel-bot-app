@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "city": "can-tho",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price_per_night.amount (chưa xác minh giá cụ thể — cần Booking.com hoặc Agoda 06/2026)",
+      "rating (chưa có nguồn rating xác thực)",
+      "booking_url (chưa xác minh URL thực tế)"
+    ],
+    "data_sources": [
+      "Booking.com: booking.com (06/2026)",
+      "Agoda: agoda.com/vi-vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "560ae42b-0ca4-45e3-a289-486756094f54",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Azerai La Residence Cần Thơ",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường Lê Lợi, Quận Ninh Kiều, TP. Cần Thơ",
+      "amenities": ["hồ bơi", "spa", "nhà hàng", "bar", "wifi miễn phí", "dịch vụ đưa đón sân bay", "phòng ven sông"],
+      "description": "Khu nghỉ dưỡng 5 sao sang trọng ven sông Cần Thơ với kiến trúc thuộc địa Pháp được phục hồi tinh tế. Sở hữu hồ bơi ngoài trời nhìn ra sông, spa cao cấp và nhà hàng phục vụ ẩm thực Nam Bộ và quốc tế. Là lựa chọn hàng đầu cho kỳ nghỉ dưỡng cao cấp tại miền Tây.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "19a9fcb9-8ced-4610-ad4e-61988949d054",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Mường Thanh Luxury Cần Thơ",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường Ngô Quyền, Quận Ninh Kiều, TP. Cần Thơ",
+      "amenities": ["hồ bơi", "phòng gym", "nhà hàng", "wifi miễn phí", "bãi đỗ xe", "phòng hội nghị"],
+      "description": "Khách sạn 4 sao thuộc chuỗi Mường Thanh, tọa lạc trung tâm thành phố, dễ dàng di chuyển đến bến Ninh Kiều và các điểm tham quan. Phòng rộng rãi, hiện đại với view thành phố hoặc sông Cần Thơ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "0c41dfc0-ff42-4560-80b2-a45c780f1b0c",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Khách sạn Ninh Kiều 2",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường Hai Bà Trưng, Quận Ninh Kiều, TP. Cần Thơ",
+      "amenities": ["nhà hàng", "wifi miễn phí", "bãi đỗ xe", "view sông"],
+      "description": "Khách sạn 3 sao truyền thống nằm ngay bến Ninh Kiều, nhìn thẳng ra sông Cần Thơ. Vị trí đắc địa ngay trung tâm, thuận tiện đi bộ đến chợ đêm, bến tàu và phố ẩm thực. Là lựa chọn tầm trung được nhiều du khách trong nước ưa thích.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "fb3dbb3a-9cd6-41d6-a2ee-aed2c6e8ce87",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Sông Xanh Riverside Homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Huyện Phong Điền, TP. Cần Thơ (khu vực vườn trái cây)",
+      "amenities": ["wifi miễn phí", "bữa sáng", "cho thuê xe đạp", "tour xuồng ba lá", "vườn trái cây"],
+      "description": "Homestay phong cách nhà vườn miền Tây nằm ven kênh rạch khu Phong Điền, cách trung tâm Cần Thơ khoảng 15km. Trải nghiệm sống cùng người dân địa phương, ăn sáng với đặc sản miền Tây, và đi xuồng ba lá qua kênh rạch trong vườn trái cây.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "f41bde46-48ab-491c-a801-08d7f90d7481",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Kim Tho Hotel Cần Thơ",
+      "type": "guesthouse",
+      "stars": 2,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường Châu Văn Liêm, Quận Ninh Kiều, TP. Cần Thơ",
+      "amenities": ["wifi miễn phí", "máy lạnh", "bãi đỗ xe"],
+      "description": "Nhà nghỉ bình dân 2 sao giá cả phải chăng, phòng sạch sẽ, nằm trong khu trung tâm gần chợ Cần Thơ và bến Ninh Kiều. Phù hợp cho khách du lịch tiết kiệm, solo traveller và nhóm bạn trẻ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

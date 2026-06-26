@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "address — địa chỉ số nhà cụ thể một số quán cần xác minh lại qua Google Maps hoặc Foody",
+      "rating — không điền rating tự sinh, cần từ Foody/Google Maps",
+      "hours — giờ cần xác nhận lại qua Google Maps"
+    ],
+    "data_sources": [
+      "Foody.vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee06-3f91-7537-8e66-4f523e0063c5",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Nhà Hàng Ngon",
+      "type": "restaurant",
+      "address": "160 Pasteur, Phường Bến Nghé, Quận 1, TP. HCM",
+      "hours": "7:00–22:00 hàng ngày — xác nhận tại Google Maps trước khi đến",
+      "price_range": "Khoảng 100.000–250.000đ/người — xác nhận tại Foody.vn",
+      "specialties": ["gỏi cuốn", "bánh xèo", "cơm tấm", "bún bò", "chè"],
+      "description": "Nhà Hàng Ngon là điểm đến nổi tiếng tọa lạc trong biệt thự Pháp cổ, nơi tập hợp hơn 30 gian hàng ẩm thực ba miền Bắc-Trung-Nam. Không gian sân vườn rộng rãi, thoáng mát. Thực đơn phong phú phù hợp cho cả du khách lần đầu đến TP. HCM muốn khám phá đa dạng ẩm thực Việt trong một điểm.",
+      "tips": "Đặt bàn trước vào buổi trưa và tối cuối tuần. Giá cao hơn quán bình dân nhưng không gian và vệ sinh tốt hơn — phù hợp gia đình và nhóm đông.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eee06-3f91-79eb-8447-c8266f11f104",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Quán 94 Cơm Tấm Kiều Giang",
+      "type": "street_food",
+      "address": "Khu Quận 3-4, TP. HCM (chuỗi nhiều chi nhánh)",
+      "hours": "6:00–22:00 — xác nhận chi nhánh gần nhất tại Google Maps",
+      "price_range": "Khoảng 50.000–100.000đ/suất — xác nhận tại Foody.vn",
+      "specialties": ["cơm tấm sườn nướng", "cơm tấm bì chả", "trứng ốp la"],
+      "description": "Một trong những thương hiệu cơm tấm nổi tiếng lâu đời của Sài Gòn, phục vụ từ bình minh đến tối muộn. Sườn nướng mềm thơm, bì dai ngon, nước mắm pha đúng vị đặc trưng Nam Bộ. Quán đông khách vào giờ sáng và trưa — nên đến sớm hoặc trễ hơn giờ cao điểm.",
+      "tips": "Đây là địa chỉ quen thuộc của người Sài Gòn — không gian bình dân nhưng chất lượng ổn định. Gọi thêm chả trứng hấp nếu muốn no bụng.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eee06-3f91-7af3-890b-aa8cca2afd2c",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Phở Hòa Pasteur",
+      "type": "restaurant",
+      "address": "260C Pasteur, Phường 8, Quận 3, TP. HCM",
+      "hours": "6:00–11:00 và 18:00–24:00 — xác nhận tại Google Maps",
+      "price_range": "Khoảng 80.000–150.000đ/tô — xác nhận tại Foody.vn",
+      "specialties": ["phở bò tái", "phở bò chín", "phở bò đặc biệt"],
+      "description": "Phở Hòa Pasteur là thương hiệu phở bò lâu đời và được xếp hạng top ở Sài Gòn, hoạt động từ thập niên 1960. Nước dùng trong, ngọt từ xương bò hầm nhiều giờ; thịt bò tươi ngon. Quán chỉ bán 2 buổi sáng sớm và tối khuya — giờ bán hàng khá đặc biệt cần lưu ý.",
+      "tips": "Bắt buộc thêm tương đen và tương đỏ để hòa vào tô phở theo phong cách Nam. Giờ sáng rất đông — đến trước 7:30 nếu không muốn chờ.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eee06-3f91-7404-be6a-065bd7f1aabe",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Cục Gạch Quán",
+      "type": "restaurant",
+      "address": "10 Đặng Tất, Phường Tân Định, Quận 1, TP. HCM",
+      "hours": "11:00–14:00 và 17:30–22:00 — xác nhận tại Google Maps",
+      "price_range": "Khoảng 150.000–350.000đ/người — xác nhận tại Foody.vn",
+      "specialties": ["cá kho tộ", "canh chua", "thịt kho hột vịt", "rau muống xào tỏi"],
+      "description": "Cục Gạch Quán là nhà hàng ẩm thực gia đình Nam Bộ nằm trong ngôi nhà xưa mang kiến trúc hoài cổ đặc biệt. Thực đơn theo phong cách bữa cơm gia đình Việt truyền thống — cá kho tộ, canh chua, thịt kho. Không gian cây xanh nhiều, ấm cúng, phù hợp bữa tối lãng mạn hoặc tiếp khách.",
+      "tips": "Đặt bàn trước là bắt buộc, đặc biệt cuối tuần và dịp lễ. Quán không nhận khách drop-in vào giờ cao điểm. Phong cách phục vụ chậm rãi — đây là trải nghiệm, không phải nhược điểm.",
+      "rating": null,
+      "must_try": true
+    }
+  ]
+}

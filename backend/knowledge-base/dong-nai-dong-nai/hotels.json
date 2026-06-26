@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price_per_night.amount (cần Booking.com/Agoda xác nhận 06/2026)",
+      "rating (không bịa — để null)",
+      "booking_url (chưa có URL thực)"
+    ],
+    "data_sources": [
+      "Booking.com (06/2026)",
+      "Agoda: agoda.com/vi-vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "948c5212-bfa5-4ded-a3c5-fed87f3b92cb",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Melia Vinpearl Đồng Nai",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Khu đô thị Amata, Long Bình, TP. Biên Hòa, Đồng Nai",
+      "amenities": ["hồ bơi ngoài trời", "spa", "nhà hàng", "phòng gym", "wifi miễn phí", "bãi đỗ xe", "dịch vụ đưa đón"],
+      "description": "Khu nghỉ dưỡng 5 sao cao cấp trong khuôn viên đô thị Amata, Biên Hòa. Thiết kế hiện đại với hồ bơi rộng lớn, spa đầy đủ dịch vụ và nhà hàng quốc tế. Phù hợp doanh nhân và gia đình muốn nghỉ dưỡng gần TP.HCM.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "b1ea1592-de8d-4aad-912e-f03d5cd496b1",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Merperle Crystal Palace Biên Hòa",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường Phạm Văn Thuận, TP. Biên Hòa, Đồng Nai",
+      "amenities": ["hồ bơi", "nhà hàng", "wifi miễn phí", "bãi đỗ xe", "phòng hội nghị"],
+      "description": "Khách sạn 4 sao trung tâm TP. Biên Hòa, dễ dàng di chuyển đến các điểm tham quan trong thành phố. Phòng rộng rãi, nhà hàng phục vụ ẩm thực Việt Nam và Châu Á. Lựa chọn tốt cho khách công vụ và du lịch ngắn ngày.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "7931e8fa-0f80-458f-90c3-53c582d75f0e",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Khách sạn Đồng Nai",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda (06/2026)"
+      },
+      "address": "Đường 30 Tháng 4, TP. Biên Hòa, Đồng Nai",
+      "amenities": ["nhà hàng", "wifi miễn phí", "bãi đỗ xe", "máy lạnh"],
+      "description": "Khách sạn 3 sao lâu đời tại trung tâm Biên Hòa, gần chợ Biên Hòa và các điểm ăn uống. Phòng sạch sẽ, dịch vụ cơ bản đầy đủ. Lựa chọn tầm trung quen thuộc cho khách trong nước.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "45851fb3-0ebb-488c-97d6-d33713a35829",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Nam Cát Tiên Ecolodge",
+      "type": "resort",
+      "stars": null,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc trang chính thức VQG Nam Cát Tiên (06/2026)"
+      },
+      "address": "Trong khuôn viên Vườn Quốc gia Nam Cát Tiên, Huyện Tân Phú, Đồng Nai",
+      "amenities": ["bao gồm bữa ăn (tuỳ gói)", "tour quan sát thú ban đêm", "hướng dẫn viên sinh thái", "wifi (hạn chế)"],
+      "description": "Khu lưu trú sinh thái trong lòng Vườn Quốc gia Nam Cát Tiên — trải nghiệm độc nhất vô nhị khi thức dậy giữa tiếng chim hót và rừng nguyên sinh. Các bungalow/nhà gỗ nhỏ gọn, đơn giản nhưng hòa quyện với thiên nhiên. Buổi tối có tour quan sát thú hoang dã bằng đèn pin.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "feae31b5-397c-4af0-884c-6d24b20517ea",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Giang Điền Resort & Camping",
+      "type": "resort",
+      "stars": null,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc trang chính thức Giang Điền (06/2026)"
+      },
+      "address": "Khu du lịch Thác Giang Điền, Xã Giang Điền, Huyện Trảng Bom, Đồng Nai",
+      "amenities": ["chỗ cắm trại", "khu BBQ", "wifi (khu trung tâm)", "nhà vệ sinh công cộng", "khu tắm thác"],
+      "description": "Khu lưu trú kết hợp nghỉ dưỡng và cắm trại ngay tại khu vực thác Giang Điền. Phù hợp nhóm bạn, gia đình muốn nghỉ qua đêm trong thiên nhiên gần TP.HCM. Có khu vực BBQ và nhiều hoạt động ngoài trời.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

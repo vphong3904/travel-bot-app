@@ -1,0 +1,52 @@
+{
+  "_meta": {
+    "city": "hue-hue",
+    "generated_from": "tra-cuu-nguon-thuc-te",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-001",
+    "status": "partial",
+    "partial_note": "budget và stats để null vì chưa có nguồn xác thực (RULE-02) — không ước đoán số. image_url chưa có nguồn CDN/ảnh chính thức.",
+    "missing_fields": [
+      "budget.low / budget.high — chưa có nguồn tổng hợp chi phí chuyến đi đã xác thực, cần tra cứu thêm",
+      "image_url — chưa có ảnh đại diện chính thức",
+      "stats.rating_avg / review_count / favorite_count / view_count — không bịa số liệu, cần lấy từ hệ thống thật khi triển khai"
+    ],
+    "data_sources": [
+      "Nghị quyết 202/2025/QH15 (sáp nhập đơn vị hành chính)",
+      "Trung tâm Bảo tồn Di tích Cố đô Huế: hueworldheritage.org.vn (06/2025)",
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "Tổng hợp từ destinations.json, foods.json cùng thư mục hue-hue"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Thừa Thiên Huế đổi tên thành thành phố Huế trực thuộc Trung ương, KHÔNG sáp nhập với tỉnh khác",
+    "uuid_version": "v7"
+  },
+  "data": {
+    "id": "019eed69-50b3-73da-a651-2515b15db7c2",
+    "name": "Huế",
+    "slug": "hue-hue",
+    "province": "Huế",
+    "province_old": "Thừa Thiên Huế",
+    "region": "Miền Trung",
+    "description": "Cố đô của Việt Nam dưới triều Nguyễn (1802–1945), nổi tiếng với quần thể di tích Đại Nội và hệ thống lăng tẩm được UNESCO công nhận là Di sản Văn hóa Thế giới từ năm 1993. Thành phố nằm bên dòng sông Hương thơ mộng, kết hợp giữa kiến trúc cung đình cổ kính, đời sống tâm linh Phật giáo và ẩm thực cung đình tinh tế.",
+    "special": "Đại Nội Huế, lăng tẩm triều Nguyễn (Tự Đức, Khải Định), Chùa Thiên Mụ, sông Hương, ẩm thực cung đình và đường phố (bún bò Huế, cơm hến, bánh khoái)",
+    "best_season": "Tháng 1–4 (mát mẻ, ít mưa, phù hợp tham quan di tích ngoài trời)",
+    "best_months": [1, 2, 3, 4],
+    "weather": "Mùa khô tháng 1–8 mát đến nóng dần về cuối; mùa mưa bão tháng 9–12, đặc biệt tháng 10–11 mưa lớn kéo dài — xác nhận dự báo thời tiết trước khi đi vào giai đoạn này.",
+    "budget": {
+      "low": null,
+      "high": null,
+      "currency": "VND",
+      "note": "// TODO: chưa có nguồn tổng hợp chi phí chuyến đi đã xác thực — tham khảo hotels.json, tours.json, transport.json để ước tính theo từng khoản"
+    },
+    "cuisine_summary": "Bún bò Huế, cơm hến, bánh khoái, bánh bèo và các loại bánh Huế truyền thống, chè Huế đa dạng, nem lụi — xem chi tiết tại foods.json",
+    "image_url": null,
+    "stats": {
+      "rating_avg": null,
+      "review_count": null,
+      "favorite_count": null,
+      "view_count": null
+    },
+    "categories": ["heritage", "culture", "temple", "food", "river"],
+    "is_active": true
+  }
+}

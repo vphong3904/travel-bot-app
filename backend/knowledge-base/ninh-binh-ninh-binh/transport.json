@@ -1,0 +1,79 @@
+{
+    "data": {
+        "getting_there": [
+            {
+                "from": "Hà Nội",
+                "type": "train",
+                "providers": [
+                    "Đường sắt Việt Nam"
+                ],
+                "price_range": null,
+                "duration": "~2-2,5 giờ",
+                "notes": "Tàu đến ga Ninh Bình, tiện cho khách solo và nhóm nhỏ."
+            },
+            {
+                "from": "Hà Nội",
+                "type": "bus",
+                "providers": [
+                    "xe limousine",
+                    "xe khách Giáp Bát/Nước Ngầm"
+                ],
+                "price_range": null,
+                "duration": "~2-2,5 giờ",
+                "notes": "Nhiều chuyến trong ngày, thường trả khách ở TP Ninh Bình hoặc Tam Cốc."
+            },
+            {
+                "from": "Hà Nội",
+                "type": "car",
+                "providers": [
+                    "xe riêng",
+                    "tự lái"
+                ],
+                "price_range": null,
+                "duration": "~1,5-2 giờ",
+                "notes": "Linh hoạt nếu đi gia đình hoặc kết hợp Tràng An - Hang Múa."
+            }
+        ],
+        "getting_around": [
+            {
+                "price_info": null,
+                "recommended": true,
+                "type": "motorbike_rental",
+                "notes": "Linh hoạt cho Tam Cốc, Hang Múa, Tràng An; cần đội mũ và tránh đường tối."
+            },
+            {
+                "price_info": null,
+                "recommended": true,
+                "type": "bicycle",
+                "notes": "Rất hợp khu Tam Cốc và làng quê bằng phẳng."
+            },
+            {
+                "price_info": null,
+                "recommended": true,
+                "type": "taxi",
+                "notes": "Phù hợp đi từ ga/bến xe đến khách sạn hoặc các điểm xa."
+            },
+            {
+                "price_info": null,
+                "recommended": false,
+                "type": "electric_car",
+                "notes": "Có ở một số khu du lịch lớn như Bái Đính."
+            }
+        ]
+    },
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-005",
+        "city": "ninh-binh-ninh-binh",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

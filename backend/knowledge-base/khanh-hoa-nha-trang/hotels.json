@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-nha-trang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": ["booking_url — cần bổ sung link trực tiếp từng khách sạn"],
+    "data_sources": [
+      "Booking.com (06/2026)",
+      "Agoda: agoda.com/vi-vn (06/2026)",
+      "Traveloka: traveloka.com/vi-vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eedf6-c8b1-77eb-a86a-785755b065b0",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Sheraton Nha Trang Hotel & Spa",
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: xác nhận giá tại Booking.com hoặc trang chính thức — dao động theo mùa",
+      "address": "26-28 Trần Phú, TP. Nha Trang, Khánh Hòa",
+      "amenities": ["Hồ bơi vô cực", "Spa", "Nhà hàng", "Phòng gym", "Bãi đỗ xe", "WiFi miễn phí", "Bar rooftop"],
+      "description": "Khách sạn 5 sao nằm ngay mặt tiền đường Trần Phú, view biển trực tiếp. Hồ bơi vô cực tầng cao nổi bật, spa đẳng cấp và nhà hàng hải sản cao cấp. Vị trí trung tâm, đi bộ đến biển và các nhà hàng dễ dàng.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eedf6-c8b1-7009-9869-70938ea22af8",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Vinpearl Resort & Spa Nha Trang Bay",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: xác nhận giá tại vinpearl.com — thường bao gồm vé cáp treo và Vinpearl Land",
+      "address": "Đảo Hòn Tre, TP. Nha Trang, Khánh Hòa",
+      "amenities": ["Hồ bơi riêng", "Bãi biển riêng", "Spa", "Golf", "Nhà hàng đa ẩm thực", "Vé cáp treo", "WiFi"],
+      "description": "Resort 5 sao trên đảo Hòn Tre, di chuyển bằng cáp treo hoặc tàu cao tốc. Bãi biển riêng yên tĩnh, cách xa khu du lịch đông đúc. Gói nghỉ dưỡng thường bao gồm vé vào Vinpearl Land — phù hợp cho gia đình.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eedf6-c8b1-702f-82f5-1b140cf1bbfb",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Novotel Nha Trang",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda — tầm trung cao cấp",
+      "address": "50 Trần Phú, TP. Nha Trang, Khánh Hòa",
+      "amenities": ["Hồ bơi ngoài trời", "Nhà hàng", "Bar", "Phòng gym", "WiFi miễn phí", "Dịch vụ đưa đón sân bay"],
+      "description": "Khách sạn 4 sao quốc tế nằm trên đường Trần Phú, ngay sát biển. Thiết kế hiện đại, phòng rộng rãi với nhiều phòng có ban công view biển. Dịch vụ chuẩn quốc tế, phù hợp du lịch công vụ và nghỉ dưỡng.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eedf6-c8b1-77e4-a590-c65f660518b2",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Sun River Nha Trang Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: xác nhận giá tại Agoda hoặc Booking.com — phân khúc tầm trung",
+      "address": "Khu vực trung tâm TP. Nha Trang, Khánh Hòa",
+      "amenities": ["WiFi miễn phí", "Điều hòa", "Nhà hàng", "Lễ tân 24/7"],
+      "description": "Khách sạn 3 sao tầm trung nằm gần trung tâm, phù hợp cho khách du lịch tiết kiệm vẫn muốn vị trí thuận tiện. Phòng sạch sẽ, nhân viên thân thiện, gần các điểm ăn uống và chợ đêm.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eedf6-c8b1-78ae-b82c-2f09395f2ece",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "La Mer Homestay Nha Trang",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: xác nhận giá tại Airbnb hoặc liên hệ trực tiếp — phân khúc budget",
+      "address": "Khu vực gần biển Nha Trang, Khánh Hòa",
+      "amenities": ["WiFi miễn phí", "Bếp dùng chung", "Sân thượng"],
+      "description": "Homestay nhỏ gần biển phù hợp cho khách du lịch trẻ, nhóm bạn hoặc solo traveler muốn trải nghiệm không gian gần gũi, tiết kiệm chi phí. Chủ nhà am hiểu địa phương, sẵn sàng tư vấn điểm đến.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

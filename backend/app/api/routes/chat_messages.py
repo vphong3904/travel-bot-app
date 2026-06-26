@@ -2,6 +2,7 @@
 Routes: /chat/sessions/:id/messages  &  /chat/messages/:id/feedback
 """
 import json
+import time
 import asyncio
 from uuid import UUID
 from typing import AsyncGenerator
@@ -17,11 +18,21 @@ from app.db.models.user import User
 from app.db.models.chat import ChatSession, ChatMessage
 from app.db.schemas.chat import ChatMessageOut, ChatMessageCreate, FeedbackUpdate
 from app.core.sse import format_sse
+from app.services import log_service
+from app.core.config import settings
+from app.utils import get_logger
 from app.utils.uuid_v7 import uuid_v7
+from app.services.nlp_preprocessor import (
+    preprocess,
+    get_greeting_response,
+    OUT_OF_SCOPE_RESPONSE,
+)
 
 router = APIRouter(tags=["chat-messages"])
+logger = get_logger("chat_messages")
 
 _rag = None
+
 
 def get_rag():
     global _rag
@@ -65,7 +76,7 @@ async def send_message(
     rag = get_rag()
 
     user_msg = ChatMessage(
-        id=str(uuid_v7()),        # ✅ fix: gọi hàm đúng
+        id=str(uuid_v7()),
         session_id=str(session_id),
         role="user",
         content=payload.content,
@@ -73,16 +84,28 @@ async def send_message(
     db.add(user_msg)
     await db.flush()
 
-    history = await _get_recent_history(db, session_id, limit=10)
+    # ✅ Dùng CHAT_HISTORY_LIMIT từ config (mặc định 10)
+    history = await _get_recent_history(db, session_id, limit=settings.CHAT_HISTORY_LIMIT)
+    nlp = preprocess(payload.content, history=history)
 
+    t0 = time.monotonic()
     rag_result = await rag.query(
-        question=payload.content,
+        question=nlp.rewritten_query,
         history=history,
         session_id=str(session_id),
     )
-
+    total_ms = int((time.monotonic() - t0) * 1000)
+    tok_per_sec = round(
+        rag_result.get("completion_tokens", 0) / max(total_ms / 1000, 0.001), 1
+    )
+    logger.info(
+        f"[CHAT] user={current_user.id} session={session_id} | "
+        f"total={total_ms}ms | speed={tok_per_sec} tok/s | "
+        f"sources={len(rag_result.get('sources', []))}"
+    )
+    
     assistant_msg = ChatMessage(
-        id=str(uuid_v7()),        # ✅ fix
+        id=str(uuid_v7()),
         session_id=str(session_id),
         role="assistant",
         content=rag_result["answer"],
@@ -95,6 +118,13 @@ async def send_message(
     db.add(assistant_msg)
     await db.commit()
     await db.refresh(assistant_msg)
+    # Ghi behavior log vào MongoDB
+    await log_service.log_behavior(
+        user_id=str(current_user.id),
+        event_type="ask_chatbot",
+        entity_type="chat_session",
+        entity_id=str(session_id),
+    )
     return assistant_msg
 
 
@@ -109,7 +139,7 @@ async def stream_message(
     await _assert_session_owner(db, session_id, current_user.id)
 
     user_msg = ChatMessage(
-        id=str(uuid_v7()),        # ✅ fix
+        id=str(uuid_v7()),
         session_id=str(session_id),
         role="user",
         content=payload.content,
@@ -117,14 +147,25 @@ async def stream_message(
     db.add(user_msg)
     await db.commit()
 
-    history = await _get_recent_history(db, session_id, limit=10)
+    # ✅ Dùng CHAT_HISTORY_LIMIT từ config
+    history = await _get_recent_history(
+        db,
+        session_id,
+        limit=settings.CHAT_HISTORY_LIMIT
+    )
+    nlp = preprocess(payload.content, history=history)
     session_id_str = str(session_id)
     question = payload.content
+    user_id_str = str(current_user.id)
     rag = get_rag()
 
     async def event_generator() -> AsyncGenerator[str, None]:
         full_content: list[str] = []
         rag_meta: dict = {}
+        t0 = time.monotonic()
+
+        # ✅ Gửi event "start" ngay lập tức để frontend biết stream đã sẵn sàng
+        yield format_sse({"type": "start"})
 
         try:
             async for chunk in rag.stream_query(
@@ -133,7 +174,11 @@ async def stream_message(
                 session_id=session_id_str,
             ):
                 if await request.is_disconnected():
+                    logger.warning(
+                        f"[SSE] Client disconnected: session={session_id_str}"
+                    )
                     return
+
                 if chunk.get("type") == "chunk":
                     full_content.append(chunk["content"])
                     yield format_sse({"type": "chunk", "content": chunk["content"]})
@@ -141,13 +186,22 @@ async def stream_message(
                     rag_meta = chunk
 
         except Exception as exc:
+            logger.error(f"[SSE] Stream error session={session_id_str}: {exc}")
             yield format_sse({"type": "error", "detail": str(exc)})
             return
 
         answer = "".join(full_content)
+        stream_ms = int((time.monotonic() - t0) * 1000)
+        tok_per_sec = rag_meta.get("tokens_per_second", 0)
+
+        logger.info(
+            f"[SSE:done] user={user_id_str} session={session_id_str} | "
+            f"chars={len(answer)} | total_stream={stream_ms}ms | speed={tok_per_sec} tok/s"
+        )
+
         async with AsyncSessionLocal() as db_new:
             assistant_msg = ChatMessage(
-                id=str(uuid_v7()),    # ✅ fix
+                id=str(uuid_v7()),
                 session_id=session_id_str,
                 role="assistant",
                 content=answer,
@@ -165,6 +219,8 @@ async def stream_message(
                 "type": "done",
                 "message_id": assistant_msg.id,
                 "sources": rag_meta.get("sources", []),
+                "latency_ms": rag_meta.get("latency_ms"),
+                "tokens_per_second": tok_per_sec,
             })
 
     return StreamingResponse(
@@ -174,6 +230,8 @@ async def stream_message(
             "Cache-Control": "no-cache",
             "X-Accel-Buffering": "no",
             "Connection": "keep-alive",
+            # ✅ Content-Type tường minh cho SSE
+            "Content-Type": "text/event-stream; charset=utf-8",
         },
     )
 
@@ -200,6 +258,14 @@ async def update_feedback(
     msg.feedback = payload.feedback
     await db.commit()
     await db.refresh(msg)
+    # Ghi behavior log vào MongoDB
+    event_type = "feedback_positive" if payload.feedback == 1 else "feedback_negative"
+    await log_service.log_behavior(
+        user_id=str(current_user.id),
+        event_type=event_type,
+        entity_type="chat_message",
+        entity_id=str(message_id),
+    )
     return msg
 
 
@@ -215,7 +281,13 @@ async def _assert_session_owner(db: AsyncSession, session_id: UUID, user_id: str
         raise HTTPException(status_code=404, detail="Session not found")
 
 
-async def _get_recent_history(db: AsyncSession, session_id: UUID, limit: int = 10) -> list[dict]:
+async def _get_recent_history(
+    db: AsyncSession, session_id: UUID, limit: int = 10
+) -> list[dict]:
+    """
+    ✅ Lấy tối đa `limit` tin nhắn gần nhất (mặc định 10 từ config).
+    Trả về theo thứ tự cũ → mới để Gemini đọc ngữ cảnh đúng chiều.
+    """
     result = await db.execute(
         select(ChatMessage.role, ChatMessage.content)
         .where(ChatMessage.session_id == str(session_id))

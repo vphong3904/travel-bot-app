@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "city": "hue-hue",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "price_range nhiều tuyến để null/ước tính chung vì giá vé máy bay/tàu/xe thay đổi liên tục theo thời điểm — cần tra trực tiếp Traveloka/Klook khi cần giá chính xác",
+    "missing_fields": [
+      "price_range cụ thể từng tuyến — biến động theo thời điểm, khuyến nghị tra Traveloka/Klook trực tiếp",
+      "providers cụ thể của xe khách — cần xác nhận thêm"
+    ],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "Traveloka: traveloka.com/vi-vn (06/2025)",
+      "Google Maps (xác nhận tuyến và khoảng cách)"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "airplane",
+        "from": "Hà Nội / TP. Hồ Chí Minh / Đà Nẵng",
+        "duration": "Khoảng 1–1.5 giờ bay từ Hà Nội/TP.HCM đến Sân bay Quốc tế Phú Bài",
+        "price_range": "Dao động theo hãng và thời điểm — xem giá thực tế trên Traveloka hoặc Vietnam Airlines/Vietjet/Bamboo Airways",
+        "providers": ["Vietnam Airlines", "Vietjet Air", "Bamboo Airways"],
+        "notes": "Sân bay Phú Bài cách trung tâm TP. Huế khoảng 15km, có taxi và xe đưa đón sân bay."
+      },
+      {
+        "type": "train",
+        "from": "Hà Nội / TP. Hồ Chí Minh / Đà Nẵng",
+        "duration": "Khoảng 12–13 giờ từ Hà Nội, 18–20 giờ từ TP.HCM, khoảng 2.5–3 giờ từ Đà Nẵng",
+        "price_range": "Tùy loại ghế/giường nằm — xem giá thực tế trên dsvn.vn (Đường sắt Việt Nam) hoặc Traveloka",
+        "providers": ["Đường sắt Việt Nam (tuyến Bắc–Nam)"],
+        "notes": "Ga Huế nằm gần trung tâm thành phố, thuận tiện di chuyển tiếp bằng taxi/xích lô."
+      },
+      {
+        "type": "bus",
+        "from": "Đà Nẵng / Quảng Trị / Hà Tĩnh",
+        "duration": "Khoảng 2.5–3 giờ từ Đà Nẵng qua đèo Hải Vân hoặc hầm đường bộ",
+        "price_range": "Bình dân — xác nhận giá tại các hãng xe khách khi đặt vé",
+        "providers": ["Các hãng xe khách tuyến Bắc Trung Bộ — cần xác nhận thêm"],
+        "notes": "Tuyến phổ biến với khách trong khu vực miền Trung, nhiều xe giường nằm chạy ban đêm."
+      },
+      {
+        "type": "car",
+        "from": "Đà Nẵng",
+        "duration": "Khoảng 2.5–3 giờ tùy đi đèo Hải Vân hoặc hầm đường bộ Hải Vân",
+        "price_range": null,
+        "providers": ["Xe tự lái", "Xe thuê riêng/limousine"],
+        "notes": "Cung đường đèo Hải Vân nổi tiếng với cảnh đẹp, phù hợp cho ai muốn ngắm cảnh trên đường."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "grab",
+        "price_info": "Theo cước hiển thị trên app Grab tại thời điểm đặt xe",
+        "notes": "Phổ biến tại trung tâm thành phố, tiện lợi và giá minh bạch.",
+        "recommended": true
+      },
+      {
+        "type": "xe_om",
+        "price_info": "Thỏa thuận giá trước khi đi — chưa có nguồn giá cố định",
+        "notes": "Phù hợp di chuyển ngắn trong khu phố cổ và các tuyến nhỏ.",
+        "recommended": false
+      },
+      {
+        "type": "motorbike_rental",
+        "price_info": "Giá thuê theo ngày — xác nhận tại các điểm thuê xe khu phố Tây",
+        "notes": "Phù hợp để tự di chuyển đến các lăng tẩm xa trung tâm như lăng Khải Định, lăng Tự Đức.",
+        "recommended": true
+      },
+      {
+        "type": "bicycle",
+        "price_info": "Một số khách sạn/resort có dịch vụ cho thuê hoặc miễn phí (xem hotels.json)",
+        "notes": "Thích hợp dạo trong khu vực trung tâm và ven sông Hương vào sáng sớm.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": "Theo đồng hồ taxi truyền thống hoặc qua app",
+        "notes": "Có nhiều hãng taxi truyền thống hoạt động tại Huế, dễ gọi tại các điểm du lịch chính.",
+        "recommended": false
+      }
+    ]
+  }
+}

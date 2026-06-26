@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "city": "dien-bien-dien-bien-phu",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-002",
+    "status": "partial",
+    "partial_note": "Tên và vị trí địa điểm xác minh qua vietnamtourism.gov.vn và Google Maps. Giá vé/rating để null — cần xác nhận tại Ban Quản lý Di tích hoặc Klook trước production.",
+    "missing_fields": [
+      "entry_fee thực tế (cần xác nhận tại Ban Quản lý Di tích Điện Biên Phủ hoặc Klook)",
+      "stats/rating thật",
+      "image_url",
+      "giờ mở cửa cụ thể một số điểm phụ"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Google Maps (tên địa điểm + toạ độ)",
+      "Sở Du lịch tỉnh Điện Biên: dienbien.gov.vn",
+      "dsvh.gov.vn (Cục Di sản Văn hóa)"
+    ]
+  },
+  "data": [
+    {
+      "id": "3b6f6068-4cd8-4210-86bd-1396606cc9d9",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Đồi A1 (Eliane 2)",
+      "type": "attraction",
+      "address": "Đường Hoàng Văn Thái, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.3833, "lng": 103.0197 },
+      "hours": "7:00–17:00 hằng ngày — xác nhận trước khi đến",
+      "description": "Cứ điểm quan trọng nhất trong chiến dịch Điện Biên Phủ 1954, nơi diễn ra trận đánh ác liệt nhất trong 56 ngày đêm. Trên đồi vẫn còn hố bom khổng lồ do quân ta đặt mìn phá vỡ hầm ngầm của Pháp, xác xe tăng và các công sự bê tông. Đây là di tích được bảo tồn nguyên vẹn nhất trong quần thể Điện Biên Phủ.",
+      "tips": "Đến buổi sáng sớm để tránh nắng — đồi trống, ít bóng cây. Mang theo nước uống. Nên đi cùng hướng dẫn viên để hiểu đầy đủ ý nghĩa lịch sử từng vị trí trên đồi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban Quản lý Khu Di tích Điện Biên Phủ hoặc dienbien.gov.vn"
+    },
+    {
+      "id": "b47a26c4-96cf-41cb-b9a1-1d12fe484df2",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Hầm Chỉ Huy Đờ Cát (De Castries)",
+      "type": "museum",
+      "address": "Đường 7/5, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.3892, "lng": 103.0169 },
+      "hours": "7:00–17:00 hằng ngày — xác nhận trước khi đến",
+      "description": "Hầm chỉ huy ngầm của Tướng Christian de Castries, nơi ông đầu hàng Đại tướng Võ Nguyên Giáp ngày 7/5/1954, kết thúc chiến dịch Điện Biên Phủ lịch sử. Hầm được tái dựng nguyên trạng với bàn ghế, bản đồ tác chiến và các hiện vật thời kỳ đó. Là điểm tham quan biểu tượng nhất của quần thể di tích.",
+      "tips": "Kết hợp với Đồi A1 và Nghĩa trang Độc Lập thành hành trình nửa ngày. Có thuyết minh viên tại chỗ, nên đặt trước nếu đi nhóm.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban Quản lý Khu Di tích Điện Biên Phủ"
+    },
+    {
+      "id": "cd06475e-b556-468f-b1b4-dd3cb6dfddcb",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Bảo tàng Chiến thắng Điện Biên Phủ",
+      "type": "museum",
+      "address": "Đường Võ Nguyên Giáp, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.3868, "lng": 103.0155 },
+      "hours": "7:30–11:30 và 13:30–17:00 (trừ thứ 2) — xác nhận trước khi đến",
+      "description": "Bảo tàng quốc gia lưu giữ hơn 1.000 hiện vật gốc về chiến dịch Điện Biên Phủ: vũ khí, quân trang, bản đồ tác chiến, hình ảnh và tài liệu lịch sử. Có sa bàn lớn mô phỏng toàn bộ trận địa và màn hình trình chiếu tóm tắt diễn biến chiến dịch. Nơi bắt đầu lý tưởng để hiểu tổng thể trước khi thăm các di tích ngoài trời.",
+      "tips": "Vào bảo tàng trước, xem sa bàn để hiểu toàn cảnh, rồi mới ra các di tích ngoài trời — trải nghiệm sẽ sâu hơn nhiều. Cho phép chụp ảnh trong hầu hết khu vực.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Bảo tàng hoặc dienbien.gov.vn"
+    },
+    {
+      "id": "ecd579da-8755-4957-b0d2-99c244215f0b",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Nghĩa trang Liệt sĩ Điện Biên Phủ (A1)",
+      "type": "attraction",
+      "address": "Đường Hoàng Văn Thái, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.3841, "lng": 103.0189 },
+      "hours": "Mở cửa tự do",
+      "description": "Nghĩa trang liệt sĩ ngay dưới chân Đồi A1, nơi an nghỉ của hơn 640 chiến sĩ hy sinh trong trận Điện Biên Phủ. Không gian trang nghiêm với hàng ngàn ngôi mộ trắng xếp đều, có tượng đài trung tâm và khu tưởng niệm. Là điểm dừng chân mang ý nghĩa tinh thần sâu sắc với mọi du khách.",
+      "tips": "Ăn mặc lịch sự, giữ yên lặng và thái độ trang trọng. Nên ghé thăm vào buổi chiều mát để cảm nhận không gian linh thiêng hơn.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "16acc5b0-579b-463b-b378-892173540c27",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Cánh Đồng Mường Thanh",
+      "type": "nature",
+      "address": "Thành phố Điện Biên Phủ và vùng lân cận, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.4000, "lng": 103.0000 },
+      "hours": "Tự do tham quan",
+      "description": "Thung lũng lòng chảo lớn nhất Tây Bắc, rộng hơn 150km², bao quanh bởi núi non trùng điệp. Nơi đây từng là chiến trường lịch sử, nay là vùng đất nông nghiệp trù phú của người Thái với những cánh đồng lúa xanh mướt trải dài. Đẹp nhất vào mùa lúa chín tháng 9–10 hay mùa cấy tháng 5–6.",
+      "tips": "Thuê xe máy để chạy một vòng quanh cánh đồng lúc bình minh hoặc hoàng hôn — ánh sáng và cảnh sắc rất đẹp. Mùa lúa chín tháng 9–10 màu vàng óng rất ấn tượng.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "9d4d130e-1504-455c-a9c7-1cae949a2117",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Bản Văn Khoa (Làng Văn Hóa Thái)",
+      "type": "attraction",
+      "address": "Xã Thanh Minh, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "coordinates": { "lat": 21.3700, "lng": 102.9900 },
+      "hours": "Tự do, nên hỏi trước chủ bản",
+      "description": "Bản người Thái trắng còn giữ nguyên nếp nhà sàn truyền thống, trang phục và phong tục sinh hoạt. Du khách có thể trải nghiệm ở lại nhà sàn, tham gia múa xòe Thái, thưởng thức rượu cần và ẩm thực bản địa. Là điểm văn hóa bổ sung hoàn hảo bên cạnh tuyến di tích lịch sử.",
+      "tips": "Nên liên hệ trước qua khách sạn hoặc tour địa phương để được đón tiếp. Ăn mặc kín đáo và tôn trọng phong tục khi vào nhà sàn.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null
+    }
+  ]
+}

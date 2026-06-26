@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "city": "da-nang-hoi-an",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "rating — không tự sinh, cần lấy đúng từ Foody.vn/Google Maps",
+      "hours — cần xác nhận chéo qua Google Maps",
+      "price_range chính xác — cần xác minh ≥2 nguồn"
+    ],
+    "data_sources": [
+      "Foody.vn (tên quán & khu vực, 06/2026)",
+      "TripAdvisor (tham khảo địa điểm, 06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eeecc-64d3-7d8e-b647-0b12d38a2b2f",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Bánh mì Phượng",
+      "type": "street_food",
+      "address": "02B Phan Châu Trinh, khu phố cổ Hội An",
+      "hours": "Thường 6:30–21:30 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Bánh mì Phượng"],
+      "description": "Quán bánh mì lâu năm nổi tiếng toàn thế giới, luôn có hàng dài khách xếp hàng, đặc biệt vào buổi sáng và tối.",
+      "tips": "Đi giờ thấp điểm (giữa trưa) để giảm thời gian chờ; quán chỉ bán mang đi nhanh, không có nhiều chỗ ngồi.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eeecc-64d3-7073-aff1-0d8a889c7913",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Morning Glory Restaurant",
+      "type": "restaurant",
+      "address": "106 Nguyễn Thái Học, khu phố cổ Hội An",
+      "hours": "Thường 10:00–22:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Cao lầu", "Mì Quảng", "các món Hội An truyền thống"],
+      "description": "Nhà hàng nổi tiếng do bếp trưởng Trịnh Diễm Vy sáng lập, phục vụ ẩm thực Hội An truyền thống trong không gian nhà cổ, có cả lớp học nấu ăn.",
+      "tips": "Nên đặt bàn trước vào buổi tối cao điểm; có thể đăng ký tham gia lớp học nấu ăn ngắn ngay tại nhà hàng.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eeecc-64d3-781b-aad7-6606a007adfc",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Khu ẩm thực Chợ Hội An",
+      "type": "market_stall",
+      "address": "Chợ Hội An, đường Trần Quý Cáp",
+      "hours": "Thường 6:00–19:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Cao lầu", "Cơm gà", "bánh xèo", "chè"],
+      "description": "Khu vực các gian hàng ăn bình dân trong chợ trung tâm Hội An, nơi người dân địa phương ăn hàng ngày, giá rẻ và đa dạng món.",
+      "tips": "Quan sát quán nào đông người dân địa phương ăn để chọn quán ngon; mang tiền mặt vì hầu hết không nhận chuyển khoản.",
+      "rating": null,
+      "must_try": false
+    },
+    {
+      "id": "019eeecc-64d3-709e-bb5d-7436a60d0a2c",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Quán hải sản đường Võ Nguyên Giáp",
+      "type": "restaurant",
+      "address": "Đường Võ Nguyên Giáp, ven biển Mỹ Khê, Đà Nẵng",
+      "hours": "Thường 10:00–23:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["hải sản tươi", "mì Quảng", "ốc"],
+      "description": "Dãy nhà hàng hải sản ven biển Mỹ Khê, phù hợp ăn tối ngắm biển với hải sản được chọn trực tiếp từ bể.",
+      "tips": "Hỏi giá hải sản trước khi chọn theo kg, đặc biệt với cua/tôm hùm để tránh phát sinh chi phí.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
+}

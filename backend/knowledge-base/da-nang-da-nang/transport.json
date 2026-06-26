@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "city": "da-nang-da-nang",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-005",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Traveloka (06/2026)", "Google Maps (06/2026)"]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "airplane",
+        "from": "Hà Nội, TP.HCM, Nha Trang, Cần Thơ",
+        "duration": "1 giờ 15 phút - 1 giờ 30 phút",
+        "price_range": null,
+        "providers": ["Vietnam Airlines", "Vietjet Air", "Bamboo Airways"],
+        "notes": "Sân bay Quốc tế Đà Nẵng nằm sát ngay rìa trung tâm thành phố, di chuyển ra biển Mỹ Khê chỉ mất tầm 15-20 phút taxi."
+      },
+      {
+        "type": "train",
+        "from": "Ga Hà Nội hoặc Ga Sài Gòn",
+        "duration": "14 - 18 giờ",
+        "price_range": null,
+        "providers": ["Đường sắt Việt Nam (VNR)"],
+        "notes": "Ga Đà Nẵng tọa lạc tại quận Thanh Khê. Hành trình đi từ phía Bắc qua đèo Hải Vân bằng tàu hỏa có cảnh quan núi biển tuyệt mỹ."
+      },
+      {
+        "type": "bus",
+        "from": "Huế, Quảng Nam, Quy Nhơn",
+        "duration": "2 - 5 giờ",
+        "price_range": null,
+        "providers": ["Phương Trang", "Hao Huong", "The Sinh Tourist"],
+        "notes": "Cập bến tại Bến xe trung tâm Đà Lạt/Đà Nẵng. Thích hợp cho hành trình ngắn kết nối các tỉnh miền Trung."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "motorbike_rental",
+        "price_info": null,
+        "notes": "Thuận tiện hàng đầu. Đường phố Đà Nẵng rộng rãi, bằng phẳng dễ đi hơn các đô thị lớn khác.",
+        "recommended": true
+      },
+      {
+        "type": "grab",
+        "price_info": "Hiển thị qua app",
+        "notes": "Dịch vụ xe công nghệ Grab Car và Grab Bike phát triển mạnh mẽ, gọi xe nhanh chóng bất kể thời gian.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": "Tùy theo đồng hồ taxi",
+        "notes": "Các hãng taxi truyền thống uy tín như Mai Linh, Vinasun, Tiên Sa hoạt động phủ khắp các điểm đón khách công cộng.",
+        "recommended": false
+      },
+      {
+        "type": "bicycle",
+        "price_info": null,
+        "notes": "Nhiều khách sạn ven biển cung cấp xe đạp miễn phí, thích hợp để dạo mát ven cung đường Võ Nguyên Giáp chiều muộn.",
+        "recommended": false
+      }
+    ]
+  }
+}

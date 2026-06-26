@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from . import auth, chat_sessions, chat_messages, travel, trips, search, admin, reviews, favorites
+from . import auth, chat_sessions, chat_messages, chat_guest, travel, trips, search, admin, reviews, favorites
 
 api_router = APIRouter(prefix="/api")
 
@@ -12,6 +12,9 @@ api_router.include_router(chat_sessions.router, prefix="/chat/sessions", tags=["
 # Chat messages: paths defined inside file already include /chat/sessions/{id}/messages
 # so mount at root with no prefix
 api_router.include_router(chat_messages.router, tags=["chat"])
+
+# Chat guest: /chat/guest/stream  (no auth required)
+api_router.include_router(chat_guest.router, tags=["chat-guest"])
 
 # Travel: /travel/*
 api_router.include_router(travel.router, prefix="/travel", tags=["travel"])

@@ -1,0 +1,286 @@
+{
+    "_meta": {
+        "city": "ha-noi",
+        "generated_from": "destinations.json + hotels.json + restaurants.json + shopping.json (cùng thành phố ha-noi)",
+        "last_updated": "2026-06-22",
+        "agent_task": "T-013",
+        "status": "partial",
+        "missing_fields": [
+            "itin2.days[2].blocks[1].location_ref.id = null (chưa có nhà hàng cụ thể khu Ba Đình trong restaurants.json)",
+            "itin2.days[3].blocks[0].location_ref.id = null (shopping.json chưa thêm field id riêng cho lịch trình tham chiếu — cần đồng bộ lại khi cập nhật)",
+            "Toàn bộ estimated_cost là ước tính, cần xác nhận giá thật trước production"
+        ]
+    },
+    "data": [
+        {
+            "id": "ha-noi-2n1d-couple",
+            "title": "Hà Nội 2N1Đ cho cặp đôi",
+            "duration_days": 2,
+            "duration_nights": 1,
+            "audience": "couple",
+            "travel_style": "explore",
+            "estimated_budget": {
+                "low": 1500000,
+                "high": 3000000,
+                "currency": "VND"
+            },
+            "best_for_season": [
+                "mùa thu (T9–11)",
+                "mùa xuân (T3–4)"
+            ],
+            "summary": "Lịch trình 2 ngày 1 đêm khám phá trung tâm Hà Nội: di tích lịch sử, phố cổ, ẩm thực đường phố và một buổi tối lãng mạn quanh Hồ Tây.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Di tích lịch sử \u0026 phố cổ",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tham quan Lăng Chủ tịch Hồ Chí Minh và Chùa Một Cột",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "9b8f897a-a1cf-4938-ad0b-11faf6ad72ce",
+                                "name": "Lăng Chủ tịch Hồ Chí Minh"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Lăng đóng cửa Thứ 2 \u0026 Thứ 6, kiểm tra lịch trước khi đi."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:30",
+                            "activity": "Ăn trưa: Bún chả",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "f0332008-50ce-408f-8b29-8489151940e0",
+                                "name": "Bún Chả Hương Liên"
+                            },
+                            "estimated_cost": 80000,
+                            "notes": "Quán nổi tiếng, có thể đông giờ trưa."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:00",
+                            "activity": "Tham quan Văn Miếu - Quốc Tử Giám",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "58e365aa-5c8c-4488-92c5-f60d0b67299c",
+                                "name": "Văn Miếu - Quốc Tử Giám"
+                            },
+                            "estimated_cost": 30000,
+                            "notes": "Gần Lăng Bác, có thể đi bộ hoặc taxi ngắn."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "18:30",
+                            "activity": "Dạo phố cổ, ăn tối khu Tạ Hiện",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "d1663179-86bf-47a3-9e0c-2c0ce0f770f3",
+                                "name": "Phố cổ Hà Nội (khu 36 phố phường)"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Kết hợp uống bia hơi và đồ nhắm đường phố."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Hồ Gươm \u0026 Hồ Tây thư thái",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "07:00",
+                            "activity": "Đi dạo quanh Hồ Hoàn Kiếm, ghé Đền Ngọc Sơn",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "35bfc90b-c189-49cc-ad2b-2dd42d1b3d95",
+                                "name": "Hồ Hoàn Kiếm (Hồ Gươm)"
+                            },
+                            "estimated_cost": 30000,
+                            "notes": "Buổi sáng sớm không khí mát mẻ, nhiều người tập thể dục."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:00",
+                            "activity": "Cà phê trứng giữa phố cổ",
+                            "location_ref": {
+                                "type": "cafe",
+                                "id": "126714a4-fb81-44a0-9b79-3b3c3e9fa5c6",
+                                "name": "Cà phê Giảng (cà phê trứng)"
+                            },
+                            "estimated_cost": 35000,
+                            "notes": "Quán nhỏ, nên đến sớm để có bàn."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:30",
+                            "activity": "Thư giãn quanh Hồ Tây, ghé chùa Trấn Quốc",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "ac29a763-f18c-4fa6-9498-a167efd3c9a1",
+                                "name": "Hồ Tây"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Có thể thuê xe đạp đôi đi dạo quanh hồ."
+                        }
+                    ]
+                }
+            ],
+            "total_estimated_cost": {
+                "amount": 375000,
+                "currency": "VND"
+            },
+            "tags": [
+                "di tích lịch sử",
+                "ẩm thực đường phố",
+                "cặp đôi",
+                "ngắn ngày"
+            ]
+        },
+        {
+            "id": "ha-noi-3n2d-family",
+            "title": "Hà Nội 3N2Đ cho gia đình",
+            "duration_days": 3,
+            "duration_nights": 2,
+            "audience": "family",
+            "travel_style": "mixed",
+            "estimated_budget": {
+                "low": 2500000,
+                "high": 5000000,
+                "currency": "VND"
+            },
+            "best_for_season": [
+                "mùa thu (T9–11)",
+                "mùa xuân (T3–4)"
+            ],
+            "summary": "Lịch trình 3 ngày phù hợp gia đình có trẻ nhỏ: kết hợp tham quan, bảo tàng tương tác và ẩm thực dễ ăn.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Làm quen trung tâm thành phố",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "09:00",
+                            "activity": "Nhận phòng khách sạn khu phố cổ",
+                            "location_ref": {
+                                "type": "hotel",
+                                "id": "5d8bd421-54a1-4eb2-b7fc-d0d3f4f56187",
+                                "name": "Hanoi La Siesta Hotel \u0026 Spa (Phố cổ)"
+                            },
+                            "estimated_cost": 1800000,
+                            "notes": "Giá phòng/đêm là ước tính, cần xác nhận khi đặt thật."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:00",
+                            "activity": "Tham quan Bảo tàng Dân tộc học (khu ngoài trời phù hợp trẻ nhỏ)",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "03f31742-c2a7-48ae-927d-b4c71489bda7",
+                                "name": "Bảo tàng Dân tộc học Việt Nam"
+                            },
+                            "estimated_cost": 40000,
+                            "notes": "Dành ít nhất 2 giờ, có khu vui chơi ngoài trời cho trẻ."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "18:00",
+                            "activity": "Ăn tối phở Hà Nội",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "456b771e-a3ff-4f31-94a5-2b07aa0f5bbb",
+                                "name": "Phở Thìn Lò Đúc"
+                            },
+                            "estimated_cost": 50000,
+                            "notes": "Món dễ ăn, phù hợp trẻ nhỏ."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Di tích \u0026 văn hóa",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tham quan Hoàng thành Thăng Long",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "a0484c7d-a78d-4420-a854-c6fde7787aa2",
+                                "name": "Hoàng thành Thăng Long"
+                            },
+                            "estimated_cost": 30000,
+                            "notes": "Nên thuê hướng dẫn viên để trẻ dễ hiểu lịch sử."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "12:00",
+                            "activity": "Ăn trưa gần khu Ba Đình",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "f0332008-50ce-408f-8b29-8489151940e0",
+                                "name": "Bún Chả Hương Liên"
+                            },
+                            "estimated_cost": 150000,
+                            "notes": "Chưa có nhà hàng cụ thể khu này trong restaurants.json — chọn quán ăn gần đó."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "15:00",
+                            "activity": "Đi dạo Hồ Hoàn Kiếm, cho trẻ chơi khu phố đi bộ",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "35bfc90b-c189-49cc-ad2b-2dd42d1b3d95",
+                                "name": "Hồ Hoàn Kiếm (Hồ Gươm)"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Cuối tuần có nhiều hoạt động đường phố cho trẻ em."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 3,
+                    "theme": "Mua sắm \u0026 khởi hành",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "09:00",
+                            "activity": "Mua quà lưu niệm tại Chợ Đồng Xuân",
+                            "location_ref": {
+                                "type": "shopping",
+                                "id": "2786d28f-64d4-4b71-99b4-d52fc7fd92e9",
+                                "name": "Chợ Đồng Xuân"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Nhớ trả giá khi mua ở chợ."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:30",
+                            "activity": "Ăn trưa nhẹ rồi ra sân bay/ga tàu",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "456b771e-a3ff-4f31-94a5-2b07aa0f5bbb",
+                                "name": "Phở Thìn Lò Đúc"
+                            },
+                            "estimated_cost": 100000,
+                            "notes": "Dự trù thời gian di chuyển ra sân bay Nội Bài ~45 phút từ trung tâm."
+                        }
+                    ]
+                }
+            ],
+            "total_estimated_cost": {
+                "amount": 2370000,
+                "currency": "VND"
+            },
+            "tags": [
+                "gia đình",
+                "bảo tàng",
+                "trẻ em",
+                "mua sắm"
+            ]
+        }
+    ]
+}

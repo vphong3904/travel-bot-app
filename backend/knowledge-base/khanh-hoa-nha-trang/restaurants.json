@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-nha-trang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Danh sách quán ăn mang tính gợi ý theo khu vực — địa chỉ số nhà cụ thể và giá menu cần xác minh lại từ Google Maps hoặc Foody trước khi dùng cho production",
+    "missing_fields": ["rating — không bịa điểm số", "hours — cần xác minh tại Google Maps từng quán"],
+    "data_sources": [
+      "Foody: foody.vn (06/2026)",
+      "Google Maps (06/2026)",
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eedf6-c8b1-74c9-aabd-37585b166dc0",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Khu hải sản Phạm Văn Đồng",
+      "type": "restaurant",
+      "address": "Đường Phạm Văn Đồng, TP. Nha Trang, Khánh Hòa",
+      "hours": "Thường 10:00–22:00 — xác nhận từng quán trước khi đến",
+      "price_range": "Dao động — hỏi giá từng loại hải sản trước khi gọi",
+      "specialties": ["Tôm hùm", "Ghẹ", "Mực nướng", "Cá mú hấp", "Hào nướng mỡ hành"],
+      "description": "Phố hải sản nổi tiếng nhất Nha Trang, tập trung nhiều nhà hàng hải sản tươi sống cạnh tranh. Khách chọn hải sản sống từ bể, nhà hàng chế biến theo yêu cầu. Khu vực sầm uất nhất về đêm.",
+      "tips": "Hỏi giá từng con trước khi đồng ý — giá hải sản tính theo cân. So sánh giá ít nhất 2–3 quán. Tránh khu vực mà nhân viên mời chào quá nhiệt tình.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eedf6-c8b1-7710-bd65-d6adb4aeb184",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Chợ Đầm Nha Trang (khu ăn uống)",
+      "type": "market_stall",
+      "address": "Chợ Đầm, TP. Nha Trang, Khánh Hòa",
+      "hours": "Sáng sớm từ 5:00 — đông nhất 6:00–9:00 cho bữa sáng",
+      "price_range": "Bình dân — tầm 30.000–80.000đ/món",
+      "specialties": ["Bún cá Nha Trang", "Bánh căn", "Bánh mì hải sản", "Cháo cá"],
+      "description": "Chợ truyền thống lớn nhất Nha Trang với khu ăn uống tập trung tại tầng trên. Đây là nơi người dân địa phương ăn sáng — thực phẩm tươi ngon, giá thực tế, không dành riêng cho khách du lịch.",
+      "tips": "Đến sớm trước 8:00 để có đồ ngon. Dùng tiếng Việt cơ bản hoặc chỉ tay — không cần lo ngại ngôn ngữ.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eedf6-c8b1-7012-b6fe-c35bc8ffb890",
+      "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Chợ đêm Nha Trang",
+      "type": "street_food",
+      "address": "Đường 19 tháng 10, TP. Nha Trang, Khánh Hòa",
+      "hours": "Thường 17:00–23:00",
+      "price_range": "Bình dân đến tầm trung — 20.000–100.000đ/món",
+      "specialties": ["Bánh căn", "Nem nướng", "Hải sản nướng", "Chè các loại", "Trái cây nhiệt đới"],
+      "description": "Chợ đêm sầm uất nhất Nha Trang, tập trung hàng ăn vặt và đặc sản địa phương. Không khí náo nhiệt, phù hợp dạo bộ và thử nhiều món. Cũng có hàng quần áo và đồ lưu niệm.",
+      "tips": "Mặc cả trước khi mua hàng lưu niệm. Thử nhiều món nhỏ thay vì ăn no ở một quán.",
+      "rating": null,
+      "must_try": true
+    }
+  ]
+}

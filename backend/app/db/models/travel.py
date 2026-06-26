@@ -192,3 +192,17 @@ class ShoppingPlace(Base):
     opening_hours = Column(String(200))
     price_range = Column(String(100))
     created_at = Column(TIMESTAMP(timezone=True))
+
+
+class DestinationViewLog(Base):
+    """Log xem địa điểm — dùng để dedup view_count theo user+ngày."""
+    __tablename__ = "destination_view_logs"
+    __table_args__ = (
+        UniqueConstraint("user_id", "destination_id", "view_date", name="uq_view_per_user_day"),
+    )
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    destination_id = Column(UUID(as_uuid=True), ForeignKey("destinations.id", ondelete="CASCADE"), nullable=False)
+    view_date = Column(String(10), nullable=False)   # 'YYYY-MM-DD' — varchar đủ dùng, không cần Date type
+    created_at = Column(TIMESTAMP(timezone=True))

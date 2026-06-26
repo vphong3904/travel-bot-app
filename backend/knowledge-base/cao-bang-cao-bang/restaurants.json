@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Tên quán ăn xác minh qua Google Maps và Foody. Địa chỉ số nhà, giờ và giá để null nếu không có nguồn xác thực.",
+    "missing_fields": [
+      "địa chỉ số nhà cụ thể (cần xác nhận tại Google Maps)",
+      "giờ mở cửa chính xác",
+      "price_range thực tế (cần xác nhận tại Foody.vn)",
+      "rating thực tế"
+    ],
+    "data_sources": [
+      "Google Maps (tên quán, khu vực, 06/2026)",
+      "Foody.vn (ẩm thực Cao Bằng, 06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "e0e4379c-65da-42d0-b3f8-0cb84bfb523b",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Quán Bánh Cuốn Chợ Cao Bằng",
+      "type": "street_food",
+      "address": "Khu vực chợ Hợp Giang, TP. Cao Bằng — xác nhận địa chỉ cụ thể tại Google Maps",
+      "hours": "5:30–11:00 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "specialties": ["bánh cuốn Cao Bằng", "chả rán", "giò lụa"],
+      "description": "Hàng bánh cuốn sáng nằm trong khu vực chợ trung tâm, phục vụ bánh cuốn Cao Bằng truyền thống với nước chấm nước dùng xương hầm đậm đà. Thường xuyên đông khách từ sáng sớm, là lựa chọn ăn sáng phổ biến của người dân địa phương.",
+      "tips": "Đến trước 8:00 để không phải chờ lâu. Gọi thêm chả rán để có trải nghiệm đầy đủ nhất.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "510d239e-7f7b-4d25-8023-33ad0be8d4cf",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Nhà Hàng Vịt Quay Cao Bằng",
+      "type": "restaurant",
+      "address": "Khu trung tâm TP. Cao Bằng — xác nhận địa chỉ cụ thể tại Google Maps",
+      "hours": "10:00–21:00 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn hoặc Google Maps",
+      "specialties": ["vịt quay 7 vị", "lợn quay lá mắc mật", "miến vịt"],
+      "description": "Nhà hàng chuyên các món vịt và lợn quay đặc trưng của người Tày-Nùng Cao Bằng. Phục vụ vịt quay nguyên con hoặc theo phần, ướp 7 loại gia vị bản địa. Không gian rộng, phù hợp cho nhóm đông.",
+      "tips": "Nên gọi trước nếu đi nhóm lớn hoặc muốn đặt vịt quay nguyên con. Hỏi thêm về các món theo mùa.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "5dd9e83f-dd2c-4314-b5d7-6b66835e444b",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Quán Bánh Áp Chao Khu Chợ",
+      "type": "street_food",
+      "address": "Khu chợ TP. Cao Bằng — xác nhận địa chỉ cụ thể tại Google Maps",
+      "hours": "6:00–12:00 và 16:00–20:00 — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "specialties": ["bánh áp chao", "bánh rán nhân thịt vịt"],
+      "description": "Hàng bánh áp chao nổi tiếng trong khu chợ Cao Bằng, chiên tại chỗ thơm giòn. Vỏ bánh vàng ươm, nhân thịt vịt và nấm hương đậm đà. Là địa chỉ ăn vặt quen thuộc của người dân địa phương.",
+      "tips": "Mua nóng sẽ ngon hơn nhiều. Có thể mua về làm quà vặt dọc đường.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "bf18f0c0-5486-4450-a37e-619ef7ba40ca",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Quán Ăn Khu Vực Bản Giốc",
+      "type": "restaurant",
+      "address": "Khu vực gần thác Bản Giốc, huyện Trùng Khánh, tỉnh Cao Bằng",
+      "hours": "7:00–18:00 hằng ngày (theo giờ thăm quan thác) — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Google Maps — giá vùng du lịch thường cao hơn thành phố",
+      "specialties": ["cơm lam", "gà nướng mắc mật", "rau rừng xào tỏi", "cá suối nướng"],
+      "description": "Các quán ăn bình dân phục vụ khách tham quan thác Bản Giốc, với thực đơn tập trung vào các món nướng và cơm lam đặc sản vùng núi. Nguyên liệu tươi từ địa phương, không gian ngoài trời.",
+      "tips": "Ăn trưa tại đây sau khi tham quan thác để tiết kiệm thời gian. Giá thường cao hơn trong thành phố.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
+}

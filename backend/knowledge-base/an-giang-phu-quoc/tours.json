@@ -1,0 +1,131 @@
+{
+  "_meta": {
+    "city": "an-giang-phu-quoc",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Tên và nội dung tour là thật — đây là các tour phổ biến xác thực tại Phú Quốc. Giá là ƯỚC TÍNH thị trường 2025 — cần xác nhận tại Klook, Traveloka hoặc đại lý tour địa phương trước production.",
+    "missing_fields": [
+      "giá thật real-time (xác nhận Klook/Traveloka/đại lý địa phương)",
+      "booking_url thật"
+    ],
+    "data_sources": [
+      "Klook.com (tên tour phổ biến)",
+      "Traveloka Experiences",
+      "Kiến thức địa phương Phú Quốc"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee71-616e-7395-97e6-4cbc91bc3712",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Tour câu cá & lặn ngắm san hô 4 đảo",
+      "duration": "1 ngày (7:00–17:00)",
+      "price": {
+        "amount": 350000,
+        "currency": "VND",
+        "per": "person",
+        "note": "ƯỚC TÍNH — xác nhận tại Klook hoặc đại lý tour tại cảng An Thới"
+      },
+      "group_size": "10–30 người",
+      "description": "Tour nổi tiếng nhất Phú Quốc, ghé 4 hòn đảo nhỏ: Hòn Thơm, Hòn Móng Tay, Hòn Gầm Ghì, Hòn Vú. Kết hợp lặn ngắm san hô, câu cá, ăn hải sản trên biển và tắm biển tại các điểm ghé.",
+      "includes": [
+        "Thuyền gỗ",
+        "Hướng dẫn viên",
+        "Thiết bị lặn ngắm san hô",
+        "Bữa trưa hải sản trên thuyền",
+        "Nước uống"
+      ],
+      "excludes": [
+        "Đón tiễn khách sạn",
+        "Đồ uống có cồn",
+        "Tip thuyền trưởng",
+        "Lặn sâu có bình khí (phí riêng)"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["gia đình", "cặp đôi", "nhóm bạn"]
+    },
+    {
+      "id": "019eee71-616e-7349-83d4-9fea49631072",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Tour khám phá Vườn Quốc gia & thác Tranh",
+      "duration": "Nửa ngày (buổi sáng, ~4 giờ)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận tại Ban quản lý VQG Phú Quốc hoặc đại lý tour"
+      },
+      "group_size": "2–15 người",
+      "description": "Trekking nhẹ vào rừng nguyên sinh Vườn Quốc gia Phú Quốc, thăm thác Tranh và suối tự nhiên. Hướng dẫn viên địa phương giới thiệu hệ sinh thái rừng nhiệt đới đặc trưng của đảo.",
+      "includes": [
+        "Hướng dẫn viên địa phương",
+        "Vé vào VQG",
+        "Nước uống"
+      ],
+      "excludes": [
+        "Đưa đón",
+        "Ăn uống",
+        "Bảo hiểm du lịch"
+      ],
+      "image_url": null,
+      "difficulty": "moderate",
+      "audience": ["nhóm bạn", "solo", "yêu thiên nhiên"]
+    },
+    {
+      "id": "019eee71-616e-7938-ab80-cdde5e62fc3a",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Tour hoàng hôn & câu mực đêm trên biển",
+      "duration": "Buổi tối (~4 giờ, 17:30–21:30)",
+      "price": {
+        "amount": 300000,
+        "currency": "VND",
+        "per": "person",
+        "note": "ƯỚC TÍNH — xác nhận tại đại lý tour khu Dương Đông hoặc Klook"
+      },
+      "group_size": "5–20 người",
+      "description": "Lên thuyền ra biển xem hoàng hôn, sau đó câu mực đêm dưới ánh đèn cao áp. Hải sản câu được có thể nướng ngay trên thuyền. Trải nghiệm độc đáo không thể bỏ qua khi đến Phú Quốc.",
+      "includes": [
+        "Thuyền gỗ truyền thống",
+        "Cần câu mực",
+        "Mồi câu",
+        "Nướng mực tươi trên thuyền",
+        "Nước uống cơ bản"
+      ],
+      "excludes": [
+        "Đưa đón",
+        "Bia/rượu",
+        "Tip"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["cặp đôi", "nhóm bạn", "gia đình (trẻ từ 8 tuổi)"]
+    },
+    {
+      "id": "019eee71-616e-72b1-968d-8d3ac3d20eba",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Tour làng nghề: nước mắm & rượu sim Phú Quốc",
+      "duration": "Nửa ngày (buổi sáng, ~3 giờ)",
+      "price": {
+        "amount": 200000,
+        "currency": "VND",
+        "per": "person",
+        "note": "ƯỚC TÍNH — nhiều tour kết hợp miễn phí nếu mua sản phẩm tại chỗ"
+      },
+      "group_size": "2–20 người",
+      "description": "Tham quan nhà thùng nước mắm truyền thống (Khải Hoàn hoặc Thanh Hà), xem quy trình ủ cá cơm làm nước mắm nhĩ. Tiếp theo thăm trang trại rượu sim, thử rượu và mua đặc sản về.",
+      "includes": [
+        "Hướng dẫn tham quan",
+        "Thử nếm nước mắm và rượu sim"
+      ],
+      "excludes": [
+        "Mua sản phẩm mang về",
+        "Đưa đón"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["gia đình", "cặp đôi", "yêu ẩm thực"]
+    }
+  ]
+}

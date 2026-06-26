@@ -15,9 +15,12 @@ class Settings(BaseSettings):
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/pdtrip_ai_db"
-    DEBUG: bool = False
     DATABASE_POOL_SIZE: int = 10
     DATABASE_MAX_OVERFLOW: int = 20
+
+    # MongoDB (log lưu trữ: search_history, user_behavior, chatbot quality control)
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    MONGODB_DB_NAME: str = "pdtrip_ai_logs"
 
     # JWT
     JWT_SECRET_KEY: str
@@ -26,12 +29,18 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     # Qdrant
-    QDRANT_URL: str = "http://localhost:6333"
+    QDRANT_URL: str = "https://50787b25-0f82-4ed7-878a-8ab676ff3023.us-west-1-0.aws.cloud.qdrant.io"
+    # Qdrant Cloud: set QDRANT_API_KEY trong .env — để trống khi chạy Docker local
+    QDRANT_API_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6NWQzYjRkMzItNWUyZi00YjNlLThjNmItMGRjMjdiMDlkNGE4In0.NgyejkC9QiY3Yjv_lXvj7IkUWRypOZFi9mwKxUqcPME"
     QDRANT_COLLECTION: str = "pdtrip_knowledge"
+    # T-011/T-012: collection riêng cho knowledge-base/ files, tách khỏi collection cũ
+    QDRANT_COLLECTION_KB_FILES: str = "pdtrip_knowledge_kb_files"
+    # T-012: nguồn dữ liệu RAG — "db" (cũ, mặc định) | "files" (T-011) | "hybrid" (cả hai)
+    KNOWLEDGE_SOURCE: str = "hybrid"
 
     # Gemini
     GEMINI_API_KEY: str
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_MODEL: str
 
     # Embedding
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
@@ -39,7 +48,23 @@ class Settings(BaseSettings):
 
     # RAG
     RAG_TOP_K: int = 5
-    RAG_SCORE_THRESHOLD: float = 0.5
+    # ✅ FIX: Hạ từ 0.5 xuống 0.3 — BGE-M3 cosine similarity thường cho score 0.3-0.7
+    # với dữ liệu tiếng Việt, 0.5 quá cao gây 0 results
+    RAG_SCORE_THRESHOLD: float = 0.3
+
+    # Chat memory
+    CHAT_HISTORY_LIMIT: int = 10   # ✅ số tin nhắn nhớ trong context
+
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = ""
+
+    # SMTP (Email OTP)
+    SMTP_HOST:     str = ""
+    SMTP_PORT:     int = 587
+    SMTP_USER:     str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM:     str = "noreply@pdtrip.ai"
+    SMTP_USE_TLS:  bool = True
 
 
 @lru_cache

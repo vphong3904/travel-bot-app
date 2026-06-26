@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "city": "da-nang-da-nang",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-013",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["vietnamtourism.gov.vn (06/2026)"]
+  },
+  "data": [
+    {
+      "id": "danang-3d2n-family",
+      "title": "3 Ngày 2 Đêm: Kỳ Nghỉ Biển Cho Gia Đình",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "family",
+      "travel_style": "relax",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Mùa Hè"],
+      "summary": "Lịch trình thư giãn nhịp độ vừa phải cho gia đình có trẻ nhỏ hoặc người lớn tuổi, tập trung trải nghiệm biển, nghỉ dưỡng và danh thắng biểu tượng.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Chào Biển Xanh & Sông Hàn Đêm",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Nhận phòng khách sạn mặt biển, nghỉ ngơi xả hơi",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019ef543-a003-7200-8200-000000000003",
+                "name": "Muong Thanh Luxury Da Nang Hotel"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể ra bờ cát đi dạo nhẹ."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "16:00",
+              "activity": "Vui chơi tắm biển Mỹ Khê",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef543-a002-7100-8100-000000000001",
+                "name": "Biển Mỹ Khê"
+              },
+              "estimated_cost": null,
+              "notes": "Cho trẻ chơi cát vùng nước nông."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:30",
+              "activity": "Lên du thuyền dạo sông Hàn mát mẻ",
+              "location_ref": {
+                "type": "tour",
+                "id": "019ef543-a005-7400-8400-000000000002",
+                "name": "Vé Du Thuyền Sông Hàn Ngắm Cầu Rồng Phun Lửa"
+              },
+              "estimated_cost": null,
+              "notes": "Nên đặt trước nếu đi vào ngày cuối tuần."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Đỉnh Cao Núi Chúa Ba Na",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Trải nghiệm cáp treo lên đỉnh làng Pháp và check-in Cầu Vàng",
+              "location_ref": {
+                "type": "tour",
+                "id": "019ef543-a005-7400-8400-000000000001",
+                "name": "Tour Ghép Trọn Gói Khám Phá Ba Na Hills 1 Ngày"
+              },
+              "estimated_cost": null,
+              "notes": "Đi sớm để tránh đoàn đông xếp hàng cáp treo."
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Mua Quà Kỷ Niệm",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Ghé chợ mua chả bò và đặc sản khô mang về",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019ef543-a007-7600-8600-000000000001",
+                "name": "Chợ Hàn"
+              },
+              "estimated_cost": null,
+              "notes": "Đóng gói kỹ vào thùng xốp để ký gửi hành lý."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["Gia đình", "Nghỉ dưỡng", "Biển"]
+    },
+    {
+      "id": "danang-1day-culture",
+      "title": "1 Ngày: Khám Phá Tâm Linh - Lịch Sử Giao Thoa",
+      "duration_days": 1,
+      "duration_nights": 0,
+      "audience": "solo",
+      "travel_style": "adventure",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Mùa Khô"],
+      "summary": "Dành cho những người thích đi một mình muốn tìm hiểu nét kiến trúc di sản cổ, tâm linh độc đáo quanh khu vực đồi núi đá vôi vịnh biển.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Từ Chăm Pa Cổ Đến Tiên Cảnh Ngũ Hành",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Tìm hiểu cổ vật điêu khắc văn hóa",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef543-a002-7100-8100-000000000004",
+                "name": "Bảo tàng Điêu khắc Chăm Đà Nẵng"
+              },
+              "estimated_cost": null,
+              "notes": "Nên dùng tai nghe điện thoại quét audio guide."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Hành trình leo ngọn Thủy Sơn khám phá các động đá vôi",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef543-a002-7100-8100-000000000003",
+                "name": "Danh thắng Ngũ Hành Sơn"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể mua vé thang cuốn một chiều đi lên cho đỡ mệt chân."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["Lịch sử", "Tâm linh", "Khám phá"]
+    }
+  ]
+}

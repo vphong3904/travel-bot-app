@@ -119,7 +119,7 @@ class ChatLogOut(BaseModel):
 # ── Search (dùng trong search route) ─────────────────────────────────────────
 
 class SearchHistoryOut(BaseModel):
-    id: UUID
+    id: str
     keyword: str
     result_count: int
     created_at: Optional[datetime]

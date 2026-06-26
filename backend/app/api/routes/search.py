@@ -1,21 +1,20 @@
 """
 Routes: /search
 GET /search           → Tìm kiếm chung (destinations + hotels + knowledge)
-GET /search/history   → Lịch sử tìm kiếm
+GET /search/history   → Lịch sử tìm kiếm (lưu trong MongoDB)
 DEL /search/history   → Xoá lịch sử
 """
-from uuid import UUID
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, status
-from sqlalchemy import select, delete, func, or_
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user
 from app.db.models.user import User
 from app.db.models.travel import Destination, Hotel, Tour
-from app.db.models.admin import SearchHistory
 from app.db.schemas.admin import SearchResultOut, SearchHistoryOut
+from app.services import log_service
 
 router = APIRouter(tags=["search"])
 
@@ -30,7 +29,7 @@ async def search(
 ):
     """
     Tìm kiếm song song trên: destinations, hotels, tours.
-    Lưu keyword vào search_history.
+    Lưu keyword vào search_history (MongoDB).
     """
     ts_query = func.plainto_tsquery("simple", q)
 
@@ -85,14 +84,12 @@ async def search(
 
     total = len(destinations) + len(hotels) + len(tours)
 
-    # Lưu lịch sử tìm kiếm
-    history_entry = SearchHistory(
+    # Lưu lịch sử tìm kiếm vào MongoDB (không block response nếu Mongo lỗi)
+    await log_service.log_search(
         user_id=current_user.id,
         keyword=q,
         result_count=total,
     )
-    db.add(history_entry)
-    await db.commit()
 
     return SearchResultOut(
         query=q,
@@ -103,31 +100,22 @@ async def search(
     )
 
 
-# ── Search history ────────────────────────────────────────────────────────────
+# ── Search history (MongoDB) ──────────────────────────────────────────────────
 @router.get("/history", response_model=list[SearchHistoryOut])
 async def get_search_history(
     skip: int = 0,
     limit: int = 20,
-    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    result = await db.execute(
-        select(SearchHistory)
-        .where(SearchHistory.user_id == current_user.id)
-        .order_by(SearchHistory.created_at.desc())
-        .offset(skip)
-        .limit(limit)
+    docs = await log_service.get_search_history(
+        user_id=current_user.id, skip=skip, limit=limit
     )
-    return result.scalars().all()
+    return docs
 
 
-# ── Delete search history ─────────────────────────────────────────────────────
+# ── Delete search history (MongoDB) ───────────────────────────────────────────
 @router.delete("/history", status_code=status.HTTP_204_NO_CONTENT)
 async def clear_search_history(
-    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    await db.execute(
-        delete(SearchHistory).where(SearchHistory.user_id == current_user.id)
-    )
-    await db.commit()
+    await log_service.clear_search_history(user_id=current_user.id)

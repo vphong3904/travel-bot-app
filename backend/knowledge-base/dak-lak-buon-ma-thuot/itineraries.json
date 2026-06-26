@@ -1,0 +1,296 @@
+{
+  "_meta": {
+    "city": "dak-lak-buon-ma-thuot",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-013",
+    "status": "partial",
+    "partial_note": "Mọi location_ref.id đã được kiểm tra khớp với UUID thật trong destinations.json/hotels.json/restaurants.json/tours.json/shopping.json cùng thư mục. Một số block dùng id: null vì chưa có entity phù hợp trong dữ liệu nguồn (ví dụ: sân bay Buôn Ma Thuột, một số buổi tự do/di chuyển không gắn với 1 địa điểm cụ thể).",
+    "missing_fields": [
+      "estimated_cost từng block và total_estimated_cost — phụ thuộc các trường giá (entry_fee, price, price_range) hiện còn null trong file JSON nguồn; chỉ ước tính được cho các phần đã có giá xác thực",
+      "Khách sạn khu vực gần hồ Lắk — hotels.json hiện chỉ có lựa chọn tại trung tâm Buôn Ma Thuột/Buôn Đôn, nên lịch trình 3N2Đ có 1 buổi nghỉ đêm tại khu vực hồ Lắk phải để location_ref.id: null cho phần lưu trú"
+    ],
+    "data_sources": [
+      "destinations.json, hotels.json, restaurants.json, tours.json, shopping.json (cùng thư mục dak-lak-buon-ma-thuot)",
+      "Vietravel — gợi ý lịch trình 3 ngày Buôn Ma Thuột mùa hè (06/2026)",
+      "Kumho Samco — lịch trình Buôn Ma Thuột 3N2Đ (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "dak-lak-buon-ma-thuot-2n1d-couple-cafe",
+      "title": "Buôn Ma Thuột 2 Ngày 1 Đêm — Cà phê & Thiên nhiên cho cặp đôi",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "couple",
+      "travel_style": "relax",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Tháng 11–4 (mùa khô, ít mưa, dễ di chuyển)"],
+      "summary": "Lịch trình ngắn tập trung vào trải nghiệm văn hóa cà phê đặc trưng của thành phố và một điểm thiên nhiên gần trung tâm, phù hợp cho cặp đôi muốn nghỉ ngơi nhẹ nhàng mà không di chuyển quá xa.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Văn hóa cà phê & trung tâm thành phố",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": null,
+              "activity": "Nhận phòng khách sạn, nghỉ ngơi sau chuyến đi",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019eeef1-4b2d-7b7e-a3e1-a0b80b390e1d",
+                "name": "Mường Thanh Luxury Buôn Ma Thuột"
+              },
+              "estimated_cost": null,
+              "notes": "Giá phòng xem hotels.json"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": null,
+              "activity": "Ăn trưa, thưởng thức món ăn dân tộc Tây Nguyên",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eeef1-4b2d-7401-873d-d340f37ea263",
+                "name": "Quán Yang Sin – Ẩm thực Tây Nguyên"
+              },
+              "estimated_cost": null,
+              "notes": "Gợi ý món cơm lam, gà nướng — xem foods.json"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": null,
+              "activity": "Tham quan Bảo tàng Thế giới Cà phê, tìm hiểu hành trình hạt cà phê và chụp ảnh kiến trúc",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eeef1-4b2d-7083-a193-d75897a81e30",
+                "name": "Bảo tàng Thế giới Cà phê"
+              },
+              "estimated_cost": null,
+              "notes": "Giá vé tham khảo xem destinations.json"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": null,
+              "activity": "Dạo chợ đêm khu vực Ngã Sáu, thưởng thức ẩm thực đường phố",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eeef1-4b2d-71d7-aafc-3f6e642b47c3",
+                "name": "Chợ đêm Buôn Ma Thuột (khu vực Ngã Sáu)"
+              },
+              "estimated_cost": null,
+              "notes": null
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Buôn làng văn hóa & mua quà",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": null,
+              "activity": "Tham quan Buôn Ako Dhong, tìm hiểu kiến trúc nhà dài Ê Đê và thưởng thức cà phê sân vườn",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eeef1-4b2d-7cfc-b46b-658eca9794ac",
+                "name": "Buôn Ako Dhong (Buôn Cô Thôn)"
+              },
+              "estimated_cost": null,
+              "notes": null
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": null,
+              "activity": "Mua cà phê và đặc sản làm quà",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019eeef1-4b2d-78bc-a25e-ac4677ba93d0",
+                "name": "Làng Cà phê Trung Nguyên"
+              },
+              "estimated_cost": null,
+              "notes": "Giá tham khảo xem shopping.json"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": null,
+              "activity": "Trả phòng khách sạn, di chuyển ra sân bay/bến xe để kết thúc chuyến đi",
+              "location_ref": {
+                "type": "destination",
+                "id": null,
+                "name": "Sân bay Buôn Ma Thuột / bến xe khách"
+              },
+              "estimated_cost": null,
+              "notes": "Chưa có entity sân bay trong destinations.json — để id: null theo RULE-11"
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["cà phê", "văn hóa", "cặp đôi", "ngắn ngày", "thư giãn"]
+    },
+    {
+      "id": "dak-lak-buon-ma-thuot-3n2d-family-nature-culture",
+      "title": "Buôn Ma Thuột 3 Ngày 2 Đêm — Thiên nhiên & Văn hóa cho gia đình/nhóm bạn",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "family",
+      "travel_style": "mixed",
+      "estimated_budget": { "low": null, "high": null, "currency": "VND" },
+      "best_for_season": ["Tháng 11–4 (mùa khô)", "Tháng 2–5 (thời điểm đẹp để tham quan thác)"],
+      "summary": "Lịch trình mở rộng ra ngoài trung tâm thành phố, kết hợp khám phá thác nước, vườn quốc gia, văn hóa voi Buôn Đôn và một đêm gần hồ Lắk — phù hợp cho gia đình hoặc nhóm bạn muốn trải nghiệm đa dạng cả thiên nhiên và văn hóa Tây Nguyên.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Thác nước & trung tâm thành phố",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": null,
+              "activity": "Nhận phòng khách sạn tại trung tâm thành phố",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019eeef1-4b2d-7b30-94a7-9c1cd187a1d5",
+                "name": "Sài Gòn Ban Mê Hotel"
+              },
+              "estimated_cost": null,
+              "notes": "Phù hợp gia đình có trẻ em — xem hotels.json"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": null,
+              "activity": "Ăn trưa tại trung tâm thành phố",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eeef1-4b2d-778b-aadb-4038a7bc1db9",
+                "name": "Gà nướng Chicky"
+              },
+              "estimated_cost": null,
+              "notes": null
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": null,
+              "activity": "Tham quan và tắm suối tại thác Dray Nur, khám phá hang động sau màn nước",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eeef1-4b2d-7f2b-a944-c1c953ef1d9e",
+                "name": "Thác Dray Nur"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể đi theo tour ghép — xem tours.json (Tour khám phá thác Dray Nur & Vườn quốc gia Yok Đôn)"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": null,
+              "activity": "Nghỉ ngơi, ăn tối tự do trong thành phố",
+              "location_ref": {
+                "type": "destination",
+                "id": null,
+                "name": "Tự do trong khu trung tâm Buôn Ma Thuột"
+              },
+              "estimated_cost": null,
+              "notes": null
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Văn hóa voi Buôn Đôn & Vườn quốc gia Yok Đôn",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": null,
+              "activity": "Di chuyển và tham quan Khu du lịch Buôn Đôn, tìm hiểu văn hóa thuần dưỡng voi và đi qua cầu treo sông Sêrêpôk",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eeef1-4b2d-7f0b-aaea-66ade05b139c",
+                "name": "Khu du lịch Buôn Đôn"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể đặt theo tour — xem tours.json (Tour văn hóa Buôn Đôn — Sông Sêrêpôk & làng voi)"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": null,
+              "activity": "Ăn trưa với đặc sản gà nướng Bản Đôn và cơm lam",
+              "location_ref": {
+                "type": "destination",
+                "id": null,
+                "name": "Quán ven khu du lịch Bản Đôn"
+              },
+              "estimated_cost": null,
+              "notes": "Chưa có entity quán ăn cụ thể tại Bản Đôn trong restaurants.json — xem foods.json để biết món đặc sản"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": null,
+              "activity": "Trekking nhẹ và tìm hiểu hệ sinh thái rừng khộp tại Vườn quốc gia Yok Đôn",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eeef1-4b2d-7439-92ba-060ea5aa057d",
+                "name": "Vườn quốc gia Yok Đôn"
+              },
+              "estimated_cost": null,
+              "notes": "Giá vé tham khảo xem destinations.json"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": null,
+              "activity": "Nghỉ đêm tại homestay khu vực Buôn Đôn",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019eeef1-4b2d-7732-9bc1-71acddf3dc81",
+                "name": "Homestay khu du lịch Buôn Đôn"
+              },
+              "estimated_cost": null,
+              "notes": "Giá phòng xem hotels.json"
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Mua sắm đặc sản & kết thúc chuyến đi",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": null,
+              "activity": "Di chuyển về trung tâm thành phố, ghé chợ trung tâm mua đặc sản làm quà",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019eeef1-4b2d-74a1-ae2f-ef86dba7064a",
+                "name": "Chợ trung tâm Buôn Ma Thuột"
+              },
+              "estimated_cost": null,
+              "notes": "Giá tham khảo xem shopping.json"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": null,
+              "activity": "Ăn trưa, trả phòng",
+              "location_ref": {
+                "type": "destination",
+                "id": null,
+                "name": "Trung tâm thành phố Buôn Ma Thuột"
+              },
+              "estimated_cost": null,
+              "notes": null
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": null,
+              "activity": "Di chuyển ra sân bay/bến xe để kết thúc chuyến đi",
+              "location_ref": {
+                "type": "destination",
+                "id": null,
+                "name": "Sân bay Buôn Ma Thuột / bến xe khách"
+              },
+              "estimated_cost": null,
+              "notes": "Chưa có entity sân bay trong destinations.json — để id: null theo RULE-11"
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["thiên nhiên", "văn hóa", "gia đình", "voi", "thác nước", "trekking nhẹ"]
+    }
+  ]
+}

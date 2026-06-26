@@ -1,3 +1,5 @@
+// lib/models/destination.dart
+
 class Category {
   final String id;
   final String name;
@@ -5,7 +7,7 @@ class Category {
   final String? icon;
   final String? description;
 
-  Category({
+  const Category({
     required this.id,
     required this.name,
     required this.slug,
@@ -13,110 +15,133 @@ class Category {
     this.description,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['id']?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      slug: json['slug']?.toString() ?? '',
-      icon: json['icon']?.toString(),
-      description: json['description']?.toString(),
-    );
-  }
+  factory Category.fromJson(Map<String, dynamic> j) => Category(
+        id: j['id']?.toString() ?? '',
+        name: j['name']?.toString() ?? '',
+        slug: j['slug']?.toString() ?? '',
+        icon: j['icon']?.toString(),
+        description: j['description']?.toString(),
+      );
 }
 
 class Destination {
   final String id;
   final String name;
+  final String? province;
   final String region;
   final String imageUrl;
   final String description;
-  final List<String> tags;
   final List<Category> categories;
   final int budgetLow;
   final int budgetHigh;
   final String weather;
   final String bestSeason;
+  final List<int> bestMonths;
   final String cuisine;
-  final String highlights;
+  final String special;    // từ backend — điểm đặc sắc
+  final double ratingAvg;
+  final int reviewCount;
+  final int favoriteCount;
+  final int viewCount;
 
-  Destination({
+  const Destination({
     required this.id,
     required this.name,
+    this.province,
     required this.region,
     required this.imageUrl,
     required this.description,
-    required this.tags,
     required this.categories,
     required this.budgetLow,
     required this.budgetHigh,
     required this.weather,
     required this.bestSeason,
+    required this.bestMonths,
     required this.cuisine,
-    required this.highlights,
+    required this.special,
+    required this.ratingAvg,
+    required this.reviewCount,
+    required this.favoriteCount,
+    required this.viewCount,
   });
 
-  factory Destination.fromJson(Map<String, dynamic> json) {
-    final rawCategories = json['categories'];
-    final categories = <Category>[];
-    if (rawCategories is List) {
-      for (final item in rawCategories) {
-        if (item is Map<String, dynamic>) {
-          categories.add(Category.fromJson(item));
-        } else if (item is Map) {
-          categories.add(Category.fromJson(Map<String, dynamic>.from(item)));
-        }
+  // Alias cho backward-compat với code cũ dùng .highlights / .tags
+  String get highlights => special;
+  List<String> get tags => categories.map((c) => c.name).toList();
+
+  factory Destination.fromJson(Map<String, dynamic> j) {
+    final rawCats = j['categories'];
+    final cats = <Category>[];
+    if (rawCats is List) {
+      for (final item in rawCats) {
+        if (item is Map) cats.add(Category.fromJson(Map<String, dynamic>.from(item)));
       }
     }
 
-    final rawTags = json['tags'];
-    final tags = <String>[];
-    if (rawTags is String && rawTags.isNotEmpty) {
-      tags.addAll(rawTags.split(',').map((tag) => tag.trim()).where((tag) => tag.isNotEmpty));
-    } else if (rawTags is List) {
-      tags.addAll(rawTags.map((tag) => tag.toString()));
-    }
-    if (tags.isEmpty) {
-      tags.addAll(categories.map((category) => category.name));
+    final rawMonths = j['best_months'];
+    final months = <int>[];
+    if (rawMonths is List) {
+      for (final m in rawMonths) {
+        if (m is int) months.add(m);
+        else if (m != null) months.add(int.tryParse('$m') ?? 0);
+      }
     }
 
+    int parseInt(dynamic v) => v is int ? v : int.tryParse('$v') ?? 0;
+    double parseDbl(dynamic v) => v == null ? 0.0 : double.tryParse('$v') ?? 0.0;
+
     return Destination(
-      id: json['id']?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      region: json['region']?.toString() ?? '',
-      imageUrl: json['image_url']?.toString() ?? '',
-      description: json['description']?.toString() ?? '',
-      tags: tags,
-      categories: categories,
-      budgetLow: json['budget_low'] is int ? json['budget_low'] as int : int.tryParse('${json['budget_low']}') ?? 0,
-      budgetHigh: json['budget_high'] is int ? json['budget_high'] as int : int.tryParse('${json['budget_high']}') ?? 0,
-      weather: json['weather']?.toString() ?? '',
-      bestSeason: json['best_season']?.toString() ?? '',
-      cuisine: json['cuisine']?.toString() ?? '',
-      highlights: json['highlights']?.toString() ?? '',
+      id: j['id']?.toString() ?? '',
+      name: j['name']?.toString() ?? '',
+      province: j['province']?.toString(),
+      region: j['region']?.toString() ?? '',
+      imageUrl: j['image_url']?.toString() ?? '',
+      description: j['description']?.toString() ?? '',
+      categories: cats,
+      budgetLow: parseInt(j['budget_low']),
+      budgetHigh: parseInt(j['budget_high']),
+      weather: j['weather']?.toString() ?? '',
+      bestSeason: j['best_season']?.toString() ?? '',
+      bestMonths: months,
+      cuisine: j['cuisine']?.toString() ?? '',
+      special: j['special']?.toString() ?? j['highlights']?.toString() ?? '',
+      ratingAvg: parseDbl(j['rating_avg']),
+      reviewCount: parseInt(j['review_count']),
+      favoriteCount: parseInt(j['favorite_count']),
+      viewCount: parseInt(j['view_count']),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'region': region,
-      'image_url': imageUrl,
-      'description': description,
-      'tags': tags,
-      'categories': categories.map((c) => {
-            'id': c.id,
-            'name': c.name,
-            'slug': c.slug,
-            'icon': c.icon,
-            'description': c.description,
-          }).toList(),
-      'budget_low': budgetLow,
-      'budget_high': budgetHigh,
-      'weather': weather,
-      'best_season': bestSeason,
-      'cuisine': cuisine,
-      'highlights': highlights,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'province': province,
+        'region': region,
+        'image_url': imageUrl,
+        'description': description,
+        'categories': categories.map((c) => {'id': c.id, 'name': c.name, 'slug': c.slug}).toList(),
+        'budget_low': budgetLow,
+        'budget_high': budgetHigh,
+        'weather': weather,
+        'best_season': bestSeason,
+        'best_months': bestMonths,
+        'cuisine': cuisine,
+        'special': special,
+        'rating_avg': ratingAvg,
+        'review_count': reviewCount,
+        'favorite_count': favoriteCount,
+        'view_count': viewCount,
+      };
+
+  Destination copyWith({int? viewCount, int? favoriteCount, int? reviewCount, double? ratingAvg}) =>
+      Destination(
+        id: id, name: name, province: province, region: region,
+        imageUrl: imageUrl, description: description, categories: categories,
+        budgetLow: budgetLow, budgetHigh: budgetHigh, weather: weather,
+        bestSeason: bestSeason, bestMonths: bestMonths, cuisine: cuisine, special: special,
+        ratingAvg: ratingAvg ?? this.ratingAvg,
+        reviewCount: reviewCount ?? this.reviewCount,
+        favoriteCount: favoriteCount ?? this.favoriteCount,
+        viewCount: viewCount ?? this.viewCount,
+      );
 }

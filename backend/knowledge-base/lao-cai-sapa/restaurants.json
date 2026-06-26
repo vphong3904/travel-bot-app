@@ -1,0 +1,54 @@
+{
+  "_meta": {
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-004",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Foody (06/2026)", "Google Maps (06/2026)"]
+  },
+  "data": [
+    {
+      "id": "019ef658-6c00-7401-8401-d12345678911",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Nhà hàng A Phủ",
+      "type": "restaurant",
+      "address": "15 Fansipan, Sapa, Lào Cai",
+      "hours": "09:00 - 23:00 — xác nhận trước khi đến",
+      "price_range": "Tầm trung bình đến cao",
+      "specialties": ["Thịt lợn cắp nách nướng", "Khâu nhục Sapa", "Gà đen hầm thuốc bắc"],
+      "description": "Không gian quán mang đậm nét kiến trúc nhà gỗ Tây Bắc cổ kính, chuyên phục vụ đặc sản bản địa.",
+      "tips": "Quán rất đông vào cuối tuần, nên gọi điện đặt bàn trước để không phải đợi lâu.",
+      "rating": 4.5,
+      "must_try": true
+    },
+    {
+      "id": "019ef658-6c00-7402-8402-d12345678912",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Nhà hàng Đỗ Quyên",
+      "type": "restaurant",
+      "address": "Đỉnh núi Hàm Rồng, Sapa, Lào Cai",
+      "hours": "08:00 - 22:00 — xác nhận trước khi đến",
+      "price_range": "Phù hợp gia đình và nhóm khách",
+      "specialties": ["Lẩu cá hồi", "Gỏi cá tầm", "Rau cải mèo xào thịt bò gác bếp"],
+      "description": "Nhà hàng có không gian rộng rãi view nhìn ra quang cảnh núi non lãng mạn.",
+      "tips": "Món lẩu cá hồi ở đây nước dùng chua ngọt thanh rất hợp vị với rau xứ lạnh ăn kèm.",
+      "rating": 4.3,
+      "must_try": true
+    },
+    {
+      "id": "019ef658-6c00-7403-8403-d12345678913",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Thắng Cố A Quỳnh",
+      "type": "restaurant",
+      "address": "15 Thạch Sơn, Sapa, Lào Cai",
+      "hours": "07:00 - 22:30 — xác nhận trước khi đến",
+      "price_range": "Bình dân đến tầm trung",
+      "specialties": ["Thắng cố ngựa truyền thống", "Cơm lam", "Rượu ngô Bắc Hà"],
+      "description": "Địa chỉ thưởng thức thắng cố lâu đời bậc nhất tại Sapa, vị thắng cố đã được biến tấu nhẹ để du khách dễ ăn.",
+      "tips": "If không quen ăn nội tạng, bạn có thể gọi lẩu ngựa thịt bắp để dễ thưởng thức hơn.",
+      "rating": 4.4,
+      "must_try": false
+    }
+  ]
+}

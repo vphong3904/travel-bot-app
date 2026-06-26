@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "generated_from": "Kiến thức tổng quan (KHÔNG có trong SQL seed hiện tại) — cần bổ sung INSERT vào backend/initdb/11_seed_categories_destinations.sql trước khi dùng cho RAG production",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-014",
+    "status": "partial",
+    "partial_note": "Mở rộng 25 tỉnh/thành còn thiếu sau khi áp dụng 34 tỉnh sáp nhập. Nội dung mô tả dựa trên kiến thức địa lý/văn hóa phổ biến, KHÔNG bịa số liệu (giá, rating, lượt xem).",
+    "missing_fields": [
+      "id (UUID tạm, chưa có trong DB thật)",
+      "budget (chưa có nguồn giá thật)",
+      "stats (chưa có dữ liệu user thật)",
+      "image_url (chưa có ảnh thật)"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Không sáp nhập — giữ nguyên"
+  },
+  "data": {
+    "id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+    "name": "Cao Bằng",
+    "slug": "cao-bang",
+    "province": "Cao Bằng",
+    "region": "Trung du và miền núi phía Bắc",
+    "description": "Vùng biên giới với thác Bản Giốc, hồ Thang Hen và hang Pác Bó gắn liền lịch sử cách mạng.",
+    "special": "Thác Bản Giốc hùng vĩ và hồ Thang Hen xanh ngọc giữa núi đá vôi",
+    "best_season": "Tháng 8–10 (thác nhiều nước) hoặc Tháng 3–5",
+    "best_months": [
+      8,
+      9,
+      10,
+      3,
+      4,
+      5
+    ],
+    "weather": "Mát mẻ 15–28°C, lạnh về đêm mùa đông, có thể có sương giá",
+    "budget": null,
+    "cuisine_summary": "Bánh cuốn Cao Bằng, hạt dẻ Trùng Khánh, vịt quay 7 vị, miến lươn",
+    "image_url": null,
+    "stats": null,
+    "categories": [
+      "nature",
+      "adventure",
+      "photography"
+    ],
+    "is_active": false,
+    "province_old": null
+  }
+}

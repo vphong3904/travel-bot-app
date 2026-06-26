@@ -1,3 +1,4 @@
+from cmath import log
 import os
 import time
 import uuid
@@ -26,4 +27,5 @@ def uuid_v7() -> uuid.UUID:
     raw[8] = (raw[8] & 0x3F) | 0x80  # variant 10xx
 
     return uuid.UUID(bytes=bytes(raw))
+print(uuid_v7());
 

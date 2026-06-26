@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (ước tính chung — cần Foody/Google Maps xác nhận)"
+    ],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
+      "Foody.vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "name": "Gỏi cá Biên Hòa",
+      "local_name": "Gỏi cá Biên Hòa",
+      "category": "main_dish",
+      "description": "Đặc sản nổi tiếng nhất Biên Hòa — cá lóc hoặc cá trắm thái lát mỏng ướp gia vị chua ngọt, ăn kèm với bánh tráng, rau sống, bún và nước mắm pha đặc trưng. Khác với gỏi cá miền Trung (ăn sống), gỏi cá Biên Hòa dùng cá đã ướp giấm chanh 'chín' nhẹ.",
+      "where_to_eat": ["Các quán đặc sản dọc đường Nguyễn Ái Quốc, Biên Hòa", "Nhà hàng ven sông Đồng Nai"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc-sản", "biên-hòa", "gỏi", "nổi-tiếng"]
+    },
+    {
+      "name": "Bưởi Tân Triều",
+      "local_name": "Bưởi Tân Triều",
+      "category": "fruit",
+      "description": "Giống bưởi đặc sản nổi tiếng nhất Đồng Nai, có hai loại: bưởi da xanh (vỏ xanh, múi hồng ngọt) và bưởi đường lá cam (vỏ vàng, múi trắng ngọt dịu). Bưởi Tân Triều được trồng tại xã Tân Bình, Vĩnh Cửu — mùa chính tháng 11 đến tháng 2, ngon nhất dịp Tết.",
+      "where_to_eat": ["Vườn bưởi Tân Triều (hái trực tiếp)", "Chợ Biên Hòa", "Các cửa hàng đặc sản"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["đặc-sản", "trái-cây", "tân-triều", "quà-tặng"]
+    },
+    {
+      "name": "Dế chiên giòn",
+      "local_name": "Dế chiên",
+      "category": "snack",
+      "description": "Món ăn đặc trưng của vùng Đông Nam Bộ, dế được nuôi hoặc bắt tự nhiên, làm sạch rồi chiên giòn với tỏi ớt. Có thể ăn kèm với muối chanh hoặc tương ớt. Mặc dù lạ miệng nhưng là trải nghiệm ẩm thực không thể bỏ qua khi đến Đồng Nai và các tỉnh Đông Nam Bộ.",
+      "where_to_eat": ["Các quán ăn địa phương khu Biên Hòa", "Chợ đêm Biên Hòa", "Khu ẩm thực gần bến xe"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc-sản", "độc-lạ", "côn-trùng", "đông-nam-bộ"]
+    },
+    {
+      "name": "Bánh canh Trảng Bom",
+      "local_name": "Bánh canh",
+      "category": "main_dish",
+      "description": "Bánh canh bột gạo sợi to, nước dùng từ xương heo ninh lâu trong vắt và ngọt tự nhiên, ăn kèm chả cua hoặc tôm. Huyện Trảng Bom nổi tiếng với phiên bản bánh canh đặc trưng địa phương, nhiều quán lâu đời giữ công thức truyền thống qua nhiều thế hệ.",
+      "where_to_eat": ["Các quán bánh canh sáng dọc QL1A, Trảng Bom", "Chợ Trảng Bom"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["sáng", "bún-bánh", "trảng-bom", "truyền-thống"]
+    },
+    {
+      "name": "Lẩu cá lăng sông Đồng Nai",
+      "local_name": "Lẩu cá lăng",
+      "category": "main_dish",
+      "description": "Cá lăng — loài cá nước ngọt sống tự nhiên trên sông Đồng Nai — thịt trắng dai ngọt, ít xương. Nấu lẩu chua cay với me, cà chua, thơm (dứa) và rau nhúng phong phú. Là đặc sản sông nước đặc trưng của các nhà hàng ven sông Đồng Nai và hồ Trị An.",
+      "where_to_eat": ["Nhà hàng ven sông Đồng Nai, Biên Hòa", "Khu ẩm thực ven hồ Trị An"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc-sản", "sông-nước", "lẩu", "cá-lăng"]
+    },
+    {
+      "name": "Nem Bình Xuyên",
+      "local_name": "Nem Bình Xuyên",
+      "category": "main_dish",
+      "description": "Nem chua lên men đặc sản của huyện Bình Xuyên (tên cũ), nay là khu vực Long Thành, Nhơn Trạch — được làm từ thịt heo tươi giã mịn, bọc lá vông hoặc lá chuối, lên men tự nhiên. Nem Đồng Nai có vị chua nhẹ, giòn dai đặc trưng khác nem Thanh Hóa.",
+      "where_to_eat": ["Chợ Biên Hòa", "Cửa hàng đặc sản Đồng Nai", "Các quán ăn khu vực Long Thành"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc-sản", "nem-chua", "quà-tặng", "lên-men"]
+    },
+    {
+      "name": "Cơm tấm Biên Hòa",
+      "local_name": "Cơm tấm",
+      "category": "main_dish",
+      "description": "Cơm tấm phong cách Biên Hòa có thêm đặc điểm riêng so với cơm tấm Sài Gòn: sườn nướng dày hơn, bì heo giòn hơn và mỡ hành thơm đặc trưng. Nhiều quán cơm tấm nổi tiếng lâu đời ở Biên Hòa phục vụ từ sáng sớm đến tận nửa đêm.",
+      "where_to_eat": ["Các quán cơm tấm dọc đường Nguyễn Văn Trị", "Khu ẩm thực trung tâm Biên Hòa"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["sáng", "phổ-biến", "biên-hòa", "cơm-tấm"]
+    }
+  ]
+}

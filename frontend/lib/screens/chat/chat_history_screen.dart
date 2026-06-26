@@ -23,9 +23,13 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   }
 
   void _refreshHistory() {
-    final token = context.read<AppState>().token;
-    _historyFuture = token != null
-        ? ChatSessionApiService(token: token).listSessions()
+    final appState = context.read<AppState>();
+    // ✅ FIX: dùng TokenProvider để luôn lấy token mới nhất
+    _historyFuture = appState.isLoggedIn
+        ? ChatSessionApiService(
+            tokenProvider: () => appState.token,
+            tokenRefresher: () => appState.refreshAccessToken(),
+          ).listSessions()
         : Future.value([]);
   }
 

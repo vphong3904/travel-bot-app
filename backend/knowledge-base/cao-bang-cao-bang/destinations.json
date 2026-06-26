@@ -1,0 +1,112 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-002",
+    "status": "partial",
+    "partial_note": "Tên địa điểm xác minh qua vietnamtourism.gov.vn và Google Maps. Giá vé/rating để null — cần xác nhận tại nguồn chính thức trước production.",
+    "missing_fields": [
+      "entry_fee thực tế (cần xác nhận tại website Sở Du lịch Cao Bằng hoặc Klook)",
+      "stats/rating thật",
+      "image_url",
+      "giờ mở cửa cụ thể một số điểm"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Google Maps (tên địa điểm + toạ độ ước tính)",
+      "Sở Du lịch tỉnh Cao Bằng: caobang.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "id": "0c7364d8-7f0e-4ab7-8fd1-806515fd6d17",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Thác Bản Giốc",
+      "type": "nature",
+      "address": "Xã Đàm Thủy, huyện Trùng Khánh, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.9028, "lng": 106.7072 },
+      "hours": "Thường 7:00–17:00 — xác nhận trước khi đến",
+      "description": "Thác nước lớn thứ tư thế giới trên ranh giới Việt–Trung, với ba tầng thác hùng vĩ rộng hàng trăm mét. Mùa nước lũ tháng 8–10 thác chảy mạnh nhất, tạo ra bức màn nước trắng xóa vô cùng ngoạn mục. Đây là biểu tượng thiên nhiên nổi tiếng nhất của Cao Bằng.",
+      "tips": "Đến vào mùa mưa (tháng 8–10) để thác nhiều nước nhất. Có thể thuê bè mảng để ngắm thác gần hơn từ phía dưới. Mang giày đế chống trơn vì đường xuống ẩm và trơn.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại caobang.gov.vn hoặc Klook — giá vé có thể thay đổi theo mùa"
+    },
+    {
+      "id": "1d406b9b-3a6c-42f2-98a6-4dde7ffe6371",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Hang Pác Bó",
+      "type": "attraction",
+      "address": "Xã Trường Hà, huyện Hà Quảng, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.9361, "lng": 106.2956 },
+      "hours": "7:00–17:00 hằng ngày — xác nhận trước khi đến",
+      "description": "Di tích lịch sử quốc gia đặc biệt nơi Chủ tịch Hồ Chí Minh sống và làm việc từ năm 1941 sau khi về nước. Khu di tích bao gồm hang Pác Bó, suối Lê-nin, núi Các Mác và nhà làm việc của Bác. Là điểm hành hương quan trọng đối với du khách muốn tìm hiểu lịch sử cách mạng Việt Nam.",
+      "tips": "Nên đến buổi sáng sớm trước 9:00 để tránh đông người, đặc biệt vào các dịp lễ. Mang theo áo dài tay vì bên trong hang khá mát và ẩm.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban Quản lý Khu di tích Pác Bó hoặc caobang.gov.vn"
+    },
+    {
+      "id": "521c2b59-d487-446a-8c72-f222893e1484",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Hồ Thang Hen",
+      "type": "nature",
+      "address": "Xã Quốc Toản, huyện Trà Lĩnh, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.8167, "lng": 106.6167 },
+      "hours": "Mở cửa tự do, không có giờ cố định",
+      "description": "Quần thể 36 hồ nước liên thông nằm trên cao nguyên đá vôi, xanh ngọc bích giữa khung cảnh núi non hùng vĩ. Vào mùa khô các hồ nhỏ hơn, mùa mưa nước dâng lên tràn bờ rất đẹp. Được ví như 'vịnh Hạ Long trên cạn' của Cao Bằng.",
+      "tips": "Thời điểm đẹp nhất để chụp ảnh là sáng sớm khi có sương mù bao phủ mặt hồ. Đường vào có thể khó đi vào mùa mưa, nên hỏi thêm tình trạng đường tại địa phương.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "3b336ae8-b707-400c-a1bb-2ceff029cd64",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Núi Mắt Thần (Thiên Đường)",
+      "type": "mountain",
+      "address": "Huyện Hạ Lang, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.6833, "lng": 106.7333 },
+      "hours": "Tự do tham quan ban ngày",
+      "description": "Ngọn núi đá vôi có một lỗ hổng tự nhiên hình tròn gần đỉnh, ánh sáng mặt trời chiếu qua tạo nên hiện tượng 'mắt thần' ấn tượng. Điểm tham quan mới nổi của Cao Bằng, thu hút đông đảo nhiếp ảnh gia và phượt thủ.",
+      "tips": "Ánh sáng qua lỗ tốt nhất vào khoảng 10:00–14:00. Cần leo bộ khoảng 30 phút, đường dốc — mang giày leo núi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại UBND huyện Hạ Lang hoặc Sở Du lịch Cao Bằng"
+    },
+    {
+      "id": "815d0d7e-e6de-4116-bf43-7ecda4b9d09e",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Chợ Cao Bằng",
+      "type": "market",
+      "address": "Phường Hợp Giang, TP. Cao Bằng, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.6668, "lng": 106.2614 },
+      "hours": "5:00–18:00 hằng ngày",
+      "description": "Chợ trung tâm thành phố Cao Bằng, nơi tập trung sản vật địa phương như hạt dẻ Trùng Khánh, miến dong, thịt lợn đen, rau rừng và các loại thổ cẩm của đồng bào dân tộc Tày, Nùng. Chợ phiên họp định kỳ có nhiều người dân tộc xuống núi bán hàng.",
+      "tips": "Đến sáng sớm trước 8:00 để mua hạt dẻ tươi và thực phẩm tươi nhất. Mặc cả nhẹ nhàng và lịch sự.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "122caad4-1582-4031-8787-0c59b317f7f3",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Khu Di tích Lịch sử Quốc gia Đặc biệt Rừng Trần Hưng Đạo",
+      "type": "attraction",
+      "address": "Xã Tam Kim, huyện Nguyên Bình, tỉnh Cao Bằng",
+      "coordinates": { "lat": 22.5167, "lng": 105.9500 },
+      "hours": "7:00–17:00 các ngày trong tuần — xác nhận trước khi đến",
+      "description": "Khu rừng thiêng liêng nơi Đội Việt Nam Tuyên truyền Giải phóng quân — tiền thân của Quân đội Nhân dân Việt Nam — được thành lập ngày 22/12/1944. Đây là địa chỉ đỏ quan trọng của lịch sử cách mạng, có nhà trưng bày và các khu tái hiện.",
+      "tips": "Kết hợp chuyến thăm với hang Pác Bó để hiểu toàn cảnh lịch sử cách mạng Cao Bằng. Nên có hướng dẫn viên địa phương để hiểu sâu hơn.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban Quản lý Di tích hoặc Sở Văn hóa Cao Bằng"
+    }
+  ]
+}

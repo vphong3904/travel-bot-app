@@ -1,0 +1,283 @@
+{
+    "_meta": {
+        "city": "hue-hue",
+        "last_updated": "2026-06-23",
+        "agent_task": "T-013",
+        "status": "complete",
+        "partial_note": null,
+        "missing_fields": [
+            "estimated_cost / total_estimated_cost — để null vì chưa có nguồn giá xác thực đầy đủ cho từng hoạt động"
+        ],
+        "data_sources": [
+            "Tổng hợp từ destinations.json, hotels.json, restaurants.json, tours.json cùng thư mục hue-hue"
+        ]
+    },
+    "data": [
+        {
+            "id": "hue-hue-2n1d-couple",
+            "title": "Huế 2N1Đ cho cặp đôi",
+            "duration_days": 2,
+            "duration_nights": 1,
+            "audience": "couple",
+            "travel_style": "culture",
+            "estimated_budget": {
+                "low": null,
+                "high": null,
+                "currency": "VND"
+            },
+            "best_for_season": [
+                "Tháng 1–4"
+            ],
+            "summary": "Lịch trình tập trung khám phá Đại Nội Huế, lăng tẩm triều Nguyễn và sông Hương lãng mạn, kết hợp nghỉ dưỡng tại khách sạn ven sông phù hợp cho cặp đôi.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Cố đô và sông Hương",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tham quan Đại Nội Huế",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-7131-a4f7-c9445a62f1f6",
+                                "name": "Đại Nội Huế (Hoàng thành Huế)"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Mặc áo dài/cổ phục để chụp ảnh (xem tours.json)"
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "12:00",
+                            "activity": "Ăn trưa bánh khoái",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019ef463-560c-795d-a056-ebce64b4ed18",
+                                "name": "Quán Hạnh Bánh Khoái"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "15:00",
+                            "activity": "Tham quan Chùa Thiên Mụ",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-701c-b09e-df7a3e962314",
+                                "name": "Chùa Thiên Mụ"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Trang phục kín đáo khi vào chùa"
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "18:30",
+                            "activity": "Đi thuyền rồng sông Hương, nghe ca Huế",
+                            "location_ref": {
+                                "type": "tour",
+                                "id": "019ef463-560c-70ef-bef7-a96aaabb4e92",
+                                "name": "Tour thuyền rồng sông Hương + Chùa Thiên Mụ"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Lăng tẩm và quà lưu niệm",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tham quan Lăng Khải Định",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-7b6a-b235-83564425f8ed",
+                                "name": "Lăng Khải Định"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Cần leo khoảng 127 bậc thang"
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:30",
+                            "activity": "Tham quan Lăng Tự Đức và ăn trưa nhẹ gần đó",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-7e3f-bbb1-507e755c0ee0",
+                                "name": "Lăng Tự Đức"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:30",
+                            "activity": "Mua quà lưu niệm tại Chợ Đông Ba",
+                            "location_ref": {
+                                "type": "shopping",
+                                "id": "019ef463-560c-7749-a98d-c6b463e527fb",
+                                "name": "Chợ Đông Ba"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Nhớ mặc cả"
+                        }
+                    ]
+                }
+            ],
+            "total_estimated_cost": {
+                "amount": null,
+                "currency": "VND"
+            },
+            "tags": [
+                "di-san",
+                "lang-man",
+                "co-do"
+            ]
+        },
+        {
+            "id": "hue-hue-3n2d-family",
+            "title": "Huế 3N2Đ cho gia đình",
+            "duration_days": 3,
+            "duration_nights": 2,
+            "audience": "family",
+            "travel_style": "mixed",
+            "estimated_budget": {
+                "low": null,
+                "high": null,
+                "currency": "VND"
+            },
+            "best_for_season": [
+                "Tháng 1–4"
+            ],
+            "summary": "Lịch trình kết hợp tham quan di tích, ẩm thực địa phương và một ngày ra biển Lăng Cô, phù hợp cho gia đình có trẻ nhỏ với nhịp độ thoải mái.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Khám phá Đại Nội và ẩm thực chợ",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:30",
+                            "activity": "Tham quan Đại Nội Huế",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-7131-a4f7-c9445a62f1f6",
+                                "name": "Đại Nội Huế (Hoàng thành Huế)"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Phù hợp cho trẻ em từ 7 tuổi (miễn phí dưới 7 tuổi — xem destinations.json)"
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "12:00",
+                            "activity": "Ăn trưa khu ẩm thực Chợ Đông Ba",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019ef463-560c-7aa7-872c-1be8cf118d70",
+                                "name": "Khu ẩm thực Chợ Đông Ba"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "15:00",
+                            "activity": "Nghỉ ngơi tại khách sạn",
+                            "location_ref": {
+                                "type": "hotel",
+                                "id": "019ef45a-14e9-7e53-8c0d-839306ffeee6",
+                                "name": "Moonlight Hotel Hue"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Biển Lăng Cô",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Di chuyển và chơi tại Biển Lăng Cô",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-782b-8e99-ee394f436664",
+                                "name": "Biển Lăng Cô"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Cách trung tâm khoảng 65km, đi qua đèo Hải Vân"
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:00",
+                            "activity": "Ăn trưa hải sản gần biển, nghỉ ngơi",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-782b-8e99-ee394f436664",
+                                "name": "Biển Lăng Cô"
+                            },
+                            "estimated_cost": null,
+                            "notes": "// TODO: cần bổ sung nhà hàng cụ thể vào restaurants.json"
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "18:00",
+                            "activity": "Quay về trung tâm Huế, nghỉ tại khách sạn",
+                            "location_ref": {
+                                "type": "hotel",
+                                "id": "019ef45a-14e9-7e53-8c0d-839306ffeee6",
+                                "name": "Moonlight Hotel Hue"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        }
+                    ]
+                },
+                {
+                    "day_number": 3,
+                    "theme": "Đồi Thiên An và chia tay Huế",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Picnic, dạo bộ tại Đồi Thiên An",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019ef45a-14e9-7000-860e-5446ce57fce5",
+                                "name": "Đồi Thiên An"
+                            },
+                            "estimated_cost": null,
+                            "notes": "Phù hợp cho trẻ em chạy chơi không gian rộng"
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:30",
+                            "activity": "Ăn trưa, mua mè xửng làm quà trước khi về",
+                            "location_ref": {
+                                "type": "shopping",
+                                "id": "019ef463-560c-760c-b9b8-0e6c41c37dab",
+                                "name": "Các cửa hàng đặc sản trên đường Nguyễn Sinh Cung / Hùng Vương"
+                            },
+                            "estimated_cost": null,
+                            "notes": null
+                        }
+                    ]
+                }
+            ],
+            "total_estimated_cost": {
+                "amount": null,
+                "currency": "VND"
+            },
+            "tags": [
+                "gia-dinh",
+                "bien",
+                "di-san"
+            ]
+        }
+    ]
+}

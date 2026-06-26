@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "city": "can-tho",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price.amount (chưa xác minh giá tour — cần Klook hoặc Traveloka 06/2026)"
+    ],
+    "data_sources": [
+      "Klook VN: klook.com/vi (06/2026)",
+      "Traveloka: traveloka.com/vi-vn (06/2026)",
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "6c795681-12f0-40ab-9b09-159ed09c9855",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Tour Chợ Nổi Cái Răng Sáng Sớm",
+      "duration": "3–4 tiếng (xuất phát 5:00–5:30)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook klook.com/vi hoặc bến Ninh Kiều (06/2026)"
+      },
+      "group_size": "Nhóm nhỏ 2–15 người, hoặc thuyền riêng",
+      "description": "Tour thuyền máy xuất phát sáng sớm từ bến Ninh Kiều, di chuyển khoảng 6km để đến chợ nổi Cái Răng — chợ nổi lớn nhất miền Tây. Tham quan cảnh mua bán trên sông, mua trái cây trực tiếp từ ghe và thưởng thức bữa sáng trên thuyền (hủ tiếu/bánh mì).",
+      "includes": ["hướng dẫn viên tiếng Việt", "thuyền máy khứ hồi", "bữa sáng đơn giản trên thuyền (tùy gói)"],
+      "excludes": ["đồ uống riêng", "mua sắm trên chợ nổi", "tip hướng dẫn viên"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "142aa68f-3cfb-4e9f-a80b-82102ec99b12",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Tour Kênh Rạch & Vườn Trái Cây Phong Điền",
+      "duration": "Nửa ngày (4–5 tiếng) hoặc cả ngày",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook klook.com/vi hoặc Traveloka (06/2026)"
+      },
+      "group_size": "Nhóm 2–12 người",
+      "description": "Khám phá hệ thống kênh rạch vùng ngoại ô Cần Thơ bằng xuồng ba lá hoặc thuyền nhỏ, ghé thăm vườn trái cây khu Phong Điền, hái và thưởng thức trái cây tươi tại chỗ, quan sát đời sống người dân ven kênh rạch miền Tây. Kết hợp bữa trưa đặc sản tại nhà vườn.",
+      "includes": ["thuyền và hướng dẫn viên", "trái cây tại vườn", "bữa trưa đặc sản (gói cả ngày)"],
+      "excludes": ["đồ uống riêng", "mua thêm trái cây", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "c3ce6a82-a90e-44a7-bc17-90e0e560f791",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Tour Cần Thơ – Sóc Trăng 1 Ngày (Chùa Dơi & Lễ hội Khmer)",
+      "duration": "Cả ngày (~10 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook hoặc Vietravel (06/2026)"
+      },
+      "group_size": "Nhóm 6–30 người",
+      "description": "Tour kết hợp từ Cần Thơ đến Sóc Trăng (khoảng 60km) khám phá văn hóa Khmer Nam Bộ: Chùa Dơi (hàng chục nghìn con dơi quạ), chùa Kh'leang, bảo tàng Khmer, và tìm hiểu lễ hội Óoc Om Bóc đặc sắc của người Khmer. Khu Sóc Trăng cũ nay thuộc Cần Thơ sau sáp nhập 2025.",
+      "includes": ["xe đưa đón", "hướng dẫn viên", "vé tham quan", "bữa trưa"],
+      "excludes": ["mua sắm", "đồ uống riêng", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "58fff5a9-dacc-4882-9ed4-a6635138f3fc",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Tour Chợ Nổi Ngã Bảy – Hậu Giang 1 Ngày",
+      "duration": "Cả ngày (~8 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook hoặc Traveloka (06/2026)"
+      },
+      "group_size": "Nhóm 4–20 người",
+      "description": "Khám phá chợ nổi Ngã Bảy (Phụng Hiệp) — điểm giao thoa 7 con kênh, thuộc Hậu Giang cũ nay là Cần Thơ sau sáp nhập 2025. Tham quan làng nghề truyền thống, vườn cây ăn trái vùng Hậu Giang và thưởng thức đặc sản địa phương ít được biết đến hơn.",
+      "includes": ["xe đưa đón", "hướng dẫn viên", "thuyền tham quan chợ nổi", "bữa trưa"],
+      "excludes": ["mua sắm", "đồ uống riêng", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

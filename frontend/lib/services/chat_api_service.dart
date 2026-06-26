@@ -1,32 +1,26 @@
 // lib/services/chat_api_service.dart
-// ─────────────────────────────────────────────────────────────────────────────
-// ChatSessionApiService — wrap toàn bộ các call tới /chat/sessions/* và
-// /chat/messages/* (RAG thật, không phải WebSocket).
-//
-// Backend không hỗ trợ WebSocket — toàn bộ chat đi qua REST + SSE stream:
-//   POST   /chat/sessions                       → tạo session mới
-//   GET    /chat/sessions                       → danh sách session
-//   GET    /chat/sessions/:id                   → chi tiết session
-//   PATCH  /chat/sessions/:id                   → đổi title / pin
-//   DEL    /chat/sessions/:id                   → xoá (soft delete)
-//   GET    /chat/sessions/:id/messages           → lịch sử hội thoại
-//   POST   /chat/sessions/:id/messages           → gửi tin nhắn (chờ đủ câu trả lời)
-//   POST   /chat/sessions/:id/messages/stream     → gửi tin nhắn, nhận SSE stream
-//   PATCH  /chat/messages/:id/feedback            → 👍 / 👎
-// ─────────────────────────────────────────────────────────────────────────────
-
 import 'dart:convert';
 
 import '../models/chat_session_model.dart';
 import 'api_service.dart';
 import 'sse_client.dart';
 
+/// ✅ FIX: Nhận TokenProvider + TokenRefresher thay vì token tĩnh.
+/// Mọi request sẽ luôn dùng token hiện tại từ AppState,
+/// và tự động retry sau khi refresh nếu gặp 401.
 class ChatSessionApiService {
-  final String? token;
+  final TokenProvider tokenProvider;
+  final TokenRefresher? tokenRefresher;
 
-  ChatSessionApiService({this.token});
+  const ChatSessionApiService({
+    required this.tokenProvider,
+    this.tokenRefresher,
+  });
 
-  ApiClient get _client => ApiClient(token: token);
+  ApiClient get _client => ApiClient(
+        tokenProvider: tokenProvider,
+        tokenRefresher: tokenRefresher,
+      );
 
   // ── Sessions ──────────────────────────────────────────────────────────────
 
@@ -105,8 +99,9 @@ class ChatSessionApiService {
   /// Gửi tin nhắn, nhận phản hồi dạng SSE stream.
   ///
   /// Yield các event dạng:
+  ///   {"type": "start"}
   ///   {"type": "chunk", "content": "..."}
-  ///   {"type": "done", "message_id": "...", "sources": [...]}
+  ///   {"type": "done", "message_id": "uuid", "sources": [...], "tokens_per_second": 97.3}
   ///   {"type": "error", "detail": "..."}
   Stream<Map<String, dynamic>> sendMessageStream(
     String sessionId,
@@ -119,7 +114,7 @@ class ChatSessionApiService {
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
       final body = await response.stream.bytesToString();
-      String detail = 'Không thể gửi tin nhắn (${response.statusCode})';
+      String detail = _statusMessage(response.statusCode);
       try {
         final decoded = jsonDecode(body);
         if (decoded is Map && decoded['detail'] != null) {
@@ -138,5 +133,16 @@ class ChatSessionApiService {
       {'feedback': feedback},
     ) as Map<String, dynamic>;
     return ChatMessageModel.fromJson(data);
+  }
+
+  String _statusMessage(int code) {
+    switch (code) {
+      case 401: return 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.';
+      case 403: return 'Bạn không có quyền thực hiện thao tác này.';
+      case 404: return 'Không tìm thấy session chat. Vui lòng tạo mới.';
+      case 429: return 'Bạn đã dùng hết lượt hỏi miễn phí hôm nay. Nâng cấp để tiếp tục!';
+      case 500: return 'Lỗi server nội bộ. Vui lòng thử lại sau.';
+      default:  return 'Lỗi gửi tin nhắn (HTTP $code).';
+    }
   }
 }

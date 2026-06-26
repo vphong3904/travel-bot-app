@@ -1,0 +1,111 @@
+{
+  "_meta": {
+    "city": "bac-ninh",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "complete",
+    "missing_fields": [
+      "price_per_night.amount (chưa có nguồn Booking.com/Agoda cập nhật)",
+      "rating (chưa có dữ liệu user thật)",
+      "booking_url (chưa xác minh URL chính thức)",
+      "address (số nhà cụ thể chưa xác minh)"
+    ],
+    "data_sources": [
+      "Booking.com (tham khảo tên khách sạn)",
+      "Agoda.com (tham khảo tên khách sạn)",
+      "Google Maps (tham khảo vị trí khu vực)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee91-da9f-7163-9882-d33c84fb8000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Aria Hotel Bắc Ninh",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda"
+      },
+      "address": "Khu vực trung tâm thành phố Bắc Ninh (xác nhận địa chỉ chính xác tại Google Maps)",
+      "amenities": ["wifi", "điều hòa", "bãi đỗ xe", "nhà hàng", "lễ tân 24/7"],
+      "description": "Khách sạn 3 sao kinh doanh phổ biến tại trung tâm thành phố Bắc Ninh, phù hợp cho khách công vụ và du lịch ngắn ngày. Phòng ốc sạch sẽ, tiện nghi cơ bản đầy đủ, vị trí thuận tiện di chuyển đến các điểm tham quan.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee91-daa0-728b-37d8-47c5ba6f1000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "TTC Hotel Bắc Ninh",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda"
+      },
+      "address": "Khu vực trung tâm thành phố Bắc Ninh (xác nhận địa chỉ chính xác tại Google Maps)",
+      "amenities": ["wifi", "hồ bơi", "gym", "nhà hàng", "phòng họp", "điều hòa", "bãi đỗ xe"],
+      "description": "Khách sạn 4 sao thuộc chuỗi TTC Hotel, một trong những lựa chọn cao cấp nhất tại Bắc Ninh. Phù hợp cho đoàn doanh nghiệp, hội nghị, và du khách muốn tiện nghi đầy đủ. Có nhà hàng phục vụ ẩm thực Á - Âu.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee91-daa1-7156-66e3-b8f56abf9000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Khách sạn Phương Đông",
+      "type": "hotel",
+      "stars": 2,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc liên hệ trực tiếp"
+      },
+      "address": "Khu vực phố Ngô Gia Tự, thành phố Bắc Ninh (xác nhận số nhà tại Google Maps)",
+      "amenities": ["wifi", "điều hòa", "lễ tân", "bãi đỗ xe"],
+      "description": "Khách sạn 2 sao bình dân phổ biến, phù hợp với du khách ngân sách thấp. Vị trí tốt ở khu phố trung tâm, dễ dàng đi bộ đến các quán ăn và chợ. Phòng đơn giản nhưng sạch sẽ, phục vụ thân thiện.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee91-daa2-7378-5d05-1e35ebed7000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Bắc Ninh Palace Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá tại Booking.com hoặc Agoda"
+      },
+      "address": "Khu vực đường Lý Thái Tổ, thành phố Bắc Ninh (xác nhận số nhà tại Google Maps)",
+      "amenities": ["wifi", "điều hòa", "nhà hàng", "bãi đỗ xe", "lễ tân 24/7"],
+      "description": "Khách sạn 3 sao tầm trung, được đánh giá tốt về vị trí và dịch vụ lễ tân. Phù hợp cho cả khách công vụ lẫn khách du lịch gia đình. Nhà hàng có thực đơn ẩm thực địa phương.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee91-daa3-7d44-3cc5-d90244910000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Homestay Quan Họ Làng Diềm",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "price_note": "// TODO: xác nhận giá trực tiếp với chủ nhà hoặc qua Booking.com"
+      },
+      "address": "Làng Diềm (Viêm Xá), xã Hòa Long, thành phố Bắc Ninh",
+      "amenities": ["wifi", "bữa sáng địa phương", "trải nghiệm văn hóa quan họ"],
+      "description": "Homestay đặc biệt tại làng Diềm — một trong những cái nôi của dân ca Quan họ. Cơ hội hiếm có để ngủ lại trong nhà người dân địa phương, thưởng thức bữa cơm quê và nghe các liền anh liền chị hát quan họ buổi tối. Phù hợp với du khách muốn trải nghiệm văn hóa sâu.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

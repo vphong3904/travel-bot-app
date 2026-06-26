@@ -21,6 +21,7 @@ Management:
   GET   /admin/embedding-jobs       → Danh sách embedding jobs
 """
 from uuid import UUID
+from app.utils.uuid_v7 import uuid_v7
 from typing import Optional
 from datetime import datetime, timedelta, timezone
 
@@ -31,7 +32,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_current_user, require_admin
 from app.db.models.user import User
 from app.db.models.chat import ChatSession, ChatMessage
-from app.db.models.admin import KnowledgeEntry, EmbeddingJob, SearchHistory, UserBehavior
+from app.db.models.admin import KnowledgeEntry, EmbeddingJob
+from app.services import log_service
 from app.db.schemas.admin import (
     KnowledgeEntryCreate,
     KnowledgeEntryUpdate,
@@ -137,17 +139,8 @@ async def stats_questions(
     """Top câu hỏi / keyword được tìm nhiều nhất."""
     since = datetime.now(timezone.utc) - timedelta(days=days)
 
-    # Top keywords
-    kw_result = await db.execute(
-        select(
-            SearchHistory.keyword,
-            func.count(SearchHistory.id).label("count"),
-        )
-        .where(SearchHistory.created_at >= since)
-        .group_by(SearchHistory.keyword)
-        .order_by(desc("count"))
-        .limit(limit)
-    )
+    # Top keywords — đọc từ MongoDB (search_history đã chuyển sang Mongo)
+    top_keywords = await log_service.top_search_keywords(since=since, limit=limit)
 
     # Top intents from chat messages
     intent_result = await db.execute(
@@ -167,7 +160,7 @@ async def stats_questions(
 
     return StatsQuestionsOut(
         period_days=days,
-        top_keywords=[{"keyword": r.keyword, "count": r.count} for r in kw_result.all()],
+        top_keywords=top_keywords,
         top_intents=[{"intent": r.intent, "count": r.count} for r in intent_result.all()],
     )
 
@@ -182,27 +175,12 @@ async def stats_destinations(
     """Điểm đến được xem / hỏi nhiều nhất."""
     since = datetime.now(timezone.utc) - timedelta(days=days)
 
-    result = await db.execute(
-        select(
-            UserBehavior.entity_id,
-            func.count(UserBehavior.id).label("count"),
-        )
-        .where(
-            UserBehavior.entity_type == "destination",
-            UserBehavior.event_type == "view_destination",
-            UserBehavior.created_at >= since,
-        )
-        .group_by(UserBehavior.entity_id)
-        .order_by(desc("count"))
-        .limit(limit)
-    )
+    # user_behavior đã chuyển sang MongoDB
+    top = await log_service.top_viewed_destinations(since=since, limit=limit)
 
     return StatsDestinationsOut(
         period_days=days,
-        top_destinations=[
-            {"destination_id": str(r.entity_id), "views": r.count}
-            for r in result.all()
-        ],
+        top_destinations=top,
     )
 
 
@@ -375,6 +353,27 @@ async def get_embedding_jobs(
     return result.scalars().all()
 
 
+@router.post("/embedding-jobs/run")
+async def run_embedding_jobs(
+    limit: int = Query(50, ge=1, le=200),
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    """
+    Xử lý các embedding job đang pending — embed nội dung KnowledgeEntry
+    và upsert vào Qdrant.
+
+    Gọi route này sau khi tạo/sửa KnowledgeEntry để dữ liệu thực sự có
+    trong Qdrant (POST /admin/knowledge chỉ tạo job "pending", không
+    tự embed).
+    """
+    from app.services.embedding_jobs import EmbeddingJobService
+
+    service = EmbeddingJobService(db)
+    result = await service.run_pending(limit=limit)
+    return result
+
+
 # ── Helper ────────────────────────────────────────────────────────────────────
 async def _get_knowledge_or_404(db: AsyncSession, entry_id: UUID) -> KnowledgeEntry:
     result = await db.execute(
@@ -384,3 +383,119 @@ async def _get_knowledge_or_404(db: AsyncSession, entry_id: UUID) -> KnowledgeEn
     if not entry:
         raise HTTPException(status_code=404, detail="Knowledge entry not found")
     return entry
+
+# ════════════════════════════════════════════════════════════
+# DEBUG / DIAGNOSTICS (admin only)
+# ════════════════════════════════════════════════════════════
+
+@router.get("/qdrant-debug")
+async def qdrant_debug(
+    _: User = Depends(require_admin),
+):
+    """
+    ✅ Debug: kiểm tra Qdrant collection status, số points, sample data.
+    Dùng để chẩn đoán khi RAG trả về 0 results.
+    """
+    from app.services.rag_pipeline import RAGPipeline
+    rag = RAGPipeline()
+    return await rag.debug_collection()
+
+
+@router.post("/knowledge/{entry_id}/embed-now")
+async def embed_knowledge_now(
+    entry_id: UUID,
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    """
+    ✅ Trigger embedding ngay lập tức cho 1 entry cụ thể.
+    Không cần đợi background job worker.
+    """
+    from app.services.embedding_jobs import EmbeddingJobService
+    from app.db.models.admin import EmbeddingJob
+    from datetime import datetime, timezone
+
+    entry = await _get_knowledge_or_404(db, entry_id)
+
+    # Tạo job mới và process ngay
+    job = EmbeddingJob(
+        entity_type="knowledge_entry",
+        entity_id=str(entry.id),
+        status="pending",
+        created_at=datetime.now(timezone.utc),
+        updated_at=datetime.now(timezone.utc),
+    )
+    db.add(job)
+    await db.commit()
+    await db.refresh(job)
+
+    service = EmbeddingJobService(db)
+    success = await service.process_job(job)
+
+    return {
+        "entry_id": str(entry_id),
+        "job_id": str(job.id),
+        "success": success,
+        "error": job.error,
+    }
+
+# ════════════════════════════════════════════════════════════
+# UNANSWERED QUESTIONS  (MongoDB)
+# ════════════════════════════════════════════════════════════
+
+@router.get("/unanswered-questions")
+async def list_unanswered_questions(
+    is_resolved: Optional[bool] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    _: User = Depends(require_admin),
+):
+    """
+    Danh sách câu hỏi chatbot không trả lời được — đọc từ MongoDB.
+    Dùng is_resolved=false để lọc câu cần xử lý.
+    """
+    return await log_service.list_unanswered_questions(is_resolved, skip, limit)
+
+
+@router.patch("/unanswered-questions/{question_id}/resolve")
+async def resolve_unanswered_question(
+    question_id: str,
+    resolved_by: str = Query(..., description="Username / email người duyệt"),
+    _: User = Depends(require_admin),
+):
+    """Đánh dấu câu hỏi unanswered đã được xử lý."""
+    updated = await log_service.resolve_unanswered_question(question_id, resolved_by)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"status": "resolved", "question_id": question_id, "resolved_by": resolved_by}
+
+
+# ════════════════════════════════════════════════════════════
+# FLAGGED RESPONSES  (MongoDB — hallucination guard)
+# ════════════════════════════════════════════════════════════
+
+@router.get("/flagged-responses")
+async def list_flagged_responses(
+    is_reviewed: Optional[bool] = None,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=200),
+    _: User = Depends(require_admin),
+):
+    """
+    Danh sách phản hồi bị hallucination guard đánh dấu — đọc từ MongoDB.
+    Dùng is_reviewed=false để lọc những câu cần admin review thủ công.
+    """
+    return await log_service.list_flagged_responses(is_reviewed, skip, limit)
+
+
+@router.patch("/flagged-responses/{flagged_id}/review")
+async def review_flagged_response(
+    flagged_id: str,
+    reviewer_note: Optional[str] = None,
+    _: User = Depends(require_admin),
+):
+    """Đánh dấu flagged response đã được review, kèm ghi chú của admin."""
+    updated = await log_service.review_flagged_response(flagged_id, reviewer_note)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Flagged response not found")
+    return {"status": "reviewed", "flagged_id": flagged_id}

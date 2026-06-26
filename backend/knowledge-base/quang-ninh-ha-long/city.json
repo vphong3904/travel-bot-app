@@ -1,0 +1,55 @@
+{
+    "data": {
+        "province": "Quảng Ninh",
+        "budget": {
+            "low": null,
+            "currency": "VND",
+            "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+            "high": null
+        },
+        "province_old": null,
+        "is_active": true,
+        "categories": [
+            "heritage",
+            "beach",
+            "cruise",
+            "food"
+        ],
+        "best_months": [
+            10,
+            11,
+            12,
+            1,
+            2,
+            3,
+            4
+        ],
+        "region": "Đông Bắc Bộ",
+        "id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+        "cuisine_summary": "Chả mực Hạ Long, sá sùng, ngán biển, sam biển, bún bề bề",
+        "description": "Thành phố ven vịnh nổi tiếng với di sản thiên nhiên thế giới Vịnh Hạ Long, du thuyền, hang động đá vôi và hải sản.",
+        "weather": "Ven biển nhiệt đới gió mùa, hè nóng ẩm, mùa bão thường rơi vào hè - đầu thu.",
+        "best_season": "Tháng 10-4 trời mát, tháng 5-8 hợp tắm biển nhưng cần theo dõi bão",
+        "slug": "quang-ninh-ha",
+        "special": "Vịnh Hạ Long - di sản thiên nhiên thế giới UNESCO, biểu tượng du lịch biển đảo miền Bắc",
+        "image_url": null,
+        "stats": null,
+        "name": "Hạ Long"
+    },
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-001",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete",
+        "uuid_version": "v7"
+    }
+}

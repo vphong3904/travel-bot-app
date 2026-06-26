@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-005",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Traveloka (06/2026)", "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "bus",
+        "from": "Hà Nội",
+        "duration": "5.5 - 6 tiếng",
+        "price_range": "Tùy thuộc vào loại xe giường nằm thường hay limousine cabin",
+        "providers": ["Sao Việt", "Inter Bus Lines", "G8 Open Tour"],
+        "notes": "Chạy đường cao tốc Nội Bài - Lào Cai thẳng đến trung tâm Sapa, có nhiều chuyến trong ngày."
+      },
+      {
+        "type": "train",
+        "from": "Ga Hà Nội",
+        "duration": "8 tiếng",
+        "price_range": "Tùy thuộc vào loại ghế ngồi, giường nằm khoang 4 hoặc khoang luxury",
+        "providers": ["Đường sắt Việt Nam (VNR)", "Chapa Express", "Laman Express"],
+        "notes": "Tàu dừng tại Ga Lào Cai, du khách cần đi thêm xe bus hoặc taxi khoảng 35km để lên thị trấn Sapa."
+      },
+      {
+        "type": "car",
+        "from": "Hà Nội (Tự lái)",
+        "duration": "5 - 6 tiếng",
+        "price_range": "Chi phí trạm thu phí và xăng xe thực tế",
+        "providers": ["Cá nhân"],
+        "notes": "Phù hợp cho gia đình muốn tự do di chuyển, cần chú ý đoạn đèo dốc từ Lào Cai lên Sapa khi trời sương mù."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "motorbike_rental",
+        "price_info": "Tính phí theo ngày tùy thuộc vào xe số hay xe ga (chưa bao gồm xăng)",
+        "notes": "Phương tiện linh hoạt nhất để len lỏi vào các bản làng sâu như Tả Van, Tả Phìn. Cần tay lái vững.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": "Tính theo số kilomet hiển thị trên đồng hồ định vị",
+        "notes": "Phù hợp khi di chuyển nhóm đông hoặc gia đình có trẻ nhỏ trong điều kiện thời tiết mưa lạnh.",
+        "recommended": false
+      },
+      {
+        "type": "xe_om",
+        "price_info": "Thương lượng trực tiếp trước khi lên xe",
+        "notes": "Các bác tài địa phương thông thuộc đường sá, thích hợp đi các đoạn ngắn dốc cao.",
+        "recommended": false
+      },
+      {
+        "type": "walking",
+        "price_info": "Miễn phí",
+        "notes": "Thích hợp dạo quanh hồ Sapa, nhà thờ Đá, chợ Sapa hoặc đi bộ trekking nhẹ nhàng vào bản Cát Cát.",
+        "recommended": true
+      }
+    ]
+  }
+}

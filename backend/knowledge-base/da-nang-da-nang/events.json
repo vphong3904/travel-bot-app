@@ -1,0 +1,50 @@
+{
+    "_meta": {
+        "city": "da-nang-da-nang",
+        "last_updated": "2026-06-23",
+        "agent_task": "T-006",
+        "status": "complete",
+        "missing_fields": [],
+        "data_sources": [
+            "manual_curated"
+        ]
+    },
+    "data": [
+        {
+            "id": "019ef543-a006-7500-8500-000000000001",
+            "city_id": "019ef543-a001-7000-8000-000000000001",
+            "name": "Lễ hội Pháo hoa Quốc tế Đà Nẵng (DIFF)",
+            "event_date": "Thường diễn ra vào tháng 6 - tháng 7 hàng năm",
+            "location_text": "Cảng sông Hàn (khu vực khán đài xem dọc đường Trần Hưng Đạo)",
+            "cost": "Mua vé khán đài hoặc xem tự do từ các tòa nhà cao tầng ven sông",
+            "description": "Sự kiện trình diễn nghệ thuật pháo hoa quy mô quốc tế với sự tham gia tranh tài của nhiều quốc gia trên thế giới.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "019ef543-a006-7500-8500-000000000002",
+            "city_id": "019ef543-a001-7000-8000-000000000001",
+            "name": "Lễ hội Quán Thế Âm Ngũ Hành Sơn",
+            "event_date": "Ngày 19 tháng 2 Âm lịch hàng năm",
+            "location_text": "Khuôn viên chùa Quán Thế Âm, Ngũ Hành Sơn",
+            "cost": "Vào cổng tự do",
+            "description": "Lễ hội tâm linh Phật giáo lớn mang đậm nét văn hóa dân gian truyền thống, cầu quốc thái dân an.",
+            "annual": true,
+            "highlight": false,
+            "source": "manual_curated"
+        },
+        {
+            "id": "019ef543-a006-7500-8500-000000000003",
+            "city_id": "019ef543-a001-7000-8000-000000000001",
+            "name": "Sự kiện Cầu Rồng Phun Lửa Phun Nước",
+            "event_date": "Tối thứ Sáu, thứ Bảy, Chủ nhật hàng tuần lúc 21:00",
+            "location_text": "Cầu Rồng, trung tâm thành phố",
+            "cost": "Xem tự do miễn phí",
+            "description": "Khoảnh khắc đầu rồng trình diễn phun lửa kết hợp phun nước độc đáo kéo dài khoảng 15 phút, thu hút đông đảo du khách tập trung xem.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        }
+    ]
+}

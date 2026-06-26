@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "city": "lam-dong-da-lat",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-004",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Foody (06/2026)", "vietnamtourism.gov.vn (06/2026)"]
+  },
+  "data": [
+    {
+      "name": "Bánh Căn",
+      "local_name": "Bánh căn Đà Lạt",
+      "category": "snack",
+      "description": "Bánh nướng đổ khuôn đất, nhân trứng, tôm hoặc mực. Điểm nhấn là chén nước chấm xíu mại có hành hoa.",
+      "where_to_eat": ["019ef504-6d4d-78e0-9047-1ad9d8d08753"],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["ăn sáng", "đặc sản"]
+    },
+    {
+      "name": "Lẩu Gà Lá É",
+      "local_name": "Lẩu gà lá é",
+      "category": "main_dish",
+      "description": "Lẩu gà ngọt nước dùng kèm lá é cay nồng, rất phù hợp với thời tiết lạnh.",
+      "where_to_eat": ["019ef504-6d4d-7641-875b-bbcaad1aaee7"],
+      "price_range": "Trung bình",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["ăn tối", "lẩu"]
+    },
+    {
+      "name": "Bánh Tráng Nướng",
+      "local_name": "Pizza Đà Lạt",
+      "category": "snack",
+      "description": "Bánh tráng nướng than củi mỏng giòn, phủ trứng, xúc xích, phô mai và mỡ hành.",
+      "where_to_eat": ["Chợ Đêm Đà Lạt", "Khu vực Quảng Trường Lâm Viên"],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["ăn vặt", "street food"]
+    },
+    {
+      "name": "Kem Bơ",
+      "local_name": "Kem bơ",
+      "category": "dessert",
+      "description": "Bơ sáp xay nhuyễn dẻo mịn kết hợp với viên kem dừa ngọt thanh.",
+      "where_to_eat": ["Khu vực Chợ Đà Lạt"],
+      "price_range": "Bình dân",
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["tráng miệng"]
+    },
+    {
+      "name": "Sữa Đậu Nành Nóng",
+      "local_name": "Sữa nóng",
+      "category": "drink",
+      "description": "Thức uống sưởi ấm ban đêm, thường uống kèm các loại bánh ngọt.",
+      "where_to_eat": ["Chợ Đêm Đà Lạt", "Khu vực Tăng Bạt Hổ"],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["ăn đêm", "đồ uống nóng"]
+    }
+  ]
+}

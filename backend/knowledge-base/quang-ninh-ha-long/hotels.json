@@ -1,0 +1,134 @@
+{
+    "data": [
+        {
+            "id": "4ef59e01-12dd-1570-98c0-08817eb55a63",
+            "amenities": [
+                "wifi",
+                "phòng dorm",
+                "quầy bar",
+                "thuê xe"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "BBQ Hostel Ha Long",
+            "type": "hostel",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "booking_url": null,
+            "rating": null,
+            "stars": null,
+            "description": "Lựa chọn tiết kiệm cho khách trẻ, gần khu vui chơi và ăn uống Bãi Cháy.",
+            "address": "Khu Bãi Cháy, Hạ Long"
+        },
+        {
+            "id": "4ef59e01-12dd-4e71-b70d-5491bc9f5711",
+            "amenities": [
+                "wifi",
+                "ăn sáng",
+                "đỗ xe",
+                "lễ tân 24h"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Ha Long Essence Hotel",
+            "type": "hotel",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "booking_url": null,
+            "rating": null,
+            "stars": 3,
+            "description": "Khách sạn tầm trung tiện di chuyển ra bến tàu và bãi biển.",
+            "address": "Bãi Cháy, Hạ Long"
+        },
+        {
+            "id": "4ef59e01-12dd-cd78-a712-fcb5a4f8b00f",
+            "amenities": [
+                "wifi",
+                "hồ bơi",
+                "nhà hàng",
+                "phòng gym"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Novotel Ha Long Bay",
+            "type": "hotel",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "booking_url": null,
+            "rating": null,
+            "stars": 4,
+            "description": "Khách sạn 4 sao phù hợp gia đình, vị trí thuận tiện khu du lịch.",
+            "address": "Bãi Cháy, Hạ Long"
+        },
+        {
+            "id": "4ef59e01-0ddd-647b-afa7-185e7911ea04",
+            "amenities": [
+                "wifi",
+                "hồ bơi",
+                "spa",
+                "bãi biển riêng",
+                "nhà hàng"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Vinpearl Resort \u0026 Spa Ha Long",
+            "type": "resort",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "booking_url": null,
+            "rating": null,
+            "stars": 5,
+            "description": "Resort cao cấp trên đảo riêng, hợp kỳ nghỉ dưỡng biển.",
+            "address": "Đảo Rều, Hạ Long"
+        },
+        {
+            "id": "4ef59e01-12dd-3071-a7e5-8c2d8b956cf5",
+            "amenities": [
+                "bữa ăn địa phương",
+                "trải nghiệm thuyền",
+                "wifi tùy nơi"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Homestay làng chài Cửa Vạn",
+            "type": "homestay",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "booking_url": null,
+            "rating": null,
+            "stars": null,
+            "description": "Trải nghiệm gần đời sống ngư dân, cần xác minh điều kiện lưu trú trước khi đặt.",
+            "address": "Khu làng chài/vùng ven Hạ Long"
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-003",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

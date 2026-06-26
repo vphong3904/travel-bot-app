@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey
+from sqlalchemy import DateTime, String, Text, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -8,8 +8,12 @@ from app.db.database import Base
 
 class KnowledgeEntry(Base):
     __tablename__ = "knowledge_entries"
- 
-    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True)
+
+    id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),   # ✅ FIX: auto-gen UUID khi tạo mới
+    )
     title: Mapped[str] = mapped_column(String(300), nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     destination_id: Mapped[str | None] = mapped_column(
@@ -24,14 +28,18 @@ class KnowledgeEntry(Base):
         DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
- 
- 
+
+
 class EmbeddingJob(Base):
     __tablename__ = "embedding_jobs"
- 
-    id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True)
+
+    id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),   # ✅ FIX: auto-gen UUID
+    )
     entity_type: Mapped[str] = mapped_column(String(50), default="knowledge_entry")
     entity_id: Mapped[str] = mapped_column(UUID(as_uuid=False), nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="pending")
@@ -40,26 +48,8 @@ class EmbeddingJob(Base):
         DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-
-class SearchHistory(Base):
-    __tablename__ = "search_history"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
-    keyword = Column(String(300), nullable=False)
-    result_count = Column(Integer, default=0)
-    created_at = Column(TIMESTAMP(timezone=True))
-
-
-class UserBehavior(Base):
-    __tablename__ = "user_behavior"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"))
-    event_type = Column(String(100))    # "view_destination", "search", ...
-    entity_type = Column(String(50))    # "destination", "hotel", ...
-    entity_id = Column(UUID(as_uuid=True))
-    created_at = Column(TIMESTAMP(timezone=True))
+# ✅ SearchHistory & UserBehavior đã chuyển sang MongoDB (app/services/log_service.py)
+# — xem app/db/mongo.py để biết collection tương ứng.

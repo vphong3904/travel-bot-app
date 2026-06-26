@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "city": "dien-bien-dien-bien-phu",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "missing_fields": [
+      "price_range thực tế (cần xác nhận tại Foody hoặc Google Maps)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Foody.vn (ẩm thực Điện Biên, 06/2026)",
+      "Sở Du lịch tỉnh Điện Biên: dienbien.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "name": "Xôi Nếp Nương",
+      "local_name": "Xôi nếp nương Điện Biên",
+      "category": "main_dish",
+      "description": "Xôi nấu từ giống nếp nương đặc sản vùng cao Điện Biên — hạt dài, trắng trong, thơm dịu tự nhiên. Được đồ trong chõ gỗ truyền thống của người Thái, xôi dẻo mà không dính tay, vị ngọt thanh. Thường ăn cùng muối vừng, thịt gà bản hoặc cá suối nướng. Là món ăn sáng và bữa chính quan trọng trong bếp người Thái Tây Bắc.",
+      "where_to_eat": ["Chợ Điện Biên Phủ", "Nhà hàng ẩm thực Thái trong thành phố", "Homestay nhà sàn"],
+      "price_range": "// TODO: xác nhận tại Foody.vn hoặc Google Maps",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["breakfast", "local-specialty", "rice"]
+    },
+    {
+      "name": "Gà Bản Nướng",
+      "local_name": "Gà bản nướng Điện Biên",
+      "category": "main_dish",
+      "description": "Gà ta nuôi thả vườn của đồng bào dân tộc Thái, thịt chắc săn và đậm vị hơn gà công nghiệp. Ướp gia vị bản địa gồm mắc khén (hạt tiêu rừng Tây Bắc), gừng, sả, tỏi, ớt rừng rồi nướng trên than củi. Mùi thơm mắc khén rất đặc trưng — không thể lẫn với bất kỳ món nướng nào khác. Thường ăn kèm xôi nếp nương.",
+      "where_to_eat": ["Nhà hàng ẩm thực Thái TP. Điện Biên Phủ", "Homestay bản Thái", "Chợ đêm"],
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["main-dish", "grilled", "local-specialty"]
+    },
+    {
+      "name": "Cá Suối Nướng Mắc Khén",
+      "local_name": "Cá suối nướng",
+      "category": "main_dish",
+      "description": "Cá bắt từ các suối núi sạch quanh Điện Biên — thường là cá chép suối, cá trầm hoặc cá niếc. Nhồi nhân sả, gừng, mắc khén vào bụng cá rồi kẹp tre nướng trên bếp than. Thịt cá ngọt, thơm mùi gia vị rừng, da giòn nhẹ. Đặc trưng của bếp ăn người Thái và là món không thể thiếu trong các bữa nhậu vùng cao.",
+      "where_to_eat": ["Nhà hàng ẩm thực Thái", "Bản văn hóa Thái", "Quán ăn ven suối"],
+      "price_range": "// TODO: xác nhận tại Foody.vn hoặc Google Maps",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["main-dish", "grilled", "river-fish", "local-specialty"]
+    },
+    {
+      "name": "Rượu Cần Điện Biên",
+      "local_name": "Rượu cần",
+      "category": "drink",
+      "description": "Rượu ủ từ gạo nếp nương và các loại lá cây rừng trong chum đất, uống chung qua cần trúc dài. Nồng độ cồn thấp, vị ngọt thanh, đậm hương thảo mộc rừng núi. Uống rượu cần là nghi thức quan trọng trong văn hóa tiếp đón khách của người Thái, Mường tại Tây Bắc. Không thể từ chối nếu muốn được chủ nhà quý mến!",
+      "where_to_eat": ["Homestay nhà sàn", "Bản văn hóa Thái", "Lễ hội địa phương"],
+      "price_range": "// TODO: xác nhận tại cơ sở địa phương",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["drink", "traditional", "cultural-experience"]
+    },
+    {
+      "name": "Pa Pỉnh Tộp (Cá Gập Nướng)",
+      "local_name": "Pa pỉnh tộp",
+      "category": "main_dish",
+      "description": "Đặc sản cá nướng độc đáo của người Thái — cá được mổ dọc sống lưng, gập đôi, kẹp nhân gồm sả, gừng, mắc khén, lá chanh và ớt rồi nướng trên lửa than. Cách gấp đặc biệt giúp gia vị ngấm sâu vào từng thớ thịt. Là món nhậu cao cấp và thường xuất hiện trong mâm cỗ đãi khách quý.",
+      "where_to_eat": ["Nhà hàng ẩm thực Thái TP. Điện Biên Phủ", "Homestay bản Thái"],
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["main-dish", "grilled", "specialty", "river-fish"]
+    },
+    {
+      "name": "Nậm Pịa",
+      "local_name": "Nậm pịa",
+      "category": "soup",
+      "description": "Canh đặc sản người Thái làm từ lòng dê hoặc lòng bò nấu với mắc khén, sả, gừng và đặc biệt là dịch tiêu hóa (pịa) — nghe lạ nhưng tạo ra vị đắng nhẹ độc đáo rất cuốn. Dành cho người dạn thử đặc sản 'thách thức' của Tây Bắc. Không phải ai cũng hợp khẩu vị, nhưng là trải nghiệm ẩm thực không thể quên.",
+      "where_to_eat": ["Nhà hàng ẩm thực Thái", "Chợ địa phương"],
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["soup", "adventurous", "local-specialty", "acquired-taste"]
+    }
+  ]
+}
