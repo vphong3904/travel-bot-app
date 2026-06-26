@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "city": "tay-ninh-tay-ninh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-013",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": [
+      "Kiến thức chuyên gia tổng hợp"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60701",
+      "title": "Tây Ninh Tâm Linh & Văn Hóa Trong Ngày",
+      "audience": "Gia đình, Khách hành hương",
+      "duration": "1 ngày",
+      "timeline": [
+        {
+          "time": "08:00",
+          "location_ref": {
+            "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60001",
+            "name": "Núi Bà Đen"
+          },
+          "activity": "Di chuyển bằng cáp treo lên đỉnh núi, chiêm bái tượng Phật Bà và ngắm quang cảnh."
+        },
+        {
+          "time": "12:00",
+          "location_ref": {
+            "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60002",
+            "name": "Tòa Thánh Tây Ninh"
+          },
+          "activity": "Tham quan kiến trúc vĩ đại và xem lễ chính ngọ của các tín đồ Cao Đài."
+        },
+        {
+          "time": "15:30",
+          "location_ref": {
+            "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60601",
+            "name": "Chợ Long Hoa"
+          },
+          "activity": "Ghé chợ mua muối tôm và bánh tráng phơi sương về làm quà."
+        }
+      ]
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60702",
+      "title": "Tây Ninh Trải Nghiệm Hoang Sơ & Cắm Trại",
+      "audience": "Giới trẻ, Phượt thủ",
+      "duration": "2 ngày 1 đêm",
+      "timeline": [
+        {
+          "time": "Ngày 1 - 14:00",
+          "location_ref": {
+            "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60003",
+            "name": "Hồ Dầu Tiếng"
+          },
+          "activity": "Dựng lều, hạ thuyền SUP đón hoàng hôn tuyệt đẹp bên bờ hồ."
+        },
+        {
+          "time": "Ngày 2 - 08:30",
+          "location_ref": {
+            "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60004",
+            "name": "Chùa Gò Kén"
+          },
+          "activity": "Rời bãi cắm trại, di chuyển về check-in ngôi chùa cổ độc đáo trước khi quay lại TP.HCM."
+        }
+      ]
+    }
+  ]
+}

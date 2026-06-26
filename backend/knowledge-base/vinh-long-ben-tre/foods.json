@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Văn hóa ẩm thực xứ dừa và miệt vườn Tiền Giang"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000201",
+      "name": "Kẹo dừa Bến Tre",
+      "type": "specialty",
+      "description": "Đặc sản lừng danh làm từ nước cốt dừa dẻo quánh, đường mạch nha và sầu riêng hoặc lá dứa, thơm béo ngậy."
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000202",
+      "name": "Cá tai tượng chiên xù Vĩnh Long",
+      "type": "dish",
+      "description": "Cá tươi nguyên con thả vạc dầu sôi dựng ngược vảy giòn rụm, cuốn bánh tráng rau sống chấm mắm nêm."
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000203",
+      "name": "Bánh xèo hến Cồn Phụng",
+      "type": "dish",
+      "description": "Vỏ bánh đổ mỏng giòn, phần nhân thay vì thịt heo băm sẽ dùng hến sông ngọt lịm xào củ hũ dừa giòn sần sật."
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000204",
+      "name": "Chuột dừa Bến Tre",
+      "type": "dish",
+      "description": "Loài chuột sống trên ngọn cây dừa ăn cơm dừa béo ngọt, được chế biến thành món nướng hoặc hấp lá cách cực bắt vị."
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000205",
+      "name": "Gỏi củ hũ dừa",
+      "type": "dish",
+      "description": "Phần lõi non nhất của cây dừa bào mỏng trộn tôm thịt, rau răm, lạc rang, vị chua ngọt mát lạnh sảng khoái."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "city": "dong-thap-dong-thap",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["manual_curated"]
+  },
+  "data": [
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60601",
+      "name": "Chợ Sa Đéc",
+      "type": "traditional_market",
+      "address": "Đường Trần Hưng Đạo, TP. Sa Đéc",
+      "specialty": "Bánh phồng tôm Sa Giang, bột gạo Sa Đéc, nông sản miền sông nước"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60602",
+      "name": "Các lò nem đặc sản Thị trấn Lai Vung",
+      "type": "specialty_shop",
+      "address": "Quốc lộ 80, Thị trấn Lai Vung, Đồng Tháp",
+      "specialty": "Nem chua Lai Vung gốc, nem đòn, quýt hồng Lai Vung (theo mùa tết)"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60603",
+      "name": "Chợ chiếu ma Định Yên",
+      "type": "craft_village",
+      "address": "Xã Định Yên, Huyện Lấp Vò, Đồng Tháp",
+      "specialty": "Chiếu nilon, chiếu lác dệt thủ công sắc sỡ độc đáo"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60604",
+      "name": "Cửa hàng Đặc sản Đất Sen Hồng",
+      "type": "specialty_shop",
+      "address": "Vòng xoay Nguyễn Huệ, TP. Cao Lãnh, Đồng Tháp",
+      "specialty": "Trà tim sen, rượu sen, hạt sen sấy ăn liền, sữa sen đóng chai"
+    }
+  ]
+}

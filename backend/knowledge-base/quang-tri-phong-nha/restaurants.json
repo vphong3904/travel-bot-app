@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "partial",
+    "missing_fields": ["average_cost"],
+    "data_sources": ["TripAdvisor", "Google Maps"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000301",
+      "name": "Quán Cháo Hải Mân",
+      "area": "TP. Đông Hà",
+      "specialty_served": "Cháo vạt giường cá lóc truyền thống",
+      "average_cost": null,
+      "price_note": "// TODO: Tra giá tô thường và tô đầu cá lóc lừng danh"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000302",
+      "name": "Nhà hàng Thu Huế Phong Nha",
+      "area": "Trung tâm thị trấn Phong Nha",
+      "specialty_served": "Gà đồi nướng lu, cá trắm sông Son om dưa",
+      "average_cost": null,
+      "price_note": "// TODO: Khảo sát thực đơn phục vụ khách trekking nước ngoài"
+    }
+  ]
+}

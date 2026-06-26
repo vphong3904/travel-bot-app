@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-013",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Tổng hợp chuyên gia lữ hành di sản"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000701",
+      "title": "Hành Trình Đỏ Hoài Niệm & Chinh Phục Hang Động Kỳ Quan",
+      "audience": "Gia đình, đoàn cựu chiến binh, khách đam mê lịch sử và khám phá",
+      "duration": "2 ngày 1 đêm",
+      "timeline": [
+        {
+          "time": "Ngày 1 - 08:30",
+          "location_ref": {
+            "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000001",
+            "name": "Thành cổ Quảng Trị"
+          },
+          "activity": "Lắng đọng thắp hương đài tưởng niệm chung, tham quan bảo tàng hiện vật chiến tranh."
+        },
+        {
+          "time": "Ngày 1 - 11:00",
+          "location_ref": {
+            "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000005",
+            "name": "Cầu Hiền Lương"
+          },
+          "activity": "Check-in hai dải màu sơn xanh - vàng biểu tượng chia cắt xưa, tham quan cột cờ vĩ tuyến."
+        },
+        {
+          "time": "Ngày 2 - 09:00",
+          "location_ref": {
+            "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000004",
+            "name": "Động Thiên Đường"
+          },
+          "activity": "Di chuyển xe điện lên núi, bộ hành qua hệ thống cầu gỗ ngắm rừng thạch nhũ triệu năm sừng sững."
+        }
+      ]
+    }
+  ]
+}

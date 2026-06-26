@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-003",
+    "status": "partial",
+    "missing_fields": ["exact_room_rates"],
+    "data_sources": ["Booking.com", "Oxalis Adventure"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000101",
+      "name": "Sài Gòn Đông Hà Hotel",
+      "segment": "4-star",
+      "address": "01 Hùng Vương, Phường 5, TP. Đông Hà, Quảng Trị",
+      "price_range": null,
+      "price_note": "// TODO: Khảo sát giá phòng phục vụ dịp lễ tri ân tháng 7"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000102",
+      "name": "Chày Lập Farmstay",
+      "segment": "resort",
+      "address": "Phúc Trạch, Bố Trạch, Quảng Bình (gần Phong Nha)",
+      "price_range": null,
+      "price_note": "Khu nghỉ dưỡng sinh thái kết hợp chèo thuyền kayak và đạp xe mộc mạc"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000103",
+      "name": "Oxalis Home",
+      "segment": "homestay",
+      "address": "Thị trấn Phong Nha, Bố Trạch, Quảng Bình",
+      "price_range": null,
+      "price_note": "Homestay ven sông Son, view núi đá vôi cực đẹp cho dân trekking"
+    }
+  ]
+}

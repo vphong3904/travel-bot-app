@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["manual_curated", "Cổng thông tin Bến Tre"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000501",
+      "name": "Lễ hội Dừa Bến Tre",
+      "time_lunar": "Tổ chức định kỳ 2 năm một lần (Thường rơi vào tháng 11 Dương lịch)",
+      "description": "Sự kiện văn hóa lớn quy mô quốc gia tôn vinh chuỗi giá trị cây dừa, triển lãm các tác phẩm nghệ thuật làm hoàn toàn từ dừa."
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000502",
+      "name": "Lễ hội trái cây ngon an toàn tỉnh Vĩnh Long",
+      "time_lunar": "Mùng 5 tháng 5 Âm lịch (Tết Đoan Ngọ)",
+      "description": "Ngày hội hội tụ các chủ vườn miền Tây đua tài trưng bày trái cây khổng lồ, lạ mắt và hội chợ giao thương giá gốc tại cù lao."
+    }
+  ]
+}

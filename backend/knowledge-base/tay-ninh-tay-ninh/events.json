@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "city": "tay-ninh-tay-ninh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": [
+      "manual_curated",
+      "Sở Văn hóa Thể thao và Du lịch Tây Ninh"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60501",
+      "name": "Hội xuân Núi Bà Đen",
+      "time_lunar": "Mùng 4 đến hết tháng Giêng Âm lịch",
+      "description": "Lễ hội lớn nhất năm thu hút hàng triệu tăng ni phật tử và du khách đến hành hương, cầu may mắn đầu năm tại Điện Bà."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60502",
+      "name": "Đại lễ Vía Đức Chí Tôn (Đạo Cao Đài)",
+      "time_lunar": "Mùng 9 tháng Giêng Âm lịch",
+      "description": "Đại lễ quan trọng nhất của đạo Cao Đài biểu dương sức mạnh tâm linh, tổ chức tại nội ô Tòa Thánh với các điệu múa rồng nhang độc đáo."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60503",
+      "name": "Đại lễ Hội Yến Diêu Trì Cung",
+      "time_lunar": "Rằm tháng Tám Âm lịch (Trung thu)",
+      "description": "Lễ hội tâm linh cực lớn của đạo Cao Đài, có phần rước cộ bông Đức Phật Mẫu và các tiết mục biểu diễn nghệ thuật truyền thống đặc sắc."
+    }
+  ]
+}

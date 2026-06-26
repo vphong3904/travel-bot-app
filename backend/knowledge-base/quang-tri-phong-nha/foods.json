@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Ẩm thực Bình Trị Thiên"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000201",
+      "name": "Cháo vạt giường (Cháo cá lóc Quảng Trị)",
+      "type": "dish",
+      "description": "Sợi bột gạo hoặc bột lọc cắt mỏng dai, nấu cùng thịt cá lóc đồng om thơm lừng phức nồng nàn củ nén và ớt bột."
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000202",
+      "name": "Bún hến Mai Xá",
+      "type": "dish",
+      "description": "Đặc sản làng Mai Xá nấu từ con chắt chắt (họ hàng với hến nhưng nhỏ hơn), nước dùng ngọt đậm đà tự nhiên, ăn kèm gừng ớt cay xé lưỡi."
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000203",
+      "name": "Gà nướng chấm muối cheo Phong Nha",
+      "type": "dish",
+      "description": "Gà đồi thả rông nướng trên than củi vàng ruộm, chấm kèm 'muối cheo' - một loại muối hái từ lá rừng bản địa cay nồng, thơm ngát độc lạ."
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000204",
+      "name": "Bánh lọc Mỹ Chánh",
+      "type": "specialty",
+      "description": "Lớp vỏ bột lọc trong suốt dai giòn bọc nhân tôm sông xào mỡ hành đậm vị, hấp chín thơm mùi lá chuối."
+    }
+  ]
+}

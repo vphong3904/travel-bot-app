@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "city": "tay-ninh-tay-ninh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": [
+      "Cổng thông tin điện tử tỉnh Tây Ninh"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60201",
+      "name": "Bánh tráng phơi sương Trảng Bàng",
+      "type": "specialty",
+      "description": "Bánh tráng dày, dẻo, có vị mặn nhẹ, được phơi dưới sương đêm, ăn kèm thịt luộc và rau rừng."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60202",
+      "name": "Bánh canh Trảng Bàng",
+      "type": "dish",
+      "description": "Sợi bánh canh trắng muốt, nước dùng trong vắt ngọt thanh từ xương ống, ăn cùng giò heo."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60203",
+      "name": "Muối tôm Tây Ninh",
+      "type": "condiment",
+      "description": "Gia vị nổi tiếng khắp cả nước dù Tây Ninh không hề có biển, vị cay mặn ngọt nồng nàn."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60204",
+      "name": "Ốc núi Bà Đen",
+      "type": "seasonal_dish",
+      "description": "Loại ốc sống ở vách núi, ăn thảo dược, thịt dai giòn sần sật, thường có nhiều vào mùa mưa."
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60205",
+      "name": "Bò tơ Tây Ninh",
+      "type": "dish",
+      "description": "Thịt bò non mềm, da mỏng được nướng hoặc làm lẩu, cuốn bánh tráng rau rừng cực bắt vị."
+    }
+  ]
+}

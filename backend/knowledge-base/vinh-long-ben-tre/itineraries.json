@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-013",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Tổng hợp chuyên gia lữ hành sông nước"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000701",
+      "title": "Trải Nghiệm Xứ Dừa Bến Tre Trong Ngày",
+      "audience": "Khách du lịch tự túc ngắn ngày, gia đình",
+      "duration": "1 ngày",
+      "timeline": [
+        {
+          "time": "09:00",
+          "location_ref": {
+            "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000003",
+            "name": "Quần thể du lịch Cồn Phụng"
+          },
+          "activity": "Đi thuyền tham quan thánh địa đạo dừa cũ, xưởng làm kẹo dừa thủ công nóng hổi."
+        },
+        {
+          "time": "14:00",
+          "location_ref": {
+            "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000002",
+            "name": "Khu du lịch Lan Vương"
+          },
+          "activity": "Thay áo bà ba, tham quan vui chơi đu dây, tát mương vui nhộn."
+        }
+      ]
+    }
+  ]
+}

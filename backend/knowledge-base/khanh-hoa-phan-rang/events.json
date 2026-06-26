@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-phan-rang",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": [
+      "manual_curated",
+      "Cổng thông tin Ninh Thuận"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000501",
+      "name": "Lễ hội Katê của người Chăm",
+      "time_lunar": "Tháng 7 lịch Chăm (Khoảng tháng 9 - tháng 10 Dương lịch)",
+      "description": "Lễ hội dân gian thiêng liêng nhất của người Chăm Bàlamôn nhằm tưởng nhớ các vị thần, diễn ra tưng bừng tại Tháp Po Klong Garai."
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000502",
+      "name": "Lễ hội Nho và Vang Ninh Thuận",
+      "time_lunar": "Tổ chức định kỳ (Thường rơi vào tháng 6 Dương lịch)",
+      "description": "Sự kiện văn hóa quảng bá thương hiệu nho Phan Rang với các hoạt động hội chợ, tham quan vườn và đêm nhạc đường phố."
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000503",
+      "name": "Lễ giỗ Tổ nghề gốm làng Bàu Trúc",
+      "time_lunar": "Mùng 3 tháng 7 Âm lịch",
+      "description": "Ngày hội tri ân tổ nghề Po Klong Chang, trình diễn nghệ thuật nặn gốm hoàn toàn bằng tay của phụ nữ dân tộc Chăm."
+    }
+  ]
+}

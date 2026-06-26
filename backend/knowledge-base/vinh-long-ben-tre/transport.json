@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-005",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Vexere"]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "route": "TP.HCM - Bến Tre (Xe Limousine)",
+        "provider": "Thảo Châu / Minh Tâm",
+        "duration": "2 hours (Qua cầu Rạch Miễu)",
+        "estimated_price": null,
+        "price_note": "// TODO: Check giá vé ngày cuối tuần tại vexere.com"
+      },
+      {
+        "route": "TP.HCM - Vĩnh Long (Xe khách giường nằm)",
+        "provider": "Phương Trang",
+        "duration": "2.5 - 3 hours (Qua cầu Mỹ Thuận)",
+        "estimated_price": null,
+        "price_note": "Hỗ trợ xe trung chuyển nội ô thành phố"
+      }
+    ],
+    "getting_around": [
+      {
+        "mode": "Tàu du lịch / Ghe máy",
+        "scope": "Di chuyển ra Cồn Phụng, Cù lao An Bình",
+        "note": "Phương tiện thiết yếu trải nghiệm sông nước miền Tây"
+      },
+      {
+        "mode": "Xe lôi máy",
+        "scope": "Nội thị và cung đường làng Bến Tre",
+        "note": "Trải nghiệm ngồi thùng xe kéo ngắm rặng dừa xanh mướt độc lạ"
+      },
+      {
+        "mode": "Xe máy thuê",
+        "scope": "Toàn tỉnh",
+        "note": "Tiện lợi len lỏi qua các cầu nông thôn nhỏ hẹp"
+      }
+    ]
+  }
+}

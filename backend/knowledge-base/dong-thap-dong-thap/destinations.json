@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "city": "dong-thap-dong-thap",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-002",
+    "status": "completed",
+    "missing_fields": ["ticket_price (mùa sếu đầu đỏ 2026)", "image_url"],
+    "data_sources": ["vietnamtourism.gov.vn", "Sở VHTTDL tỉnh Đồng Tháp"]
+  },
+  "data": [
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60001",
+      "name": "Vườn quốc gia Tràm Chim",
+      "type": "nature",
+      "description": "Khu đất ngập nước Ramsar thế giới, ngôi nhà của loài sếu đầu đỏ quý hiếm và hệ sinh thái thủy sinh phong phú.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: xác nhận giá vé tàu kéo tham quan tại tramchim.com.vn"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60002",
+      "name": "Khu di tích Xẻo Quýt",
+      "type": "nature",
+      "description": "Căn cứ cách mạng trong rừng tràm nguyên sinh, nơi du khách trải nghiệm đi xuồng ba lá len lỏi giữa rừng.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: cập nhật phí thuê xuồng ba lá theo lượt khách"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60003",
+      "name": "Làng hoa kiểng Sa Đéc",
+      "type": "market",
+      "description": "Vựa hoa lớn nhất miền Tây Nam Bộ với phương thức trồng hoa độc đáo trên giàn ngập nước.",
+      "rating": null,
+      "ticket_price": 0,
+      "price_note": "Miễn phí tham quan làng hoa, có phí nhỏ ở một số vườn check-in tư nhân"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60004",
+      "name": "Nhà cổ Huỳnh Thủy Lê",
+      "type": "museum",
+      "description": "Ngôi nhà cổ kết hợp kiến trúc Pháp - Hoa, gắn liền với thiên tình sử lãng mạn trong tiểu thuyết 'Người tình'.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: check phí thuyết minh tiếng Anh/Pháp tại di tích"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60005",
+      "name": "Khu du lịch sinh thái Gáo Giồng",
+      "type": "nature",
+      "description": "Lá phổi xanh của vùng Đồng Tháp Mười với sân chim tự nhiên rộng lớn hàng chục ngàn con.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: tra cứu giá buffet bánh dân gian tại KDL"
+    }
+  ]
+}
