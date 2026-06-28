@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 const String kApiBase = String.fromEnvironment(
   'API_BASE_URL',
-  defaultValue: 'http://localhost:8000',
+  defaultValue: 'http://localhost:8000/api',
 );
 
 class AdminApiClient {
