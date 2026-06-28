@@ -1,11 +1,18 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "completed",
-    "missing_fields": ["image_url"],
-    "data_sources": ["Sở Du lịch TP.HCM", "Sở Du lịch tỉnh Bà Rịa - Vũng Tàu"]
+    "missing_fields": [
+      "image_url",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "Sở Du lịch TP.HCM",
+      "Sở Du lịch tỉnh Bà Rịa - Vũng Tàu",
+      "T-037: Hồ Mây Park — homaypark.com & Traveloka (2025)"
+    ]
   },
   "data": [
     {
@@ -52,6 +59,24 @@
       "rating": null,
       "ticket_price": null,
       "price_note": "// TODO: cập nhật giá vé cho khách Việt Nam và khách quốc tế phân định riêng"
+    },
+    {
+      "id": "002603b8-9e06-4a68-b37a-4a35aba9badc",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Khu du lịch Hồ Mây Park (Cáp treo Hồ Mây)",
+      "type": "amusement_park",
+      "address": "Số 1A Trần Phú, Phường 1, TP. Vũng Tàu, Bà Rịa — Vũng Tàu",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cáp treo khoảng 8:00–23:00; khu trò chơi & công viên nước 8:00–18:00 — xác nhận lịch trước khi đến",
+      "description": "Khu giải trí trên đỉnh Núi Lớn đi bằng cáp treo, có hơn 70 trò chơi, công viên nước trên núi (đường trượt từ độ cao ~10m), rạp phim 7D và chương trình nhạc nước, view toàn cảnh biển Vũng Tàu.",
+      "tips": "Đi T2–T5 thường được giảm ~20% giá vé; lên đỉnh ngắm hoàng hôn trên biển.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Vé trọn gói dao động ~150.000–1.200.000đ tùy gói dịch vụ; giảm ~20% từ T2–T5. (nguồn: homaypark.com & Traveloka, 2025 — có thể thay đổi)"
     }
   ]
 }

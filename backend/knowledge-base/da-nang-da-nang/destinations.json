@@ -1,11 +1,21 @@
 {
   "_meta": {
     "city": "da-nang-da-nang",
-    "last_updated": "2026-06-23",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "partial",
-    "missing_fields": ["entry_fee", "hours", "stats"],
-    "data_sources": ["danangtourism.gov.vn (06/2026)", "Google Maps (06/2026)"]
+    "missing_fields": [
+      "entry_fee",
+      "hours",
+      "stats",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "danangtourism.gov.vn (06/2026)",
+      "Google Maps (06/2026)",
+      "T-037: Sun World Da Nang Downtown / Asia Park — sunworld.vn & Klook (2025)",
+      "T-037: Mikazuki Water Park 365 — Klook & Traveloka (2025)"
+    ]
   },
   "data": [
     {
@@ -14,12 +24,18 @@
       "name": "Biển Mỹ Khê",
       "type": "beach",
       "address": "Đường Võ Nguyên Giáp, Phường Phước Mỹ, Quận Sơn Trà, Đà Nẵng",
-      "coordinates": { "lat": 16.0604, "lng": 108.2472 },
+      "coordinates": {
+        "lat": 16.0604,
+        "lng": 108.2472
+      },
       "hours": "Mở cửa tự do",
       "description": "Một trong những bãi biển quyến rũ nhất hành tinh với bãi cát trắng mịn, độ dốc thoải và sóng biển hiền hòa quanh năm.",
       "tips": "Nên tắm biển tại các khu vực có cắm cờ cứu hộ quy định và tránh khung giờ trưa nắng gắt.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
     },
@@ -29,12 +45,18 @@
       "name": "Sun World Ba Na Hills",
       "type": "attraction",
       "address": "Thôn An Sơn, Xã Hòa Ninh, Huyện Hòa Vang, Đà Nẵng",
-      "coordinates": { "lat": 15.9954, "lng": 107.9892 },
+      "coordinates": {
+        "lat": 15.9954,
+        "lng": 107.9892
+      },
       "hours": "Thường hoạt động 08:00 - 17:00 — liên hệ xác nhận khung giờ cáp treo",
       "description": "Quần thể du lịch nghỉ dưỡng trên đỉnh núi Chúa với kiến trúc làng Pháp cổ kính và cây Cầu Vàng biểu tượng.",
       "tips": "Nên mang theo áo khoác mỏng vì nhiệt độ trên đỉnh núi có thể giảm đột ngột và sương mù dày vào buổi chiều.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null,
       "price_note": "// TODO: xác nhận tại Klook/Traveloka"
@@ -45,12 +67,18 @@
       "name": "Danh thắng Ngũ Hành Sơn",
       "type": "mountain",
       "address": "81 Huyền Trân Công Chúa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-      "coordinates": { "lat": 16.0042, "lng": 108.2638 },
+      "coordinates": {
+        "lat": 16.0042,
+        "lng": 108.2638
+      },
       "hours": "Thường từ 07:00 - 17:30",
       "description": "Hệ thống gồm 5 ngọn núi đá vôi nhô lên giữa lòng thung lũng ven biển, sở hữu nhiều hang động huyền bí và chùa chiền cổ xưa.",
       "tips": "Nên mang giày thể thao chống trơn trượt vì đường bậc đá leo hang động khá trơn.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null,
       "price_note": "// TODO: xác nhận tại Quầy bán vé cổng Ngũ Hành Sơn"
@@ -61,12 +89,18 @@
       "name": "Bảo tàng Điêu khắc Chăm Đà Nẵng",
       "type": "museum",
       "address": "Số 02 2 Tháng 9, Phường Bình Hiên, Quận Hải Châu, Đà Nẵng",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "Xác nhận lại lịch mở cửa",
       "description": "Nơi lưu giữ và trưng bày bộ sưu tập các hiện vật nghệ thuật điêu khắc tôn giáo của vương quốc cổ Champa lớn nhất thế giới.",
       "tips": "Có dịch vụ quét mã QR để nghe thuyết minh tự động rất chi tiết về từng cổ vật.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null,
       "price_note": "// TODO: xác nhận tại website chammuseum.danang.vn"
@@ -77,12 +111,18 @@
       "name": "Chùa Linh Ứng Bán Đảo Sơn Trà",
       "type": "temple",
       "address": "Khu vực Bán đảo Sơn Trà, Phường Thọ Quang, Quận Sơn Trà, Đà Nẵng",
-      "coordinates": { "lat": 16.0998, "lng": 108.2778 },
+      "coordinates": {
+        "lat": 16.0998,
+        "lng": 108.2778
+      },
       "hours": "06:00 - 21:00",
       "description": "Ngôi chùa bề thế tựa lưng vào đỉnh Sơn Trà, nổi tiếng với bức tượng Phật Bà Quan Thế Âm cao nhất Việt Nam hướng mặt ra biển.",
       "tips": "Trang phục lịch sự kín đáo khi vào chính điện. Cẩn thận tài sản cá nhân vì khu vực này có nhiều khỉ tự nhiên.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
     },
@@ -92,14 +132,62 @@
       "name": "Chợ Cồn",
       "type": "market",
       "address": "290 Hùng Vương, Phường Vĩnh Trung, Quận Hải Châu, Đà Nẵng",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "07:00 - 19:30",
       "description": "Khu chợ giao thương sầm uất trung tâm đô thị, được mệnh danh là thiên đường ăn vặt bình dân quy tụ mọi đặc sản xứ Quảng.",
       "tips": "Khu ẩm thực bên trong chợ bán theo từng gian hàng nhỏ lẻ, nên đổi tiền lẻ để thuận tiện thanh toán.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "7ee3cc3e-9cbe-41fa-9d37-7b10152be122",
+      "city_id": "019ef543-a001-7000-8000-000000000001",
+      "name": "Mikazuki Water Park 365 (Da Nang Mikazuki)",
+      "type": "water_park",
+      "address": "Bãi biển Xuân Thiều, đường Nguyễn Tất Thành, phường Hòa Hiệp Nam, quận Liên Chiểu, Đà Nẵng",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "9:00–19:00 hằng ngày",
+      "description": "Tổ hợp công viên nước kết hợp tắm khoáng nóng Onsen kiểu Nhật bên bãi biển Xuân Thiều: dòng sông lười 450m, bể tạo sóng, khu trượt nước, cùng khu Onsen trong nhà (xông hơi, bể nóng/lạnh) hoạt động quanh năm.",
+      "tips": "Mua vé online thường rẻ hơn quầy; nên dành cả ngày để trải nghiệm cả khu nước ngoài trời và Onsen trong nhà.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Combo: T2–T6 người lớn 530.000đ, trẻ em (1m–1m4) 420.000đ; cuối tuần người lớn 600.000đ. Trẻ dưới 1m miễn phí. (nguồn: Klook & Traveloka, 2025 — có thể thay đổi)"
+    },
+    {
+      "id": "42ec7f93-a0b9-455c-8cb4-593a59e5f28b",
+      "city_id": "019ef543-a001-7000-8000-000000000001",
+      "name": "Công viên Châu Á — Sun World Da Nang Downtown (Asia Park)",
+      "type": "amusement_park",
+      "address": "1 Phan Đăng Lưu, phường Hòa Cường Bắc, quận Hải Châu, Đà Nẵng",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Thường mở buổi chiều đến tối (khoảng 15:00–22:00) — xác nhận trước khi đến",
+      "description": "Công viên giải trí giữa trung tâm Đà Nẵng với vòng quay Sun Wheel cao 115m (top 5 thế giới), nhiều trò chơi cảm giác mạnh và khu công viên văn hóa các nước châu Á thu nhỏ.",
+      "tips": "Đẹp nhất vào buổi tối khi Sun Wheel và toàn khu lên đèn; kết hợp dạo cầu Rồng gần đó.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé trọn gói: người lớn 250.000đ, trẻ em (1m–1m4) 150.000đ (áp dụng 2025). (nguồn: sunworld.vn & Klook, 2025 — có thể thay đổi)"
     }
   ]
 }
