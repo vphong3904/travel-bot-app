@@ -9,6 +9,7 @@ import '../../shared/providers/auth_provider.dart';
 import '../../shared/providers/users_provider.dart';
 import 'role_badge.dart';
 import 'change_role_dialog.dart';
+import 'user_sessions_tab.dart';
 
 class UserDetailPanel extends ConsumerStatefulWidget {
   final String userId;
@@ -31,7 +32,7 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -137,6 +138,7 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
                     tabs: const [
                       Tab(text: 'Thông tin'),
                       Tab(text: 'Lịch sử chat'),
+                      Tab(text: 'Phiên đăng nhập'),
                     ],
                   ),
 
@@ -151,6 +153,7 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
                           onToggleActive: () => _toggleActive(user),
                         ),
                         _ChatHistoryTab(sessions: user.recentSessions),
+                        UserSessionsTab(userId: user.id),
                       ],
                     ),
                   ),
