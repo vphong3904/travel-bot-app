@@ -1,0 +1,55 @@
+{
+    "_meta":  {
+                  "city":  "ha-noi",
+                  "generated_from":  "Kiến thức tổng quan — KHÔNG có trong SQL seed",
+                  "last_updated":  "2026-06-22",
+                  "agent_task":  "T-006",
+                  "status":  "partial",
+                  "partial_note":  "Giá là ƯỚC TÍNH thị trường tham khảo — cần xác nhận trước khi production.",
+                  "missing_fields":  [
+                                         "id thật từ DB",
+                                         "giá đã verify thật"
+                                     ],
+                  "data_sources":  [
+                                       "manual_curated"
+                                   ]
+              },
+    "data":  [
+                 {
+                     "id":  "e45cb3fa-e15f-4f93-8b4c-8e2af43c807d",
+                     "city_id":  "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+                     "name":  "Tết Nguyên Đán tại Hà Nội",
+                     "event_date":  "Tháng 1 hoặc 2 (theo lịch âm)",
+                     "location_text":  "Toàn thành phố, chợ hoa Hàng Lược",
+                     "cost":  "free",
+                     "description":  "Lễ hội lớn nhất trong năm, phố cổ trang trí rực rỡ, chợ hoa Hàng Lược nhộn nhịp những ngày cận Tết.",
+                     "annual":  true,
+                     "highlight":  true,
+                     "source":  "manual_curated"
+                 },
+                 {
+                     "id":  "d61bd410-80c6-4b5d-849a-85f1f0564804",
+                     "city_id":  "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+                     "name":  "Lễ hội Gò Đống Đa",
+                     "event_date":  "Mùng 5 Tết (lịch âm)",
+                     "location_text":  "Công viên Đống Đa, quận Đống Đa",
+                     "cost":  "free",
+                     "description":  "Lễ hội tưởng nhớ chiến thắng Ngọc Hồi - Đống Đa của vua Quang Trung, có múa rồng, tái hiện lịch sử.",
+                     "annual":  true,
+                     "highlight":  false,
+                     "source":  "manual_curated"
+                 },
+                 {
+                     "id":  "863fb8d9-7e24-4a17-a9b0-4888e14e374d",
+                     "city_id":  "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+                     "name":  "Trung Thu phố cổ Hà Nội",
+                     "event_date":  "Tháng 8 (rằm tháng 8 âm lịch)",
+                     "location_text":  "Phố Hàng Mã và khu phố cổ",
+                     "cost":  "free",
+                     "description":  "Phố Hàng Mã rực rỡ đèn lồng, mặt nạ, đồ chơi Trung Thu truyền thống, đông đúc về tối.",
+                     "annual":  true,
+                     "highlight":  true,
+                     "source":  "manual_curated"
+                 }
+             ]
+}

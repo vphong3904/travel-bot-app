@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "city": "lam-dong-mui-ne",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-001",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Tổng cục Du lịch Việt Nam", "Dữ liệu địa lý tổng hợp"]
+  },
+  "data": {
+    "id": "019f3b22-1000-7000-8000-000000000000",
+    "name": "Đà Lạt - Mũi Né (Lâm Đồng - Bình Thuận)",
+    "aliases": ["Lâm Đồng - Mũi Né", "Lên rừng xuống biển", "Da Lat - Mui Ne"],
+    "country": "Vietnam",
+    "region": "Tây Nguyên & Duyên hải Nam Trung Bộ",
+    "coordinates": {
+      "lat": 11.4500,
+      "lng": 108.3000
+    },
+    "description": "Hành trình nối tuyến độc đáo mang tên 'Lên rừng xuống biển', kết hợp hoàn hảo giữa cái lạnh mờ sương, rừng thông ngút ngàn của cao nguyên Đà Lạt (Lâm Đồng) và nắng vàng, biển xanh, đồi cát mênh mông của Mũi Né (Bình Thuận).",
+    "best_time_to_visit": "Tháng 11 đến tháng 3 (Thời tiết khô ráo, Đà Lạt se lạnh mờ sương, Mũi Né nắng đẹp không quá gắt).",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "currency": "VND",
+    "language": "Vietnamese",
+    "tags": [
+      "Nối tuyến",
+      "Lên rừng xuống biển",
+      "Nghỉ dưỡng",
+      "Thiên nhiên",
+      "Phượt đèo"
+    ],
+    "weather_avg": {
+      "dry_season": {
+        "months": "Tháng 11 - Tháng 4",
+        "temp_c_dalat": "14°C - 24°C",
+        "temp_c_muine": "25°C - 32°C",
+        "condition": "Đà Lạt lạnh về đêm, ban ngày nắng ấm. Mũi Né nắng đẹp, biển êm."
+      },
+      "rainy_season": {
+        "months": "Tháng 5 - Tháng 10",
+        "temp_c_dalat": "16°C - 25°C",
+        "temp_c_muine": "26°C - 33°C",
+        "condition": "Đà Lạt mưa rào vào chiều tối, Mũi Né có thể có mưa rải rác hoặc áp thấp."
+      }
+    },
+    "distance_info": {
+      "route": "Đà Lạt - Mũi Né",
+      "distance_km": 155,
+      "estimated_travel_time_hours": 3.5,
+      "main_roads": ["QL28B (Đèo Đại Ninh)", "QL28 (Đèo Gia Bắc)"]
+    }
+  }
+}

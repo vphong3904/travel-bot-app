@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-002",
+    "status": "completed",
+    "missing_fields": ["ticket_price (khu trò chơi dân gian Lan Vương)", "image_url"],
+    "data_sources": ["vietnamtourism.gov.vn", "Sở Du lịch Bến Tre - Vĩnh Long"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000001",
+      "name": "Cù lao An Bình (Vĩnh Long)",
+      "type": "nature",
+      "description": "Hòn ngọc xanh giữa dòng sông Tiền, nổi tiếng với những vườn cây ăn trái sum suê trĩu quả quanh năm và hệ thống homestay mộc mạc.",
+      "rating": null,
+      "ticket_price": 0,
+      "price_note": "Phí đi phà sang cù lao tự túc, vào vườn trái cây tính phí theo cân ký hoặc bao bụng tùy vườn"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000002",
+      "name": "Khu du lịch Lan Vương (Bến Tre)",
+      "type": "nature",
+      "description": "Thiên đường vui chơi giải trí sông nước miệt vườn với các hoạt động chèo xuồng ba lá, đi cầu khỉ, tát mương bắt cá.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: check giá thuê trang phục áo bà ba trọn gói tại lanvuong.com"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000003",
+      "name": "Quần thể du lịch Cồn Phụng",
+      "type": "nature",
+      "description": "Thắng cảnh nổi tiếng nằm trên sông Tiền, lưu giữ các công trình kiến trúc độc đáo của Đạo Dừa Nguyễn Thành Nam.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: xác nhận giá vé tàu trung chuyển ra cồn trọn gói"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000004",
+      "name": "Sân chim Vàm Hồ",
+      "type": "nature",
+      "description": "Khu sinh thái rừng ngập mặn độc đáo của xứ dừa, nơi trú ngụ của hàng ngàn cá thể chim, cò, vạc hoang dã.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: kiểm tra phí hướng dẫn trekking đường rừng rừng ngập mặn"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000005",
+      "name": "Chùa cổ Long An (Vĩnh Long)",
+      "type": "temple",
+      "description": "Ngôi chùa cổ danh tiếng bậc nhất tỉnh Vĩnh Long với nghệ thuật chạm khắc gỗ độc sắc thế kỷ XIX.",
+      "rating": null,
+      "ticket_price": 0,
+      "price_note": "Miễn phí tham quan chiêm bái"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh-vung-tau",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-003",
+    "status": "partial",
+    "missing_fields": ["exact_weekend_rates"],
+    "data_sources": ["Booking.com", "Traveloka"]
+  },
+  "data": [
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60101",
+      "name": "The Imperial Hotel Vũng Tàu",
+      "segment": "5-star",
+      "address": "159 Thùy Vân, Thắng Tam, TP. Vũng Tàu",
+      "price_range": null,
+      "price_note": "// TODO: Khảo sát phụ thu phòng view biển Bãi Sau dịp cuối tuần hè"
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60102",
+      "name": "Rex Hotel Sài Gòn",
+      "segment": "5-star",
+      "address": "141 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh",
+      "price_range": null,
+      "price_note": "Khách sạn di sản trung tâm, sở hữu Rooftop Bar ngắm phố đi bộ cực đỉnh"
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60103",
+      "name": "Marina Bay Vung Tau Resort",
+      "segment": "resort",
+      "address": "115 Trần Phú, Phường 5, TP. Vũng Tàu",
+      "price_range": null,
+      "price_note": "// TODO: Check tình trạng phòng bungalow ngắm hoàng hôn Bãi Trước"
+    }
+  ]
+}

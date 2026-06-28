@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "city": "an-giang-phu-quoc",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Giá là ƯỚC TÍNH thị trường — vé máy bay và phà biến động theo mùa/thời điểm đặt. Xác nhận giá thật tại Vietjet, Vietnam Airlines, Traveloka trước production.",
+    "missing_fields": [
+      "giá vé real-time (biến động theo mùa)",
+      "lịch phà cập nhật"
+    ],
+    "data_sources": [
+      "Vietnam Airlines, Vietjet (tuyến bay)",
+      "Superdong, Phú Quốc Express (phà)",
+      "Google Maps (di chuyển nội đảo)"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "airplane",
+        "from": "TP.HCM (TSN), Hà Nội (NIO), Đà Nẵng, Cần Thơ và các TP lớn",
+        "duration": "~55 phút từ TP.HCM; ~2h từ Hà Nội",
+        "price_range": "800.000–2.500.000đ/chiều (ƯỚC TÍNH, biến động mạnh theo mùa)",
+        "providers": [
+          "Vietnam Airlines",
+          "Vietjet Air",
+          "Bamboo Airways"
+        ],
+        "notes": "Sân bay Phú Quốc quốc tế (PQC) cách trung tâm Dương Đông ~10km. Là cách di chuyển phổ biến nhất. Nên đặt sớm 2–4 tuần trong mùa cao điểm (Tết, hè)."
+      },
+      {
+        "type": "ferry",
+        "from": "Rạch Giá (Kiên Giang) hoặc Hà Tiên",
+        "duration": "~2h15 từ Rạch Giá; ~45 phút từ Hà Tiên (tàu cao tốc)",
+        "price_range": "200.000–350.000đ/người (ƯỚC TÍNH)",
+        "providers": [
+          "Superdong",
+          "Phú Quốc Express",
+          "Tàu Ngọc Thành"
+        ],
+        "notes": "Phà chạy nhiều chuyến/ngày, nhưng mùa mưa (tháng 6–10) sóng to có thể hủy chuyến. Nên kiểm tra trước khi đặt vé."
+      },
+      {
+        "type": "bus_combined",
+        "from": "TP.HCM (xe khách đến Rạch Giá/Hà Tiên, sau đó đi phà)",
+        "duration": "~6–8 giờ tổng (xe + phà)",
+        "price_range": "300.000–500.000đ/người tổng (ƯỚC TÍNH)",
+        "providers": [
+          "Xe khách Phương Trang (Futa)",
+          "Kumho Samco"
+        ],
+        "notes": "Lựa chọn tiết kiệm nhất cho khách từ TP.HCM. Nhiều hãng có combo xe + phà. Không phù hợp trẻ nhỏ hoặc người say tàu xe."
+      },
+      {
+        "type": "private_car",
+        "from": "TP.HCM hoặc Cần Thơ",
+        "duration": "~4–5 giờ đến Hà Tiên + 45 phút phà",
+        "price_range": null,
+        "providers": ["Dịch vụ thuê xe tư nhân"],
+        "price_note": "// TODO: xác nhận giá thuê xe tại các dịch vụ địa phương",
+        "notes": "Phù hợp nhóm đông (4–7 người) chia tiền. Linh hoạt dừng dọc đường tham quan."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "motorbike_rental",
+        "price_info": "120.000–200.000đ/ngày (ƯỚC TÍNH, tùy loại xe)",
+        "notes": "Cách di chuyển phổ biến và tiện nhất trên đảo. Nhiều điểm cho thuê ở Dương Đông và gần sân bay. Cần bằng lái A1 và đội mũ bảo hiểm.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": "~15.000–20.000đ/km (ƯỚC TÍNH)",
+        "notes": "Có taxi Mai Linh và Sao Vàng hoạt động trên đảo. Giá thường cao hơn đất liền. Nên chốt giá trước với taxi không đồng hồ.",
+        "recommended": true
+      },
+      {
+        "type": "grab",
+        "price_info": "Tính theo app Grab",
+        "notes": "Grab có hoạt động tại Phú Quốc nhưng coverage không đều như TP.HCM. Khu Dương Đông và Bãi Trường dễ đặt hơn, khu xa đảo khó.",
+        "recommended": true
+      },
+      {
+        "type": "xe_dien_golf",
+        "price_info": "null",
+        "price_note": "// TODO: xác nhận giá tại các khu resort/vinpearl",
+        "notes": "Xe điện golf carts có trong một số resort lớn (Vinpearl, JW Marriott) để di chuyển nội khu.",
+        "recommended": false
+      },
+      {
+        "type": "bicycle",
+        "price_info": "50.000–80.000đ/ngày (ƯỚC TÍNH)",
+        "notes": "Phù hợp tham quan khu trung tâm Dương Đông và bãi biển gần. Không phù hợp cho các tuyến xa (Bãi Dài, Vườn Quốc gia) vì đường xa và nắng nóng.",
+        "recommended": false
+      },
+      {
+        "type": "bus_noi_dao",
+        "price_info": null,
+        "price_note": "// TODO: xác nhận có tuyến bus công cộng nội đảo không",
+        "notes": "Hiện tại Phú Quốc chưa có hệ thống xe buýt công cộng nội đảo hoàn chỉnh. Một số tuyến trung chuyển sân bay có hoạt động theo giờ.",
+        "recommended": false
+      }
+    ]
+  }
+}

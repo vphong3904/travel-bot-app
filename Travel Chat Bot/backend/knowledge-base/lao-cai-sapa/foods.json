@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-004",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026)", "Foody (06/2026)"]
+  },
+  "data": [
+    {
+      "name": "Thang Co Sapa",
+      "local_name": "Thắng cố Sapa",
+      "category": "main_dish",
+      "description": "Món ăn truyền thống của người H'Mông nấu từ thịt và nội tạng ngựa kết hợp với 12 loại thảo mộc rừng đặc trưng.",
+      "where_to_eat": ["Thắng Cố A Quỳnh"],
+      "price_range": "Mức giá trung bình tùy theo phần ăn",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "truyền thống", "thảo mộc"]
+    },
+    {
+      "name": "Lon Cap Nach",
+      "local_name": "Thịt lợn cắp nách",
+      "category": "main_dish",
+      "description": "Giống lợn đặc sản được nuôi thả rông trên đồi núi, thịt săn chắc, thơm ngọt, lớp da giòn rụm khi nướng.",
+      "where_to_eat": ["Nhà hàng A Phủ"],
+      "price_range": "Tính theo đĩa hoặc theo kilogram",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "món nướng"]
+    },
+    {
+      "name": "Ca Hoi Sapa",
+      "local_name": "Lẩu cá hồi Sapa",
+      "category": "main_dish",
+      "description": "Cá hồi xứ lạnh được nuôi ngay tại dòng suối mát Sapa, thịt cá chắc, ít mỡ, làm lẩu hoặc gỏi cực ngon.",
+      "where_to_eat": ["Nhà hàng Đỗ Quyên"],
+      "price_range": "Tùy thuộc vào kích thước cá hoặc combo nồi lẩu",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["hải sản xứ lạnh", "lẩu"]
+    },
+    {
+      "name": "Com Lam Tay Bac",
+      "local_name": "Cơm lam Tây Bắc",
+      "category": "snack",
+      "description": "Gạo nếp nương thơm dẻo được cho vào ống tre rồi nướng chín trên than hồng, chấm muối vừng đậm đà.",
+      "where_to_eat": ["Chợ đêm Sapa", "Các bản làng du lịch"],
+      "price_range": "Giá rẻ bình dân theo ống",
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["món ăn vặt", "đồ nếp", "chay"]
+    },
+    {
+      "name": "Khau Nhuc Sapa",
+      "local_name": "Khâu nhục",
+      "category": "main_dish",
+      "description": "Món thịt ba chỉ được tẩm ướp kỳ công với địa liền, húng lìu, chao đỏ rồi hấp cách thủy đến mức mềm nhừ tan trong miệng.",
+      "where_to_eat": ["Nhà hàng A Phủ"],
+      "price_range": "Giá theo đĩa ăn kèm xôi hoặc cơm",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc sản cổ truyền", "thịt heo"]
+    }
+  ]
+}

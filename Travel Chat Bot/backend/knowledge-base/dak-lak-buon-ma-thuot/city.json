@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "city": "dak-lak-buon-ma-thuot",
+    "generated_from": "Kiến thức tổng quan (KHÔNG có trong SQL seed hiện tại) — cần bổ sung INSERT vào backend/initdb/11_seed_categories_destinations.sql trước khi dùng cho RAG production",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-014",
+    "status": "partial",
+    "partial_note": "Mở rộng 25 tỉnh/thành còn thiếu sau khi áp dụng 34 tỉnh sáp nhập. Nội dung mô tả dựa trên kiến thức địa lý/văn hóa phổ biến, KHÔNG bịa số liệu (giá, rating, lượt xem).",
+    "missing_fields": [
+      "id (UUID tạm, chưa có trong DB thật)",
+      "budget (chưa có nguồn giá thật)",
+      "stats (chưa có dữ liệu user thật)",
+      "image_url (chưa có ảnh thật)"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Đắk Lắk + Phú Yên"
+  },
+  "data": {
+    "id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+    "name": "Buôn Ma Thuột",
+    "slug": "dak-lak-buon-ma-thuot",
+    "province": "Đắk Lắk",
+    "region": "Duyên hải Nam Trung Bộ và Tây Nguyên",
+    "description": "Thủ phủ cà phê Tây Nguyên với hồ Lắk, thác Dray Nur và voi nhà Bản Đôn; sau sáp nhập còn có vùng biển Phú Yên với Gành Đá Đĩa, Mũi Điện.",
+    "special": "Thủ phủ cà phê Việt Nam, gắn liền văn hóa cưỡi voi và cồng chiêng",
+    "best_season": "Tháng 11–4 (mùa khô)",
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "weather": "Mát mẻ 18–30°C mùa khô, mùa mưa tháng 5–10",
+    "budget": null,
+    "cuisine_summary": "Cà phê Buôn Ma Thuột, bún đỏ, gà nướng Bản Đôn, cơm lam",
+    "image_url": null,
+    "stats": null,
+    "categories": [
+      "nature",
+      "culture",
+      "adventure",
+      "mountain"
+    ],
+    "is_active": false,
+    "province_old": "Đắk Lắk"
+  }
+}

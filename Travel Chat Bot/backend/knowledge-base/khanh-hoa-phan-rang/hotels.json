@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-phan-rang",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-003",
+    "status": "partial",
+    "missing_fields": [
+      "exact_season_rates"
+    ],
+    "data_sources": [
+      "Booking.com",
+      "Traveloka"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000101",
+      "name": "Amanoi Resort",
+      "segment": "5-star",
+      "address": "Vĩnh Hy, Vĩnh Hải, Ninh Hải, Ninh Thuận",
+      "price_range": null,
+      "price_note": "// TODO: Check giá phòng siêu sang phân khúc Ultra-luxury tại amanoi.com"
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000102",
+      "name": "TTC Resort Ninh Chữ",
+      "segment": "4-star",
+      "address": "Đường Yên Ninh, Văn Hải, Phan Rang-Tháp Chàm",
+      "price_range": null,
+      "price_note": "// TODO: xác nhận chương trình combo hè tại booking.com"
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000103",
+      "name": "Khách sạn Sài Gòn Ninh Chữ",
+      "segment": "4-star",
+      "address": "19 Yên Ninh, Khánh Hải, Ninh Hải",
+      "price_range": null,
+      "price_note": "// TODO: Cập nhật tình trạng phòng qua Traveloka"
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000104",
+      "name": "InRA Champa Homestay",
+      "segment": "homestay",
+      "address": "Làng dệt Mỹ Nghiệp, Phước Dân, Ninh Phước",
+      "price_range": null,
+      "price_note": "Trải nghiệm văn hóa sinh hoạt Chăm bản địa"
+    }
+  ]
+}

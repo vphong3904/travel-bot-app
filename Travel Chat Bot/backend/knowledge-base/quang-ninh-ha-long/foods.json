@@ -1,0 +1,108 @@
+{
+    "data": [
+        {
+            "where_to_eat": [
+                "Chợ Hạ Long",
+                "Chợ Cái Dăm",
+                "nhà hàng hải sản"
+            ],
+            "description": "Đặc sản nổi tiếng làm từ mực tươi, giã tay rồi chiên vàng, thường ăn với xôi trắng hoặc bánh cuốn.",
+            "category": "specialty",
+            "price_note": "// TODO: xác nhận giá tại chợ/quán địa phương",
+            "local_name": "Chả mực giã tay",
+            "tags": [
+                "đặc sản",
+                "mang về"
+            ],
+            "vegetarian": false,
+            "name": "Chả mực Hạ Long",
+            "must_try": true,
+            "price_range": null
+        },
+        {
+            "where_to_eat": [
+                "nhà hàng hải sản",
+                "chợ đặc sản"
+            ],
+            "description": "Hải sản quý vùng Quảng Ninh, dùng nấu nước dùng hoặc rang khô, giá biến động mạnh.",
+            "category": "specialty",
+            "price_note": "// TODO: xác nhận giá tại chợ/quán địa phương",
+            "local_name": "Sá sùng Quan Lạn",
+            "tags": [
+                "hải sản",
+                "cao cấp"
+            ],
+            "vegetarian": false,
+            "name": "Sá sùng",
+            "must_try": false,
+            "price_range": null
+        },
+        {
+            "where_to_eat": [
+                "nhà hàng Hồng Hạnh",
+                "khu Bãi Cháy"
+            ],
+            "description": "Loài nhuyễn thể có thể nướng, hấp, nấu cháo hoặc làm rượu ngán.",
+            "category": "main_dish",
+            "price_note": "// TODO: xác nhận giá tại chợ/quán địa phương",
+            "local_name": "Ngán Quảng Ninh",
+            "tags": [
+                "hải sản"
+            ],
+            "vegetarian": false,
+            "name": "Ngán biển",
+            "must_try": true,
+            "price_range": null
+        },
+        {
+            "where_to_eat": [
+                "TP Hạ Long",
+                "khu Bãi Cháy"
+            ],
+            "description": "Bún nước với bề bề bóc vỏ, nước dùng ngọt hải sản, hợp ăn sáng.",
+            "category": "main_dish",
+            "price_note": "// TODO: xác nhận giá tại chợ/quán địa phương",
+            "local_name": "Bún tôm tích",
+            "tags": [
+                "ăn sáng",
+                "hải sản"
+            ],
+            "vegetarian": false,
+            "name": "Bún bề bề",
+            "must_try": true,
+            "price_range": null
+        },
+        {
+            "where_to_eat": [
+                "nhà hàng hải sản Hạ Long"
+            ],
+            "description": "Sam chế biến thành gỏi, xào chua ngọt hoặc nướng; nên ăn tại quán uy tín.",
+            "category": "main_dish",
+            "price_note": "// TODO: xác nhận giá tại chợ/quán địa phương",
+            "local_name": "Sam Hạ Long",
+            "tags": [
+                "hải sản",
+                "đặc sản"
+            ],
+            "vegetarian": false,
+            "name": "Sam biển",
+            "must_try": false,
+            "price_range": null
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-004",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

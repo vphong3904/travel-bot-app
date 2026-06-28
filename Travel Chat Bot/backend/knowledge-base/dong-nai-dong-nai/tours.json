@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price.amount (cần Klook hoặc Traveloka xác nhận 06/2026)"
+    ],
+    "data_sources": [
+      "Klook VN: klook.com/vi (06/2026)",
+      "Traveloka: traveloka.com/vi-vn (06/2026)",
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "c6096a08-881a-49cf-86d8-a6024b498bd9",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Tour Trekking Nam Cát Tiên 2 Ngày 1 Đêm",
+      "duration": "2 ngày 1 đêm",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook klook.com/vi hoặc ban quản lý VQG Nam Cát Tiên (06/2026)"
+      },
+      "group_size": "2–15 người",
+      "description": "Gói lưu trú và trekking trong Vườn Quốc gia Nam Cát Tiên: ngày 1 đi bộ rừng quan sát chim thú, tắm suối Đatanla nhỏ, chiều thăm Bàu Sấu; tối quan sát thú ban đêm bằng đèn pin. Ngày 2 thăm Đảo Tiên và về. Lưu trú tại ecolodge trong vườn.",
+      "includes": ["hướng dẫn viên sinh thái", "vé vào VQG", "lưu trú 1 đêm", "2 bữa ăn chính", "tour quan sát thú ban đêm"],
+      "excludes": ["đồ uống riêng", "bảo hiểm du lịch", "tip hướng dẫn viên", "chi phí di chuyển đến VQG"],
+      "image_url": null,
+      "difficulty": "moderate"
+    },
+    {
+      "id": "8f39689d-8f35-4783-9647-fdcab26ce717",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Tour Thác Giang Điền Ngày (từ TP.HCM)",
+      "duration": "1 ngày (~8 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook klook.com/vi hoặc Traveloka (06/2026)"
+      },
+      "group_size": "4–30 người",
+      "description": "Tour ngày từ TP.HCM đến khu du lịch Thác Giang Điền — gồm: tắm thác, chèo kayak, cáp treo tham quan, leo núi nhẹ và picnic. Về TP.HCM buổi tối. Phù hợp gia đình và nhóm bạn muốn dã ngoại cuối tuần gần thành phố.",
+      "includes": ["xe đưa đón TP.HCM – Giang Điền", "vé vào khu du lịch", "hướng dẫn viên", "bữa trưa BBQ"],
+      "excludes": ["hoạt động trả phí riêng (kayak, cáp treo)", "đồ uống", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "96306272-2169-450b-8b64-3dad596f361f",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Tour Vườn Bưởi Tân Triều & Văn miếu Trấn Biên",
+      "duration": "Nửa ngày (4–5 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại Klook hoặc Traveloka (06/2026)"
+      },
+      "group_size": "2–20 người",
+      "description": "Tour khám phá văn hóa và đặc sản nổi tiếng của Đồng Nai: tham quan Văn miếu Trấn Biên — công trình văn hóa lớn nhất Nam Bộ — và vườn bưởi Tân Triều trứ danh. Hái bưởi tươi, thử đặc sản địa phương và mua quà về. Phù hợp cả gia đình và nhóm nhỏ.",
+      "includes": ["xe đưa đón khu vực Biên Hòa", "hướng dẫn viên", "thử bưởi tại vườn"],
+      "excludes": ["mua bưởi mang về", "đồ uống", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "fa4e339d-3f15-46ea-ab73-543f53400427",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Tour Câu Cá & Cắm Trại Hồ Trị An",
+      "duration": "1 ngày hoặc 2 ngày 1 đêm",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận giá tại các điểm cho thuê ven hồ Trị An (06/2026)"
+      },
+      "group_size": "2–12 người",
+      "description": "Trải nghiệm câu cá trên hồ Trị An — hồ nhân tạo khổng lồ bao quanh rừng. Gói bao gồm thuyền câu, dụng cụ câu, hướng dẫn viên địa phương và có thể nấu ăn bằng cá câu được ngay trên thuyền hoặc bờ hồ. Gói cắm trại qua đêm có lửa trại và BBQ.",
+      "includes": ["thuyền câu", "dụng cụ câu cơ bản", "hướng dẫn địa phương", "bữa trưa (BBQ cá tự câu)"],
+      "excludes": ["phí cắm trại qua đêm (gói riêng)", "đồ uống", "tip"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "city": "can-tho",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "hours (chưa xác minh giờ cụ thể — ghi null + hướng dẫn xác nhận)",
+      "rating (không có nguồn xác thực — ghi null)",
+      "price_range (ước tính từ kiến thức chung — cần xác nhận Foody/Google Maps)"
+    ],
+    "data_sources": [
+      "Foody.vn (06/2026)",
+      "Google Maps (06/2026)",
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "1c69f7cd-58e2-4967-ae17-58bc4ad314a3",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Nhà hàng Mekong",
+      "type": "restaurant",
+      "address": "Khu vực bến Ninh Kiều, Quận Ninh Kiều, TP. Cần Thơ",
+      "hours": null,
+      "price_range": "Trung bình – Cao",
+      "specialties": ["lẩu mắm miền Tây", "cá lóc nướng trui", "tôm càng xanh hấp", "canh chua cá bông lau"],
+      "description": "Nhà hàng chuyên ẩm thực miền Tây sông nước nằm ven sông Cần Thơ, phục vụ các món đặc sản địa phương trong không gian thoáng mát nhìn ra sông. Được nhiều du khách và người dân địa phương đánh giá tốt về chất lượng và phục vụ.",
+      "tips": "Đặt bàn trước vào cuối tuần. Thử combo lẩu mắm + cá nướng là bộ đôi kinh điển.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "b28c7a08-14cb-41b7-ae78-fcaa2467822e",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Quán bánh xèo Mười Xinh",
+      "type": "street_food",
+      "address": "Đường Đề Thám hoặc khu vực Ninh Kiều, TP. Cần Thơ",
+      "hours": "Thường 10:00–21:00 — xác nhận thực tế tại Foody.vn trước khi đến",
+      "price_range": "Bình dân",
+      "specialties": ["bánh xèo miền Tây", "bánh khọt", "gỏi cuốn"],
+      "description": "Quán bánh xèo nổi tiếng lâu đời ở Cần Thơ, bánh giòn vàng, nhân tôm thịt đầy đặn, ăn kèm rau sống phong phú và nước mắm pha đúng chuẩn miền Tây. Không gian bình dân, đông khách cả trong và ngoài nước.",
+      "tips": "Đến vào buổi trưa hoặc chiều tối khi bánh ra mẻ mới. Chỗ ngồi có thể chật vào giờ cao điểm.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "21f1c014-fe3b-4d61-9052-1b519dcf1099",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Chợ đêm Ninh Kiều",
+      "type": "market_stall",
+      "address": "Bến Ninh Kiều, Đường Hai Bà Trưng, Quận Ninh Kiều, TP. Cần Thơ",
+      "hours": "18:00–22:00 hàng ngày — xác nhận thực tế trước khi đến",
+      "price_range": "Bình dân",
+      "specialties": ["bánh tráng nướng", "nem nướng", "bún bì chả", "chè các loại", "trái cây miền Tây"],
+      "description": "Chợ đêm ven sông Ninh Kiều là điểm tụ hội ẩm thực vào buổi tối của người Cần Thơ và du khách. Hàng chục gian hàng bán đủ loại đặc sản miền Tây với giá bình dân, không khí sôi động bên bờ sông.",
+      "tips": "Vừa ăn vừa ngắm sông về đêm rất thơ mộng. Cuối tuần thường có biểu diễn đờn ca tài tử gần đây.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "1475dd0c-03f7-4379-b960-12542745cdd5",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Nhà hàng Sông Hương (Bình Thủy)",
+      "type": "restaurant",
+      "address": "Khu vực Quận Bình Thủy, TP. Cần Thơ",
+      "hours": null,
+      "price_range": "Trung bình",
+      "specialties": ["cá lóc nướng trui", "lẩu cá kèo", "hủ tiếu mực", "tôm sú nướng muối ớt"],
+      "description": "Nhà hàng ven sông khu Bình Thủy, khu vực yên tĩnh hơn nội ô, chuyên hải sản và đặc sản sông nước miền Tây. Thường được khách hàng địa phương ưa chuộng cho bữa gia đình hoặc liên hoan nhóm.",
+      "tips": "Kết hợp với tham quan Nhà cổ Bình Thủy ngay gần đó trong cùng buổi chiều.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
+}

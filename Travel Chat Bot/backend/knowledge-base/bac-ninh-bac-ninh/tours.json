@@ -1,0 +1,73 @@
+{
+  "_meta": {
+    "city": "bac-ninh",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "missing_fields": [
+      "price.amount (chưa có nguồn Klook/Traveloka cập nhật — cần xác minh)",
+      "id (UUID tạm — chưa có trong DB thật)"
+    ],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "Klook.com/vi (tham khảo loại hình tour)",
+      "Traveloka.com/vi-vn (tham khảo loại hình tour)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee91-daa7-72ff-ca99-8bfe30797000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Tour Chùa Cổ Bắc Ninh – Cụm Thuận Thành",
+      "duration": "Nửa ngày (4–5 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận tại Klook (klook.com/vi) hoặc các công ty lữ hành địa phương"
+      },
+      "group_size": "2–30 người",
+      "description": "Tour tham quan cụm di tích Phật giáo cổ nhất Việt Nam tại huyện Thuận Thành: Chùa Dâu (Pháp Vân) — ngôi chùa cổ nhất VN — và Chùa Bút Tháp với kiến trúc thế kỷ 17 nguyên vẹn. Hướng dẫn viên giải thích lịch sử Phật giáo Giao Chỉ và ý nghĩa các công trình.",
+      "includes": ["Xe đưa đón từ Hà Nội hoặc Bắc Ninh (tùy tour)", "Hướng dẫn viên tiếng Việt", "Nước uống"],
+      "excludes": ["Ăn trưa", "Phí vào cổng (nếu có)", "Chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019eee91-daa8-736e-28f8-a166bd8ec000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Tour Làng Nghề Truyền Thống Bắc Ninh",
+      "duration": "Một ngày (6–7 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận tại Klook hoặc Vietravel"
+      },
+      "group_size": "4–20 người",
+      "description": "Tour trải nghiệm hai làng nghề đặc sắc nhất Bắc Ninh: Làng tranh dân gian Đông Hồ (xem và thử in tranh) và Làng gốm Phù Lãng (xem thợ làm gốm thủ công). Kết hợp ăn trưa đặc sản bánh phu thê và nem Bùi tại nhà hàng địa phương.",
+      "includes": ["Xe đưa đón", "Hướng dẫn viên", "Trải nghiệm in tranh Đông Hồ", "Ăn trưa đặc sản"],
+      "excludes": ["Mua sắm tranh/gốm", "Chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019eee91-daaa-72eb-1148-8e80e32c8000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Tour Văn Hóa Quan Họ & Đền Đô",
+      "duration": "Một ngày (6–8 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "price_note": "// TODO: xác nhận tại các công ty lữ hành địa phương hoặc Klook"
+      },
+      "group_size": "2–30 người",
+      "description": "Tour văn hóa đặc sắc kết hợp thăm Đền Đô (đền thờ 8 vua triều Lý tại Từ Sơn), mua bánh phu thê Đình Bảng và thưởng thức chương trình hát quan họ dân gian. Tour được tổ chức đặc biệt vào dịp lễ hội Đền Đô (tháng 3 âm lịch) và Hội Lim (tháng 1 âm lịch).",
+      "includes": ["Xe đưa đón", "Hướng dẫn viên am hiểu văn hóa quan họ", "Vé xem biểu diễn quan họ (nếu có)", "Bánh phu thê Đình Bảng mang về"],
+      "excludes": ["Ăn trưa", "Chi phí mua sắm", "Chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

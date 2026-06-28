@@ -1,0 +1,652 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-002",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "coordinates — cần xác minh tọa độ chính xác qua Google Maps",
+      "entry_fee — một số địa điểm cần xác minh giá vé hiện tại qua Klook/Traveloka"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Sở Du lịch TP. HCM: tourism.hochiminhcity.gov.vn (06/2026)",
+      "Google Maps (06/2026)",
+      "Klook Việt Nam: klook.com/vi (06/2026)",
+      "TripAdvisor: tripadvisor.com.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee06-3f91-788d-9915-e65782ad4e85",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Chợ Bến Thành",
+      "type": "market",
+      "address": "Công trường Quách Thị Trang, Phường Bến Thành, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7722,
+        "lng": 106.6983
+      },
+      "hours": "Thường 6:00–18:00 (khu hàng đêm đến ~23:00) — xác nhận trước khi đến",
+      "description": "Chợ Bến Thành là biểu tượng du lịch nổi tiếng nhất của Sài Gòn, được xây dựng từ năm 1914. Nơi đây quy tụ hàng ngàn gian hàng bán thực phẩm, quần áo, đồ thủ công mỹ nghệ, đặc sản địa phương và đồ lưu niệm. Ngoài mua sắm, chợ còn là nơi thưởng thức ẩm thực đường phố ngay tại chỗ.",
+      "tips": "Đến sớm buổi sáng để tránh đông đúc. Mặc cả là văn hóa ở đây — bắt đầu với 50–60% giá chào. Khu ẩm thực bên trong chợ phục vụ nhiều món đặc sản giá hợp lý.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí vào cửa"
+    },
+    {
+      "id": "019eee06-3f91-77e4-a3c7-48acf0b9c31a",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Dinh Độc Lập",
+      "type": "attraction",
+      "address": "135 Nam Kỳ Khởi Nghĩa, Phường Bến Thành, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7769,
+        "lng": 106.6957
+      },
+      "hours": "7:30–11:00 và 13:00–16:00 (đóng cửa khi có sự kiện nhà nước) — xác nhận trước khi đến",
+      "description": "Dinh Độc Lập (hay còn gọi là Dinh Thống Nhất) là công trình kiến trúc lịch sử mang ý nghĩa trọng đại — nơi chứng kiến sự kiện thống nhất đất nước năm 1975. Tòa nhà được thiết kế bởi kiến trúc sư Ngô Viết Thụ theo phong cách hiện đại kết hợp truyền thống Á Đông, với hầm ngầm và hệ thống thông tin liên lạc thời chiến được bảo tồn nguyên vẹn.",
+      "tips": "Nên thuê hướng dẫn viên tại chỗ để hiểu rõ hơn về lịch sử các phòng. Khu hầm ngầm là điểm hấp dẫn nhất — đừng bỏ qua. Quần áo lịch sự được khuyến khích.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn: 65.000 đồng/người/lượt.\nSinh viên: 45.000 đồng/người/lượt.\nHọc sinh từ 6 đến 17 tuổi: 15.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi."
+    },
+    {
+      "id": "019eee06-3f91-7da8-9742-5d6f0abd16f5",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Nhà thờ Đức Bà",
+      "type": "attraction",
+      "address": "01 Công xã Paris, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7797,
+        "lng": 106.699
+      },
+      "hours": "Thường mở cửa hàng ngày — giờ cụ thể liên hệ nhà thờ để xác nhận",
+      "description": "Nhà thờ Đức Bà Sài Gòn là công trình kiến trúc Gothic đặc sắc do người Pháp xây dựng từ năm 1863–1880, nằm ngay trung tâm Quận 1. Tháp chuông cao 57m là một trong những biểu tượng của thành phố. Phía trước nhà thờ là quảng trường Paris với tượng Đức Mẹ hòa bình nổi tiếng.",
+      "tips": "Không vào trong khi đang có lễ. Góc chụp ảnh đẹp nhất từ đầu đường Đồng Khởi hướng về phía nhà thờ, đặc biệt lúc chiều tà. Kết hợp tham quan cùng Bưu điện Thành phố ngay bên cạnh.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí (khu vực ngoài)"
+    },
+    {
+      "id": "019eee06-3f91-7357-927f-0bb11a498d86",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bảo tàng Chứng tích Chiến tranh",
+      "type": "museum",
+      "address": "28 Võ Văn Tần, Phường Võ Thị Sáu, Quận 3, TP. HCM",
+      "coordinates": {
+        "lat": 10.7796,
+        "lng": 106.6924
+      },
+      "hours": "7:30–18:00 hàng ngày (kể cả cuối tuần và lễ) — xác nhận trước khi đến",
+      "description": "Một trong những bảo tàng được ghé thăm nhiều nhất Việt Nam, lưu giữ tư liệu và hiện vật về cuộc kháng chiến chống Mỹ. Bảo tàng gồm nhiều phòng trưng bày ảnh lịch sử, vũ khí, máy bay và xe tăng ngoài trời, cùng khu tái hiện nhà tù Côn Đảo. Nội dung có tính chân thực cao, phù hợp người lớn và thanh thiếu niên.",
+      "tips": "Nên dành ít nhất 2–3 tiếng. Mang theo nước uống vì bảo tàng khá rộng. Không phù hợp với trẻ nhỏ dưới 8 tuổi do nội dung mang tính lịch sử nặng nề.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "40.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười khuyết tật đặc biệt nặng;\nCác đối tượng chính sách theo quy định hiện hành."
+    },
+    {
+      "id": "019eee06-3f91-72fa-984b-77095ef88e7d",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Chùa Ngọc Hoàng",
+      "type": "temple",
+      "address": "73 Mai Thị Lựu, Phường Đa Kao, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7867,
+        "lng": 106.6979
+      },
+      "hours": "7:00–18:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Chùa Ngọc Hoàng (Phước Hải Tự) là ngôi chùa Đạo giáo xây dựng từ năm 1909, nổi tiếng với không gian linh thiêng và hương khói nghi ngút. Nơi đây được cựu Tổng thống Obama ghé thăm năm 2016, khiến chùa càng trở nên nổi tiếng quốc tế. Kiến trúc điêu khắc tinh xảo và ao rùa trong sân tạo nên cảnh quan độc đáo.",
+      "tips": "Đến vào sáng sớm hoặc cuối tuần để thấy không khí thờ phụng nhộn nhịp. Trang phục kín đáo, lịch sự. Không chụp ảnh thẳng vào mặt người đang thờ cúng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019eee06-3f91-79cf-a456-1ee9d8b2bfc8",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Làng Du lịch Bình Quới",
+      "type": "nature",
+      "address": "1147 Bình Quới, Phường 28, Bình Thạnh, TP. HCM",
+      "coordinates": {
+        "lat": 10.8292,
+        "lng": 106.7266
+      },
+      "hours": "7:00–22:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Làng Du lịch Bình Quới là khu nghỉ dưỡng sinh thái nằm ven sông Sài Gòn, cách trung tâm thành phố khoảng 8km. Nơi đây có nhà hàng truyền thống, các trò chơi dân gian, biểu diễn văn nghệ và không gian xanh mát bên sông — lý tưởng để thoát khỏi nhịp sống đô thị.",
+      "tips": "Đặt bàn trước nếu đi vào cuối tuần, đặc biệt cho nhóm đông. Phù hợp cho gia đình có trẻ nhỏ. Dịch vụ chèo thuyền trên sông là trải nghiệm đáng thử.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "MIỄN PHÍ vào cổng tham quan. Một số dịch vụ ăn uống, vui chơi, chèo thuyền và các hoạt động trải nghiệm thu phí riêng."
+    },
+    {
+      "id": "019eee06-3f91-7f60-a2f0-f82d3a3e029e",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Địa đạo Củ Chi",
+      "type": "attraction",
+      "address": "Khu di tích lịch sử địa đạo Củ Chi, huyện Củ Chi, TP. HCM (cách trung tâm ~70km)",
+      "coordinates": {
+        "lat": 11.0646,
+        "lng": 106.4998
+      },
+      "hours": "7:00–17:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Hệ thống địa đạo Củ Chi là mạng lưới đường hầm dài hơn 200km được đào bởi người dân và du kích trong thời kỳ kháng chiến. Di tích lịch sử quốc gia đặc biệt này cho phép du khách trải nghiệm chui qua đường hầm được mở rộng cho người nước ngoài, xem biểu diễn vũ khí thủ công và tìm hiểu cuộc sống trong lòng đất.",
+      "tips": "Nên đi theo tour có hướng dẫn viên để hiểu đầy đủ lịch sử. Mặc quần áo thoải mái, kín (hầm bẩn và chật). Bẫy địa đạo trưng bày là hiện vật thật — quan sát cẩn thận khi đi cùng trẻ em.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Khách Việt Nam: 35.000 đồng/người/lượt.\nKhách quốc tế: 125.000 đồng/người/lượt.\nGIẢM 50% GIÁ VÉ\nHọc sinh, sinh viên; người cao tuổi; người khuyết tật theo quy định hiện hành.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi và các đối tượng chính sách theo quy định hiện hành."
+    },
+    {
+      "id": "38e79b92-ba50-40e8-b972-29b3cde56c89",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Landmark 81",
+      "type": "attraction",
+      "address": "208 Nguyễn Hữu Cảnh, Phường 22, Bình Thạnh, TP. HCM",
+      "coordinates": {
+        "lat": 10.7949,
+        "lng": 106.7218
+      },
+      "hours": "SkyView: 9:00–22:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Landmark 81 là tòa nhà cao nhất Việt Nam với 81 tầng và chiều cao 461m, tọa lạc ven sông Sài Gòn. Đài quan sát SkyView ở tầng 79–81 cung cấp tầm nhìn 360 độ toàn thành phố. Tòa nhà còn là trung tâm thương mại, khách sạn và ẩm thực cao cấp, là điểm check-in mang tính biểu tượng của TP. HCM hiện đại.",
+      "tips": "Mua vé SkyView trực tuyến trên Klook để được giá tốt hơn. Đến lúc hoàng hôn (17:00–18:30) để ngắm cảnh đẹp nhất. Khu Vincom Mega Mall bên dưới phù hợp cho mua sắm và ăn uống sau khi tham quan.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Thứ Hai đến Thứ Sáu: người lớn (cao trên 1,4m) 300.000 đồng/người; trẻ em (cao dưới 1,4m) 150.000 đồng/người.\nThứ Bảy, Chủ Nhật và ngày lễ: người lớn 500.000 đồng/người; trẻ em 250.000 đồng/người."
+    },
+    {
+      "id": "c74f756d-7d48-444b-899e-96a9a03e7c68",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bưu điện Thành phố",
+      "type": "attraction",
+      "address": "2 Công xã Paris, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7797,
+        "lng": 106.6997
+      },
+      "hours": "7:00–19:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Bưu điện Thành phố Hồ Chí Minh là công trình kiến trúc Pháp cổ điển được xây dựng cuối thế kỷ 19, nằm ngay cạnh Nhà thờ Đức Bà. Nội thất vẫn hoạt động như một bưu điện thực sự, với mái vòm cao, sàn gạch hoa và những ô kính cổ. Hai bản đồ lớn vẽ tay của Sài Gòn và vùng lân cận trên tường từ thời Pháp là điểm thu hút đặc biệt.",
+      "tips": "Ghé cùng chuyến với Nhà thờ Đức Bà vì hai nơi chỉ cách nhau vài bước chân. Bên trong có thể mua bưu thiếp và tem kỷ niệm. Góc chụp ảnh đẹp ngay từ cổng vào với ánh sáng tự nhiên ban sáng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "cb143053-ad59-4ffd-9d10-d2022fcf87ea",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Phố đi bộ Nguyễn Huệ",
+      "type": "attraction",
+      "address": "Đường Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7745,
+        "lng": 106.703
+      },
+      "hours": "Mở cửa 24/7 — náo nhiệt nhất từ 18:00–22:00",
+      "description": "Phố đi bộ Nguyễn Huệ là trục đại lộ trung tâm dài khoảng 670m, kéo dài từ UBND Thành phố ra phía sông Sài Gòn. Đây là không gian sinh hoạt cộng đồng sầm uất với nhiều sự kiện văn hóa, nghệ thuật đường phố, và là điểm hẹn quen thuộc của người dân thành phố. Quảng trường Hồ Chí Minh ở đầu phố là điểm nhấn kiến trúc.",
+      "tips": "Đến tối cuối tuần để trải nghiệm không khí nhộn nhịp nhất. Dịp Tết Nguyên Đán, đường hoa Nguyễn Huệ tổ chức tại đây rất đáng xem. Kết hợp đi bộ ra bến Bạch Đằng ngắm sông Sài Gòn buổi tối.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "1c798ce9-b3ba-45bc-8e60-f8a7dba3e642",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bitexco Financial Tower",
+      "type": "attraction",
+      "address": "02 Hải Triều, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7715,
+        "lng": 106.704
+      },
+      "hours": "Saigon Skydeck: 9:30–21:30 hàng ngày — xác nhận trước khi đến",
+      "description": "Bitexco Financial Tower là tòa tháp 68 tầng có hình dáng búp sen cách điệu, biểu tượng kiến trúc nổi bật của trung tâm tài chính Sài Gòn. Đài quan sát Saigon Skydeck ở tầng 49 cho phép ngắm toàn cảnh thành phố và sông Sài Gòn. Sàn kính ngoài trời là trải nghiệm cảm giác mạnh được nhiều du khách yêu thích.",
+      "tips": "Thời điểm tốt nhất là hoàng hôn khi ánh đèn thành phố bắt đầu bật sáng. Kết hợp với phố đi bộ Nguyễn Huệ chỉ cách vài phút đi bộ. Mua vé online trước để tránh xếp hàng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn: khoảng 240.000 đồng/người/lượt.\nTrẻ em từ 4 đến 12 tuổi, người từ 65 tuổi trở lên và người khuyết tật: khoảng 130.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em dưới 4 tuổi."
+    },
+    {
+      "id": "732828ea-8361-4baa-af73-ce68d887cf3b",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Phố Tây Bùi Viện",
+      "type": "attraction",
+      "address": "Đường Bùi Viện, Phường Phạm Ngũ Lão, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7676,
+        "lng": 106.6929
+      },
+      "hours": "Sôi động nhất từ 19:00–02:00 — xác nhận trước khi đến",
+      "description": "Phố Tây Bùi Viện là trung tâm giải trí về đêm nổi tiếng nhất Sài Gòn, quy tụ hàng trăm quán bar, nhà hàng và hostel phục vụ du khách quốc tế. Con phố đi bộ dài khoảng 300m luôn tấp nập người đi chơi từ tối đến tận đêm khuya. Đây là nơi giao thoa văn hóa quốc tế đặc sắc ngay trong lòng thành phố.",
+      "tips": "Chỉ dành cho người lớn — không phù hợp cho trẻ em hoặc gia đình vào ban đêm. Chú ý giữ đồ vật cá nhân ở nơi đông đúc. Khu vực Phạm Ngũ Lão xung quanh có nhiều lựa chọn ăn uống đa dạng hơn với giá hợp lý hơn.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí (chi phí tùy dịch vụ)"
+    },
+    {
+      "id": "92d47212-a83b-455b-8408-99e141716bce",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Khu du lịch Suối Tiên",
+      "type": "attraction",
+      "address": "120 Xa lộ Hà Nội, Phường Tân Phú, TP. Thủ Đức, TP. HCM",
+      "coordinates": {
+        "lat": 10.853,
+        "lng": 106.796
+      },
+      "hours": "Thứ 2–6: 8:00–17:00 | Thứ 7–CN: 8:00–18:00 — xác nhận trước khi đến",
+      "description": "Khu du lịch văn hóa Suối Tiên là công viên chủ đề rộng lớn kết hợp giữa truyền thuyết dân gian Việt Nam và các trò chơi giải trí hiện đại. Nơi đây có các khu vực theo chủ đề thần thoại dân tộc, công viên nước, khu nuôi động vật và nhiều show biểu diễn nghệ thuật. Là điểm vui chơi gia đình quen thuộc của người dân TP. HCM.",
+      "tips": "Đến sớm vào buổi sáng để tránh nắng và đông đúc. Mặc đồ bơi sẵn nếu muốn chơi công viên nước. Nên mua vé combo trọn gói để tiết kiệm chi phí.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào cổng: khoảng 180.000 đồng/người lớn và 100.000 đồng/trẻ em.\nMIỄN VÉ\nTrẻ em cao dưới 1m."
+    },
+    {
+      "id": "0e6fbdd2-9f04-4bd8-87f7-7f6dc9dea033",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bến Nhà Rồng – Bảo tàng Hồ Chí Minh",
+      "type": "museum",
+      "address": "01 Nguyễn Tất Thành, Phường 12, Quận 4, TP. HCM",
+      "coordinates": {
+        "lat": 10.7647,
+        "lng": 106.7058
+      },
+      "hours": "7:30–17:00 (thứ 3 và thứ 6 đóng cửa buổi sáng) — xác nhận trước khi đến",
+      "description": "Bến Nhà Rồng là nơi đánh dấu sự kiện ngày 5/6/1911, khi Nguyễn Tất Thành (sau này là Chủ tịch Hồ Chí Minh) lên tàu ra đi tìm đường cứu nước. Tòa nhà có kiến trúc Pháp đặc trưng với phần mái trang trí rồng độc đáo. Bảo tàng bên trong lưu giữ nhiều tư liệu, hình ảnh và hiện vật về cuộc đời và sự nghiệp của Chủ tịch Hồ Chí Minh.",
+      "tips": "Kết hợp tham quan cùng khu vực bến cảng Nhà Rồng để hiểu bối cảnh lịch sử. Phù hợp cho học sinh, sinh viên và người muốn tìm hiểu về lịch sử cận đại Việt Nam. Nên đến vào buổi sáng khi ánh sáng đẹp cho chụp ảnh.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Công dân Việt Nam: miễn phí hoặc thu phí tượng trưng theo quy định hiện hành.\nKhách quốc tế: khoảng 25.000 đồng/người/lượt.\nMIỄN VÉ\nCác đối tượng chính sách theo quy định hiện hành."
+    },
+    {
+      "id": "056d2a6b-d439-4386-a729-92fe82ed574e",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Nhà hát Thành phố",
+      "type": "attraction",
+      "address": "7 Công trường Lam Sơn, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7764,
+        "lng": 106.7033
+      },
+      "hours": "Theo lịch biểu diễn — kiểm tra lịch tại trang chính thức trước khi đến",
+      "description": "Nhà hát Thành phố Hồ Chí Minh (Opéra House) là công trình kiến trúc Pháp cuối thế kỷ 19, mang phong cách Baroque tráng lệ với mặt tiền điêu khắc công phu. Nơi đây là địa điểm tổ chức các buổi biểu diễn opera, nhạc giao hưởng, ballet, kịch và các sự kiện văn hóa cao cấp. Bên ngoài nhà hát là một trong những góc chụp ảnh đẹp nhất của trung tâm Quận 1.",
+      "tips": "Đặt vé trước qua trang chính thức hoặc các đại lý vé. Mặc trang phục lịch sự khi vào xem biểu diễn. Khu vực trước nhà hát về đêm rất đẹp với ánh đèn — lý tưởng để chụp ảnh dù không xem show.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "giá vé theo từng chương trình biểu diễn — xem lịch tại trang Nhà hát Thành phố"
+    },
+    {
+      "id": "c6323798-72a9-41c8-bd82-26020b01fd60",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bảo tàng Mỹ thuật TP. HCM",
+      "type": "museum",
+      "address": "97A Phó Đức Chính, Phường Nguyễn Thái Bình, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7701,
+        "lng": 106.6981
+      },
+      "hours": "9:00–17:00 (thứ 2 đóng cửa) — xác nhận trước khi đến",
+      "description": "Bảo tàng Mỹ thuật TP. HCM tọa lạc trong một tòa biệt thự Pháp cổ điển xây dựng từ đầu thế kỷ 20, kết hợp phong cách kiến trúc châu Âu và Á Đông. Nơi đây lưu giữ hơn 20.000 tác phẩm nghệ thuật Việt Nam qua các thời kỳ, từ mỹ thuật cổ điển đến đương đại. Tòa nhà với ban công và cầu thang uốn lượn cũng là điểm check-in yêu thích của giới trẻ.",
+      "tips": "Không gian yên tĩnh và mát mẻ, phù hợp để nghỉ ngơi giữa hành trình khám phá Quận 1. Kiến trúc bên ngoài và hành lang bên trong rất đẹp để chụp ảnh. Có thể kết hợp với tham quan chợ Bến Thành chỉ cách vài phút đi bộ.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn: 30.000 đồng/người/lượt.\nHọc sinh, sinh viên: 15.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười từ 60 tuổi trở lên."
+    },
+    {
+      "id": "7a46bc33-5004-44ff-ba47-a365f1491771",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Chùa Bửu Long",
+      "type": "temple",
+      "address": "81 Nguyễn Xiển, Phường Long Bình, TP. Thủ Đức, TP. HCM",
+      "coordinates": {
+        "lat": 10.8612,
+        "lng": 106.7907
+      },
+      "hours": "Thường 8:00–17:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Chùa Bửu Long (Thiền viện Bửu Long) là quần thể kiến trúc Phật giáo theo phong cách Thái Lan – Myanmar với tháp vàng rực rỡ, hồ nước trong xanh và vườn cây xanh mát. Nơi đây thường được ví như \"Angkor Wat thu nhỏ\" của Sài Gòn. Không gian thanh tịnh và cảnh quan đẹp khiến đây trở thành điểm đến tâm linh và check-in ấn tượng cách trung tâm khoảng 20km.",
+      "tips": "Cần đặt lịch thăm viếng trước hoặc tham gia theo đoàn. Mặc trang phục kín đáo, lịch sự — không mặc quần đùi hay áo hở. Đi phương tiện cá nhân sẽ thuận tiện hơn vì giao thông công cộng đến đây còn hạn chế.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "914ceccf-f379-4c4e-82e8-d8ae4dd5073f",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Công viên Vinhomes Central Park",
+      "type": "nature",
+      "address": "720A Điện Biên Phủ, Phường 22, Bình Thạnh, TP. HCM",
+      "coordinates": {
+        "lat": 10.7962,
+        "lng": 106.722
+      },
+      "hours": "Mở cửa 24/7 — hoạt động nhất từ 17:00–21:00",
+      "description": "Công viên Vinhomes Central Park là công viên đô thị hiện đại rộng lớn ven sông Sài Gòn, nằm dưới chân tòa nhà Landmark 81. Không gian xanh với đài phun nước, sân chơi trẻ em, khu thể dục ngoài trời và đường dạo bộ ven sông là điểm thư giãn lý tưởng của cư dân và du khách. Về đêm, ánh đèn phản chiếu từ Landmark 81 xuống mặt sông tạo cảnh đẹp đặc sắc.",
+      "tips": "Đây là điểm hoàn hảo để chụp ảnh Landmark 81 từ xa. Không gian thường đông vào buổi tối cuối tuần — đến sớm nếu muốn yên tĩnh hơn. Kết hợp ghé thăm Vincom Mega Mall ngay bên cạnh nếu muốn mua sắm hay ăn uống.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "0bb438eb-e9d5-43d2-80b4-1a7b9564445f",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Khu du lịch sinh thái Cần Giờ",
+      "type": "nature",
+      "address": "Huyện Cần Giờ, TP. HCM (cách trung tâm khoảng 50km)",
+      "coordinates": {
+        "lat": 10.4124,
+        "lng": 106.8748
+      },
+      "hours": "Thường 7:00–17:00 — xác nhận trước khi đến tùy khu vực",
+      "description": "Khu dự trữ sinh quyển Cần Giờ là vùng rừng ngập mặn rộng lớn được UNESCO công nhận, nơi sinh sống của nhiều loài động thực vật quý hiếm. Điểm tham quan nổi bật bao gồm đảo Khỉ, rừng Sác, khu tưởng niệm Rừng Sác và bãi biển 30/4. Đây là điểm trốn thoát khỏi đô thị lý tưởng cho những ai muốn trải nghiệm thiên nhiên ngay gần thành phố.",
+      "tips": "Thuê xe máy hoặc đi theo tour có hướng dẫn viên vì khu vực rất rộng. Mang theo kem chống muỗi và áo chống nắng. Đi phà Bình Khánh để vào huyện Cần Giờ — hành trình phà cũng là một trải nghiệm thú vị.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào cổng tham quan: khoảng 70.000 đồng/người lớn.\nTrẻ em: khoảng 35.000 đồng/người.\nDỊCH VỤ TÙY CHỌN\nCác hoạt động như cano, câu cua, tham quan Đầm Dơi, tháp Tang Bồng, câu cá sấu... thu phí riêng."
+    },
+    {
+      "id": "61cba05b-2082-4be9-be7c-8b827032584c",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Thảo Cầm Viên Sài Gòn",
+      "type": "nature",
+      "address": "2 Nguyễn Bỉnh Khiêm, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7881,
+        "lng": 106.7055
+      },
+      "hours": "7:00–18:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Thảo Cầm Viên Sài Gòn là một trong những vườn thú và vườn thực vật lâu đời nhất châu Á, được người Pháp thành lập từ năm 1864. Khuôn viên rộng lớn là nơi sinh sống của hàng trăm loài động vật và hàng nghìn loài thực vật nhiệt đới. Ngoài xem thú, du khách còn có thể thưởng thức không gian xanh mát hiếm có ngay giữa trung tâm thành phố.",
+      "tips": "Nên đến vào buổi sáng khi thú vật còn hoạt động tích cực. Phù hợp cho gia đình có trẻ nhỏ. Kết hợp tham quan Bảo tàng Lịch sử TP. HCM nằm ngay bên trong khuôn viên.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Khách cao từ 1,3m trở lên: 60.000 đồng/người/lượt.\nKhách cao từ 1m đến dưới 1,3m: 40.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em cao dưới 1m đi cùng gia đình."
+    },
+    {
+      "id": "dc8b036f-9da8-44f4-94d9-cb0b58020433",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bảo tàng Lịch sử TP. HCM",
+      "type": "museum",
+      "address": "2 Nguyễn Bỉnh Khiêm, Phường Bến Nghé, Quận 1, TP. HCM (trong khuôn viên Thảo Cầm Viên)",
+      "coordinates": {
+        "lat": 10.7878,
+        "lng": 106.7059
+      },
+      "hours": "8:00–11:30 và 13:00–17:00 (thứ 2 đóng cửa) — xác nhận trước khi đến",
+      "description": "Bảo tàng Lịch sử TP. HCM tọa lạc trong tòa nhà kiến trúc Đông Dương đặc trưng, lưu giữ hơn 30.000 hiện vật phản ánh lịch sử và văn hóa Việt Nam từ thời tiền sử đến thế kỷ 20. Các bộ sưu tập nổi bật bao gồm đồ gốm Óc Eo, hiện vật Chăm Pa, trang phục truyền thống các dân tộc và vũ khí cổ. Bảo tàng nằm trong khuôn viên Thảo Cầm Viên nên có thể kết hợp tham quan cả hai.",
+      "tips": "Kết hợp tham quan cùng Thảo Cầm Viên để tiết kiệm thời gian và chi phí. Nên thuê hướng dẫn viên hoặc audioguide để hiểu sâu hơn về hiện vật. Phòng trưng bày đồ gốm và văn hóa Chăm Pa là điểm nổi bật nhất.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "30.000 đồng/người/lượt.\nGIẢM 50% GIÁ VÉ\nTrẻ em từ 6 đến dưới 16 tuổi;\nHọc sinh, sinh viên (xuất trình thẻ hợp lệ);\nCông dân Việt Nam từ 60 tuổi trở lên;\nNgười khuyết tật nặng.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười khuyết tật đặc biệt nặng;\nHộ nghèo;\nCác đối tượng được hưởng chính sách ưu đãi theo quy định hiện hành."
+    },
+    {
+      "id": "643369a0-0af5-4632-940f-3244d58867ca",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Đường sách TP. HCM",
+      "type": "attraction",
+      "address": "Đường Đinh Lễ, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7775,
+        "lng": 106.7005
+      },
+      "hours": "8:00–21:00 hàng ngày (kể cả cuối tuần và lễ) — xác nhận trước khi đến",
+      "description": "Đường sách Nguyễn Văn Bình (tên thường gọi: Đường sách TP. HCM) là phố sách văn hóa nằm ngay gần Nhà thờ Đức Bà, với hơn 20 gian hàng sách và văn phòng phẩm từ các nhà xuất bản lớn. Không gian được thiết kế thoáng đãng với nhiều góc ngồi đọc sách và chụp ảnh. Đây còn là nơi thường xuyên tổ chức hội sách, giao lưu tác giả và các sự kiện văn hóa.",
+      "tips": "Ghé vào buổi sáng hoặc chiều mát để đọc sách thoải mái. Thường xuyên có chương trình giảm giá sách. Vào các dịp lễ lớn, không gian được trang trí đẹp và có nhiều sự kiện đặc biệt.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "cc335da0-ebd4-442c-959b-3a75c89cb121",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Chùa Vĩnh Nghiêm",
+      "type": "temple",
+      "address": "339 Nam Kỳ Khởi Nghĩa, Phường 7, Quận 3, TP. HCM",
+      "coordinates": {
+        "lat": 10.7725,
+        "lng": 106.6877
+      },
+      "hours": "6:00–18:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Chùa Vĩnh Nghiêm là một trong những ngôi chùa lớn và nổi tiếng nhất TP. HCM, được xây dựng từ năm 1964 theo kiến trúc Nhật Bản – Việt Nam kết hợp. Tháp Vĩnh Nghiêm 7 tầng cao 40m là điểm nhận diện đặc trưng của ngôi chùa. Đây là trung tâm Phật giáo lớn, thường xuyên tổ chức các lễ hội tôn giáo và khóa tu học.",
+      "tips": "Trang phục kín đáo, lịch sự khi vào chùa. Đến vào sáng sớm để không khí yên tĩnh hơn, đặc biệt vào các ngày rằm hay mùng 1. Chùa nằm gần trung tâm, dễ dàng kết hợp trong hành trình tham quan Quận 3.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "4f1c4d11-1eee-483a-a49b-0be26f535179",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bến Bạch Đằng",
+      "type": "attraction",
+      "address": "Bến Bạch Đằng, Phường Bến Nghé, Quận 1, TP. HCM",
+      "coordinates": {
+        "lat": 10.7769,
+        "lng": 106.7066
+      },
+      "hours": "Mở cửa 24/7 — đẹp nhất vào buổi tối",
+      "description": "Bến Bạch Đằng là khu vực bờ sông Sài Gòn lịch sử, nay được chỉnh trang thành công viên bờ sông hiện đại. Nơi đây có khu phố đi bộ ven sông, bến tàu du lịch và nhiều điểm ngắm nhìn toàn cảnh sông Sài Gòn về đêm. Du thuyền ngắm cảnh sông Sài Gòn xuất phát từ đây là trải nghiệm được nhiều du khách yêu thích.",
+      "tips": "Đây là điểm xuất phát của các tour du thuyền ăn tối trên sông Sài Gòn — đặt trước qua Klook hoặc các công ty lữ hành. Buổi tối cuối tuần không gian rất đông và sôi động. Góc nhìn về phía Thủ Thiêm và cầu Thủ Thiêm 2 về đêm rất đẹp.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí (tour du thuyền tính thêm)"
+    },
+    {
+      "id": "c8ca0e53-e33b-4de5-baf8-7949728f02aa",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Nhà thờ Tân Định",
+      "type": "attraction",
+      "address": "289 Hai Bà Trưng, Phường 8, Quận 3, TP. HCM",
+      "coordinates": {
+        "lat": 10.784,
+        "lng": 106.6923
+      },
+      "hours": "Thường mở cửa hàng ngày — giờ cụ thể liên hệ nhà thờ để xác nhận",
+      "description": "Nhà thờ Tân Định là công trình kiến trúc Gothic nổi tiếng với màu hồng phấn đặc trưng, trở thành điểm check-in \"hồng nhất Sài Gòn\" cực kỳ phổ biến trên mạng xã hội. Được xây dựng từ năm 1876, nhà thờ có hai tháp chuông vươn cao và kiến trúc khá khác biệt so với các nhà thờ thông thường. Khu vực xung quanh còn nhiều quán cà phê và ẩm thực thú vị.",
+      "tips": "Không vào trong khi đang có lễ. Góc chụp ảnh đẹp nhất từ đường Hai Bà Trưng nhìn thẳng vào mặt tiền nhà thờ. Ánh sáng buổi sáng sớm và chiều tà đẹp nhất. Nên kết hợp khám phá các hẻm ẩm thực quanh đây.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "0e348eb4-0da9-4ce9-8df6-7387c789e084",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Hội quán Người Hoa – Chùa Bà Thiên Hậu",
+      "type": "temple",
+      "address": "710 Nguyễn Trãi, Phường 11, Quận 5, TP. HCM",
+      "coordinates": {
+        "lat": 10.7534,
+        "lng": 106.666
+      },
+      "hours": "6:00–17:00 hàng ngày — xác nhận trước khi đến",
+      "description": "Chùa Bà Thiên Hậu (Hội quán Tuệ Thành) là ngôi chùa thờ Bà Thiên Hậu – vị thần biển của người Hoa, được xây dựng từ năm 1760. Đây là một trong những di tích lâu đời nhất và quan trọng nhất của cộng đồng người Hoa tại TP. HCM, nằm trong khu Chợ Lớn. Hương khói nghi ngút và các đèn lồng đỏ treo khắp nơi tạo nên không gian tâm linh đặc trưng.",
+      "tips": "Nên đến vào buổi sáng khi khói hương chưa quá dày đặc. Quận 5 – Chợ Lớn có rất nhiều điểm thú vị để khám phá trong cùng một chuyến. Lưu ý: khói nhang trong chùa khá nồng — người nhạy cảm nên chuẩn bị.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "136a26f1-0f36-4d47-a541-ee0b9032e2d0",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Chợ Lớn – Khu phố người Hoa",
+      "type": "market",
+      "address": "Quận 5, TP. HCM",
+      "coordinates": {
+        "lat": 10.7527,
+        "lng": 106.662
+      },
+      "hours": "Hoạt động cả ngày — nhộn nhịp nhất từ sáng sớm đến chiều tối",
+      "description": "Chợ Lớn là khu phố cổ của cộng đồng người Hoa lớn nhất Đông Nam Á tại TP. HCM, nằm chủ yếu ở Quận 5 và Quận 6. Khu vực này có hàng trăm năm lịch sử với kiến trúc đặc trưng, chùa chiền cổ kính, chợ thực phẩm nhộn nhịp và ẩm thực người Hoa phong phú. Ghé thăm chợ An Đông, Bình Tây là những điểm mua sắm truyền thống không thể bỏ qua.",
+      "tips": "Thuê xe ôm công nghệ để di chuyển linh hoạt trong khu vực vì các hẻm nhỏ khá phức tạp. Khu ẩm thực quanh chợ Bình Tây có nhiều món Triều Châu, Quảng Đông ngon. Đừng bỏ qua các tiệm thuốc Bắc và tạp hóa cổ trên đường Hải Thượng Lãn Ông.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "40d76cd2-d424-42e4-8d98-cd78352e9c64",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bảo tàng Phụ nữ Nam Bộ",
+      "type": "museum",
+      "address": "202 Võ Thị Sáu, Phường Võ Thị Sáu, Quận 3, TP. HCM",
+      "coordinates": {
+        "lat": 10.7815,
+        "lng": 106.6917
+      },
+      "hours": "7:30–11:30 và 13:30–17:00 (thứ 2 đóng cửa) — xác nhận trước khi đến",
+      "description": "Bảo tàng Phụ nữ Nam Bộ là nơi tôn vinh vai trò và đóng góp của người phụ nữ Việt Nam trong lịch sử và văn hóa dân tộc. Bảo tàng lưu giữ hơn 18.000 hiện vật gồm trang phục, công cụ lao động, tư liệu kháng chiến của phụ nữ Nam Bộ qua các thời kỳ. Đây là bảo tàng ít được biết đến nhưng rất đáng tham quan, đặc biệt với phụ nữ và người quan tâm đến lịch sử xã hội.",
+      "tips": "Nằm gần Bảo tàng Chứng tích Chiến tranh nên có thể kết hợp trong cùng một buổi. Thường ít đông đúc, không gian tham quan thoải mái. Nhân viên thân thiện và sẵn sàng giải thích về các hiện vật.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn: 30.000 đồng/người/lượt.\nHọc sinh, sinh viên: 10.000 đồng/người/lượt.\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười cao tuổi từ 60 tuổi trở lên;\nThương binh;\nNgười khuyết tật."
+    },
+    {
+      "id": "2be15367-c737-4871-b942-4eb8c973fda4",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Cầu Ánh Sao – Khu đô thị Phú Mỹ Hưng",
+      "type": "attraction",
+      "address": "Khu đô thị Phú Mỹ Hưng, Quận 7, TP. HCM",
+      "coordinates": {
+        "lat": 10.7274,
+        "lng": 106.7012
+      },
+      "hours": "Mở cửa 24/7 — đẹp nhất từ 18:00–22:00",
+      "description": "Cầu Ánh Sao là cây cầu bộ hành bắc qua kênh Tẻ trong khu đô thị hiện đại Phú Mỹ Hưng, Quận 7. Cây cầu được trang trí hệ thống đèn LED đổi màu và có máy phun sương tạo hiệu ứng sương mù huyền ảo về đêm. Khu vực xung quanh là hồ bán nguyệt và công viên ven kênh, tạo thành điểm dạo bộ lãng mạn được nhiều đôi tình nhân và gia đình yêu thích.",
+      "tips": "Đến sau 19:00 khi hệ thống đèn được bật đầy đủ. Khu Phú Mỹ Hưng xung quanh có nhiều nhà hàng và trung tâm thương mại để kết hợp tham quan. Thích hợp cho các cặp đôi tìm không gian lãng mạn cách xa trung tâm ồn ào.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "6d45dbd3-2817-4c78-a0b9-b5881376c443",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Bảo tàng Áo dài",
+      "type": "museum",
+      "address": "206/19/30 Long Thuận, Phường Long Phước, TP. Thủ Đức, TP. HCM",
+      "coordinates": {
+        "lat": 10.8624,
+        "lng": 106.7678
+      },
+      "hours": "9:00–17:00 hàng ngày (thứ 2 đóng cửa) — xác nhận trước khi đến",
+      "description": "Bảo tàng Áo dài là bảo tàng tư nhân do nhà thiết kế Sĩ Hoàng sáng lập, tọa lạc trong khuôn viên biệt thự vườn yên tĩnh tại TP. Thủ Đức. Nơi đây lưu giữ hơn 1.000 chiếc áo dài qua các thời kỳ từ truyền thống đến hiện đại, cùng các tư liệu về sự phát triển của trang phục truyền thống Việt Nam. Không gian vườn xanh mát xung quanh cũng là điểm chụp ảnh áo dài rất được ưa chuộng.",
+      "tips": "Nhiều bạn trẻ đến đây mặc áo dài thuê để chụp ảnh — có dịch vụ cho thuê tại chỗ. Đường vào hơi khó tìm, nên dùng Google Maps. Cách trung tâm khoảng 20km, phù hợp ghé khi có nửa ngày rảnh.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn: 50.000 đồng/người/lượt.\nHọc sinh, sinh viên: 30.000 đồng/người/lượt (xuất trình thẻ hợp lệ).\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười cao tuổi từ 70 tuổi trở lên;\nNgười khuyết tật."
+    }
+  ]
+}

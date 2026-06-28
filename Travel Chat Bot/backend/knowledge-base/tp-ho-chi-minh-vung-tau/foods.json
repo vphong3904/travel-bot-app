@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh-vung-tau",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Ẩm thực Nam Bộ đô thị"]
+  },
+  "data": [
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60201",
+      "name": "Cơm tấm Sài Gòn",
+      "type": "dish",
+      "description": "Hạt tấm nhuyễn dẻo thơm ăn kèm sườn heo nướng mật ong cháy cạnh mọng nước, chả trứng chưng đặc sắc, bì heo và nước mắm kẹo ngọt cay."
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60202",
+      "name": "Bánh khọt Vũng Tàu",
+      "type": "dish",
+      "description": "Bánh chiên khuôn ngập dầu giòn rụm bên ngoài mượt bên trong, nhân tôm tươi roi rói rắc bột tôm, cuốn xà lách cải bẹ xanh chấm mắm đu đủ."
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60203",
+      "name": "Lẩu cá đuối Vũng Tàu",
+      "type": "dish",
+      "description": "Thịt cá đuối sụn giòn sần sật ngọt lịm, nấu trong nước lẩu măng chua cay nồng ấm, nhúng kèm rau muống rau chuối bào cực bắt mồi."
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60204",
+      "name": "Bánh mì Huỳnh Hoa Sài Gòn",
+      "type": "specialty",
+      "description": "Bánh mì ổ siêu khủng kẹp ngập tràn các tầng chả lụa, dăm bông, thịt nguội, quét bơ trứng gà tươi béo ngậy và pate đặc chế siêu thơm."
+    }
+  ]
+}

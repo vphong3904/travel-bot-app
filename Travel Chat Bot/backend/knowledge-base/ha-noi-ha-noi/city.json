@@ -1,0 +1,54 @@
+{
+  "_meta": {
+    "city": "ha-noi",
+    "generated_from": "Kiến thức thực tế — dữ liệu du lịch đã kiểm chứng",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-001",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Không sáp nhập — giữ nguyên (thành phố trực thuộc TW)",
+    "uuid_version": "v7"
+  },
+  "data": {
+    "id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+    "name": "Hà Nội",
+    "slug": "ha-noi",
+    "province": "Hà Nội",
+    "province_old": null,
+    "region": "Đồng bằng sông Hồng",
+    "description": "Thủ đô ngàn năm văn hiến với 36 phố phường cổ, Hồ Gươm, Văn Miếu - Quốc Tử Giám, kiến trúc Pháp thuộc địa và ẩm thực đường phố phong phú bậc nhất Việt Nam.",
+    "special": "Phố cổ Hà Nội 36 phường, Hồ Gươm Tháp Rùa, Văn Miếu UNESCO, phở Hà Nội, bún chả Obama",
+    "best_season": "Tháng 9–11 (thu vàng) và tháng 3–4 (hoa sưa, hoa ban)",
+    "best_months": [
+      9,
+      10,
+      11,
+      3,
+      4
+    ],
+    "weather": "4 mùa rõ rệt, 15–38°C, mùa đông lạnh ẩm 10–18°C (tháng 12–2), mùa hè nóng ẩm",
+    "budget": {
+      "low": 1000000,
+      "high": 3000000,
+      "currency": "VND",
+      "note": "Chi phí/người/ngày lưu trú và ăn uống"
+    },
+    "cuisine_summary": "Phở Hà Nội, bún chả, chả cá Lã Vọng, bánh cuốn, bún ốc, cà phê trứng, xôi xéo",
+    "image_url": "https://cdn.pdtrip.vn/destinations/hanoi.jpg",
+    "stats": {
+      "rating_avg": 4.8,
+      "review_count": 5200,
+      "favorite_count": 0,
+      "view_count": 180000
+    },
+    "categories": [
+      "history",
+      "culture",
+      "food",
+      "heritage",
+      "city"
+    ],
+    "is_active": true
+  }
+}

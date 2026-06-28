@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh-vung-tau",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["manual_curated"]
+  },
+  "data": [
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60601",
+      "name": "Chợ Bến Thành",
+      "type": "traditional_market",
+      "address": "Đường Lê Lợi, Phường Bến Thành, Quận 1, TP.HCM",
+      "specialty": "Đồ lưu niệm thủ công mỹ nghệ, áo dài, cà phê rang xay, bánh mứt miệt vườn mộc mạc"
+    },
+    {
+      "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60602",
+      "name": "Chợ hải sản tự phát Xóm Lưới Vũng Tàu",
+      "type": "traditional_market",
+      "address": "Góc đường Phan Bội Châu - Nguyễn Công Trứ, TP. Vũng Tàu",
+      "specialty": "Ghẹ xanh sống nhảy, mực trứng tươi roi rói, tôm tít cân ký hấp chín tại chỗ ăn liền cực ngọt"
+    }
+  ]
+}

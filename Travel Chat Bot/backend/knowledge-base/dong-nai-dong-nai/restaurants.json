@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "hours (cần xác nhận Google Maps/Foody trước khi đến)",
+      "rating (không có nguồn xác thực — để null)",
+      "address số nhà (chưa xác minh — để mô tả khu vực)"
+    ],
+    "data_sources": [
+      "Foody.vn (06/2026)",
+      "Google Maps (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "a155d51c-baca-4bef-8763-65d36a775561",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Nhà hàng Ven Sông Đồng Nai",
+      "type": "restaurant",
+      "address": "Khu vực ven sông Đồng Nai, TP. Biên Hòa, Đồng Nai",
+      "hours": null,
+      "price_range": "Trung bình – Cao",
+      "specialties": ["gỏi cá Biên Hòa", "lẩu cá lăng", "tôm sú nướng muối ớt", "cá lóc hấp bầu"],
+      "description": "Cụm nhà hàng ven bờ sông Đồng Nai phục vụ đặc sản sông nước, không gian mát mẻ nhìn ra sông rộng. Là lựa chọn kinh điển của người Biên Hòa cho bữa ăn gia đình hoặc liên hoan nhóm với các món cá đồng và hải sản tươi sống.",
+      "tips": "Đặt bàn trước vào cuối tuần. Hỏi về cá lăng tươi đánh bắt từ sông vì không phải lúc nào cũng có.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "d4eda6f1-3930-4c5a-b475-490b554ea077",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Quán Gỏi Cá Mười Chính",
+      "type": "street_food",
+      "address": "Khu vực đường Nguyễn Ái Quốc, TP. Biên Hòa, Đồng Nai",
+      "hours": "Thường 10:00–21:00 — xác nhận tại Foody.vn trước khi đến",
+      "price_range": "Bình dân",
+      "specialties": ["gỏi cá Biên Hòa", "bánh tráng cuốn", "gỏi bò"],
+      "description": "Quán chuyên gỏi cá đặc sản Biên Hòa lâu đời, nổi tiếng với cá tươi và nước chấm pha đúng công thức truyền thống. Không gian bình dân, đông khách địa phương — dấu hiệu của một quán ngon.",
+      "tips": "Gọi thêm bánh tráng nướng ăn kèm. Không gian có thể chật vào giờ trưa.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "681f9f0d-a74e-45ce-abbb-57df3f211fdb",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Nhà hàng Nam Cát Tiên (trong VQG)",
+      "type": "restaurant",
+      "address": "Trung tâm Du lịch Sinh thái VQG Nam Cát Tiên, Huyện Tân Phú, Đồng Nai",
+      "hours": "Theo giờ khu du lịch — xác nhận khi đặt tour VQG",
+      "price_range": "Trung bình",
+      "specialties": ["cơm rừng", "gà nướng đất sét", "rau rừng xào tỏi", "canh bí rừng"],
+      "description": "Nhà hàng phục vụ bữa ăn cho du khách lưu trú và tham quan trong Vườn Quốc gia Nam Cát Tiên. Thực đơn đơn giản nhưng dùng nguyên liệu địa phương, thưởng thức bữa cơm giữa không khí rừng nhiệt đới là trải nghiệm độc đáo.",
+      "tips": "Đặt bữa ăn trước cùng lúc đặt tour lưu trú để đảm bảo chỗ. Thực đơn hạn chế — đừng kỳ vọng như nhà hàng thành phố.",
+      "rating": null,
+      "must_try": false
+    },
+    {
+      "id": "e9aee27a-d70a-435b-8433-b89426d1328d",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Chợ đêm Biên Hòa",
+      "type": "market_stall",
+      "address": "Khu vực trung tâm TP. Biên Hòa, gần chợ Biên Hòa",
+      "hours": "18:00–23:00 hằng ngày — xác nhận thực tế",
+      "price_range": "Bình dân",
+      "specialties": ["dế chiên", "nem Bình Xuyên", "bánh tráng nướng", "cơm tấm đêm", "chè các loại"],
+      "description": "Khu ẩm thực đêm sầm uất tại trung tâm Biên Hòa, nơi tập trung nhiều gian hàng đặc sản địa phương từ dế chiên độc lạ đến nem chua, bánh tráng nướng. Không khí vui vẻ, giá bình dân, phù hợp cho mọi nhóm du khách.",
+      "tips": "Thử dế chiên nếu chưa bao giờ ăn — giòn, thơm, không tanh. Mang tiền mặt.",
+      "rating": null,
+      "must_try": true
+    }
+  ]
+}

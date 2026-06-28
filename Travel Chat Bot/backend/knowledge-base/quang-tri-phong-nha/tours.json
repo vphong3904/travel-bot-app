@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-005",
+    "status": "partial",
+    "missing_fields": ["tour_operator_details"],
+    "data_sources": ["Oxalis Adventure"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000401",
+      "title": "Tour Ký Ức Lịch Sử DMZ Quảng Trị - Đôi Bờ Hiền Lương 1 Ngày",
+      "duration": "1 ngày",
+      "highlights": [
+        "Thắp hương tưởng niệm tại Thành Cổ Quảng Trị",
+        "Check-in cầu Hiền Lương vĩ tuyến 17 huyền thoại",
+        "Khám phá mê cung ngầm địa đạo Vịnh Mốc"
+      ],
+      "price": null,
+      "price_note": "// TODO: Tra cứu giá tour ghép đón trả từ Huế hoặc Đông Hà"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000402",
+      "title": "Tour Chinh Phục Hệ Thống Hang Động Phong Nha & Động Thiên Đường",
+      "duration": "1 ngày",
+      "highlights": [
+        "Đi thuyền máy sông Son xuyên hang nước Phong Nha",
+        "Leo cầu thang gỗ khám phá kiến trúc Động Thiên Đường",
+        "Ăn trưa mẹt gà nướng chuẩn vị bản địa"
+      ],
+      "price": null,
+      "price_note": "// TODO: Cập nhật giá vé trọn gói đã gồm xe điện trung chuyển hang khô"
+    }
+  ]
+}

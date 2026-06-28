@@ -1,0 +1,226 @@
+{
+    "data": [
+        {
+            "summary": "Lịch trình gọn cho người lần đầu đến Ninh Bình.",
+            "id": "ninh-binh-2d1n-culture",
+            "tags": [
+                "di sản",
+                "cặp đôi",
+                "làng quê"
+            ],
+            "total_estimated_cost": {
+                "currency": "VND",
+                "amount": null
+            },
+            "estimated_budget": {
+                "low": null,
+                "currency": "VND",
+                "high": null
+            },
+            "days": [
+                {
+                    "blocks": [
+                        {
+                            "estimated_cost": null,
+                            "start_time": "08:00",
+                            "activity": "Đi thuyền Tràng An",
+                            "notes": "Đi sớm để tránh nắng.",
+                            "location_ref": {
+                                "name": "Quần thể danh thắng Tràng An",
+                                "id": "4ef59e01-d1dc-e178-90a7-7bfefc8a2fa0",
+                                "type": "destination"
+                            },
+                            "time_of_day": "morning"
+                        },
+                        {
+                            "estimated_cost": null,
+                            "start_time": "14:30",
+                            "activity": "Thăm cố đô Hoa Lư",
+                            "notes": "Dành 1-1,5 giờ.",
+                            "location_ref": {
+                                "name": "Cố đô Hoa Lư",
+                                "id": "4ef59e01-02dd-957d-90ca-ac6f0f13272b",
+                                "type": "destination"
+                            },
+                            "time_of_day": "afternoon"
+                        },
+                        {
+                            "estimated_cost": null,
+                            "start_time": "18:30",
+                            "activity": "Ăn dê núi",
+                            "notes": "Đặt bàn nếu cuối tuần.",
+                            "location_ref": {
+                                "name": "Nhà hàng Hoàng Giang",
+                                "id": "4ef59e01-09dd-857b-b149-fa9930b62c2d",
+                                "type": "restaurant"
+                            },
+                            "time_of_day": "evening"
+                        }
+                    ],
+                    "day_number": 1,
+                    "theme": "Tràng An - Hoa Lư - Hang Múa"
+                },
+                {
+                    "blocks": [
+                        {
+                            "estimated_cost": null,
+                            "start_time": "07:30",
+                            "activity": "Đi thuyền Tam Cốc",
+                            "notes": "Đẹp nhất mùa lúa.",
+                            "location_ref": {
+                                "name": "Tam Cốc - Bích Động",
+                                "id": "4ef59e01-02dd-2d72-bf62-85e964abab5e",
+                                "type": "destination"
+                            },
+                            "time_of_day": "morning"
+                        },
+                        {
+                            "estimated_cost": null,
+                            "start_time": "15:00",
+                            "activity": "Mua quà ở làng thêu Văn Lâm",
+                            "notes": "Chọn đồ nhỏ gọn.",
+                            "location_ref": {
+                                "name": "Làng thêu ren Văn Lâm",
+                                "id": "4ef59e01-0ddd-e870-970a-cd223c978869",
+                                "type": "shopping"
+                            },
+                            "time_of_day": "afternoon"
+                        }
+                    ],
+                    "day_number": 2,
+                    "theme": "Tam Cốc chậm rãi"
+                }
+            ],
+            "travel_style": "culture",
+            "duration_nights": 1,
+            "audience": "couple",
+            "duration_days": 2,
+            "title": "Ninh Bình 2N1Đ: Di sản và làng quê",
+            "best_for_season": [
+                "Mùa xuân",
+                "Mùa thu"
+            ]
+        },
+        {
+            "summary": "Nhịp vừa phải cho gia đình, hạn chế leo quá nhiều.",
+            "id": "ninh-binh-3d2n-family-nature",
+            "tags": [
+                "gia đình",
+                "thiên nhiên",
+                "nghỉ dưỡng"
+            ],
+            "total_estimated_cost": {
+                "currency": "VND",
+                "amount": null
+            },
+            "estimated_budget": {
+                "low": null,
+                "currency": "VND",
+                "high": null
+            },
+            "days": [
+                {
+                    "blocks": [
+                        {
+                            "estimated_cost": null,
+                            "start_time": "15:00",
+                            "activity": "Nhận phòng resort",
+                            "notes": "Nghỉ ngơi sau di chuyển.",
+                            "location_ref": {
+                                "name": "Ninh Binh Hidden Charm Hotel \u0026 Resort",
+                                "id": "4ef59e01-07dd-1278-a365-940a798b0078",
+                                "type": "hotel"
+                            },
+                            "time_of_day": "afternoon"
+                        },
+                        {
+                            "estimated_cost": null,
+                            "start_time": "18:30",
+                            "activity": "Ăn tối gần Tam Cốc",
+                            "notes": "Gọi món đặc sản vừa khẩu vị trẻ em.",
+                            "location_ref": {
+                                "name": "Nhà hàng Thăng Long",
+                                "id": "4ef59e01-09dd-e973-adb9-9243fe706472",
+                                "type": "restaurant"
+                            },
+                            "time_of_day": "evening"
+                        }
+                    ],
+                    "day_number": 1,
+                    "theme": "Nhận phòng và Tam Cốc"
+                },
+                {
+                    "blocks": [
+                        {
+                            "estimated_cost": null,
+                            "start_time": "08:00",
+                            "activity": "Tham quan chùa Bái Đính",
+                            "notes": "Có thể dùng xe điện.",
+                            "location_ref": {
+                                "name": "Chùa Bái Đính",
+                                "id": "4ef59e01-02dd-677a-b8e5-01854952e5f3",
+                                "type": "destination"
+                            },
+                            "time_of_day": "morning"
+                        },
+                        {
+                            "estimated_cost": null,
+                            "start_time": "14:00",
+                            "activity": "Đi thuyền Tràng An tuyến ngắn",
+                            "notes": "Chuẩn bị áo chống nắng.",
+                            "location_ref": {
+                                "name": "Quần thể danh thắng Tràng An",
+                                "id": "4ef59e01-d1dc-e178-90a7-7bfefc8a2fa0",
+                                "type": "destination"
+                            },
+                            "time_of_day": "afternoon"
+                        }
+                    ],
+                    "day_number": 2,
+                    "theme": "Bái Đính - Tràng An"
+                },
+                {
+                    "blocks": [
+                        {
+                            "estimated_cost": null,
+                            "start_time": "08:30",
+                            "activity": "Đi thuyền Đầm Vân Long",
+                            "notes": "Yên tĩnh, hợp gia đình.",
+                            "location_ref": {
+                                "name": "Đầm Vân Long",
+                                "id": "4ef59e01-02dd-e97e-8ccb-18e076fa8d3a",
+                                "type": "destination"
+                            },
+                            "time_of_day": "morning"
+                        }
+                    ],
+                    "day_number": 3,
+                    "theme": "Đầm Vân Long"
+                }
+            ],
+            "travel_style": "relax",
+            "duration_nights": 2,
+            "audience": "family",
+            "duration_days": 3,
+            "title": "Ninh Bình 3N2Đ: Gia đình và thiên nhiên",
+            "best_for_season": [
+                "Mùa khô"
+            ]
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-013",
+        "city": "ninh-binh-ninh-binh",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

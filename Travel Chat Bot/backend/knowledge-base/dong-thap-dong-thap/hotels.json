@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "city": "dong-thap-dong-thap",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-003",
+    "status": "partial",
+    "missing_fields": ["exact_room_rates"],
+    "data_sources": ["Booking.com", "Agoda"]
+  },
+  "data": [
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60101",
+      "name": "Khách sạn Sao Mai Cao Lãnh",
+      "segment": "4-star",
+      "address": "85 Nguyễn Huệ, Phường 1, TP. Cao Lãnh, Đồng Tháp",
+      "price_range": null,
+      "price_note": "// TODO: Khảo sát giá phòng deluxe dịp lễ hội sen tại booking.com"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60102",
+      "name": "Khách sạn Bông Hồng Sa Đéc",
+      "segment": "3-star",
+      "address": "251 Nguyễn Sinh Sắc, Thị xã Sa Đéc, Đồng Tháp",
+      "price_range": null,
+      "price_note": "// TODO: kiểm tra tình trạng phòng mùa tết làng hoa"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60103",
+      "name": "Maison en Bambou Phong Le Vent",
+      "segment": "homestay",
+      "address": "Làng hoa Sa Đéc, Tân Quy Đông, Sa Đéc",
+      "price_range": null,
+      "price_note": "Homestay tre trúc mộc mạc giữa lòng làng hoa"
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60104",
+      "name": "Tràm Chim Homestay",
+      "segment": "homestay",
+      "address": "Thị trấn Tràm Chim, Huyện Tam Nông, Đồng Tháp",
+      "price_range": null,
+      "price_note": "Phù hợp cho khách dậy sớm săn ảnh sếu đầu đỏ"
+    }
+  ]
+}

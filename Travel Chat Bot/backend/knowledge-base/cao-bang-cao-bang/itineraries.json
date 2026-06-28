@@ -1,0 +1,286 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-013",
+    "status": "complete",
+    "missing_fields": [
+      "estimated_budget thực tế (cần xác nhận giá vé, khách sạn từ Booking/Klook)",
+      "total_estimated_cost (phụ thuộc vào giá hotel và tour chưa xác nhận)"
+    ],
+    "data_sources": [
+      "destinations.json (UUID địa điểm đã khớp)",
+      "hotels.json (UUID lưu trú đã khớp)",
+      "restaurants.json (UUID quán ăn đã khớp)",
+      "tours.json (UUID tour đã khớp)"
+    ]
+  },
+  "data": [
+    {
+      "id": "cao-bang-2n3d-couple",
+      "title": "Cao Bằng 3 Ngày 2 Đêm — Khám Phá Cặp Đôi",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "couple",
+      "travel_style": "explore",
+      "estimated_budget": {
+        "low": null,
+        "high": null,
+        "currency": "VND"
+      },
+      "best_for_season": ["Tháng 8–10 (thác đẹp nhất)", "Tháng 3–5 (hoa cải vàng)"],
+      "summary": "Hành trình 3 ngày 2 đêm lãng mạn khám phá thiên nhiên hùng vĩ và lịch sử sâu sắc của Cao Bằng. Từ thác Bản Giốc hùng tráng đến hang Pác Bó yên bình, kết thúc bằng phiên chợ vùng cao đầy sắc màu.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Thành phố và Hồ Thang Hen",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:00",
+              "activity": "Ăn sáng bánh cuốn Cao Bằng tại chợ",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "e0e4379c-65da-42d0-b3f8-0cb84bfb523b",
+                "name": "Quán Bánh Cuốn Chợ Cao Bằng"
+              },
+              "estimated_cost": null,
+              "notes": "Đến trước 8:00 để tránh đông"
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Tham quan Chợ Cao Bằng, mua đặc sản",
+              "location_ref": {
+                "type": "destination",
+                "id": "815d0d7e-e6de-4116-bf43-7ecda4b9d09e",
+                "name": "Chợ Cao Bằng"
+              },
+              "estimated_cost": null,
+              "notes": "Mua hạt dẻ Trùng Khánh và thổ cẩm làm quà"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "13:00",
+              "activity": "Di chuyển và thăm Hồ Thang Hen",
+              "location_ref": {
+                "type": "destination",
+                "id": "521c2b59-d487-446a-8c72-f222893e1484",
+                "name": "Hồ Thang Hen"
+              },
+              "estimated_cost": null,
+              "notes": "Cách TP khoảng 50km, mang máy ảnh — cảnh đẹp nhất vào chiều tà"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Ăn tối vịt quay 7 vị tại thành phố",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "510d239e-7f7b-4d25-8023-33ad0be8d4cf",
+                "name": "Nhà Hàng Vịt Quay Cao Bằng"
+              },
+              "estimated_cost": null,
+              "notes": null
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Thác Bản Giốc — Điểm Nhấn Chuyến Đi",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "06:30",
+              "activity": "Xuất phát sớm đến thác Bản Giốc (90km)",
+              "location_ref": {
+                "type": "destination",
+                "id": "0c7364d8-7f0e-4ab7-8fd1-806515fd6d17",
+                "name": "Thác Bản Giốc"
+              },
+              "estimated_cost": null,
+              "notes": "Đến trước 9:00 để có ánh sáng chụp ảnh đẹp và ít người. Thuê bè mảng để ngắm thác gần"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Ăn trưa cơm lam và gà nướng khu vực Bản Giốc",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "bf18f0c0-5486-4450-a37e-619ef7ba40ca",
+                "name": "Quán Ăn Khu Vực Bản Giốc"
+              },
+              "estimated_cost": null,
+              "notes": null
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Khám phá vùng Trùng Khánh, mua hạt dẻ tại chợ địa phương",
+              "location_ref": {
+                "type": "shopping",
+                "id": "f171b273-7fdf-4df8-9019-89724d2613be",
+                "name": "Chợ Phiên Huyện Trùng Khánh"
+              },
+              "estimated_cost": null,
+              "notes": "Hỏi chủ homestay về lịch chợ phiên"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "17:00",
+              "activity": "Nghỉ đêm tại homestay gần Bản Giốc",
+              "location_ref": {
+                "type": "hotel",
+                "id": "96bcfd33-b97c-4e32-8bac-19bbd82f106a",
+                "name": "Homestay Bản Giốc View"
+              },
+              "estimated_cost": null,
+              "notes": "Đặt trước — số lượng phòng hạn chế"
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Hang Pác Bó — Lịch Sử Cách Mạng",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Thăm Hang Pác Bó và suối Lê-nin",
+              "location_ref": {
+                "type": "destination",
+                "id": "1d406b9b-3a6c-42f2-98a6-4dde7ffe6371",
+                "name": "Hang Pác Bó"
+              },
+              "estimated_cost": null,
+              "notes": "Di chuyển từ Bản Giốc khoảng 2–3 tiếng. Mang áo khoác nhẹ vì trong hang mát"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "13:00",
+              "activity": "Ăn bánh áp chao trước khi về thành phố",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "5dd9e83f-dd2c-4314-b5d7-6b66835e444b",
+                "name": "Quán Bánh Áp Chao Khu Chợ"
+              },
+              "estimated_cost": null,
+              "notes": "Mua thêm đặc sản mang về"
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND"
+      },
+      "tags": ["nature", "history", "photography", "couple", "northeast"]
+    },
+    {
+      "id": "cao-bang-1n2d-family",
+      "title": "Cao Bằng 2 Ngày 1 Đêm — Gia Đình & Trẻ Em",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "family",
+      "travel_style": "mixed",
+      "estimated_budget": {
+        "low": null,
+        "high": null,
+        "currency": "VND"
+      },
+      "best_for_season": ["Tháng 8–10", "Tháng 3–5"],
+      "summary": "Hành trình 2 ngày 1 đêm gọn gàng cho gia đình có trẻ nhỏ: thăm thác Bản Giốc tráng lệ và hang Pác Bó giàu tính giáo dục lịch sử. Lịch trình không quá dày, phù hợp với nhịp của gia đình có trẻ em.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Thác Bản Giốc và Nghỉ Ngơi",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:00",
+              "activity": "Ăn sáng và xuất phát từ TP. Cao Bằng hoặc Hà Nội",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "e0e4379c-65da-42d0-b3f8-0cb84bfb523b",
+                "name": "Quán Bánh Cuốn Chợ Cao Bằng"
+              },
+              "estimated_cost": null,
+              "notes": "Xuất phát sớm từ TP. Cao Bằng"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "10:30",
+              "activity": "Thăm thác Bản Giốc, thuê bè mảng cho trẻ trải nghiệm",
+              "location_ref": {
+                "type": "destination",
+                "id": "0c7364d8-7f0e-4ab7-8fd1-806515fd6d17",
+                "name": "Thác Bản Giốc"
+              },
+              "estimated_cost": null,
+              "notes": "Trẻ em thích cưỡi bè mảng rất vui. Giám sát trẻ kỹ vì nước chảy mạnh"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:30",
+              "activity": "Ăn trưa tại khu vực Bản Giốc",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "bf18f0c0-5486-4450-a37e-619ef7ba40ca",
+                "name": "Quán Ăn Khu Vực Bản Giốc"
+              },
+              "estimated_cost": null,
+              "notes": "Gọi cơm lam và cá suối cho trẻ thử"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "17:00",
+              "activity": "Nhận phòng và nghỉ ngơi tại khách sạn TP. Cao Bằng",
+              "location_ref": {
+                "type": "hotel",
+                "id": "c342a323-88cb-41aa-8f81-d66ef59a8f11",
+                "name": "Khách sạn Bằng Giang"
+              },
+              "estimated_cost": null,
+              "notes": "Khách sạn trung tâm tiện di chuyển ngày 2"
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Hang Pác Bó — Học Lịch Sử Cùng Con",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Thăm Hang Pác Bó và giải thích lịch sử cách mạng cho trẻ",
+              "location_ref": {
+                "type": "destination",
+                "id": "1d406b9b-3a6c-42f2-98a6-4dde7ffe6371",
+                "name": "Hang Pác Bó"
+              },
+              "estimated_cost": null,
+              "notes": "Có hướng dẫn viên địa phương sẽ giúp trẻ hiểu câu chuyện lịch sử sinh động hơn"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Mua đặc sản hạt dẻ và bánh áp chao tại chợ làm quà",
+              "location_ref": {
+                "type": "shopping",
+                "id": "558d2683-d0ba-4b81-866d-0223bae35658",
+                "name": "Chợ Cao Bằng (Chợ Hợp Giang)"
+              },
+              "estimated_cost": null,
+              "notes": null
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND"
+      },
+      "tags": ["family", "history", "nature", "education", "short-trip"]
+    }
+  ]
+}

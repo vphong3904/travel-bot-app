@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-002",
+    "status": "completed",
+    "missing_fields": ["ticket_price (Động Thiên Đường cao điểm 2026)", "image_url"],
+    "data_sources": ["vietnamtourism.gov.vn", "BQL Vườn quốc gia Phong Nha - Kẻ Bàng"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000001",
+      "name": "Di tích Quốc gia đặc biệt Thành cổ Quảng Trị",
+      "type": "museum",
+      "description": "Nơi diễn ra trận chiến 81 ngày đêm khốc liệt năm 1972, địa danh biểu tượng cho tinh thần quả cảm và lòng yêu nước.",
+      "rating": null,
+      "ticket_price": 0,
+      "price_note": "Miễn phí vé vào cửa, khuyến khích chuẩn bị hoa và hương viếng các anh hùng liệt sĩ"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000002",
+      "name": "Địa đạo Vịnh Mốc",
+      "type": "museum",
+      "description": "Hệ thống công trình rầm ngầm trong lòng đất vĩ đại, một làng hầm chiến đấu sinh hoạt thu nhỏ của quân dân Quảng Trị.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: xác nhận giá vé tham quan cho khách quốc tế tại di tích"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000003",
+      "name": "Động Phong Nha",
+      "type": "nature",
+      "description": "Kỳ quan hang động nước tiêu biểu thuộc Vườn quốc gia Phong Nha - Kẻ Bàng, di chuyển tham quan bằng thuyền dọc sông Son.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: cập nhật chi phí thuê thuyền máy trung chuyển của nghiệp đoàn"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000004",
+      "name": "Động Thiên Đường",
+      "type": "nature",
+      "description": "Hoàng cung trong lòng đất với hệ thống thạch nhũ kiến tạo tráng lệ, hang động khô dài nhất châu Á.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "// TODO: kiểm tra phí xe điện trung chuyển từ chân núi lên cửa hang"
+    },
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000005",
+      "name": "Cụm di tích Đôi bờ Hiền Lương - Sông Bến Hải",
+      "type": "museum",
+      "description": "Nơi từng là vĩ tuyến 17 chia cắt hai miền Nam Bắc suốt 20 năm ròng rã kháng chiến.",
+      "rating": null,
+      "ticket_price": null,
+      "price_note": "Bao gồm vé tham quan phòng trưng bày di vật vĩ tuyến"
+    }
+  ]
+}

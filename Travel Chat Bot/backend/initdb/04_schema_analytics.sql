@@ -1,0 +1,10 @@
+-- ============================================================
+-- PDTrip AI – Schema: ANALYTICS
+-- ============================================================
+-- search_history & user_behavior đã CHUYỂN SANG MONGODB.
+-- Xem:
+--   - app/db/mongo.py           (connection + index)
+--   - app/services/log_service.py (ghi/đọc log)
+-- Lý do: 2 bảng này là event-log append-only, không cần JOIN/ACID
+-- chặt với data nghiệp vụ khác → phù hợp NoSQL hơn quan hệ.
+-- ============================================================

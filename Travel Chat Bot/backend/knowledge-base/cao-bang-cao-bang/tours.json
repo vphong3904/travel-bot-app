@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Tên tour và lịch trình dựa trên kiến thức chung về điểm đến Cao Bằng. Giá tour cần xác nhận tại Klook/Traveloka/đơn vị lữ hành trước production.",
+    "missing_fields": [
+      "price thực tế (cần xác nhận tại Klook hoặc Traveloka hoặc lữ hành địa phương)",
+      "group_size thực tế",
+      "image_url"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Klook.com/vi (tìm kiếm tour Cao Bằng, 06/2026)",
+      "Traveloka.com/vi-vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f9ed2021-a420-42b0-8892-ffc6233ee5d2",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Tour Thác Bản Giốc – Hang Pác Bó 2 Ngày 1 Đêm",
+      "duration": "2 ngày 1 đêm",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person"
+      },
+      "price_note": "// TODO: xác nhận tại Klook.com/vi hoặc lữ hành địa phương Cao Bằng",
+      "group_size": null,
+      "description": "Tour trọn gói ghép hai điểm nổi tiếng nhất Cao Bằng: thác Bản Giốc hùng vĩ và hang Pác Bó lịch sử. Ngày 1 di chuyển từ TP. Cao Bằng đến Trùng Khánh, thăm thác Bản Giốc và nghỉ đêm tại khu vực lân cận hoặc homestay. Ngày 2 thăm Pác Bó và về thành phố.",
+      "includes": ["xe đưa đón", "hướng dẫn viên địa phương", "bữa trưa ngày 1", "1 đêm khách sạn/homestay"],
+      "excludes": ["vé tham quan", "bữa tối", "chi tiêu cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "b18733bc-0c98-45a4-b014-dc49c7787370",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Tour Khám Phá Cao Nguyên Đá Hồ Thang Hen",
+      "duration": "1 ngày",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person"
+      },
+      "price_note": "// TODO: xác nhận tại Klook.com/vi hoặc lữ hành địa phương",
+      "group_size": null,
+      "description": "Tour 1 ngày khám phá hồ Thang Hen và các vùng cao nguyên đá vôi xung quanh huyện Trà Lĩnh. Tham quan quần thể 36 hồ liên thông, ngắm cảnh núi non đá vôi, tìm hiểu đời sống người Tày-Nùng địa phương. Phù hợp nhiếp ảnh gia và người yêu thiên nhiên.",
+      "includes": ["xe đưa đón", "hướng dẫn viên", "bữa trưa"],
+      "excludes": ["vé tham quan (nếu có)", "đồ uống", "chi tiêu cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "34072675-9f94-48d9-b9dc-99a21ec410e4",
+      "city_id": "aa20e516-ea38-4c41-9bd2-7de71095647e",
+      "name": "Hành Trình Về Nguồn – Lịch Sử Cách Mạng Cao Bằng",
+      "duration": "1 ngày",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person"
+      },
+      "price_note": "// TODO: xác nhận tại Traveloka.com hoặc lữ hành địa phương",
+      "group_size": null,
+      "description": "Tour chuyên đề lịch sử thăm hang Pác Bó, suối Lê-nin, núi Các Mác và Rừng Trần Hưng Đạo — cái nôi cách mạng Việt Nam. Phù hợp nhóm trường học, đoàn thể chính trị, hoặc khách quan tâm lịch sử. Có hướng dẫn viên am hiểu lịch sử địa phương.",
+      "includes": ["xe đưa đón", "hướng dẫn viên chuyên lịch sử", "bữa trưa", "tài liệu tham khảo"],
+      "excludes": ["vé vào cửa di tích", "chi tiêu cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

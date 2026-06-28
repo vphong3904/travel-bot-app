@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "city": "hue-hue",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "rating — không bịa số liệu, cần từ nguồn chính thức (Foody/Google Maps)",
+      "price_range — ước tính chung theo loại hình, chưa xác thực từng quán"
+    ],
+    "data_sources": [
+      "Foody Huế: foody.vn (06/2025)",
+      "Google Maps (xác nhận giờ mở cửa)",
+      "TripAdvisor: tripadvisor.com.vn (tips thực tế)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019ef463-560a-72b9-bc1f-c7fc3cb8904f",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Quán Bún Bò Bà Xuân",
+      "type": "street_food",
+      "address": "17 Lý Thường Kiệt, phường Vĩnh Ninh, TP. Huế",
+      "hours": "Thường 6:00–10:00 và 16:00–21:00 — xác nhận trước khi đến",
+      "price_range": "Bình dân (khoảng 30.000–60.000đ/tô — xem foods.json)",
+      "specialties": ["Bún bò Huế", "Bún bò giò heo"],
+      "description": "Quán bún bò Huế lâu năm được nhiều người dân địa phương và khách du lịch tìm đến, nổi tiếng với nước dùng đậm đà chuẩn vị Huế. Không gian quán đơn giản, đông khách vào buổi sáng.",
+      "tips": "Nên đến sớm trước 8h vì quán thường hết hàng nhanh vào buổi sáng.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019ef463-560c-795d-a056-ebce64b4ed18",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Quán Hạnh Bánh Khoái",
+      "type": "restaurant",
+      "address": "11 Phó Đức Chính, phường Vĩnh Ninh, TP. Huế",
+      "hours": "Thường 9:00–21:00 — xác nhận trước khi đến",
+      "price_range": "Trung bình (khoảng 50.000–90.000đ/phần — xem foods.json)",
+      "specialties": ["Bánh khoái", "Nem lụi"],
+      "description": "Quán chuyên bánh khoái lâu đời, được nhiều bài viết du lịch và người dân địa phương nhắc đến như địa chỉ tin cậy để thử món bánh khoái Huế đúng vị, ăn kèm nước chấm tương đặc trưng.",
+      "tips": "Quán khá đông vào giờ ăn tối, nên đặt chỗ trước nếu đi nhóm lớn.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019ef463-560c-7aa7-872c-1be8cf118d70",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Khu ẩm thực Chợ Đông Ba",
+      "type": "market_stall",
+      "address": "Trần Hưng Đạo, phường Phú Hòa, TP. Huế (trong khu Chợ Đông Ba — xem destinations.json)",
+      "hours": "Thường 5:00–20:00, khu ẩm thực nhộn nhịp nhất buổi sáng — xác nhận trước khi đến",
+      "price_range": "Bình dân, nhiều hàng quán nhỏ (giá theo từng món — xem foods.json)",
+      "specialties": ["Bánh bèo", "Cơm hến", "Chè Huế"],
+      "description": "Tập hợp nhiều hàng quán ăn lâu năm trong và quanh chợ Đông Ba, nơi tập trung đa dạng món ăn đặc sản Huế ở một địa điểm, phù hợp để thử nhiều món trong một buổi.",
+      "tips": "Đi cùng người địa phương hoặc hỏi giá trước khi ăn để tránh bị tính giá cao hơn cho khách du lịch.",
+      "rating": null,
+      "must_try": true
+    }
+  ]
+}

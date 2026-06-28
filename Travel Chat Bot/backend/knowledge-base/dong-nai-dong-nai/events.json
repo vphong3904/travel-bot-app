@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-006",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
+      "Sở Du lịch Đồng Nai: dongnai.gov.vn (06/2026)",
+      "manual_curated"
+    ]
+  },
+  "data": [
+    {
+      "id": "243669ed-ce70-4303-923d-7f7c31b0855d",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Lễ hội Sayangva (Cúng thần Lúa) của người Chơro",
+      "event_date": "Tháng 3–4 âm lịch hằng năm (thường tháng 4–5 dương lịch)",
+      "location_text": "Huyện Long Khánh và một số xã người Chơro, Đồng Nai",
+      "cost": "Miễn phí tham dự (cộng đồng mở cửa đón khách)",
+      "description": "Lễ hội truyền thống quan trọng nhất của người Chơro — dân tộc bản địa của vùng Đông Nam Bộ sinh sống lâu đời tại Đồng Nai. Lễ cúng thần Lúa (Yang Va) gồm nghi thức dâng lễ vật, hát múa truyền thống, chơi cồng chiêng và ăn uống cộng đồng. Là dịp hiếm để tiếp cận văn hóa bản địa đặc sắc.",
+      "annual": true,
+      "highlight": true
+    },
+    {
+      "id": "e33b900e-66a3-481c-9971-c71994b7c957",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Lễ hội trái cây Đồng Nai",
+      "event_date": "Tháng 6–7 hằng năm (mùa trái cây chính)",
+      "location_text": "TP. Biên Hòa và huyện Cẩm Mỹ, Long Khánh, Đồng Nai",
+      "cost": "Miễn phí hoặc giá thấp",
+      "description": "Lễ hội tôn vinh các loại trái cây đặc sản Đồng Nai như bưởi Tân Triều, sầu riêng Cẩm Mỹ, chôm chôm Long Khánh, măng cụt... Có các hoạt động: trưng bày giống trái cây, thi bình trái cây, ẩm thực từ trái cây và chợ nông sản giá gốc tại vườn.",
+      "annual": true,
+      "highlight": true
+    },
+    {
+      "id": "143b2916-7b17-4e77-b0b1-4b32478bf67e",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Tết Chôl Chnăm Thmây (Tết Khmer)",
+      "event_date": "Tháng 4 dương lịch (khoảng 13–16/4 hằng năm)",
+      "location_text": "Các chùa Khmer khu vực Bình Phước cũ (nay thuộc Đồng Nai), đặc biệt huyện Bù Đốp",
+      "cost": "Miễn phí",
+      "description": "Tết Năm Mới của người Khmer Nam Bộ — lễ hội lớn nhất trong năm của cộng đồng Khmer tại Bình Phước cũ, nay thuộc Đồng Nai sau sáp nhập 2025. Các nghi lễ tại chùa, múa Lâm Thol truyền thống, thả đèn nước và bữa tiệc cộng đồng kéo dài 3 ngày.",
+      "annual": true,
+      "highlight": false
+    },
+    {
+      "id": "4f9f0067-3a50-4fd6-9ccc-0d495b96d4fa",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Giỗ Tổ Hùng Vương tại Văn miếu Trấn Biên",
+      "event_date": "Mùng 10 tháng 3 âm lịch hằng năm",
+      "location_text": "Văn miếu Trấn Biên, TP. Biên Hòa, Đồng Nai",
+      "cost": "Miễn phí",
+      "description": "Lễ Giỗ Tổ Hùng Vương tổ chức trọng thể tại Văn miếu Trấn Biên — ngôi văn miếu lớn nhất Nam Bộ. Nghi lễ dâng hương trang nghiêm, biểu diễn múa hát truyền thống và các hoạt động văn hóa giáo dục. Thu hút đông đảo người dân và học sinh toàn tỉnh về dự.",
+      "annual": true,
+      "highlight": false
+    },
+    {
+      "id": "02b42832-b25d-47c7-9cde-3e27e1a977ef",
+      "city_id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+      "name": "Mùa trekking Nam Cát Tiên (mùa khô)",
+      "event_date": "Tháng 12 – tháng 4 hằng năm",
+      "location_text": "Vườn Quốc gia Nam Cát Tiên, Huyện Tân Phú, Đồng Nai",
+      "cost": "Theo giá tour (xem tours.json)",
+      "description": "Mùa khô là thời điểm lý tưởng nhất để trekking và quan sát thú ở Nam Cát Tiên: đường mòn khô ráo, động vật tập trung ra bàu uống nước dễ quan sát hơn, ít muỗi và côn trùng hơn mùa mưa. Ban quản lý VQG thường tổ chức thêm các tour đặc biệt và chương trình giáo dục môi trường.",
+      "annual": true,
+      "highlight": true
+    }
+  ]
+}

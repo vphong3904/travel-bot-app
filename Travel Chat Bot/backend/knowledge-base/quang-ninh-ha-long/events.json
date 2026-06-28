@@ -1,0 +1,53 @@
+{
+    "data": [
+        {
+            "source": "manual_curated",
+            "location_text": "TP Hạ Long",
+            "id": "4ef59e01-16dd-7470-8261-df9af3b02283",
+            "cost": null,
+            "description": "Sự kiện đường phố, âm nhạc và trình diễn lớn mở màn mùa du lịch hè Quảng Ninh.",
+            "annual": true,
+            "event_date": "Thường dịp 30/4-1/5 hằng năm",
+            "name": "Carnaval Hạ Long",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "highlight": true
+        },
+        {
+            "source": "manual_curated",
+            "location_text": "Yên Tử, Uông Bí",
+            "id": "4ef59e01-16dd-6878-a9a0-6375ca51aeaa",
+            "cost": null,
+            "description": "Mùa lễ hội hành hương Yên Tử, thu hút đông du khách và Phật tử.",
+            "annual": true,
+            "event_date": "Từ mùng 10 tháng Giêng âm lịch",
+            "name": "Lễ hội Yên Tử",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "highlight": true
+        },
+        {
+            "source": "manual_curated",
+            "location_text": "Khu di tích Bạch Đằng, Quảng Ninh",
+            "id": "4ef59e01-16dd-7078-a635-b7c38bb78770",
+            "cost": null,
+            "description": "Lễ hội tưởng niệm chiến thắng Bạch Đằng, có nghi lễ và hoạt động văn hóa dân gian.",
+            "annual": true,
+            "event_date": "Tháng 3 âm lịch",
+            "name": "Lễ hội Bạch Đằng",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "highlight": false
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-006",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

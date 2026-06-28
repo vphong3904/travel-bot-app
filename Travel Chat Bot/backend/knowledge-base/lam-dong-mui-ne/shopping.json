@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "city": "lam-dong-mui-ne",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-006",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": ["Google Maps", "vietnamtourism.gov.vn"]
+  },
+  "data": [
+    {
+      "id": "01904a44-cd4a-7000-8c9f-3d1cb5aa70f5",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Chợ Mũi Né",
+      "type": "market",
+      "items": ["Hải sản khô", "Nước mắm nhĩ truyền thống", "Trái thanh long tươi", "Đồ ăn vặt biển"],
+      "address": "Đường Huỳnh Thúc Kháng, Phường Mũi Né, Phan Thiết",
+      "opening_hours": "Khoảng 05:00–18:00 (Sầm uất nhất buổi sáng sớm)",
+      "price_range": "Bình dân, có thể mặc cả nhẹ nhàng",
+      "tips": "Nên mua nước mắm nhĩ đóng chai thủy tinh gói kỹ làm quà, mua mực một nắng đóng chân không có thùng xốp ướp đá mang về đường xa."
+    },
+    {
+      "id": "01904a44-cd4a-7000-9eb4-9fa0cb782b12",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Cửa hàng nước mắm Con Cá Vàng",
+      "type": "souvenir_shop",
+      "items": ["Nước mắm hảo hạng Phan Thiết", "Mực một nắng", "Khô cá chỉ vàng", "Cá mai sấy mè"],
+      "address": "Trục đường Quốc lộ 1A hoặc chi nhánh trung tâm Phan Thiết",
+      "opening_hours": "Thường mở 07:30–21:00, xác nhận trước khi đến",
+      "price_range": "Giá niêm yết rõ ràng theo phân khúc chất lượng",
+      "tips": "Nơi mua sắm an tâm được kiểm định chất lượng, không lo chặt chém ép giá, đóng thùng xốp chuyên nghiệp gửi máy bay/xe khách."
+    },
+    {
+      "id": "01904a44-cd4a-7000-abf2-ea01bc58df14",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Tranh cát Phi Long",
+      "type": "souvenir_shop",
+      "items": ["Tranh cát nghệ thuật thủ công"],
+      "address": "444 Thủ Khoa Huân, Phường Phú Thủy, Phan Thiết",
+      "opening_hours": "Thường mở 08:00–17:00, xác nhận trước khi đến",
+      "price_range": "Từ vài trăm ngàn đến hàng triệu đồng tùy độ tinh xảo bức tranh",
+      "tips": "Đây là cơ sở nhân đạo nuôi dạy và tạo việc làm cho trẻ em khuyết tật. Các bức tranh cát làm vô cùng kỳ công tỉ mỉ bằng tay, là món quà lưu niệm cực kỳ ý nghĩa văn hóa."
+    },
+    {
+      "id": "01904a44-cd4a-7000-bc4d-17e0ab41f4bc",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Lotte Mart Phan Thiết",
+      "type": "mall",
+      "items": ["Nhu yếu phẩm", "Quần áo tắm biển", "Đồ ăn nhanh", "Đặc sản đóng gói tiêu chuẩn"],
+      "address": "Khu dân cư Hùng Vương, Phường Phú Thủy, Phan Thiết",
+      "opening_hours": "Thường mở 08:00–22:00, xác nhận trước khi đến",
+      "price_range": "Giá niêm yết siêu thị",
+      "tips": "Thích hợp mua sắm bổ sung đồ dùng cá nhân, kem chống nắng hoặc ghé qua ăn uống giải trí máy lạnh mát mẻ nếu trời trưa quá nắng gay gắt."
+    }
+  ]
+}

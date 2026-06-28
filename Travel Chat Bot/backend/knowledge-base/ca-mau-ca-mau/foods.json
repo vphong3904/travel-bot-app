@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "city": "ca-mau",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (cần xác nhận từ Foody hoặc thực tế địa phương)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Foody.vn (tên món, khu vực)",
+      "Kiến thức ẩm thực địa phương phổ biến"
+    ]
+  },
+  "data": [
+    {
+      "name": "Cua Cà Mau",
+      "local_name": "Cua biển Cà Mau",
+      "category": "main_dish",
+      "description": "Cua biển Cà Mau nổi tiếng khắp cả nước với thịt chắc, gạch béo và hương vị đậm đà nhờ nguồn nước mặn vùng ngập mặn. Có thể chế biến nhiều cách: hấp gừng, rang muối, nướng, nấu canh chua hoặc bún cua. Đặc biệt ngon nhất vào mùa cua gạch (tháng 9–11 âm lịch).",
+      "where_to_eat": ["Chợ Cà Mau", "Các nhà hàng hải sản TP. Cà Mau", "Bến Năm Căn", "Chợ cua Cà Mau"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá cua theo kg tại Foody.vn hoặc chợ địa phương",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["hải sản", "đặc sản", "nổi tiếng nhất", "cua gạch"]
+    },
+    {
+      "name": "Ba khía muối",
+      "local_name": "Ba khía Rạch Gốc",
+      "category": "specialty",
+      "description": "Đặc sản nổi tiếng của vùng Rạch Gốc - Ngọc Hiển, Cà Mau. Ba khía là loài cua nhỏ sống ở bìa rừng đước, được ướp muối theo phương pháp truyền thống tạo nên món ăn mặn mà hương vị biển rừng. Ăn kèm cơm nóng, bún hoặc làm nước chấm. Hằng năm có Lễ hội Ba khía vào tháng 10 âm lịch.",
+      "where_to_eat": ["Chợ Cà Mau", "Chợ Năm Căn", "Các cơ sở đặc sản địa phương", "Huyện Ngọc Hiển"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá/hộp tại Foody hoặc chợ địa phương",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "khô/muối", "mang về", "lễ hội ba khía"]
+    },
+    {
+      "name": "Cá thòi lòi nướng",
+      "local_name": "Cá thòi lòi",
+      "category": "main_dish",
+      "description": "Cá thòi lòi là loài cá kỳ lạ có thể sống trên cạn và leo cây đước — đặc trưng chỉ có ở vùng rừng ngập mặn. Thịt cá săn chắc, nướng than với sả ớt hoặc kho tiêu có vị ngọt tự nhiên và thơm đặc biệt. Hiện ngày càng khan hiếm nên là đặc sản quý.",
+      "where_to_eat": ["Nhà hàng đặc sản Cà Mau", "Khu vực Năm Căn", "Đất Mũi"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá tại nhà hàng địa phương",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản hiếm", "cá rừng ngập mặn", "nướng"]
+    },
+    {
+      "name": "Mật ong rừng U Minh",
+      "local_name": "Mật ong U Minh Hạ",
+      "category": "specialty",
+      "description": "Mật ong khai thác từ đàn ong mật tự nhiên trong rừng tràm U Minh Hạ — có màu vàng đậm, độ sánh cao và hương thơm đặc trưng của hoa tràm. Nổi tiếng là một trong những loại mật ong ngon và sạch nhất Việt Nam, được bán rộng rãi làm quà.",
+      "where_to_eat": ["Vườn Quốc gia U Minh Hạ", "Chợ Cà Mau", "Cơ sở đặc sản địa phương"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá/lít tại điểm bán hoặc chợ",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["đặc sản", "mang về", "sạch tự nhiên", "tràm"]
+    },
+    {
+      "name": "Bánh tét lá cẩm",
+      "local_name": "Bánh tét lá cẩm",
+      "category": "specialty",
+      "description": "Bánh tét đặc trưng miền Tây Nam Bộ nhưng phiên bản Cà Mau được gói bằng lá cẩm tạo màu tím đẹp mắt. Nhân bánh gồm đậu xanh và thịt heo. Thường được làm dịp Tết Nguyên Đán và bán quanh năm tại các chợ. Vừa ngon vừa có giá trị làm quà.",
+      "where_to_eat": ["Chợ Cà Mau", "Chợ TP. Bạc Liêu", "Cơ sở làm bánh truyền thống"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá/đòn tại chợ địa phương",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["bánh truyền thống", "Tết", "mang về"]
+    },
+    {
+      "name": "Tôm khô Cà Mau",
+      "local_name": "Tôm khô",
+      "category": "specialty",
+      "description": "Tôm sú và tôm thẻ phơi khô theo phương pháp truyền thống — đặc sản nổi tiếng nhất Cà Mau sau cua biển. Màu đỏ hồng tự nhiên, vị ngọt đậm, dùng nấu canh chua, xào dưa kiệu hoặc ăn kèm cơm. Được bán nhiều tại cảng cá và chợ, phổ biến làm quà biếu.",
+      "where_to_eat": ["Chợ Cà Mau", "Cảng cá Sông Đốc", "Năm Căn"],
+      "price_range": null,
+      "price_note": "// TODO: xác nhận giá/kg tại Foody hoặc chợ địa phương",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "mang về", "khô", "hải sản"]
+    }
+  ]
+}

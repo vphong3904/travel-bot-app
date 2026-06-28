@@ -1,0 +1,118 @@
+{
+  "_meta": {
+    "city": "ha-noi",
+    "generated_from": "Kiến thức tổng quan, tên địa danh/món ăn thật — KHÔNG có trong SQL seed",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Giá/đánh giá là ƯỚC TÍNH dựa trên kiến thức thị trường phổ biến, KHÔNG phải số liệu real-time đã verify — PHẢI xác nhận lại trước khi production.",
+    "missing_fields": [
+      "id thật từ DB",
+      "stats/rating thật",
+      "image_url thật",
+      "giá đã verify thật"
+    ]
+  },
+  "data": [
+    {
+      "name": "Phở Hà Nội",
+      "local_name": "Phở",
+      "category": "main_dish",
+      "description": "Món nước với bánh phở, nước dùng ninh xương trong nhiều giờ, ăn cùng thịt bò hoặc gà.",
+      "where_to_eat": [
+        "Phở Thìn Lò Đúc",
+        "Phở Bát Đàn",
+        "Phở Gia Truyền"
+      ],
+      "price_range": "35.000–60.000đ",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản",
+        "ăn sáng"
+      ]
+    },
+    {
+      "name": "Bún chả",
+      "local_name": "Bún chả",
+      "category": "main_dish",
+      "description": "Chả thịt nướng than ăn cùng bún, nước mắm chua ngọt và rau sống.",
+      "where_to_eat": [
+        "Bún Chả Hương Liên",
+        "Bún chả Đắc Kim"
+      ],
+      "price_range": "40.000–80.000đ",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản",
+        "ăn trưa"
+      ]
+    },
+    {
+      "name": "Chả cá Lã Vọng",
+      "local_name": "Chả cá",
+      "category": "main_dish",
+      "description": "Cá lăng/cá quả nướng trên than, ăn kèm bún, thì là, lạc rang, mắm tôm.",
+      "where_to_eat": [
+        "Chả Cá Lã Vọng"
+      ],
+      "price_range": "100.000–200.000đ",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản"
+      ]
+    },
+    {
+      "name": "Cà phê trứng",
+      "local_name": "Cà phê trứng",
+      "category": "drink",
+      "description": "Cà phê đánh cùng lòng đỏ trứng và sữa tạo lớp kem béo phía trên.",
+      "where_to_eat": [
+        "Cà phê Giảng",
+        "Cà phê Đinh"
+      ],
+      "price_range": "25.000–40.000đ",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": [
+        "đồ uống",
+        "đặc sản"
+      ]
+    },
+    {
+      "name": "Bánh cuốn Thanh Trì",
+      "local_name": "Bánh cuốn",
+      "category": "snack",
+      "description": "Bánh bột gạo tráng mỏng, nhân thịt mộc nhĩ, ăn cùng nước mắm và chả lụa.",
+      "where_to_eat": [
+        "Bánh cuốn Bà Hoành",
+        "Khu Thanh Trì"
+      ],
+      "price_range": "30.000–50.000đ",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng"
+      ]
+    },
+    {
+      "name": "Nem chua rán",
+      "local_name": "Nem chua rán",
+      "category": "snack",
+      "description": "Nem chua chiên giòn, ăn kèm tương ớt/mù tạt, món ăn vặt phổ biến phố cổ về đêm.",
+      "where_to_eat": [
+        "Phố Tạ Hiện",
+        "Hàng đêm các quán nhậu vỉa hè"
+      ],
+      "price_range": "20.000–40.000đ",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": [
+        "ăn vặt",
+        "ăn đêm"
+      ]
+    }
+  ]
+}

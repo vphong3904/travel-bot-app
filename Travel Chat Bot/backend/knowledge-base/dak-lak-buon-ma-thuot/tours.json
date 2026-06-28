@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "city": "dak-lak-buon-ma-thuot",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price.amount cho hầu hết các tour — chưa tìm được giá cụ thể từ ≥2 nguồn (Klook/Traveloka) khớp nhau cho từng tour riêng lẻ, để null theo RULE-02",
+      "group_size — cần xác nhận với đơn vị tổ chức tour cụ thể"
+    ],
+    "data_sources": [
+      "Nam Thiên Travel — tour Tây Nguyên: namthientravel.com.vn (06/2026)",
+      "Kumho Samco — lịch trình Buôn Ma Thuột: kumhosamco.com.vn (06/2026)",
+      "Vietravel — du lịch Buôn Ma Thuột mùa hè: vietravel.com (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eeef1-4b2d-7113-aaa6-ac03188193dc",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour khám phá thác Dray Nur & Vườn quốc gia Yok Đôn",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour ngày kết hợp tham quan cụm thác Dray Nur hùng vĩ và trải nghiệm sinh thái tại Vườn quốc gia Yok Đôn — phù hợp cho người yêu thiên nhiên và muốn vận động nhẹ (đi bộ, tắm suối).",
+      "includes": ["Xe đưa đón trong ngày", "Hướng dẫn viên", "Vé vào cổng các điểm tham quan"],
+      "excludes": ["Ăn uống dọc đường (trừ khi ghi rõ trong gói)", "Chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "moderate"
+    },
+    {
+      "id": "019eeef1-4b2d-7849-8767-774f0dda201f",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour văn hóa Buôn Đôn — Sông Sêrêpôk & làng voi",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour tìm hiểu văn hóa, lịch sử nghề thuần dưỡng voi tại Buôn Đôn, đi qua cầu treo bắc qua sông Sêrêpôk, tham quan mộ vua săn voi và trải nghiệm các hoạt động du lịch thân thiện với voi.",
+      "includes": ["Xe đưa đón", "Hướng dẫn viên địa phương", "Vé vào khu du lịch"],
+      "excludes": ["Bữa ăn (trừ khi ghi rõ trong gói)", "Chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019eeef1-4b2d-76f2-b002-d69664620197",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour Hồ Lắk & buôn làng M'nông",
+      "duration": "1 ngày (có thể nghỉ đêm tại khu vực hồ)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Trải nghiệm ngồi thuyền độc mộc trên hồ Lắk, tham quan buôn Jun – buôn Lê của người M'nông, xem trình diễn cồng chiêng, đàn đá, đàn T'rưng và tìm hiểu đời sống nhà dài truyền thống.",
+      "includes": ["Xe đưa đón", "Thuyền độc mộc trên hồ", "Hướng dẫn viên"],
+      "excludes": ["Bữa ăn (trừ khi ghi rõ trong gói)", "Lưu trú nếu nghỉ đêm"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019eeef1-4b2d-7c4d-b6f2-9277a05d8c0e",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour văn hóa cà phê — Làng Cà phê Trung Nguyên & Bảo tàng Thế giới Cà phê",
+      "duration": "Nửa ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour khám phá văn hóa cà phê Buôn Ma Thuột tại Làng Cà phê Trung Nguyên và Bảo tàng Thế giới Cà phê, gồm trải nghiệm thưởng thức nhiều loại cà phê và tìm hiểu hành trình hạt cà phê từ khắp thế giới qua không gian trưng bày tương tác.",
+      "includes": ["Vé vào bảo tàng (xem thêm destinations.json)", "Hướng dẫn tham quan"],
+      "excludes": ["Đồ lưu niệm", "Workshop pha chế (nếu có phụ thu riêng)"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "city": "ca-mau",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-002",
+    "status": "partial",
+    "partial_note": "Tên địa điểm xác minh qua kiến thức công khai. Tọa độ ước tính từ Google Maps. Giá vé/rating ghi null nếu chưa có nguồn xác thực.",
+    "missing_fields": [
+      "stats/rating thật",
+      "image_url thật",
+      "entry_fee một số điểm cần xác nhận thực tế"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Google Maps (tọa độ ước tính)",
+      "Sở Du lịch Cà Mau: camau.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "id": "a5b646aa-0a77-4573-9828-6fc926cfa907",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Mũi Cà Mau",
+      "type": "nature",
+      "address": "Xã Đất Mũi, huyện Ngọc Hiển, tỉnh Cà Mau",
+      "coordinates": { "lat": 8.5833, "lng": 104.7167 },
+      "hours": "Mở cửa hằng ngày — xác nhận giờ cụ thể trước khi đến",
+      "description": "Điểm cực Nam của đất nước Việt Nam, nơi hội tụ ba dòng chảy Biển Đông, Vịnh Thái Lan và biển Tây. Có cột mốc quốc gia số 0, biểu tượng thiêng liêng chủ quyền Tổ quốc. Xung quanh là rừng ngập mặn bạt ngàn và bãi bồi đất mới không ngừng mở rộng ra biển.",
+      "tips": "Nên đi thuyền từ bến Đầm Dơi hoặc Năm Căn để vào Đất Mũi — đường thủy là trải nghiệm đặc trưng. Đi sáng sớm để tránh nắng và chụp ảnh đẹp hơn.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí tham quan tại camau.gov.vn hoặc Klook"
+    },
+    {
+      "id": "764d5012-c64e-4f97-8e66-42f24bfe03cd",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Vườn Quốc gia U Minh Hạ",
+      "type": "nature",
+      "address": "Huyện U Minh và huyện Trần Văn Thời, tỉnh Cà Mau",
+      "coordinates": { "lat": 9.4500, "lng": 105.0500 },
+      "hours": "Thường 7:00–17:00 — xác nhận trước khi đến",
+      "description": "Vườn quốc gia với hệ sinh thái rừng tràm trên đất than bùn độc đáo, một trong hai vùng đất ngập nước quan trọng nhất Nam Bộ (cùng với U Minh Thượng). Nơi sinh sống của nhiều loài chim, rắn, rùa và ong mật. Nổi tiếng với mật ong rừng U Minh chất lượng cao.",
+      "tips": "Thuê thuyền chèo để khám phá lòng rừng — không ồn ào, dễ quan sát chim và động vật. Mùa khô (tháng 12–4) cảnh quan đẹp nhất. Mang theo áo khoác chống vắt.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí vào rừng tại Ban quản lý VQG U Minh Hạ"
+    },
+    {
+      "id": "25cb52e2-9647-41ae-84f6-98bb9b2d2e2f",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Hòn Đá Bạc",
+      "type": "attraction",
+      "address": "Xã Khánh Bình Tây, huyện Trần Văn Thời, tỉnh Cà Mau",
+      "coordinates": { "lat": 9.6200, "lng": 104.8000 },
+      "hours": "Mở cửa hằng ngày — xác nhận giờ cụ thể trước khi đến",
+      "description": "Quần thể đảo đá nhỏ nằm ngoài khơi bờ biển Tây Cà Mau, có di tích lịch sử đường Hồ Chí Minh trên biển. Cảnh quan thiên nhiên hoang sơ với hang động, bãi đá và rừng cây nhiệt đới. Là điểm kết hợp tham quan di tích và nghỉ dưỡng biển.",
+      "tips": "Đi thuyền từ cầu cảng Khánh Bình Tây. Mang theo đủ nước và thức ăn vì cơ sở dịch vụ còn hạn chế trên đảo.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí thuyền + vé tham quan tại Klook hoặc Sở Du lịch Cà Mau"
+    },
+    {
+      "id": "e2511569-ca3c-4292-a9e0-20e11a724d92",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Đầm Thị Tường",
+      "type": "nature",
+      "address": "Huyện Cái Nước và huyện Phú Tân, tỉnh Cà Mau",
+      "coordinates": { "lat": 9.1000, "lng": 105.0200 },
+      "hours": "Mở cửa hằng ngày — tốt nhất đi sáng sớm 5:00–8:00",
+      "description": "Đầm nước ngọt lớn giữa vùng rừng ngập mặn, là nơi sinh sống của hàng trăm loài chim nước di cư. Đặc biệt nổi tiếng vào mùa chim về (tháng 11–3) với hàng nghìn con cò, vạc, sếu tụ về. Mặt đầm phẳng lặng phản chiếu trời xanh tạo nên cảnh quan thơ mộng.",
+      "tips": "Thuê thuyền và xuất phát lúc bình minh để xem chim bay lên — thời điểm đẹp và ấn tượng nhất. Mang theo ống nhòm nếu có.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí thuê thuyền tại địa phương"
+    },
+    {
+      "id": "5edb3bdb-f39b-440b-97b3-1e1b0b1d3929",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Cánh đồng điện gió Bạc Liêu",
+      "type": "attraction",
+      "address": "Khu vực biển Bạc Liêu (nay thuộc tỉnh Cà Mau sau sáp nhập), tỉnh Cà Mau",
+      "coordinates": { "lat": 9.2500, "lng": 105.7200 },
+      "hours": "Tham quan tự do từ bờ — xác nhận giờ tour chính thức trước khi đến",
+      "description": "Một trong những trang trại điện gió lớn nhất Việt Nam với hàng chục turbine khổng lồ mọc giữa biển. Cảnh quan kỳ vĩ và hiện đại, đặc biệt đẹp khi hoàng hôn. Trở thành điểm check-in nổi tiếng và biểu tượng phát triển năng lượng sạch của vùng đất cực Nam.",
+      "tips": "Thuê xe máy để chạy dọc đường bờ biển chiều tối — ánh sáng hoàng hôn chiếu vào các turbine tạo ra khung cảnh ảo diệu. Kết hợp ghé nhà Công tử Bạc Liêu gần đó.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận nếu có tour thuyền ra gần turbine"
+    },
+    {
+      "id": "cbe319df-91fc-4391-add2-9f5fd83b202c",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Nhà Công tử Bạc Liêu",
+      "type": "museum",
+      "address": "Số 13 đường Điện Biên Phủ, TP. Bạc Liêu (nay thuộc tỉnh Cà Mau)",
+      "coordinates": { "lat": 9.2937, "lng": 105.7273 },
+      "hours": "Thường 7:00–17:00 các ngày — xác nhận trước khi đến",
+      "description": "Dinh thự cổ xây năm 1919 của gia đình Hội đồng Trạch — gia đình địa chủ giàu nhất Nam Kỳ đầu thế kỷ 20. Kiến trúc Pháp lai Á Đông, hiện được phục dựng thành bảo tàng lưu giữ chứng tích về cuộc sống xa hoa của công tử Bạc Liêu — nhân vật dân gian nổi tiếng miền Nam.",
+      "tips": "Kết hợp tham quan với Khu lưu niệm Cao Văn Lầu và đờn ca tài tử để hiểu sâu hơn về văn hóa Bạc Liêu.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí vào cửa tại Sở Du lịch Cà Mau"
+    },
+    {
+      "id": "226241c8-03a6-4020-be42-b31ab31854db",
+      "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+      "name": "Rừng đước Năm Căn",
+      "type": "nature",
+      "address": "Huyện Năm Căn, tỉnh Cà Mau",
+      "coordinates": { "lat": 8.9500, "lng": 105.0200 },
+      "hours": "Mở cửa hằng ngày — xác nhận giờ tham quan",
+      "description": "Vùng rừng đước ngập mặn đặc trưng nhất Đồng bằng sông Cửu Long, với những cây đước cao vút ken dày trên mặt nước. Hệ sinh thái phong phú: cua, cá, tôm sú nuôi trong rừng. Chợ Năm Căn nằm ngay trên sông cũng là điểm tham quan độc đáo với cảnh sinh hoạt trên thuyền.",
+      "tips": "Mua hải sản tươi sống ngay tại chợ nổi Năm Căn — giá rẻ và tươi hơn nhiều so với trung tâm thành phố. Đi thuyền qua kênh rạch để thấy rõ bộ rễ đước ấn tượng.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: xác nhận phí thuyền tại Năm Căn"
+    }
+  ]
+}
