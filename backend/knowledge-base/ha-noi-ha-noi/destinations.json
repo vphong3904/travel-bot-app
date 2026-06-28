@@ -2,20 +2,25 @@
   "_meta": {
     "city": "ha-noi",
     "generated_from": "Kết hợp 8 items gốc + 22 items bổ sung — tổng 30 địa điểm",
-    "last_updated": "2026-06-23",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "partial_note": null,
     "missing_fields": [
       "id thật từ DB (đang dùng UUID tạm)",
       "stats/rating thật",
       "image_url thật",
-      "giá đã verify thật qua Klook/Traveloka"
+      "coordinates các điểm vui chơi (chưa verify — để null)",
+      "giá đã verify thật qua Klook/Traveloka cho các điểm tham quan cũ"
     ],
     "data_sources": [
       "Kiến thức địa danh Hà Nội phổ biến đã xác minh tên/địa chỉ thật",
       "vietnamtourism.gov.vn (tham khảo tên địa điểm)",
-      "Giá vé là ước tính thị trường — cần xác minh lại từ Klook/Traveloka trước production"
+      "Giá vé là ước tính thị trường — cần xác minh lại từ Klook/Traveloka trước production",
+      "T-037 điểm vui chơi: congvienhotay.vn (06/2026)",
+      "T-037 điểm vui chơi: vinwonders.com — VinKE & Thủy cung Times City (06/2026)",
+      "T-037 điểm vui chơi: Klook VN klook.com/vi (06/2026)",
+      "T-037 điểm vui chơi: baosonparadise.vn — Thiên đường Bảo Sơn (09/2025)"
     ]
   },
   "data": [
@@ -560,6 +565,60 @@
       "stats": null,
       "verified": true,
       "entry_fee": "Công dân Việt Nam: miễn phí tham quan.\nKhách quốc tế: 40.000 đồng/người/lượt.\nMIỄN VÉ\nNgười khuyết tật;\nThành viên Hiệp hội Bảo tàng Quốc tế (ICOM). (cần xác nhận giá hiện hành)"
+    },
+    {
+      "id": "7529c68c-5432-4364-9688-fd94a60c0b07",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Công viên nước Hồ Tây",
+      "type": "water_park",
+      "address": "614 đường Lạc Long Quân, phường Nhật Tân, quận Tây Hồ, Hà Nội",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Hoạt động theo mùa hè (khoảng tháng 4–9), thường 9:00–19:00; có thể thay đổi theo thời tiết — xác nhận trước khi đến",
+      "description": "Công viên nước lớn bậc nhất Hà Nội nằm bên bờ Hồ Tây, có bể tạo sóng, dòng sông lười, nhiều đường trượt cảm giác mạnh và khu vui chơi cho trẻ em — điểm giải trí mùa hè quen thuộc của người dân thủ đô.",
+      "tips": "Cuối tuần mùa hè rất đông, nên đi sớm. Mang theo đồ bơi; công viên không cho mang đồ ăn, thức uống từ ngoài vào.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Vé trọn gói cả ngày. Ưu đãi 120.000đ cho người trên 65 tuổi/người khuyết tật/phụ nữ mang thai (có giấy tờ); trẻ cao dưới 0,9m miễn phí. Giá vé người lớn xác nhận tại congvienhotay.vn. (nguồn: congvienhotay.vn & Klook Blog, 06/2026 — có thể thay đổi)"
+    },
+    {
+      "id": "9491cb40-f140-422c-a9f1-70e31ce7a858",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "VinKE & Vinpearl Aquarium (Thủy cung Times City)",
+      "type": "aquarium",
+      "address": "Tầng B1, Vincom Mega Mall Times City, 458 Minh Khai, quận Hai Bà Trưng, Hà Nội",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Thứ 2–Thứ 6: 10:00–22:00; cuối tuần & ngày lễ: 9:30–22:00",
+      "description": "Tổ hợp thủy cung rộng ~4.000m² với hơn 30.000 sinh vật biển (có chim cánh cụt, cua nhện) cùng các show Ocean Dance, Mermaid; liền kề là VinKE — khu vui chơi giáo dục, trò chơi và trải nghiệm hướng nghiệp cho trẻ em.",
+      "tips": "Mua vé online (Klook/VinWonders) thường rẻ hơn quầy. Đi cả thủy cung và VinKE nên chọn vé combo và dành nửa ngày.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Thủy cung: người lớn 190.000đ (ngày thường) / 250.000đ (cuối tuần, lễ), trẻ em 140.000đ / 190.000đ. VinKE: người lớn 170.000đ / 220.000đ, trẻ em 130.000đ / 170.000đ. (nguồn: vinwonders.com & Klook, 06/2026 — có thể thay đổi)"
+    },
+    {
+      "id": "4d9e1168-7bfa-4b37-9c57-48d0438188c9",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Công viên Thiên đường Bảo Sơn",
+      "type": "theme_park",
+      "address": "Km5+200 đường Lê Trọng Tấn, xã An Khánh, huyện Hoài Đức, Hà Nội",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "8:00–17:00 (Thứ 3–Chủ nhật), đóng cửa Thứ 2; lịch có thể thay đổi theo mùa — xác nhận trước khi đến",
+      "description": "Công viên chủ đề lớn ở phía tây Hà Nội gồm thủy cung 4 tầng, khu Safari thế giới động vật, nông trại vui vẻ cho trẻ làm nông dân nhí và khu tái hiện làng nghề truyền thống Việt Nam.",
+      "tips": "Phù hợp gia đình có trẻ nhỏ, nên đi trọn ngày. Cuối tuần giá vé cao hơn ngày thường; kiểm tra lịch hoạt động trước vì đóng cửa Thứ 2.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Thứ 3–Thứ 6: 250.000đ/người; Thứ 7–Chủ nhật: 320.000đ/người. (nguồn: baosonparadise.vn & Bonbon Car, 09/2025 — có thể thay đổi theo tháng)"
     }
   ]
 }

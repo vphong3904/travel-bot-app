@@ -1,20 +1,22 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh",
-    "last_updated": "2026-06-23",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "partial_note": null,
     "missing_fields": [
       "coordinates — cần xác minh tọa độ chính xác qua Google Maps",
-      "entry_fee — một số địa điểm cần xác minh giá vé hiện tại qua Klook/Traveloka"
+      "entry_fee — một số địa điểm cần xác minh giá vé hiện tại qua Klook/Traveloka",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "vietnamtourism.gov.vn (06/2026)",
       "Sở Du lịch TP. HCM: tourism.hochiminhcity.gov.vn (06/2026)",
       "Google Maps (06/2026)",
       "Klook Việt Nam: klook.com/vi (06/2026)",
-      "TripAdvisor: tripadvisor.com.vn (06/2026)"
+      "TripAdvisor: tripadvisor.com.vn (06/2026)",
+      "T-037: Công viên nước Đầm Sen — Tin Việt Travel & Bonbon Car (2025)"
     ]
   },
   "data": [
@@ -647,6 +649,27 @@
       },
       "verified": true,
       "entry_fee": "Người lớn: 50.000 đồng/người/lượt.\nHọc sinh, sinh viên: 30.000 đồng/người/lượt (xuất trình thẻ hợp lệ).\nMIỄN VÉ\nTrẻ em dưới 6 tuổi;\nNgười cao tuổi từ 70 tuổi trở lên;\nNgười khuyết tật."
+    },
+    {
+      "id": "3d2bdd23-6dec-40d3-8782-5b3601a1b02f",
+      "city_id": "019eeda8-d830-72fe-8479-3d24a2698ee8",
+      "name": "Công viên nước Đầm Sen",
+      "type": "water_park",
+      "address": "Số 3 Hòa Bình, Phường 3, Quận 11, TP. Hồ Chí Minh",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "T2–T7: 9:00–18:00; Chủ nhật & ngày lễ: 8:30–18:00",
+      "description": "Công viên nước lớn trung tâm Sài Gòn với hơn 36 trò chơi nước hiện đại, khu tạo sóng, nhiều đường trượt và khu vui chơi riêng cho trẻ em.",
+      "tips": "Đi ngày thường để vắng hơn; mang đồ bơi và kem chống nắng, gửi đồ tại tủ khóa.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn (>1m4) 220.000đ, trẻ em (0,8–1m4) 180.000đ, dưới 0,8m miễn phí. (nguồn: Tin Việt Travel & Bonbon Car, 2025 — có thể thay đổi)"
     }
   ]
 }
