@@ -136,6 +136,29 @@ class SearchResultOut(BaseModel):
     tours: list[dict]
 
 
+# ── Audit Log ────────────────────────────────────────────────────────────────
+
+class AuditLogOut(BaseModel):
+    id: str
+    actor_id: str
+    actor_email: str
+    actor_role: str
+    action: str
+    resource_type: str
+    resource_id: str
+    before_value: Optional[dict] = None
+    after_value: Optional[dict] = None
+    ip_address: str = ""
+    created_at: datetime
+
+
+class AuditLogListOut(BaseModel):
+    items: list[AuditLogOut]
+    total: int
+    page: int
+    page_size: int
+
+
 # ── RBAC ─────────────────────────────────────────────────────────────────────
 
 class UserRoleUpdate(BaseModel):

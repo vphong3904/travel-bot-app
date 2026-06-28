@@ -31,7 +31,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user, require_admin, require_role
 from app.db.models.user import User, UserRole
-from app.db.mongo import get_mongo_db
+from app.db.mongo import get_mongo_db, COLLECTION_AUDIT_LOGS
 from app.db.models.chat import ChatSession, ChatMessage
 from app.db.models.admin import KnowledgeEntry, EmbeddingJob
 from app.services import log_service
@@ -47,8 +47,11 @@ from app.db.schemas.admin import (
     UserAdminOut,
     UserAdminUpdate,
     UserRoleUpdate,
+    AuditLogOut,
+    AuditLogListOut,
     ChatLogOut,
 )
+from app.services.audit_service import log_audit
 
 router = APIRouter(tags=["admin"])
 
@@ -330,18 +333,62 @@ async def update_user_role(
     await db.commit()
     await db.refresh(user)
 
-    await mongo_db["admin_audit_logs"].insert_one({
-        "actor_id": str(current_user.id),
-        "actor_email": current_user.email,
-        "action": "role_change",
-        "resource_type": "user",
-        "resource_id": str(user_id),
-        "before_value": {"role": before_role},
-        "after_value": {"role": body.role},
-        "created_at": datetime.now(timezone.utc),
-    })
+    await log_audit(
+        mongo_db=mongo_db,
+        actor=current_user,
+        action="role_change",
+        resource_type="user",
+        resource_id=str(user_id),
+        before_value={"role": before_role},
+        after_value={"role": body.role},
+    )
 
     return user
+
+
+# ════════════════════════════════════════════════════════════
+# AUDIT LOGS
+# ════════════════════════════════════════════════════════════
+
+@router.get("/audit-logs", response_model=AuditLogListOut)
+async def get_audit_logs(
+    actor_id: Optional[str] = Query(None),
+    action: Optional[str] = Query(None),
+    resource_type: Optional[str] = Query(None),
+    from_date: Optional[datetime] = Query(None),
+    to_date: Optional[datetime] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=200),
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.SUPER_ADMIN])),
+    mongo_db=Depends(get_mongo_db),
+):
+    """Xem audit log — chỉ ADMIN và SUPER_ADMIN."""
+    query: dict = {}
+    if actor_id:
+        query["actor_id"] = actor_id
+    if action:
+        query["action"] = action
+    if resource_type:
+        query["resource_type"] = resource_type
+    if from_date or to_date:
+        query["created_at"] = {}
+        if from_date:
+            query["created_at"]["$gte"] = from_date
+        if to_date:
+            query["created_at"]["$lte"] = to_date
+
+    total = await mongo_db[COLLECTION_AUDIT_LOGS].count_documents(query)
+    skip = (page - 1) * page_size
+    cursor = (
+        mongo_db[COLLECTION_AUDIT_LOGS]
+        .find(query, {"_id": 0})
+        .sort("created_at", -1)
+        .skip(skip)
+        .limit(page_size)
+    )
+    items = await cursor.to_list(length=page_size)
+
+    return AuditLogListOut(items=items, total=total, page=page, page_size=page_size)
 
 
 # ════════════════════════════════════════════════════════════

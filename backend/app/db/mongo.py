@@ -28,6 +28,7 @@ COLLECTION_SEARCH_HISTORY = "search_history"
 COLLECTION_USER_BEHAVIOR = "user_behavior"
 COLLECTION_UNANSWERED_QUESTIONS = "chatbot_unanswered_questions"
 COLLECTION_FLAGGED_RESPONSES = "chatbot_flagged_responses"
+COLLECTION_AUDIT_LOGS = "admin_audit_logs"
 
 _client: AsyncIOMotorClient | None = None
 _db: AsyncIOMotorDatabase | None = None
@@ -99,3 +100,9 @@ async def _ensure_indexes(db: AsyncIOMotorDatabase) -> None:
     await db[COLLECTION_FLAGGED_RESPONSES].create_index("session_id")
     await db[COLLECTION_FLAGGED_RESPONSES].create_index("is_reviewed")
     await db[COLLECTION_FLAGGED_RESPONSES].create_index("created_at")
+
+    await db[COLLECTION_AUDIT_LOGS].create_index("actor_id")
+    await db[COLLECTION_AUDIT_LOGS].create_index([("created_at", -1)])
+    await db[COLLECTION_AUDIT_LOGS].create_index("resource_type")
+    await db[COLLECTION_AUDIT_LOGS].create_index("action")
+    await db[COLLECTION_AUDIT_LOGS].create_index([("actor_id", 1), ("created_at", -1)])
