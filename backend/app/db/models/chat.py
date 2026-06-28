@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, SmallInteger, String, Text
+from sqlalchemy import ARRAY, Boolean, DateTime, Float, ForeignKey, Integer, SmallInteger, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -20,6 +20,8 @@ class ChatSession(Base):
     total_tokens: Mapped[int] = mapped_column(Integer, default=0)
     pinned: Mapped[bool] = mapped_column(Boolean, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, default=False)
+    tags: Mapped[list] = mapped_column(ARRAY(Text), default=list)
+    is_flagged: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -51,6 +53,12 @@ class ChatMessage(Base):
     completion_tokens: Mapped[int] = mapped_column(Integer, default=0)
     latency_ms: Mapped[int | None] = mapped_column(Integer)
     feedback: Mapped[int | None] = mapped_column(SmallInteger)
+    confidence_score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    search_method: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    search_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    llm_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    cache_hit: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    chunk_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

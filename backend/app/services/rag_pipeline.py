@@ -766,6 +766,11 @@ class RAGPipeline:
             "completion_tokens": completion_tokens,
             "latency_ms": latency_ms,
             "hallucination_confidence": hallu_report.overall_confidence,
+            "confidence_score": hallu_report.overall_confidence,
+            "search_method": search_method,
+            "search_ms": search_ms,
+            "llm_ms": llm_ms,
+            "cache_hit": None,
         }
 
         # [YÊU CẦU 4] Lưu cache (chỉ cache câu trả lời đáng tin cậy, KB-grounded)
@@ -792,6 +797,12 @@ class RAGPipeline:
             "completion_tokens": 0,
             "latency_ms": latency_ms,
             "hallucination_confidence": 1.0 if not is_error else 0.0,
+            "confidence_score": 1.0 if not is_error else 0.0,
+            "search_method": "no_results",
+            "search_ms": None,
+            "llm_ms": None,
+            "cache_hit": None,
+            "chunk_count": None,
         }
 
     async def _log_flagged_response(
@@ -974,6 +985,12 @@ class RAGPipeline:
             "tokens_per_second": tok_per_sec,
             "ttft_ms": timing.ttft_ms,
             "hallucination_confidence": hallu_report.overall_confidence,
+            "confidence_score": hallu_report.overall_confidence,
+            "search_method": search_method,
+            "search_ms": search_ms,
+            "llm_ms": llm_ms,
+            "cache_hit": None,
+            "chunk_count": chunk_count,
         }
 
         # [YÊU CẦU 4] Cache câu trả lời nếu đáng tin cậy
