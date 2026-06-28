@@ -1,15 +1,15 @@
-// lib/router.dart
-// Chỉ phần auth routes và redirect guard — tích hợp vào GoRouter root của dự án
-
+// lib/admin/admin_router.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'features/auth/providers/auth_provider.dart';
-import 'features/auth/screens/login_screen.dart';
-import 'features/auth/screens/forgot_password_screen.dart';
-import 'features/auth/screens/reset_password_screen.dart';
+import 'shared/providers/auth_provider.dart';
+import 'web/screens/login_screen.dart';
+import 'web/screens/forgot_password_screen.dart';
+import 'web/screens/reset_password_screen.dart';
+import 'web/screens/dashboard_screen.dart';
+import 'web/widgets/admin_layout.dart';
 
-/// Provider cho GoRouter — dùng ref.watch để router reactive theo authProvider
+/// Provider cho GoRouter — reactive theo authProvider
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
@@ -21,10 +21,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           state.matchedLocation == '/forgot-password' ||
           state.matchedLocation.startsWith('/reset-password');
 
-      // Chưa đăng nhập + không ở auth route → về login
       if (!isLoggedIn && !isAuthRoute) return '/login';
-
-      // Đã đăng nhập mà vào trang login → về dashboard
       if (isLoggedIn && state.matchedLocation == '/login') return '/dashboard';
 
       return null;
@@ -49,11 +46,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
 
-      // Protected routes (thêm các route dashboard, users, ... ở đây)
-      GoRoute(
-        path: '/dashboard',
-        name: 'dashboard',
-        builder: (_, __) => const _PlaceholderScreen(title: 'Dashboard'),
+      // Protected routes — wraps in AdminLayout
+      ShellRoute(
+        builder: (context, state, child) => AdminLayout(child: child),
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            name: 'dashboard',
+            builder: (_, __) => const DashboardScreen(),
+          ),
+        ],
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -63,7 +65,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.grey),
             const SizedBox(height: 16),
-            const Text('Trang không tồn tại', style: TextStyle(fontSize: 18)),
+            const Text('Trang không tồn tại',
+                style: TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => context.go('/login'),
@@ -75,15 +78,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ),
   );
 });
-
-/// Placeholder — xóa khi TA-005 (Dashboard) hoàn thành
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const _PlaceholderScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(title)),
-    body: Center(child: Text('$title — Coming soon (TA-005)')),
-  );
-}

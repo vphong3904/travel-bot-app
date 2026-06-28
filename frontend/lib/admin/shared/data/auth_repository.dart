@@ -1,7 +1,7 @@
-// lib/features/auth/data/auth_repository.dart
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/login_response.dart';
+import '../providers/dio_provider.dart';
 
 class AuthRepository {
   final Dio _dio;
@@ -47,8 +47,6 @@ class AuthRepository {
   }
 }
 
-// Provider
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  // Inject từ DI root — dio phải được cấu hình với baseUrl và cookie jar
-  throw UnimplementedError('authRepositoryProvider must be overridden in ProviderScope');
+  return AuthRepository(ref.watch(authDioProvider));
 });

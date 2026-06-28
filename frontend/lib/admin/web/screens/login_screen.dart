@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/auth_provider.dart';
+import '../../shared/providers/auth_provider.dart';
+import '../widgets/auth_card.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -50,7 +51,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
-            child: _AuthCard(
+            child: AuthCard(
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -182,29 +183,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Shared widgets (dùng lại trong ForgotPassword + ResetPassword)
-// ---------------------------------------------------------------------------
-
-class _AuthCard extends StatelessWidget {
-  final Widget child;
-  const _AuthCard({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(40),
-        child: child,
-      ),
-    );
-  }
-}
 
 class _AuthHeader extends StatelessWidget {
   final IconData icon;

@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../data/auth_repository.dart';
-import 'login_screen.dart' show _AuthCard;
+import '../../shared/data/auth_repository.dart';
+import '../widgets/auth_card.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   /// Token từ query params ?token=xxx (đọc bởi GoRouter)
@@ -84,7 +84,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
-            child: _AuthCard(
+            child: AuthCard(
               child: Form(
                 key: _formKey,
                 child: Column(
