@@ -56,6 +56,12 @@ class ChatMessageOut(BaseModel):
     completion_tokens: int
     latency_ms: Optional[int]
     feedback: Optional[int]
+    confidence_score: Optional[float] = None
+    search_method: Optional[str] = None
+    search_ms: Optional[int] = None
+    llm_ms: Optional[int] = None
+    cache_hit: Optional[str] = None
+    chunk_count: Optional[int] = None
     created_at: Optional[datetime]
 
     model_config = {"from_attributes": True}

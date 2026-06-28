@@ -114,6 +114,12 @@ async def send_message(
         prompt_tokens=rag_result.get("prompt_tokens", 0),
         completion_tokens=rag_result.get("completion_tokens", 0),
         latency_ms=rag_result.get("latency_ms"),
+        confidence_score=rag_result.get("confidence_score"),
+        search_method=rag_result.get("search_method"),
+        search_ms=rag_result.get("search_ms"),
+        llm_ms=rag_result.get("llm_ms"),
+        cache_hit=rag_result.get("cache_hit"),
+        chunk_count=rag_result.get("chunk_count"),
     )
     db.add(assistant_msg)
     await db.commit()
@@ -210,6 +216,12 @@ async def stream_message(
                 prompt_tokens=rag_meta.get("prompt_tokens", 0),
                 completion_tokens=rag_meta.get("completion_tokens", 0),
                 latency_ms=rag_meta.get("latency_ms"),
+                confidence_score=rag_meta.get("confidence_score"),
+                search_method=rag_meta.get("search_method"),
+                search_ms=rag_meta.get("search_ms"),
+                llm_ms=rag_meta.get("llm_ms"),
+                cache_hit=rag_meta.get("cache_hit"),
+                chunk_count=rag_meta.get("chunk_count"),
             )
             db_new.add(assistant_msg)
             await db_new.commit()
