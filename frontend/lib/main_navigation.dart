@@ -1,11 +1,7 @@
 // lib/main_navigation.dart
-// ─────────────────────────────────────────────────────────────────────────────
-// MainNavigationScreen — Bottom navigation chính của app (mobile).
-//
+// MainNavigationScreen — Bottom navigation chính của mobile app.
 // Tab order: Khám phá | AI Chat | Dịch vụ | Hồ sơ
-// Admin FAB chỉ hiện nếu user.isAdmin == true.
-// Khi nhấn FAB → mở Mobile Admin (Navigator push, không dùng GoRouter).
-// ─────────────────────────────────────────────────────────────────────────────
+// Web Admin chạy riêng qua lib/main_admin.dart (Flutter Web target).
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,11 +11,8 @@ import 'screens/home/home_screen.dart';
 import 'screens/chat/chatbot_screen.dart';
 import 'screens/services/services_screen.dart';
 import 'screens/profile/profile_screen.dart';
-import 'admin/mobile_admin_navigator.dart'; // ← dùng mobile admin
-import 'widgets/common_widgets.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  /// Tab khởi đầu (mặc định 0 = Home)
   final int initialIndex;
 
   const MainNavigationScreen({super.key, this.initialIndex = 0});
@@ -69,34 +62,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isAdmin = context.select<AppState, bool>(
-      (s) => s.user?.isAdmin ?? false,
-    );
+    // Suppress unused import warning — AppState still needed for user context elsewhere
+    context.watch<AppState>();
 
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
       ),
-      // Admin FAB → Mobile Admin (chỉ mobile)
-      floatingActionButton: isAdmin ? _buildAdminFab() : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (i) => setState(() => _currentIndex = i),
         destinations: _destinations,
         animationDuration: const Duration(milliseconds: 300),
       ),
-    );
-  }
-
-  Widget _buildAdminFab() {
-    return FloatingActionButton.extended(
-      onPressed: () => pushMobileAdmin(context), // ← hàm từ mobile_admin_navigator.dart
-      backgroundColor: AppColors.dark,
-      foregroundColor: Colors.white,
-      icon: const Icon(Icons.admin_panel_settings_outlined),
-      label: const Text('Admin', style: TextStyle(fontWeight: FontWeight.w600)),
-      elevation: 2,
     );
   }
 }

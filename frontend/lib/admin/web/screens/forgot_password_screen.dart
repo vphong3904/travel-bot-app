@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../data/auth_repository.dart';
-import 'login_screen.dart' show _AuthCard; // re-use shared card
+import '../../shared/data/auth_repository.dart';
+import '../widgets/auth_card.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -60,7 +60,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
-            child: _AuthCard(
+            child: AuthCard(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: _submitted ? _SuccessView(email: _emailCtrl.text) : _FormView(
