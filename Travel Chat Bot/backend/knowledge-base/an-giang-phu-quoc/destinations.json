@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "city": "an-giang-phu-quoc",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-002",
+    "status": "partial",
+    "partial_note": "Tên địa điểm là thật, đã xác minh qua nguồn công khai. Giá vé/rating là ƯỚC TÍNH hoặc null — PHẢI xác nhận qua vietnamtourism.gov.vn hoặc Google Maps trước production.",
+    "missing_fields": [
+      "stats/rating thật",
+      "image_url thật",
+      "giá vé một số điểm cần xác nhận thực tế"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Google Maps (tên + toạ độ)",
+      "Sở Du lịch tỉnh Kiên Giang (nay thuộc An Giang)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee71-616d-7317-b456-896589eaa20c",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Bãi Sao",
+      "type": "beach",
+      "address": "Xã Dương Tơ, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.0311,
+        "lng": 103.9777
+      },
+      "hours": "Mở 24/7 (bãi công cộng)",
+      "description": "Một trong những bãi biển đẹp nhất Phú Quốc với cát trắng mịn, nước biển trong xanh màu ngọc lam. Nổi tiếng là bãi biển lý tưởng để tắm và chụp ảnh, ít khách sạn lớn bao vây nên không khí còn tự nhiên.",
+      "tips": "Đến trước 9:00 hoặc sau 16:00 để tránh nắng gắt và đông người. Có thể thuê ghế nằm và ô tại các quán dọc bãi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí (bãi biển công cộng)"
+    },
+    {
+      "id": "019eee71-616d-7dc2-81e1-0521e1d2b287",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Vinpearl Safari Phú Quốc",
+      "type": "attraction",
+      "address": "Đường Vòng Quanh Đảo, xã Gành Dầu, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.3800,
+        "lng": 103.8383
+      },
+      "hours": "8:00–17:00 hằng ngày",
+      "description": "Vườn thú bán hoang dã lớn nhất Đông Nam Á tại Phú Quốc, có hơn 3.000 động vật quý hiếm. Du khách di chuyển bằng xe điện qua khu bảo tồn, xem sư tử, tê giác, hà mã trong môi trường bán tự nhiên.",
+      "tips": "Nên đặt vé online trước để có giá tốt hơn. Đi vào buổi sáng khi động vật còn hoạt động nhiều.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại vinpearl.com hoặc Klook — giá vé theo mùa có thể thay đổi",
+      "price_note": "// TODO: xác nhận tại vinpearl.com hoặc Klook"
+    },
+    {
+      "id": "019eee71-616d-7457-b092-16c665bc6447",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Làng chài Hàm Ninh",
+      "type": "attraction",
+      "address": "Xã Hàm Ninh, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.1738,
+        "lng": 104.0545
+      },
+      "hours": "Mở cả ngày (chợ hải sản sầm uất nhất buổi sáng 6:00–10:00)",
+      "description": "Làng chài truyền thống lâu đời nhất Phú Quốc, nơi ngư dân bán hải sản tươi sống trực tiếp. Có cầu gỗ dài ra biển, là điểm chụp ảnh đẹp với khung cảnh thuyền đánh cá và núi rừng phía xa.",
+      "tips": "Đến sáng sớm để thấy cảnh đánh cá và mua ghẹ, tôm hùm tươi với giá gốc. Có thể ăn tại các quán hải sản ngay cầu cảng.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019eee71-616e-7f4e-ac72-07dffaf4bc21",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Vườn Quốc gia Phú Quốc",
+      "type": "nature",
+      "address": "Xã Gành Dầu – Bãi Thơm, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.3200,
+        "lng": 103.9000
+      },
+      "hours": "7:00–17:00 hằng ngày",
+      "description": "Vùng rừng nguyên sinh được UNESCO công nhận, chiếm hơn 50% diện tích đảo Phú Quốc. Có nhiều loài động thực vật quý hiếm, hệ thống suối và thác nước, tuyến trek băng rừng nguyên sinh.",
+      "tips": "Cần thuê hướng dẫn viên địa phương khi vào sâu rừng. Mang theo nước, thuốc chống muỗi và giày đế bằng.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban quản lý Vườn Quốc gia Phú Quốc",
+      "price_note": "// TODO: xác nhận tại Ban quản lý Vườn Quốc gia Phú Quốc"
+    },
+    {
+      "id": "019eee71-616e-74a8-a5f9-8edfe71161eb",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Chợ Đêm Phú Quốc (Dinh Cậu Night Market)",
+      "type": "market",
+      "address": "Đường Bạch Đằng, khu Dinh Cậu, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.2154,
+        "lng": 103.9586
+      },
+      "hours": "17:00–23:00 hằng ngày",
+      "description": "Chợ đêm sôi động nhất Phú Quốc nằm ngay mặt biển khu Dinh Cậu. Hàng chục quầy hải sản tươi, mực nướng, bạch tuộc, bắp nướng… Là nơi lý tưởng để thưởng thức ẩm thực và mua đồ lưu niệm.",
+      "tips": "Nên trả giá khi mua đồ lưu niệm. Hải sản tươi rẻ hơn nhiều so với nhà hàng khách sạn. Đông nhất lúc 19:00–21:00.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí vào chợ"
+    },
+    {
+      "id": "019eee71-616e-7cf5-bbc6-a2d20b16ae09",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Dinh Cậu (Dinh Cô)",
+      "type": "temple",
+      "address": "Đường Bạch Đằng, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.2165,
+        "lng": 103.9580
+      },
+      "hours": "6:00–18:00 hằng ngày",
+      "description": "Ngôi miếu thờ cá Ông (cá voi) nhỏ xinh nằm trên mỏm đá nhô ra biển. Đây là điểm linh thiêng với ngư dân địa phương và là điểm ngắm hoàng hôn tuyệt đẹp nhất Phú Quốc.",
+      "tips": "Đến trước 18:00 để ngắm hoàng hôn từ mỏm đá. Kết hợp với chợ đêm ở sát bên.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019eee71-616e-7461-ba4b-6695feaa9e55",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Bãi Dài (Kem Beach)",
+      "type": "beach",
+      "address": "Xã Gành Dầu, TP. Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.3500,
+        "lng": 103.8500
+      },
+      "hours": "Mở 24/7",
+      "description": "Bãi biển hoang sơ dài hơn 15km ở phía bắc đảo, cát trắng mịn, ít người hơn khu nam đảo. Hiện có khu Vinpearl Bãi Dài nhưng vẫn còn nhiều đoạn bãi công cộng tự nhiên.",
+      "tips": "Cần xe máy hoặc taxi để đến (khoảng 25km từ trung tâm). Mang đồ ăn và nước vì khu vực hạn chế dịch vụ ăn uống.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí (khu công cộng)"
+    }
+  ]
+}

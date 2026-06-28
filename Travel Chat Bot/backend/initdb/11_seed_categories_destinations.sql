@@ -1,0 +1,259 @@
+-- -- ============================================================
+-- -- PDTrip AI – Seed: TRAVEL categories + destinations (+best_months) + destination_categories
+-- -- (Tách từ 01_pdtrip_ai_db.sql để dễ quản lý — xem README_INITDB.md)
+-- -- ============================================================
+
+-- -- [TRAVEL] Categories — 10 loại hình du lịch phổ biến
+-- -- ============================================================
+-- INSERT INTO categories (id, name, slug, icon) VALUES
+-- ('c1111111-1111-1111-1111-111111111111', 'Beach',       'beach',       'beach_access'),
+-- ('c2222222-2222-2222-2222-222222222222', 'Mountain',    'mountain',    'terrain'),
+-- ('c3333333-3333-3333-3333-333333333333', 'Resort',      'resort',      'spa'),
+-- ('c4444444-4444-4444-4444-444444444444', 'Adventure',   'adventure',   'hiking'),
+-- ('c5555555-5555-5555-5555-555555555555', 'Food',        'food',        'restaurant'),
+-- ('c6666666-6666-6666-6666-666666666666', 'Culture',     'culture',     'museum'),
+-- ('c7777777-7777-7777-7777-777777777777', 'Nature',      'nature',      'forest'),
+-- ('c8888888-8888-8888-8888-888888888888', 'Photography', 'photography', 'camera'),
+-- ('c9999999-9999-9999-9999-999999999999', 'Family',      'family',      'family_restroom'),
+-- ('caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Luxury',      'luxury',      'diamond');
+
+-- -- ============================================================
+-- -- [TRAVEL] DESTINATIONS — 5 điểm đến phổ biến
+-- -- ============================================================
+-- INSERT INTO destinations (id, name, province, region, description, best_season, weather, cuisine, budget_low, budget_high, image_url, special, rating_avg, review_count, favorite_count, view_count) VALUES
+-- ('11111111-1111-1111-1111-111111111111', 'Đà Lạt',  'Lâm Đồng',   'Tây Nguyên',
+--  'Thành phố ngàn hoa với khí hậu mát mẻ quanh năm, nổi tiếng với đồi chè, thác nước và kiến trúc Pháp cổ.',
+--  'Tháng 11–4 (mùa khô, ít mưa)',
+--  'Mát mẻ quanh năm, nhiệt độ 15–24°C, mùa mưa từ tháng 5–10',
+--  'Bánh tráng nướng, lẩu gà lá é, sữa đậu nành nóng, dâu tây, atiso',
+--  1500000, 4000000,
+--  'https://cdn.pdtrip.vn/destinations/dalat.jpg', 'Thành phố ngàn hoa, khí hậu mát mẻ quanh năm, nổi tiếng với đồi chè, thác nước và kiến trúc Pháp cổ', 4.5, 120, 0, 5000),
+
+-- ('22222222-2222-2222-2222-222222222222', 'Phú Quốc', 'Kiên Giang', 'Miền Nam',
+--  'Đảo ngọc lớn nhất Việt Nam với bãi biển trong xanh, hải sản tươi sống và các khu nghỉ dưỡng cao cấp.',
+--  'Tháng 11–4 (mùa khô, biển êm)',
+--  'Nóng ẩm, 25–32°C, mùa mưa tháng 5–10 có bão nhẹ',
+--  'Hải sản, nước mắm Phú Quốc, gỏi cá trích, nhum nướng mỡ hành',
+--  3000000, 8000000,
+--  'https://cdn.pdtrip.vn/destinations/phuquoc.jpg', 'Đảo ngọc với biển xanh và resort cao cấp', 4.7, 150, 0, 6000),
+
+-- ('33333333-3333-3333-3333-333333333333', 'Hà Giang', 'Hà Giang',   'Miền Bắc',
+--  'Vùng núi đá hùng vĩ với cung đường đèo Mã Pí Lèng, ruộng bậc thang và văn hóa dân tộc đặc sắc.',
+--  'Tháng 9–11 (mùa hoa tam giác mạch) hoặc Tháng 3–5',
+--  'Lạnh về đêm, 10–25°C, có thể có sương mù và rét đậm vào mùa đông',
+--  'Thắng cố, mèn mén, rượu ngô, cháo ấu tẩu, thịt trâu khô',
+--  1500000, 5000000,
+--  'https://cdn.pdtrip.vn/destinations/hagiang.jpg', 'Vùng núi đá hùng vĩ với cung đường đèo Mã Pí Lèng, cao nguyên đá Đồng Văn và văn hóa dân tộc đặc sắc', 4.3, 90, 0, 4000),
+
+-- ('44444444-4444-4444-4444-444444444444', 'Hội An',  'Quảng Nam',  'Miền Trung',
+--  'Phố cổ di sản UNESCO với kiến trúc cổ kính, đèn lồng rực rỡ và ẩm thực đường phố nổi tiếng.',
+--  'Tháng 2–4 (khô, mát, ít mưa)',
+--  'Nóng vào hè (28–35°C), mùa mưa bão tháng 9–12',
+--  'Cao lầu, mì Quảng, cơm gà, bánh mì Phượng, bánh bao bánh vạc',
+--  1000000, 3500000,
+--  'https://cdn.pdtrip.vn/destinations/hoian.jpg', 'Phố cổ di sản UNESCO và lễ hội đèn lồng rực rỡ', 4.6, 110, 0, 5500),
+
+-- ('55555555-5555-5555-5555-555555555555', 'Sa Pa',   'Lào Cai',    'Miền Bắc',
+--  'Thị trấn trong mây với ruộng bậc thang, đỉnh Fansipan và văn hóa các dân tộc H''Mông, Dao, Tày.',
+--  'Tháng 9–11 (lúa chín vàng) hoặc Tháng 3–5 (hoa nở)',
+--  'Lạnh, 10–20°C, có thể có băng giá vào tháng 12–1',
+--  'Thắng cố, lợn cắp nách, cá hồi Sa Pa, rau cải mèo, rượu táo mèo',
+--  1500000, 4500000,
+--  'https://cdn.pdtrip.vn/destinations/sapa.jpg', 'Thị trấn trong mây với ruộng bậc thang và đỉnh Fansipan', 4.8, 200, 1,7000),
+-- ('66666666-6666-6666-6666-666666666666', 'Vịnh Hạ Long', 'Quảng Ninh', 'Miền Bắc',
+--  'Di sản thiên nhiên thế giới với hàng nghìn đảo đá vôi nhô lên từ mặt biển xanh ngọc.',
+--  'Tháng 3–5 và Tháng 10–11 (ít mưa, biển êm)',
+--  'Mát mẻ mùa xuân/thu 20–28°C, nóng ẩm mùa hè, có bão tháng 7–9',
+--  'Chả mực Hạ Long, sam biển, ngán, sá sùng, bánh cuốn chả mực',
+--  2000000, 6000000,
+--  'https://cdn.pdtrip.vn/destinations/halong.jpg', 'Di sản thiên nhiên thế giới với hàng nghìn đảo đá vôi nhô lên từ mặt biển xanh ngọc', 4.9, 250,0, 8000),
+ 
+-- ('77777777-7777-7777-7777-777777777777', 'Huế', 'Thừa Thiên Huế', 'Miền Trung',
+--  'Cố đô triều Nguyễn với hệ thống lăng tẩm, đại nội cổ kính và sông Hương thơ mộng.',
+--  'Tháng 1–4 (mát, ít mưa)',
+--  'Mùa hè nóng 30–38°C, mùa mưa bão tháng 9–11',
+--  'Bún bò Huế, cơm hến, bánh bèo, bánh khoái, chè Huế',
+--  1200000, 3500000,
+--  'https://cdn.pdtrip.vn/destinations/hue.jpg', 'Cố đô triều Nguyễn với hệ thống lăng tẩm, đại nội cổ kính và sông Hương thơ mộng', 4.5, 120, 0, 5000),
+ 
+-- ('88888888-8888-8888-8888-888888888888', 'Nha Trang', 'Khánh Hòa', 'Miền Trung',
+--  'Thành phố biển sôi động với các đảo san hô, hoạt động lặn biển và ẩm thực hải sản phong phú.',
+--  'Tháng 1–8 (khô, biển đẹp, ít mưa)',
+--  'Nóng 25–34°C quanh năm, mùa mưa tháng 9–12',
+--  'Bún cá, nem nướng Ninh Hòa, bánh căn, hải sản tươi sống',
+--  2000000, 5500000,
+--  'https://cdn.pdtrip.vn/destinations/nhatrang.jpg', 'Thành phố biển sôi động với các đảo san hô, hoạt động lặn biển và ẩm thực hải sản phong phú.', 4.6, 140, 0, 6000),
+ 
+-- ('99999999-9999-9999-9999-999999999999', 'Mũi Né', 'Bình Thuận', 'Miền Nam',
+--  'Thiên đường đồi cát và lướt ván diều, nổi tiếng với Đồi Cát Bay và Suối Tiên.',
+--  'Tháng 11–4 (gió mạnh, thích hợp lướt ván diều)',
+--  'Nóng khô 26–33°C, gió mạnh quanh năm đặc trưng vùng duyên hải',
+--  'Hải sản nướng, bánh căn, gỏi cá mai, nước mắm Phan Thiết',
+--  1500000, 4000000,
+--  'https://cdn.pdtrip.vn/destinations/muine.jpg', 'Thiên đường đồi cát và lướt ván diều, nổi tiếng với Đồi Cát Bay và Suối Tiên.', 4.4, 100, 0, 4500),
+ 
+-- ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'Ninh Bình', 'Ninh Bình', 'Miền Bắc',
+--  'Vịnh Hạ Long trên cạn với Tam Cốc, Tràng An và quần thể hang động sông nước hữu tình.',
+--  'Tháng 9–11 (mùa lúa chín vàng) hoặc Tháng 1–3',
+--  'Mát mẻ mùa thu 22–28°C, lạnh nhẹ mùa đông, nóng ẩm mùa hè',
+--  'Cơm cháy, dê núi, ốc núi, rượu Kim Sơn, nem chua Yên Mạc',
+--  800000, 2800000,
+--  'https://cdn.pdtrip.vn/destinations/ninhbinh.jpg', 'Vịnh Hạ Long trên cạn với Tam Cốc, Tràng An và quần thể hang động sông nước hữu tình.', 4.7, 130, 0, 5500),
+
+-- ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'Hà Nội', 'Hà Nội', 'Miền Bắc',
+--  'Thủ đô nghìn năm văn hiến với phố cổ 36 phố phường, hồ Gươm và nền ẩm thực đường phố nổi tiếng thế giới.',
+--  'Tháng 9–11 (mùa thu) hoặc Tháng 3–4 (mùa xuân)',
+--  'Mát mẻ mùa thu/xuân 20–28°C, nóng ẩm mùa hè, lạnh hanh khô mùa đông có khi dưới 10°C',
+--  'Phở, bún chả, chả cá Lã Vọng, bánh cuốn Thanh Trì, cà phê trứng',
+--  1200000, 3500000,
+--  'https://cdn.pdtrip.vn/destinations/hanoi.jpg', 'Thủ đô nghìn năm văn hiến với phố cổ, hồ Gươm và ẩm thực đường phố nổi tiếng thế giới', 4.7, 180, 0, 7000),
+
+-- ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'Đà Nẵng', 'Đà Nẵng', 'Miền Trung',
+--  'Thành phố biển hiện đại với Cầu Vàng, Bà Nà Hills, cầu Rồng và bãi biển Mỹ Khê.',
+--  'Tháng 2–5 (khô, mát, biển êm)',
+--  'Nóng vào hè 28–35°C, mùa mưa bão tháng 9–12',
+--  'Mì Quảng, bánh tráng cuốn thịt heo, bún chả cá, gỏi cá Nam Ô',
+--  1500000, 4500000,
+--  'https://cdn.pdtrip.vn/destinations/danang.jpg', 'Thành phố biển hiện đại với Cầu Vàng, Bà Nà Hills và bãi biển Mỹ Khê', 4.7, 160, 0, 6500),
+
+-- ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'TP. Hồ Chí Minh', 'TP. Hồ Chí Minh', 'Miền Nam',
+--  'Đô thị sôi động nhất Việt Nam với Dinh Độc Lập, phố đi bộ Nguyễn Huệ và ẩm thực đường phố đa dạng.',
+--  'Tháng 12–4 (mùa khô, ít mưa)',
+--  'Nóng quanh năm 25–35°C, mùa mưa tháng 5–11 thường mưa rào buổi chiều',
+--  'Cơm tấm, hủ tiếu Nam Vang, bánh mì Huỳnh Hoa, bột chiên, súp cua',
+--  1500000, 4000000,
+--  'https://cdn.pdtrip.vn/destinations/hochiminh.jpg', 'Đô thị sôi động nhất Việt Nam với Dinh Độc Lập, phố đi bộ Nguyễn Huệ và ẩm thực đường phố đa dạng', 4.5, 150, 0, 6000),
+
+-- ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'Phong Nha', 'Quảng Bình', 'Miền Trung',
+--  'Vương quốc hang động với Sơn Đoòng - hang động lớn nhất thế giới và hệ thống hang Tối, hang Én.',
+--  'Tháng 2–8 (mùa khô, nước hang trong)',
+--  'Nóng ẩm mùa hè, mưa lớn tháng 9–11 khiến nước hang dâng cao',
+--  'Cháo canh, bánh bột lọc Quảng Bình, khoai deo, lẩu cá khoai',
+--  1000000, 3000000,
+--  'https://cdn.pdtrip.vn/destinations/phongnha.jpg', 'Vương quốc hang động với Sơn Đoòng - hang động lớn nhất thế giới', 4.8, 95, 1, 4200),
+
+-- ('ffffffff-ffff-ffff-ffff-ffffffffffff', 'Quy Nhơn', 'Bình Định', 'Miền Trung',
+--  'Thành phố biển yên bình với Kỳ Co, Eo Gió và những bãi biển hoang sơ ít khách du lịch.',
+--  'Tháng 1–8 (biển êm, nắng đẹp)',
+--  'Nóng khô mùa hè, mưa bão tháng 9–12',
+--  'Bánh xèo tôm nhảy, bún chả cá, nem chợ Huyện, bánh hỏi lòng heo',
+--  1200000, 3500000,
+--  'https://cdn.pdtrip.vn/destinations/quynhon.jpg', 'Thành phố biển yên bình với Kỳ Co, Eo Gió và những bãi biển hoang sơ', 4.6, 85, 0, 3800),
+
+-- ('00000000-0000-0000-0000-000000000001', 'Côn Đảo', 'Bà Rịa - Vũng Tàu', 'Miền Nam',
+--  'Hòn đảo lịch sử với di tích Nhà tù Côn Đảo, mùa rùa biển đẻ trứng và biển hoang sơ tuyệt đẹp.',
+--  'Tháng 3–9 (biển êm, mùa rùa đẻ trứng tháng 6–9)',
+--  'Nóng ẩm 25–32°C, gió mùa Đông Bắc mạnh tháng 10–2 khiến biển động',
+--  'Hải sản tươi sống, mứt hạt bàng, gỏi cá mai',
+--  2000000, 6000000,
+--  'https://cdn.pdtrip.vn/destinations/condao.jpg', 'Hòn đảo lịch sử với Nhà tù Côn Đảo, mùa rùa biển đẻ trứng và biển hoang sơ', 4.8, 70, 4, 3200),
+
+-- ('00000000-0000-0000-0000-000000000002', 'Mộc Châu', 'Sơn La', 'Miền Bắc',
+--  'Cao nguyên hoa mận, hoa cải và đồi chè trái tim, điểm đến trốn nóng lý tưởng vùng Tây Bắc.',
+--  'Tháng 10–1 (mùa hoa) hoặc Tháng 5–8 (mùa hè mát mẻ)',
+--  'Mát mẻ mùa hè 18–25°C, lạnh giá mùa đông có thể có sương muối',
+--  'Bê chao, cá suối nướng, thịt trâu gác bếp, sữa chua Mộc Châu',
+--  1000000, 3000000,
+--  'https://cdn.pdtrip.vn/destinations/mocchau.jpg', 'Cao nguyên hoa mận, hoa cải và đồi chè trái tim, điểm trốn nóng lý tưởng Tây Bắc', 4.7, 75, 0, 3500);
+
+-- -- ============================================================
+-- -- [TRAVEL] DESTINATIONS — Seed dữ liệu best_months
+-- -- Cột best_months SMALLINT[] đã được khai báo trong CREATE TABLE destinations ở trên.
+-- -- ============================================================
+-- UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Đà Lạt';
+-- UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Phú Quốc';
+-- UPDATE destinations SET best_months = ARRAY[9,10,11,3,4,5] WHERE name = 'Hà Giang';
+-- UPDATE destinations SET best_months = ARRAY[2,3,4]          WHERE name = 'Hội An';
+-- UPDATE destinations SET best_months = ARRAY[9,10,11,3,4,5] WHERE name = 'Sa Pa';
+-- UPDATE destinations SET best_months = ARRAY[3,4,5,10,11]   WHERE name = 'Vịnh Hạ Long';
+-- UPDATE destinations SET best_months = ARRAY[1,2,3,4]       WHERE name = 'Huế';
+-- UPDATE destinations SET best_months = ARRAY[1,2,3,4,5,6,7,8] WHERE name = 'Nha Trang';
+-- UPDATE destinations SET best_months = ARRAY[11,12,1,2,3,4]  WHERE name = 'Mũi Né';
+-- UPDATE destinations SET best_months = ARRAY[9,10,11,1,2,3] WHERE name = 'Ninh Bình';
+-- UPDATE destinations SET best_months = ARRAY[9,10,11,3,4]    WHERE name = 'Hà Nội';
+-- UPDATE destinations SET best_months = ARRAY[2,3,4,5]        WHERE name = 'Đà Nẵng';
+-- UPDATE destinations SET best_months = ARRAY[12,1,2,3,4]     WHERE name = 'TP. Hồ Chí Minh';
+-- UPDATE destinations SET best_months = ARRAY[2,3,4,5,6,7,8]  WHERE name = 'Phong Nha';
+-- UPDATE destinations SET best_months = ARRAY[1,2,3,4,5,6,7,8] WHERE name = 'Quy Nhơn';
+-- UPDATE destinations SET best_months = ARRAY[3,4,5,6,7,8,9]  WHERE name = 'Côn Đảo';
+-- UPDATE destinations SET best_months = ARRAY[10,11,12,1,5,6,7,8] WHERE name = 'Mộc Châu';
+
+-- -- ============================================================
+-- -- [TRAVEL] Destination Categories — Mỗi điểm đến có 4–5 category
+-- -- ============================================================
+--  INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('11111111-1111-1111-1111-111111111111','c2222222-2222-2222-2222-222222222222'), -- Mountain
+-- ('11111111-1111-1111-1111-111111111111','c3333333-3333-3333-3333-333333333333'), -- Resort
+-- ('11111111-1111-1111-1111-111111111111','c4444444-4444-4444-4444-444444444444'), -- Adventure
+-- ('11111111-1111-1111-1111-111111111111','c5555555-5555-5555-5555-555555555555'), -- Food
+-- ('11111111-1111-1111-1111-111111111111','c8888888-8888-8888-8888-888888888888'); -- Photography
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('22222222-2222-2222-2222-222222222222','c1111111-1111-1111-1111-111111111111'), -- Beach
+-- ('22222222-2222-2222-2222-222222222222','c3333333-3333-3333-3333-333333333333'), -- Resort
+-- ('22222222-2222-2222-2222-222222222222','c5555555-5555-5555-5555-555555555555'), -- Food
+-- ('22222222-2222-2222-2222-222222222222','c9999999-9999-9999-9999-999999999999'), -- Family
+-- ('22222222-2222-2222-2222-222222222222','caaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'); -- Luxury
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('33333333-3333-3333-3333-333333333333','c2222222-2222-2222-2222-222222222222'),
+-- ('33333333-3333-3333-3333-333333333333','c4444444-4444-4444-4444-444444444444'),
+-- ('33333333-3333-3333-3333-333333333333','c7777777-7777-7777-7777-777777777777'),
+-- ('33333333-3333-3333-3333-333333333333','c8888888-8888-8888-8888-888888888888');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('44444444-4444-4444-4444-444444444444','c5555555-5555-5555-5555-555555555555'),
+-- ('44444444-4444-4444-4444-444444444444','c6666666-6666-6666-6666-666666666666'),
+-- ('44444444-4444-4444-4444-444444444444','c8888888-8888-8888-8888-888888888888'),
+-- ('44444444-4444-4444-4444-444444444444','c9999999-9999-9999-9999-999999999999');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('55555555-5555-5555-5555-555555555555','c2222222-2222-2222-2222-222222222222'),
+-- ('55555555-5555-5555-5555-555555555555','c4444444-4444-4444-4444-444444444444'),
+-- ('55555555-5555-5555-5555-555555555555','c7777777-7777-7777-7777-777777777777'),
+-- ('55555555-5555-5555-5555-555555555555','c8888888-8888-8888-8888-888888888888');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('66666666-6666-6666-6666-666666666666','c1111111-1111-1111-1111-111111111111'),
+-- ('66666666-6666-6666-6666-666666666666','c7777777-7777-7777-7777-777777777777'),
+-- ('66666666-6666-6666-6666-666666666666','c8888888-8888-8888-8888-888888888888'),
+-- ('66666666-6666-6666-6666-666666666666','c9999999-9999-9999-9999-999999999999');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('77777777-7777-7777-7777-777777777777','c5555555-5555-5555-5555-555555555555'),
+-- ('77777777-7777-7777-7777-777777777777','c6666666-6666-6666-6666-666666666666'),
+-- ('77777777-7777-7777-7777-777777777777','c9999999-9999-9999-9999-999999999999');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('88888888-8888-8888-8888-888888888888','c1111111-1111-1111-1111-111111111111'),
+-- ('88888888-8888-8888-8888-888888888888','c3333333-3333-3333-3333-333333333333'),
+-- ('88888888-8888-8888-8888-888888888888','c5555555-5555-5555-5555-555555555555'),
+-- ('88888888-8888-8888-8888-888888888888','c9999999-9999-9999-9999-999999999999');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('99999999-9999-9999-9999-999999999999','c1111111-1111-1111-1111-111111111111'),
+-- ('99999999-9999-9999-9999-999999999999','c4444444-4444-4444-4444-444444444444'),
+-- ('99999999-9999-9999-9999-999999999999','c7777777-7777-7777-7777-777777777777');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c7777777-7777-7777-7777-777777777777'),
+-- ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c6666666-6666-6666-6666-666666666666'),
+-- ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c8888888-8888-8888-8888-888888888888'),
+-- ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','c9999999-9999-9999-9999-999999999999');
+
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','c5555555-5555-5555-5555-555555555555'),
+-- ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','c6666666-6666-6666-6666-666666666666'),
+-- ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','c8888888-8888-8888-8888-888888888888');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('cccccccc-cccc-cccc-cccc-cccccccccccc','c1111111-1111-1111-1111-111111111111'),
+-- ('cccccccc-cccc-cccc-cccc-cccccccccccc','c4444444-4444-4444-4444-444444444444'),
+-- ('cccccccc-cccc-cccc-cccc-cccccccccccc','c5555555-5555-5555-5555-555555555555');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('dddddddd-dddd-dddd-dddd-dddddddddddd','c5555555-5555-5555-5555-555555555555'),
+-- ('dddddddd-dddd-dddd-dddd-dddddddddddd','c6666666-6666-6666-6666-666666666666');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee','c4444444-4444-4444-4444-444444444444'),
+-- ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee','c7777777-7777-7777-7777-777777777777');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('ffffffff-ffff-ffff-ffff-ffffffffffff','c1111111-1111-1111-1111-111111111111'),
+-- ('ffffffff-ffff-ffff-ffff-ffffffffffff','c7777777-7777-7777-7777-777777777777');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('00000000-0000-0000-0000-000000000001','c1111111-1111-1111-1111-111111111111'),
+-- ('00000000-0000-0000-0000-000000000001','c7777777-7777-7777-7777-777777777777');
+-- INSERT INTO destination_categories(destination_id, category_id) VALUES
+-- ('00000000-0000-0000-0000-000000000002','c2222222-2222-2222-2222-222222222222'),
+-- ('00000000-0000-0000-0000-000000000002','c7777777-7777-7777-7777-777777777777');
+
+-- -- ============================================================

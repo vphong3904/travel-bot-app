@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-phan-rang",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "partial",
+    "missing_fields": [
+      "average_cost"
+    ],
+    "data_sources": [
+      "Foody",
+      "Google Maps"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000301",
+      "name": "Cơm Gà Khánh Kỳ",
+      "area": "TP. Phan Rang-Tháp Chàm",
+      "specialty_served": "Cơm gà truyền thống",
+      "average_cost": null,
+      "price_note": "// TODO: Đối chiếu menu tại Foody Phan Rang"
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000302",
+      "name": "Quán Bánh Căn Quê Hương",
+      "area": "Khu chợ Phan Rang",
+      "specialty_served": "Bánh căn, bánh xèo hải sản",
+      "average_cost": null,
+      "price_note": "// TODO: Cập nhật giá bán theo đĩa/cặp"
+    },
+    {
+      "id": "019f2b3c-4d5e-7a8b-b2c3-d4e5f6000303",
+      "name": "Nhà hàng Hải sản Vĩnh Hy",
+      "area": "Khu vực làng bè Vịnh Vĩnh Hy",
+      "specialty_served": "Hải sản tươi sống, lẩu cá bớp",
+      "average_cost": null,
+      "price_note": "// TODO: Xác nhận giá cân ký hải sản thực tế tại bè"
+    }
+  ]
+}

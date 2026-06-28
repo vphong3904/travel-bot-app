@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "city": "hue-hue",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "price.amount để null cho hầu hết tour vì chưa xác minh chéo ≥2 nguồn Nhóm 2 (RULE-18) — cần tra cứu thêm tại Klook/Traveloka",
+    "missing_fields": [
+      "price.amount — cần xác minh chéo Klook & Traveloka",
+      "group_size — chưa có nguồn cụ thể cho từng tour"
+    ],
+    "data_sources": [
+      "Klook Việt Nam: klook.com/vi (06/2025)",
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "Traveloka: traveloka.com/vi-vn (06/2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019ef463-560c-70ef-bef7-a96aaabb4e92",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Tour thuyền rồng sông Hương + Chùa Thiên Mụ",
+      "duration": "Khoảng 3–4 giờ (nửa buổi)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Đi thuyền rồng truyền thống dọc sông Hương, dừng chân tại Chùa Thiên Mụ (xem destinations.json) và thường có thêm trải nghiệm nghe ca Huế trên thuyền vào buổi tối.",
+      "includes": ["Vé thuyền", "Hướng dẫn viên (tùy gói)"],
+      "excludes": ["Vé vào các điểm tham quan trên bờ (nếu có)", "Ăn uống"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019ef463-560c-7482-997e-5783e28ed078",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Tour tham quan lăng tẩm triều Nguyễn (Tự Đức – Khải Định – Minh Mạng)",
+      "duration": "Cả ngày (khoảng 6–8 giờ)",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tham quan các lăng tẩm tiêu biểu của triều Nguyễn, thường kết hợp xe điện hoặc ô tô di chuyển giữa các điểm, có hướng dẫn viên giải thích lịch sử và kiến trúc từng lăng.",
+      "includes": ["Xe đưa đón", "Hướng dẫn viên"],
+      "excludes": ["Vé vào lăng (xem destinations.json)", "Ăn uống"],
+      "image_url": null,
+      "difficulty": "moderate"
+    },
+    {
+      "id": "019ef463-560c-72f3-aaf3-453f1db6434f",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Tour Đại Nội Huế kết hợp trải nghiệm áo dài cổ phục",
+      "duration": "Khoảng 2–3 giờ",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tham quan Đại Nội Huế cùng dịch vụ thuê áo dài/cổ phục để chụp ảnh, phổ biến với khách trẻ và khách quốc tế muốn trải nghiệm văn hóa triều Nguyễn.",
+      "includes": ["Vé vào Đại Nội (xem destinations.json)", "Thuê trang phục (tùy gói)"],
+      "excludes": ["Chụp ảnh chuyên nghiệp (nếu có nhu cầu thêm)"],
+      "image_url": null,
+      "difficulty": "easy"
+    }
+  ]
+}

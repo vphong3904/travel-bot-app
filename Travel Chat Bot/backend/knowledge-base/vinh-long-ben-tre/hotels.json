@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-003",
+    "status": "partial",
+    "missing_fields": ["exact_season_rates"],
+    "data_sources": ["Booking.com", "Agoda"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000101",
+      "name": "Diamond Stars Ben Tre Hotel",
+      "segment": "5-star",
+      "address": "140 Hùng Vương, Phường An Hội, TP. Bến Tre",
+      "price_range": null,
+      "price_note": "// TODO: Khảo sát giá phòng view sông Hàm Luông tại booking.com"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000102",
+      "name": "Ben Tre Riverside Resort",
+      "segment": "4-star",
+      "address": "Nguyễn Văn Tư, Phường 7, TP. Bến Tre",
+      "price_range": null,
+      "price_note": "// TODO: Check giá phòng bungalow ven sông tại agoda.com"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000103",
+      "name": "Út Trinh Homestay Vĩnh Long",
+      "segment": "homestay",
+      "address": "Cù lao An Bình, Huyện Long Hồ, Vĩnh Long",
+      "price_range": null,
+      "price_note": "Homestay miệt vườn Nam Bộ chuẩn trải nghiệm nấu ăn tối cùng gia chủ"
+    }
+  ]
+}

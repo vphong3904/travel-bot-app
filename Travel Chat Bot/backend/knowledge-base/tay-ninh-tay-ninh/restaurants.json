@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "city": "tay-ninh-tay-ninh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "partial",
+    "missing_fields": [
+      "average_cost"
+    ],
+    "data_sources": [
+      "Foody",
+      "Google Maps"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60301",
+      "name": "Bánh canh Trảng Bàng Năm Dung",
+      "area": "Huyện Trảng Bàng",
+      "specialty_served": "Bánh canh & Bánh tráng phơi sương",
+      "average_cost": null,
+      "price_note": "// TODO: Xác nhận menu 2026 từ Foody"
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60302",
+      "name": "Bò Tơ Năm Sánh",
+      "area": "TP. Tây Ninh",
+      "specialty_served": "Bò tơ nướng, lẩu bò",
+      "average_cost": null,
+      "price_note": "// TODO: Kiểm tra giá theo set menu hiện tại"
+    },
+    {
+      "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60303",
+      "name": "Nhà hàng Lâm Viên (KDL Núi Bà)",
+      "area": "Khu vực Núi Bà Đen",
+      "specialty_served": "Ốc núi, thằn lằn núi, gà nướng",
+      "average_cost": null,
+      "price_note": "// TODO: Đối chiếu báo giá thực tế của KDL"
+    }
+  ]
+}

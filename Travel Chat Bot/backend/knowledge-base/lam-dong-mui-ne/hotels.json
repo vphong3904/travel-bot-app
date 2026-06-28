@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "city": "lam-dong-mui-ne",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-003",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": ["Booking.com", "Agoda"]
+  },
+  "data": [
+    {
+      "id": "01904a43-6df3-7000-cd4c-1f544971cb32",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Anantara Mui Ne Resort",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "12A Nguyễn Đình Chiểu, Phường Hàm Tiến, Thành phố Phan Thiết, Bình Thuận",
+      "amenities": ["Bãi biển riêng", "Hồ bơi ngoài trời", "Spa cao cấp", "Nhà hàng", "Phòng gym"],
+      "description": "Khu nghỉ dưỡng 5 sao sang trọng kết hợp hài hòa văn hóa Việt Nam truyền thống và kiến trúc hiện đại bên bờ biển.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "01904a43-6df3-7000-df34-2e1cbfe8f5b8",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Bamboo Village Beach Resort & Spa",
+      "type": "resort",
+      "stars": 4,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "38 Nguyễn Đình Chiểu, Phường Hàm Tiến, Thành phố Phan Thiết, Bình Thuận",
+      "amenities": ["Hồ bơi", "Spa", "Nhà hàng ven biển", "Khuôn viên xanh rợp bóng tre", "Wifi miễn phí"],
+      "description": "Mệnh danh là làng tre yên bình sát biển, không gian thư giãn tĩnh lặng tuyệt hảo phong cách nhiệt đới.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "01904a43-6df3-7000-ebe5-3a0cb8b30f81",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Mui Ne Hills Bliss Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "69B Nguyễn Đình Chiểu, Phường Hàm Tiến, Thành phố Phan Thiết, Bình Thuận",
+      "amenities": ["Hồ bơi sân thượng", "Quầy bar", "Tầm nhìn ngắm vịnh biển", "Điều hòa"],
+      "description": "Nằm trên ngọn đồi nhỏ yên tĩnh ngắm toàn cảnh vịnh biển Mũi Né, phân khúc tầm trung năng động trẻ trung.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "01904a43-6df3-7000-f925-b827cb658514",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "iHome Homestay Mui Ne",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Huỳnh Thúc Kháng, Phường Mũi Né, Thành phố Phan Thiết, Bình Thuận",
+      "amenities": ["Bếp chung", "Sân vườn BBQ", "Phòng dorm và phòng riêng", "Cho thuê xe máy"],
+      "description": "Homestay phong cách bụi bặm, thân thiện cho giới trẻ và khách du lịch ba lô nằm rất gần Làng Chài.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

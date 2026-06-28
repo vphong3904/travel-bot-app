@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "city": "da-nang-da-nang",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-005",
+    "status": "partial",
+    "missing_fields": ["price"],
+    "data_sources": ["Klook (06/2026)", "Traveloka (06/2026)"]
+  },
+  "data": [
+    {
+      "id": "019ef543-a005-7400-8400-000000000001",
+      "city_id": "019ef543-a001-7000-8000-000000000001",
+      "name": "Tour Ghép Trọn Gói Khám Phá Ba Na Hills 1 Ngày",
+      "duration": "1 Ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person", "price_note": "// TODO: xác nhận tại Klook" },
+      "group_size": "Ghép đoàn",
+      "description": "Bao gồm xe trung chuyển đón trả tận nơi nội đô, vé cáp treo khứ hồi, buffet trưa tại nhà hàng trên đỉnh núi và hướng dẫn viên.",
+      "includes": ["Xe đưa đón", "Vé cáp treo", "Buffet trưa", "HDV địa phương"],
+      "excludes": ["Vé tham quan bảo tàng tượng sáp", "Chi tiêu trò chơi trúng thưởng lẻ"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019ef543-a005-7400-8400-000000000002",
+      "city_id": "019ef543-a001-7000-8000-000000000001",
+      "name": "Vé Du Thuyền Sông Hàn Ngắm Cầu Rồng Phun Lửa",
+      "duration": "Khoảng 45 - 60 phút",
+      "price": { "amount": null, "currency": "VND", "per": "person", "price_note": "// TODO: xác nhận tại cảng nội địa bờ sông Hàn" },
+      "group_size": "Thuyền lớn nhiều khách",
+      "description": "Lên thuyền xuôi dòng sông Hàn ban đêm, thưởng ngoạn ánh đèn đô thị lấp lánh và xem cầu Rồng phun lửa phun nước vào cuối tuần.",
+      "includes": ["Nước suối", "Xem múa Chăm trên thuyền", "Bảo hiểm đường thủy"],
+      "excludes": ["Đồ ăn gọi thêm trên tàu"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "019ef543-a005-7400-8400-000000000003",
+      "city_id": "019ef543-a001-7000-8000-000000000001",
+      "name": "Tour Hành Trình Văn Hóa: Ngũ Hành Sơn - Phố Cổ Hội An",
+      "duration": "Nửa ngày (Từ chiều đến tối)",
+      "price": { "amount": null, "currency": "VND", "per": "person", "price_note": "// TODO: xác nhận tại các đại lý lữ hành Bạch Đằng" },
+      "group_size": "Ghép đoàn",
+      "description": "Khởi hành từ chiều tham quan hang động chùa chiền tại Ngũ Hành Sơn, sau đó di chuyển sang Hội An ngắm đèn lồng phố cổ đêm.",
+      "includes": ["Xe vận chuyển đời mới", "Vé tham quan các điểm", "Ăn tối đặc sản Hội An"],
+      "excludes": ["Chi phí mua sắm đồ lưu niệm"],
+      "image_url": null,
+      "difficulty": "moderate"
+    }
+  ]
+}

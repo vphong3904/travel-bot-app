@@ -1,0 +1,488 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-013",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": [
+      "destinations.json (tp-ho-chi-minh)",
+      "hotels.json (tp-ho-chi-minh)",
+      "restaurants.json (tp-ho-chi-minh)",
+      "tours.json (tp-ho-chi-minh)"
+    ]
+  },
+  "data": [
+    {
+      "id": "tp-ho-chi-minh-2n1d-firsttime",
+      "title": "Sài Gòn 2N1Đ — Khám Phá Lần Đầu",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "any",
+      "travel_style": "culture",
+      "estimated_budget": {
+        "low": 800000,
+        "high": 2000000,
+        "currency": "VND",
+        "note": "Ngân sách thấp: ăn đường phố, ở hostel, đi xe buýt/metro. Ngân sách cao: ở khách sạn 3 sao, ăn nhà hàng, đi Grab"
+      },
+      "best_for_season": [
+        "quanh năm",
+        "tháng 11–4 (mùa khô)"
+      ],
+      "summary": "Lịch trình 2 ngày 1 đêm dành cho du khách đến TP. HCM lần đầu, tập trung khám phá các điểm tham quan lịch sử và văn hóa nổi tiếng tại Quận 1, kết hợp trải nghiệm ẩm thực đường phố đặc trưng Sài Gòn. Mọi điểm đi được bằng Grab hoặc đi bộ.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Lịch sử & Kiến trúc Quận 1",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:30",
+              "activity": "Ăn sáng phở bò tái đặc sản Sài Gòn",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7af3-890b-aa8cca2afd2c",
+                "name": "Phở Hòa Pasteur"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Đến sớm trước 8:00 để tránh hết phở. Quán chỉ mở buổi sáng đến ~11:00."
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Tham quan Dinh Độc Lập — khám phá hầm ngầm và phòng lịch sử",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-77e4-a3c7-48acf0b9c31a",
+                "name": "Dinh Độc Lập"
+              },
+              "estimated_cost": {
+                "min": 30000,
+                "max": 300000,
+                "currency": "VND"
+              },
+              "notes": "Dành ít nhất 1.5–2 tiếng. Thuê hướng dẫn viên tại chỗ để hiểu sâu lịch sử."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "11:30",
+              "activity": "Ăn trưa với cơm tấm sườn nướng — đặc sản Sài Gòn",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-79eb-8447-c8266f11f104",
+                "name": "Quán 94 Cơm Tấm Kiều Giang"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Bình dân, đông khách. Có thể chờ chỗ ngồi vào giờ cao điểm."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "13:30",
+              "activity": "Tham quan Bảo tàng Chứng tích Chiến tranh",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-7357-927f-0bb11a498d86",
+                "name": "Bảo tàng Chứng tích Chiến tranh"
+              },
+              "estimated_cost": {
+                "min": 30000,
+                "max": 300000,
+                "currency": "VND"
+              },
+              "notes": "Dành ít nhất 2 tiếng. Mang theo nước. Nặng về cảm xúc — chuẩn bị tâm lý trước."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "16:30",
+              "activity": "Ghé thăm Nhà thờ Đức Bà và chụp ảnh, đi dạo phố đi bộ Nguyễn Huệ",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-7da8-9742-5d6f0abd16f5",
+                "name": "Nhà thờ Đức Bà"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 200000,
+                "currency": "VND"
+              },
+              "notes": "Buổi chiều ánh sáng đẹp để chụp ảnh. Kết hợp đi bộ xuống đường Đồng Khởi ra bờ sông."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Bữa tối tại Nhà Hàng Ngon — thử đa dạng ẩm thực Việt trong một điểm",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7537-8e66-4f523e0063c5",
+                "name": "Nhà Hàng Ngon"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Đặt bàn trước. Gọi gỏi cuốn, bánh xèo và cơm tấm để thử nhiều món."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Chợ Bến Thành & Khám Phá Chợ Lớn",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Ăn sáng bánh mì Sài Gòn tại khu Phạm Ngũ Lão",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7537-8e66-4f523e0063c5",
+                "name": "Nhà Hàng Ngon"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Chưa có UUID — tham khảo foods.json (bánh mì). Nhiều xe bánh mì ngon trong khu này."
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Mua sắm và khám phá Chợ Bến Thành",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-788d-9915-e65782ad4e85",
+                "name": "Chợ Bến Thành"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 500000,
+                "currency": "VND",
+                "note": "Tùy ý"
+              },
+              "notes": "Mặc cả nhiệt tình. Mua đồ lưu niệm và đặc sản khô mang về."
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "10:30",
+              "activity": "Tham quan Chùa Ngọc Hoàng — không gian tâm linh đặc biệt",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-72fa-984b-77095ef88e7d",
+                "name": "Chùa Ngọc Hoàng"
+              },
+              "estimated_cost": {
+                "min": 30000,
+                "max": 300000,
+                "currency": "VND"
+              },
+              "notes": "Miễn phí vào. Mặc trang phục kín đáo, lịch sự."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Ăn trưa tại Cục Gạch Quán — ẩm thực gia đình Nam Bộ trong không gian hoài cổ",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7404-be6a-065bd7f1aabe",
+                "name": "Cục Gạch Quán"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Bắt buộc đặt bàn trước. Thử cá kho tộ và canh chua — hai món tiêu biểu Nam Bộ."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:30",
+              "activity": "Mua sắm tại phố Đồng Khởi và Vincom Center",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019eee06-3f91-7346-a977-728aedd63b5b",
+                "name": "Phố Mua Sắm Đồng Khởi"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 500000,
+                "currency": "VND",
+                "note": "Tùy ý"
+              },
+              "notes": "Kết hợp với Vincom Center ngay gần đó để mua đặc sản đóng gói tại siêu thị."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Dạo phố đêm Bùi Viện, ăn vặt và mua đồ lưu niệm",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019eee06-3f91-7767-aa83-ae97b4f67ced",
+                "name": "Phố Bùi Viện — Khu Phố Tây"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Khu này sôi động nhất từ 20:00. Phố đi bộ vào tối cuối tuần."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND",
+        "cost_note": "// TODO: tính lại sau khi xác minh giá vé Dinh Độc Lập, Bảo tàng Chứng tích, giá ăn uống"
+      },
+      "tags": [
+        "lịch sử",
+        "văn hóa",
+        "ẩm thực",
+        "mua sắm",
+        "lần đầu",
+        "Quận 1"
+      ]
+    },
+    {
+      "id": "tp-ho-chi-minh-3n2d-family",
+      "title": "Sài Gòn 3N2Đ — Gia Đình & Trẻ Em",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "family",
+      "travel_style": "mixed",
+      "estimated_budget": {
+        "low": null,
+        "high": null,
+        "currency": "VND",
+        "budget_note": "// TODO: tính lại sau khi xác minh giá tour, giá vé và giá lưu trú"
+      },
+      "best_for_season": [
+        "tháng 11–4 (mùa khô)",
+        "hè (tháng 6–8 — nhiều hoạt động cho trẻ)"
+      ],
+      "summary": "Lịch trình 3 ngày 2 đêm dành cho gia đình có trẻ nhỏ, kết hợp các điểm tham quan phù hợp cho cả trẻ em và người lớn. Ngày 1 khám phá trung tâm, ngày 2 trải nghiệm thiên nhiên sông nước, ngày 3 tour lịch sử Củ Chi.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Khám Phá Trung Tâm Sài Gòn",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Tham quan Dinh Độc Lập — cả gia đình",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-77e4-a3c7-48acf0b9c31a",
+                "name": "Dinh Độc Lập"
+              },
+              "estimated_cost": {
+                "min": 30000,
+                "max": 300000,
+                "currency": "VND"
+              },
+              "notes": "Trẻ em thích khu xe tăng và máy bay ngoài trời. Hầm ngầm phù hợp trẻ từ 8 tuổi trở lên."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Ăn trưa tại Nhà Hàng Ngon — đa dạng lựa chọn cho cả gia đình",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7537-8e66-4f523e0063c5",
+                "name": "Nhà Hàng Ngon"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Không gian rộng, phù hợp trẻ em. Đặt bàn trước."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Mua sắm đồ lưu niệm tại Chợ Bến Thành — trải nghiệm chợ Sài Gòn",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-788d-9915-e65782ad4e85",
+                "name": "Chợ Bến Thành"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 500000,
+                "currency": "VND",
+                "note": "Tùy ý"
+              },
+              "notes": "Trẻ em thích khám phá chợ. Giữ trẻ gần tầm mắt — chợ đông đúc."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "18:30",
+              "activity": "Dạo phố đi bộ Nguyễn Huệ, ăn tối tự chọn",
+              "location_ref": {
+                "type": "destination",
+                "id": "cb143053-ad59-4ffd-9d10-d2022fcf87ea",
+                "name": "Phố đi bộ Nguyễn Huệ"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Phố đi bộ an toàn cho trẻ em vào buổi tối. Có nhiều xe kem, quán ăn vặt."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Sông Nước & Thiên Nhiên",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Khám phá Làng Du lịch Bình Quới — thiên nhiên sông nước",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-79cf-a456-1ee9d8b2bfc8",
+                "name": "Làng Du lịch Bình Quới"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 200000,
+                "currency": "VND"
+              },
+              "notes": "Phù hợp gia đình — trẻ em thích chơi ngoài trời và các trò chơi dân gian. Đặt bàn ăn trưa tại đây trước."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Ăn trưa tại nhà hàng trong Làng Bình Quới — ẩm thực truyền thống sông nước",
+              "location_ref": {
+                "type": "destination",
+                "id": "019eee06-3f91-79cf-a456-1ee9d8b2bfc8",
+                "name": "Làng Du lịch Bình Quới"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Thực đơn đa dạng, giá ổn. Nên đặt bàn trước cuối tuần."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:30",
+              "activity": "Nghỉ ngơi, về khách sạn",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019eee06-3f91-71af-aaa9-76dff9405217",
+                "name": "Liberty Central Saigon Citypoint"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 200000,
+                "currency": "VND"
+              },
+              "notes": "Trẻ em cần nghỉ trưa. Tận dụng hồ bơi khách sạn."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Tối ăn cơm tấm bình dân",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-79eb-8447-c8266f11f104",
+                "name": "Quán 94 Cơm Tấm Kiều Giang"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Bình dân, trẻ em dễ ăn cơm tấm. Không cần đặt bàn."
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Tour Lịch Sử Củ Chi",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Khởi hành tour Địa Đạo Củ Chi nửa ngày",
+              "location_ref": {
+                "type": "tour",
+                "id": "019eee06-3f91-75ea-9c91-fc5ad50cc5f0",
+                "name": "Tour Địa Đạo Củ Chi Nửa Ngày"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 200000,
+                "currency": "VND"
+              },
+              "notes": "Xe đón tại khách sạn. Dặn trẻ em không chạm vào bẫy trưng bày. Mặc quần áo tối màu, thoải mái."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "13:30",
+              "activity": "Về thành phố, ăn trưa tự do",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019eee06-3f91-7404-be6a-065bd7f1aabe",
+                "name": "Cục Gạch Quán"
+              },
+              "estimated_cost": {
+                "min": 50000,
+                "max": 250000,
+                "currency": "VND"
+              },
+              "notes": "Tour thường về đến trung tâm lúc ~13:00–14:00."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "15:00",
+              "activity": "Mua sắm đồ quà về tại Vincom Center",
+              "location_ref": {
+                "type": "shopping",
+                "id": "019eee06-3f91-7767-aa83-ae97b4f67cec",
+                "name": "Vincom Center Đồng Khởi"
+              },
+              "estimated_cost": {
+                "min": 0,
+                "max": 500000,
+                "currency": "VND",
+                "note": "Tùy ý"
+              },
+              "notes": "Siêu thị trong Vincom có đặc sản Việt Nam đóng gói sạch, có hoá đơn — an toàn mang về làm quà."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND",
+        "cost_note": "// TODO: tính lại sau khi xác minh giá tour Củ Chi, giá vé và giá lưu trú gia đình"
+      },
+      "tags": [
+        "gia đình",
+        "trẻ em",
+        "lịch sử",
+        "thiên nhiên",
+        "sông nước",
+        "3 ngày"
+      ]
+    }
+  ]
+}

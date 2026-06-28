@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "city": "quang-tri-phong-nha",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["manual_curated"]
+  },
+  "data": [
+    {
+      "id": "019f5e6f-7a8b-7c8d-b2c3-d4e5f6000601",
+      "name": "Chợ Đông Hà",
+      "type": "traditional_market",
+      "address": "Đường Trần Hưng Đạo, TP. Đông Hà, Quảng Trị",
+      "specialty": "Tiêu vùng đất đỏ Cùa, rượu Kim Long, tinh dầu tràm Quảng Trị, hàng nhập khẩu Thái Lan - Lào"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "city": "da-nang-hoi-an",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price_per_night.amount — cần xác minh ≥2 nguồn (Booking.com & Agoda) trước khi điền số cụ thể",
+      "rating — không tự sinh, cần lấy đúng từ Booking.com/Agoda",
+      "booking_url — cần lấy link thật khi triển khai, không tự bịa"
+    ],
+    "data_sources": [
+      "Booking.com (tên & phân khúc, 06/2026)",
+      "Agoda (tham chiếu phân khúc, 06/2026)",
+      "Traveloka (tham chiếu phân khúc, 06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eeecc-64d2-7293-8074-579adc2abfa2",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Hoi An Coco Homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Khu vực Cẩm Châu, gần phố cổ Hội An",
+      "amenities": ["wifi", "xe đạp miễn phí", "bữa sáng", "sân vườn"],
+      "description": "Homestay gia đình phong cách vườn nhiệt đới, gần phố cổ, phù hợp khách muốn trải nghiệm sinh hoạt cùng người dân địa phương với mức giá tiết kiệm.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa có nguồn xác thực giá phòng — cần bổ sung từ Booking.com/Agoda"
+    },
+    {
+      "id": "019eeecc-64d3-72d5-a33a-2ab1d536ec9f",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Hoi An Backpacker Hostel",
+      "type": "hostel",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Khu phố cổ Hội An",
+      "amenities": ["wifi", "phòng dorm & phòng riêng", "tour desk", "khu sinh hoạt chung"],
+      "description": "Hostel năng động dành cho khách backpacker, gần trung tâm phố cổ, có khu vực chung để giao lưu với du khách quốc tế.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa có nguồn xác thực giá phòng — cần bổ sung từ Booking.com/Agoda"
+    },
+    {
+      "id": "019eeecc-64d3-716f-8954-42dcc494892e",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Little Hoi An Boutique Hotel",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Khu vực gần phố cổ Hội An",
+      "amenities": ["hồ bơi", "wifi", "nhà hàng", "đưa đón sân bay (phụ phí)"],
+      "description": "Khách sạn boutique 4 sao theo phong cách kiến trúc Hội An truyền thống, gần phố cổ, phù hợp cặp đôi và gia đình muốn không gian yên tĩnh.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa có nguồn xác thực giá phòng — cần bổ sung từ Booking.com/Agoda"
+    },
+    {
+      "id": "019eeecc-64d3-7324-a1c3-66cffa63284c",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Anantara Hoi An Resort",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Ven sông Thu Bồn, gần phố cổ Hội An",
+      "amenities": ["hồ bơi", "spa", "nhà hàng cao cấp", "thuyền đưa đón phố cổ"],
+      "description": "Resort 5 sao nằm bên sông Thu Bồn, kiến trúc thuộc địa Pháp pha trộn văn hóa địa phương, có dịch vụ thuyền riêng đưa khách vào phố cổ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa có nguồn xác thực giá phòng — cần bổ sung từ Booking.com/Agoda"
+    },
+    {
+      "id": "019eeecc-64d3-7e43-aa78-11a7c5e14ce2",
+      "city_id": "44444444-4444-4444-4444-444444444444",
+      "name": "Four Seasons Resort The Nam Hai, Hoi An",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Bãi biển Hà My, giữa Đà Nẵng và Hội An",
+      "amenities": ["villa riêng hồ bơi", "spa", "bãi biển riêng", "nhà hàng fine-dining"],
+      "description": "Khu nghỉ dưỡng 5 sao đẳng cấp quốc tế với villa biệt lập có hồ bơi riêng, nằm trên bãi biển Hà My giữa Đà Nẵng và Hội An.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa có nguồn xác thực giá phòng — cần bổ sung từ Booking.com/Agoda"
+    }
+  ]
+}

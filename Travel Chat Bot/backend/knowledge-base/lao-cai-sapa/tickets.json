@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "city": "lam-dong-mui-ne",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-006",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["Klook", "Traveloka"]
+  },
+  "data": [
+    {
+      "id": "019f3b22-6001-7000-8000-000000000001",
+      "city_id": "019f3b22-1000-7000-8000-000000000000",
+      "location_id": null,
+      "name": "Vé Cáp Treo Đồi Robin - Thiền Viện Trúc Lâm",
+      "price": { "adult": 120000, "child": 90000, "currency": "VND" },
+      "price_source": "Trạm cáp treo Đà Lạt",
+      "hours": "07:30 - 17:00",
+      "description": "Vé khứ hồi ngắm nhìn toàn cảnh đồi thông rậm rạp và Hồ Tuyền Lâm từ trên cao.",
+      "booking_required": false
+    },
+    {
+      "id": "019f3b22-6002-7000-8000-000000000002",
+      "city_id": "019f3b22-1000-7000-8000-000000000000",
+      "location_id": "019f3b22-2002-7000-8000-000000000002",
+      "name": "Vé Xe Mô Tô Địa Hình ATV Bàu Trắng",
+      "price": { "adult": 600000, "child": null, "currency": "VND" },
+      "price_source": "Ban quản lý dịch vụ đồi cát",
+      "hours": "05:00 - 18:00",
+      "description": "Trải nghiệm cảm giác mạnh đua xe ATV leo cồn cát dựng đứng tại Bàu Trắng trong 20 phút.",
+      "booking_required": false
+    },
+    {
+      "id": "019f3b22-6003-7000-8000-000000000003",
+      "city_id": "019f3b22-1000-7000-8000-000000000000",
+      "location_id": "019f3b22-2004-7000-8000-000000000004",
+      "name": "Vé Xe Trượt Ống Alpine Coaster Datanla",
+      "price": { "adult": 250000, "child": 150000, "currency": "VND" },
+      "price_source": "KDL Datanla",
+      "hours": "07:30 - 17:00",
+      "description": "Vé trượt xe ống máng đôi vòng vèo xuyên rừng thông xuống chân thác 1 và thác 3.",
+      "booking_required": false
+    }
+  ]
+}

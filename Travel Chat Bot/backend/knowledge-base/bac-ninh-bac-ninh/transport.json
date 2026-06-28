@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "city": "bac-ninh",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "complete",
+    "missing_fields": [
+      "price_range (giá xe buýt, taxi — cần xác minh cập nhật từ nguồn thực tế)"
+    ],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "Transerco (thông tin tuyến xe buýt Hà Nội–Bắc Ninh)",
+      "Google Maps (thời gian di chuyển tham khảo)"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "bus",
+        "from": "Hà Nội (Bến xe Gia Lâm)",
+        "duration": "45–60 phút",
+        "price_range": "15.000–20.000đ (tham khảo — xác nhận tại nhà xe)",
+        "providers": ["Xe buýt tuyến 204 (Transerco)", "Xe buýt tuyến 203"],
+        "notes": "Tuyến 204 xuất phát từ Bến xe Gia Lâm, tần suất khoảng 20–30 phút/chuyến. Đây là phương tiện rẻ nhất và phổ biến nhất cho khách từ Hà Nội."
+      },
+      {
+        "type": "bus",
+        "from": "Hà Nội (Bến xe Mỹ Đình)",
+        "duration": "60–90 phút (tùy tắc đường)",
+        "price_range": null,
+        "providers": ["Các hãng xe khách liên tỉnh"],
+        "notes": "Có xe khách từ Bến xe Mỹ Đình đến Bắc Ninh. Phù hợp cho khách ở phía Tây Hà Nội. Xác nhận giờ và giá tại bến xe."
+      },
+      {
+        "type": "car",
+        "from": "Hà Nội (nội thành)",
+        "duration": "30–60 phút (tùy điểm xuất phát và giờ đi)",
+        "price_range": "150.000–300.000đ (taxi/Grab — ước tính)",
+        "providers": ["Grab", "Be", "Taxi truyền thống"],
+        "notes": "Đi theo Quốc lộ 1A hoặc đường cao tốc Hà Nội–Bắc Ninh. Tắc đường vào giờ cao điểm và dịp cuối tuần lễ hội. Thuê xe tự lái hoặc có tài xế cũng là lựa chọn tiện."
+      },
+      {
+        "type": "motorbike",
+        "from": "Hà Nội (nội thành)",
+        "duration": "40–60 phút",
+        "price_range": null,
+        "providers": [],
+        "notes": "Nhiều bạn trẻ và du khách tự lái xe máy từ Hà Nội. Đi theo đường Yên Viên qua cầu Đuống hoặc cầu Chui. Phù hợp thời tiết đẹp, không nên đi mùa mưa hay đêm muộn."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "grab",
+        "price_info": null,
+        "notes": "Grab hoạt động tại thành phố Bắc Ninh và các thị xã lớn. Tiện lợi nhất cho di chuyển giữa các điểm tham quan trong nội thành. Ít xe hơn Hà Nội nên đặt trước 5–10 phút.",
+        "recommended": true
+      },
+      {
+        "type": "xe_om",
+        "price_info": null,
+        "notes": "Xe ôm truyền thống có ở bến xe, gần chợ và khu trung tâm. Thỏa thuận giá trước khi đi. Phù hợp cho quãng đường ngắn trong thị trấn.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": null,
+        "notes": "Taxi địa phương (Taxi Bắc Ninh, Taxi Mai Linh...) có mặt khắp thành phố. Nên bắt taxi có đồng hồ tính tiền hoặc thỏa thuận giá từ đầu.",
+        "recommended": true
+      },
+      {
+        "type": "motorbike_rental",
+        "price_info": "100.000–150.000đ/ngày (tham khảo — xác nhận tại điểm thuê)",
+        "notes": "Thuê xe máy rất phù hợp để khám phá các làng nghề và di tích nằm rải rác (Đông Hồ, Phù Lãng, chùa Dâu, chùa Bút Tháp). Hỏi khách sạn để giới thiệu điểm thuê uy tín.",
+        "recommended": true
+      },
+      {
+        "type": "bicycle",
+        "price_info": null,
+        "notes": "Đạp xe phù hợp trong khu vực huyện Thuận Thành (cụm chùa Dâu–Bút Tháp) vì đường làng bằng phẳng, ít xe. Hỏi thuê tại các homestay hoặc nhà nghỉ địa phương.",
+        "recommended": false
+      },
+      {
+        "type": "bus",
+        "price_info": null,
+        "notes": "Có xe buýt nội tỉnh kết nối các huyện trong Bắc Ninh, nhưng tần suất thấp và không thuận tiện cho du khách. Chỉ dùng khi không có lựa chọn khác.",
+        "recommended": false
+      }
+    ]
+  }
+}

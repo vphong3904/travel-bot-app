@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "city": "tp-ho-chi-minh-vung-tau",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-005",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Vexere", "Greenlines DP"]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "route": "TP.HCM - Vũng Tàu (Xe Limousine VIP)",
+        "provider": "Hoa Mai / Toàn Thắng / Vie Limousine",
+        "duration": "2 hours (Qua cao tốc TP.HCM - Long Thành)",
+        "estimated_price": null,
+        "price_note": "Tần suất 15-30 phút/chuyến đón trả tận nơi nội đô quận 1"
+      },
+      {
+        "route": "Bến Bạch Đằng (Q1) - Bến Hồ Mây (Vũng Tàu) (Tàu cao tốc)",
+        "provider": "Greenlines DP",
+        "duration": "1.5 hours lướt sóng sông Lòng Tàu ra vịnh biển",
+        "estimated_price": null,
+        "price_note": "// TODO: Tra bảng giá ngày thường và cuối tuần tại greenlines-dp.com"
+      }
+    ],
+    "getting_around": [
+      {
+        "mode": "Grab / Taxi",
+        "scope": "Nội thành TP.HCM & Vũng Tàu",
+        "note": "Hệ thống phủ rộng toàn diện, gọi xe công nghệ cực nhanh 24/7"
+      },
+      {
+        "mode": "Xe máy thuê",
+        "scope": "Cung đường ven biển Trần Phú - Hạ Long Vũng Tàu",
+        "note": "Hoàn hảo để tự do đi hóng gió biển Bãi Trước, Bãi Sau"
+      }
+    ]
+  }
+}

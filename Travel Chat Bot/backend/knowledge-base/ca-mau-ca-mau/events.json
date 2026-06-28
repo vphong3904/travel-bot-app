@@ -1,0 +1,66 @@
+{
+    "_meta": {
+        "city": "ca-mau",
+        "last_updated": "2026-06-22",
+        "agent_task": "T-006",
+        "status": "complete",
+        "partial_note": null,
+        "missing_fields": [
+            "ngày cụ thể một số lễ hội (chỉ biết tháng âm lịch)",
+            "cost (miễn phí hay có vé)"
+        ],
+        "data_sources": [
+            "manual_curated"
+        ]
+    },
+    "data": [
+        {
+            "id": "1254a0d8-af7a-4190-976e-56a1d35ffeae",
+            "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+            "name": "Lễ hội Nghinh Ông (Đua thuyền trên biển)",
+            "event_date": "Rằm tháng 2 âm lịch hằng năm",
+            "location_text": "Thị trấn Sông Đốc, huyện Trần Văn Thời, Cà Mau",
+            "cost": null,
+            "description": "Lễ hội truyền thống lớn nhất của ngư dân Cà Mau, cầu nguyện cho mùa đánh cá bình an và bội thu. Có nghi lễ rước sắc thần Nghinh Ông trên biển, đua thuyền truyền thống, biểu diễn văn nghệ và hội chợ. Hàng chục nghìn ngư dân và du khách tập hợp tại cảng Sông Đốc.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "86dcae4d-db57-4c5e-9045-4784e94c22ed",
+            "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+            "name": "Lễ hội Ba khía Rạch Gốc",
+            "event_date": "Tháng 10 âm lịch hằng năm",
+            "location_text": "Huyện Ngọc Hiển, Cà Mau",
+            "cost": null,
+            "description": "Lễ hội thường niên đặc trưng của vùng Ngọc Hiển, gắn với mùa thu hoạch ba khía — đặc sản muối mặn nổi tiếng. Có thi muối ba khía, trình diễn nghề truyền thống và chợ bán đặc sản địa phương. Đây là cơ hội hiếm để thấy toàn bộ quy trình làm ba khía từ đánh bắt đến muối ủ.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "8dfb2559-3781-4b6e-a1b3-ad6cc33b4485",
+            "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+            "name": "Lễ hội Đờn ca tài tử Bạc Liêu",
+            "event_date": "Tháng 11–12 hằng năm (lịch cụ thể thay đổi)",
+            "location_text": "TP. Bạc Liêu (nay thuộc tỉnh Cà Mau)",
+            "cost": null,
+            "description": "Lễ hội tôn vinh đờn ca tài tử Nam Bộ — di sản văn hóa phi vật thể thế giới được UNESCO công nhận năm 2013. Bạc Liêu là cái nôi của đờn ca tài tử với nhạc sĩ Cao Văn Lầu và bài \u0027Dạ cổ hoài lang\u0027. Có thi đấu đờn ca, triển lãm và biểu diễn đường phố.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "0dc5019b-9533-4c00-aceb-bfa4d1a984ee",
+            "city_id": "23431b56-3e63-4368-949f-8df24ab3c539",
+            "name": "Ngày hội Văn hóa – Thể thao dân tộc Khmer Nam Bộ",
+            "event_date": "Thường tổ chức vào tháng 11–12 (lịch thay đổi từng năm)",
+            "location_text": "TP. Cà Mau và các huyện có đông đồng bào Khmer",
+            "cost": null,
+            "description": "Sự kiện định kỳ vinh danh văn hóa người Khmer vùng Tây Nam Bộ, có đua ghe ngo, múa Lâm Thôn, triển lãm trang phục và ẩm thực Khmer. Đây là dịp để hiểu sâu hơn về cộng đồng dân tộc thiểu số đang sinh sống lâu đời tại đồng bằng Cửu Long.",
+            "annual": true,
+            "highlight": false,
+            "source": "manual_curated"
+        }
+    ]
+}

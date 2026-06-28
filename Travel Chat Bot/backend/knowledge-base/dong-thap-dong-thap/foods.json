@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "city": "dong-thap-dong-thap",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-004",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["Cổng thông tin ẩm thực miền Tây"]
+  },
+  "data": [
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60201",
+      "name": "Hủ tiếu Sa Đéc",
+      "type": "dish",
+      "description": "Sợi hủ tiếu to mềm dai đặc trưng, nước súp từ xương ngọt lịm ăn kèm nước sốt đắm vị đặc chế của người địa phương."
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60202",
+      "name": "Nem Lai Vung",
+      "type": "specialty",
+      "description": "Làm từ thịt heo đùi và bì xắt nhỏ trộn thính ớt tiêu, gói lá chùm ruột lên men chua ngọt giòn sần sật."
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60203",
+      "name": "Chuột đồng quay lu Cao Lãnh",
+      "type": "dish",
+      "description": "Chuột ăn lúa béo múp được làm sạch mổ bụng tẩm ướp gia vị rồi quay trong lu đất, da giòn rụm thịt ngọt như gà."
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60204",
+      "name": "Cơm gói lá sen",
+      "type": "dish",
+      "description": "Cơm nấu hạt sen, huyết rồng trộn thịt, nấm, hạt điều rồi bọc kín trong lá sen đem hấp chín thơm lừng hương đồng nội."
+    },
+    {
+      "id": "019f3c4d-5e6f-7a8b-a1b2-c3d4e5f60205",
+      "name": "Bánh phồng tôm Sa Giang",
+      "type": "specialty",
+      "description": "Đặc sản lâu đời làm từ bột khoai mì tinh và tôm xay nhuyễn, chiên lên phồng xốp giòn tan đậm đà vị biển hồ."
+    }
+  ]
+}

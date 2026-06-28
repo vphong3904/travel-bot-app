@@ -1,0 +1,928 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:frontend/widgets/markdown_chat.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../widgets/common_widgets.dart';
+import '../../providers/app_state.dart';
+import '../../models/chat_message.dart';
+import '../../services/chat_api_service.dart';
+import '../../services/api_service.dart';
+import '../../widgets/itinerary_card.dart';
+import '../trip_detail/trip_details_screen.dart';
+import '../auth/login_register_screen.dart';
+import '../../services/sse_client.dart';
+
+// ── Giới hạn câu hỏi cho khách ─────────────────────────────────────────────
+const _kGuestMaxQuestions = 3;
+const _kGuestCountKey = 'guest_ai_question_count';
+const _kGuestDateKey  = 'guest_ai_question_date';
+
+class ChatBotScreen extends StatefulWidget {
+  final String? sessionId;
+  final String? initialMessage;
+
+  const ChatBotScreen({super.key, this.sessionId, this.initialMessage});
+
+  @override
+  State<ChatBotScreen> createState() => _ChatBotScreenState();
+}
+
+class _ChatBotScreenState extends State<ChatBotScreen> {
+  late ChatSessionApiService _api;
+  late String _sessionId;
+  final List<ChatMessage> _messages = [];
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollCtrl = ScrollController();
+  bool _isLoading = true;
+  bool _isSending = false;
+  String? _error;
+
+  // Guest mode
+  bool _isGuest = false;
+  int _guestQuestionCount = 0;
+
+  final quickPrompts = [
+    'Thời tiết Đà Lạt tháng 12?',
+    'Gợi ý điểm đến biển tầm trung',
+    'Lịch trình Phú Quốc 3N2Đ',
+    'Khách sạn Phú Quốc giá rẻ',
+    'Ẩm thực Hà Giang đặc sắc?',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    final appState = context.read<AppState>();
+
+    if (!appState.isLoggedIn) {
+      // Chế độ khách: cho phép hỏi tối đa _kGuestMaxQuestions câu
+      _isGuest = true;
+      _loadGuestCount().then((_) {
+        if (mounted) setState(() => _isLoading = false);
+        // Nếu có initialMessage và còn quota → gửi luôn
+        if (mounted && widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => _sendMessage(widget.initialMessage!));
+        }
+      });
+      return;
+    }
+
+    _api = ChatSessionApiService(
+      tokenProvider: () => appState.token,
+      tokenRefresher: () => appState.refreshAccessToken(),
+    );
+    _initSession();
+  }
+
+  // ── Guest quota helpers ─────────────────────────────────────────────────
+
+  Future<void> _loadGuestCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedDate = prefs.getString(_kGuestDateKey) ?? '';
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    if (savedDate != today) {
+      // Ngày mới → reset đếm
+      await prefs.setInt(_kGuestCountKey, 0);
+      await prefs.setString(_kGuestDateKey, today);
+    }
+    _guestQuestionCount = prefs.getInt(_kGuestCountKey) ?? 0;
+  }
+
+  Future<void> _incrementGuestCount() async {
+    _guestQuestionCount++;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_kGuestCountKey, _guestQuestionCount);
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    await prefs.setString(_kGuestDateKey, today);
+  }
+
+  int get _guestRemaining => (_kGuestMaxQuestions - _guestQuestionCount).clamp(0, _kGuestMaxQuestions);
+  bool get _guestLimitReached => _isGuest && _guestQuestionCount >= _kGuestMaxQuestions;
+
+  Future<void> _initSession() async {
+    try {
+      if (widget.sessionId != null && widget.sessionId!.isNotEmpty) {
+        _sessionId = widget.sessionId!;
+        await _loadMessages();
+      } else {
+        final session = await _api.createSession();
+        _sessionId = session.id;
+      }
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _sendMessage(widget.initialMessage!);
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _error = friendlyError(e);
+      });
+    }
+  }
+
+  Future<void> _loadMessages() async {
+    try {
+      final msgs = await _api.listMessages(_sessionId);
+      if (!mounted) return;
+      setState(() {
+        _messages.clear();
+        for (final m in msgs) {
+          _messages.add(ChatMessage(
+            sender: m.isUser ? 'user' : 'ai',
+            text: m.content,
+            sources: (m.sources as List<dynamic>?)
+                    ?.map((e) => SourceRef.fromDynamic(e))
+                    .toList() ??
+                [],
+            intent: m.intent ?? '',
+            confidence: m.promptTokens > 0 ? 0.95 : 0,
+          ));
+        }
+      });
+      _scrollToBottom();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _error = 'Lỗi tải lịch sử: ${friendlyError(e)}');
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _sendMessage(String text) async {
+    if (text.trim().isEmpty || _isSending) return;
+
+    // Khách đã hết quota → hiện dialog mời đăng nhập
+    if (_guestLimitReached) {
+      _showGuestLimitDialog();
+      return;
+    }
+
+    final trimmed = text.trim();
+    _controller.clear();
+
+    setState(() {
+      _messages.add(ChatMessage(sender: 'user', text: trimmed));
+      _isSending = true;
+    });
+    _scrollToBottom();
+
+    // Nếu là khách → gọi AI qua Gemini trực tiếp (không cần session)
+    if (_isGuest) {
+      await _sendGuestMessage(trimmed);
+      return;
+    }
+
+    try {
+      final stream = _api.sendMessageStream(_sessionId, trimmed);
+      String fullContent = '';
+      List<SourceRef> sources = [];
+      Map<String, dynamic>? itinerary;
+      bool hasItinerary = false;
+
+      await for (final event in stream) {
+        if (!mounted) break;
+
+        if (event['type'] == 'chunk') {
+          final rawContent = event['content'] as String? ?? '';
+          final parsed = _parseChunkContent(rawContent);
+          fullContent += parsed['text'] as String;
+
+          if (parsed['sources'] != null) {
+            sources = (parsed['sources'] as List)
+                .map((e) => SourceRef.fromDynamic(e))
+                .toList();
+          }
+          if (parsed['itinerary'] != null) {
+            itinerary = parsed['itinerary'] as Map<String, dynamic>;
+            hasItinerary = true;
+          }
+
+          setState(() {
+            if (_messages.isNotEmpty && _messages.last.sender == 'ai') {
+              _messages.last = ChatMessage(
+                sender: 'ai',
+                text: fullContent,
+                sources: sources,
+                hasItinerary: hasItinerary,
+                itinerary: itinerary,
+              );
+            } else {
+              _messages.add(ChatMessage(sender: 'ai', text: fullContent));
+            }
+          });
+          _scrollToBottom();
+
+        } else if (event['type'] == 'done') {
+          final doneSources = (event['sources'] as List<dynamic>?)
+              ?.map((e) => SourceRef.fromDynamic(e))
+              .toList();
+          if (doneSources != null && doneSources.isNotEmpty) {
+            sources = doneSources;
+          }
+          if (event['itinerary'] != null) {
+            itinerary = event['itinerary'] as Map<String, dynamic>;
+            hasItinerary = true;
+          }
+          if (event['content'] != null) {
+            final parsed = _parseChunkContent(event['content'].toString());
+            final finalText = parsed['text'] as String;
+            if (finalText.isNotEmpty) fullContent = finalText;
+          }
+
+        } else if (event['type'] == 'error') {
+          throw Exception(event['detail'] ?? 'Lỗi từ server');
+        }
+      }
+
+      if (!mounted) return;
+      if (_messages.isNotEmpty && _messages.last.sender == 'ai') {
+        setState(() {
+          _messages.last = ChatMessage(
+            sender: 'ai',
+            text: fullContent.isNotEmpty ? fullContent : _messages.last.text,
+            sources: sources,
+            hasItinerary: hasItinerary,
+            itinerary: itinerary,
+          );
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _messages.add(ChatMessage(
+          sender: 'ai',
+          text: '❌ ${friendlyError(e)}',
+        ));
+      });
+    } finally {
+      if (mounted) setState(() => _isSending = false);
+    }
+    _scrollToBottom();
+  }
+
+  Map<String, dynamic> _parseChunkContent(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return {'text': ''};
+
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      try {
+        final decoded = jsonDecode(trimmed) as Map<String, dynamic>;
+        final hasKnownKeys = decoded.containsKey('answer') ||
+            decoded.containsKey('sources') ||
+            decoded.containsKey('itinerary');
+        if (!hasKnownKeys) return {'text': raw};
+
+        final text = (decoded['answer'] ??
+                decoded['content'] ??
+                decoded['text'] ??
+                decoded['response'] ??
+                '')
+            .toString();
+        final rawSources = decoded['sources'] as List<dynamic>?;
+        final sources = rawSources?.map((e) => SourceRef.fromDynamic(e)).toList();
+        final itinerary = decoded['itinerary'] as Map<String, dynamic>?;
+        return {
+          'text': text,
+          if (sources != null && sources.isNotEmpty) 'sources': sources,
+          if (itinerary != null) 'itinerary': itinerary,
+        };
+      } catch (_) {}
+    }
+
+    return {'text': raw};
+  }
+
+  // ── Xử lý tin nhắn cho khách — gọi /chat/guest/stream thật ──────────────
+
+  Future<void> _sendGuestMessage(String trimmed) async {
+    try {
+      await _incrementGuestCount();
+
+      // Gọi endpoint guest không cần auth
+      final guestClient = ApiClient();
+      final response = await guestClient.postStream(
+        '/chat/guest/stream',
+        {'content': trimmed},
+      );
+
+      if (response.statusCode == 429) {
+        final body = await response.stream.bytesToString();
+        String detail = 'Bạn đã dùng hết câu hỏi miễn phí hôm nay.';
+        try {
+          final decoded = jsonDecode(body);
+          if (decoded is Map && decoded['detail'] != null) detail = decoded['detail'].toString();
+        } catch (_) {}
+        if (mounted) {
+          setState(() => _messages.add(ChatMessage(sender: 'ai', text: '⚠️ $detail')));
+          _showGuestLimitBanner();
+        }
+        return;
+      }
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw ApiException(response.statusCode, 'Lỗi kết nối server (${response.statusCode}).');
+      }
+
+      String fullContent = '';
+      List<SourceRef> sources = [];
+
+      await for (final event in SseClient.parse(response)) {
+        if (!mounted) break;
+
+        if (event['type'] == 'chunk') {
+          final raw = event['content'] as String? ?? '';
+          final parsed = _parseChunkContent(raw);
+          fullContent += parsed['text'] as String;
+
+          if (parsed['sources'] != null) {
+            sources = (parsed['sources'] as List).map((e) => SourceRef.fromDynamic(e)).toList();
+          }
+
+          setState(() {
+            if (_messages.isNotEmpty && _messages.last.sender == 'ai') {
+              _messages.last = ChatMessage(sender: 'ai', text: fullContent, sources: sources);
+            } else {
+              _messages.add(ChatMessage(sender: 'ai', text: fullContent));
+            }
+          });
+          _scrollToBottom();
+
+        } else if (event['type'] == 'done') {
+          final doneSources = (event['sources'] as List<dynamic>?)
+              ?.map((e) => SourceRef.fromDynamic(e))
+              .toList();
+          if (doneSources != null && doneSources.isNotEmpty) sources = doneSources;
+
+          // Sync local count với server (server là source of truth)
+          final serverRemaining = event['remaining'] as int?;
+          if (serverRemaining != null) {
+            final serverUsed = _kGuestMaxQuestions - serverRemaining;
+            if (serverUsed > _guestQuestionCount) {
+              _guestQuestionCount = serverUsed;
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setInt(_kGuestCountKey, _guestQuestionCount);
+            }
+          }
+
+        } else if (event['type'] == 'error') {
+          throw Exception(event['detail'] ?? 'Lỗi từ server');
+        }
+      }
+
+      if (mounted && _messages.isNotEmpty && _messages.last.sender == 'ai') {
+        setState(() {
+          _messages.last = ChatMessage(
+            sender: 'ai',
+            text: fullContent.isNotEmpty ? fullContent : _messages.last.text,
+            sources: sources,
+          );
+        });
+      }
+
+      // Câu cuối cùng → hiện banner mời đăng nhập
+      if (mounted && _guestLimitReached) _showGuestLimitBanner();
+
+    } catch (e) {
+      if (mounted) {
+        setState(() => _messages.add(ChatMessage(sender: 'ai', text: '❌ ${friendlyError(e)}')));
+      }
+    } finally {
+      if (mounted) setState(() => _isSending = false);
+    }
+    _scrollToBottom();
+  }
+
+  void _showGuestLimitDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.lock_outline, color: AppColors.primary),
+            SizedBox(width: 10),
+            Text('Đã dùng hết lượt'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Bạn đã sử dụng hết $_kGuestMaxQuestions câu hỏi miễn phí hôm nay.',
+              style: const TextStyle(fontSize: 14, color: AppColors.dark),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Đăng nhập để hỏi không giới hạn, lưu lịch sử hội thoại và nhiều tính năng khác!',
+              style: TextStyle(fontSize: 13, color: AppColors.muted),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Để sau', style: TextStyle(color: AppColors.muted)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginRegisterScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('Đăng nhập ngay'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showGuestLimitBanner() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 5),
+        backgroundColor: AppColors.dark,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        content: const Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.white, size: 18),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Bạn đã dùng hết 3 câu hỏi miễn phí. Đăng nhập để hỏi không giới hạn!',
+                style: TextStyle(fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+        action: SnackBarAction(
+          label: 'Đăng nhập',
+          textColor: AppColors.primary,
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginRegisterScreen()),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _scrollToBottom() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollCtrl.hasClients) {
+        _scrollCtrl.animateTo(
+          _scrollCtrl.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.bg,
+        appBar: AppBar(title: const Text('Trợ Lý AI Du Lịch')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Guest quota banner (chỉ hiện khi là khách)
+    Widget? guestBanner;
+    if (_isGuest) {
+      final remaining = _guestRemaining;
+      guestBanner = Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        color: remaining == 0 ? AppColors.error.withValues(alpha: 0.08) : AppColors.primary.withValues(alpha: 0.07),
+        child: Row(
+          children: [
+            Icon(
+              remaining == 0 ? Icons.lock_outline : Icons.info_outline,
+              size: 15,
+              color: remaining == 0 ? AppColors.error : AppColors.primary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                remaining == 0
+                    ? 'Bạn đã dùng hết $_kGuestMaxQuestions câu hỏi miễn phí hôm nay.'
+                    : 'Khách được hỏi miễn phí $remaining/$_kGuestMaxQuestions câu hôm nay.',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  color: remaining == 0 ? AppColors.error : AppColors.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginRegisterScreen()),
+              ),
+              child: const Text(
+                'Đăng nhập',
+                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.primary),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_error != null) {
+      return Scaffold(
+        backgroundColor: AppColors.bg,
+        appBar: AppBar(title: const Text('Trợ Lý AI Du Lịch')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, size: 56, color: AppColors.error),
+                const SizedBox(height: 16),
+                Text(
+                  _error!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 15, color: AppColors.dark),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() { _error = null; _isLoading = true; });
+                    _initSession();
+                  },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Thử lại'),
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: AppColors.bg,
+      appBar: AppBar(
+        title: const Text('Trợ Lý AI Du Lịch',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      ),
+      body: Column(
+        children: [
+          if (guestBanner != null) guestBanner,
+          // FIX: Quick prompts — hiển thị trong 2 dòng với Wrap thay vì 1 dòng ngang bị cắt
+          if (_messages.length <= 1)
+            _buildQuickPrompts(),
+
+          Expanded(
+            child: _messages.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chat_bubble_outline,
+                            size: 48, color: AppColors.muted),
+                        const SizedBox(height: 16),
+                        Text('Bắt đầu hội thoại!',
+                            style: TextStyle(
+                                color: AppColors.muted, fontSize: 16)),
+                        const SizedBox(height: 8),
+                        Text('Hỏi về du lịch, điểm đến, lịch trình...',
+                            style: TextStyle(
+                                color: AppColors.muted, fontSize: 13)),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollCtrl,
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                    itemCount: _messages.length + (_isSending ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      // Typing indicator
+                      if (_isSending && index == _messages.length) {
+                        return Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2, color: AppColors.primary),
+                                ),
+                                const SizedBox(width: 10),
+                                Text('AI đang xử lý...',
+                                    style: TextStyle(
+                                        color: AppColors.muted, fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      final msg = _messages[index];
+                      final isUser = msg.sender == 'user';
+                      final sources = msg.sources;
+
+                      return Align(
+                        alignment: isUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: ConstrainedBox(
+                          // FIX: dùng ConstrainedBox với maxWidth tương đối screen
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.78,
+                            // FIX: minWidth để bubble user không quá hẹp
+                            minWidth: 60,
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+                            decoration: BoxDecoration(
+                              color: isUser ? AppColors.primary : Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(16),
+                                topRight: const Radius.circular(16),
+                                bottomLeft: Radius.circular(isUser ? 16 : 4),
+                                bottomRight: Radius.circular(isUser ? 4 : 16),
+                              ),
+                              boxShadow: isUser
+                                  ? null
+                                  : [
+                                      BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.05),
+                                          blurRadius: 8)
+                                    ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (!isUser && (msg.intent).isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 6),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(intentIcon(msg.intent),
+                                            size: 13,
+                                            color: AppColors.secondary),
+                                        const SizedBox(width: 4),
+                                        Flexible(
+                                          child: Text(intentLabel(msg.intent),
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: AppColors.secondary,
+                                                  fontWeight: FontWeight.w600),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                ChatMarkdown(
+                                  text: msg.text,
+                                  isUser: isUser,
+                                ),
+
+                                if (!isUser && (msg.confidence) > 0) ...[
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Độ tin cậy: ${(msg.confidence * 100).toStringAsFixed(0)}%',
+                                    style: TextStyle(
+                                        fontSize: 11, color: AppColors.muted),
+                                  ),
+                                ],
+
+                                if (!isUser && sources.isNotEmpty) ...[
+                                  const SizedBox(height: 10),
+                                  // FIX: Wrap tự xuống dòng, không overflow
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 6,
+                                    children: sources
+                                        .where((s) => s.displayLabel.isNotEmpty)
+                                        .map((source) {
+                                      return Tooltip(
+                                        message: source.category.isNotEmpty
+                                            ? '${source.category} · ${source.source}'
+                                            : source.source,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary
+                                                .withValues(alpha: 0.08),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(Icons.link,
+                                                  size: 11,
+                                                  color: AppColors.primary),
+                                              const SizedBox(width: 4),
+                                              ConstrainedBox(
+                                                constraints: const BoxConstraints(maxWidth: 120),
+                                                child: Text(source.displayLabel,
+                                                    style: const TextStyle(
+                                                        fontSize: 11,
+                                                        color: AppColors.primary),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+
+                                if (msg.hasItinerary && msg.itinerary != null) ...[
+                                  const SizedBox(height: 8),
+                                  ItineraryCard(
+                                      itinerary: Map<String, dynamic>.from(
+                                          msg.itinerary!)),
+                                ],
+
+                                if (msg.hasItinerary) ...[
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => TripDetailsScreen(
+                                                itinerary: msg.itinerary)),
+                                      ),
+                                      icon: const Icon(Icons.map, size: 16),
+                                      label: const Text('Xem Lịch Trình Chi Tiết',
+                                          style: TextStyle(fontSize: 13)),
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.secondary,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(vertical: 10)),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+
+          // FIX: Input bar — thêm maxLines + điều chỉnh padding an toàn
+          _buildInputBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickPrompts() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: quickPrompts.map((p) => GestureDetector(
+          onTap: _isSending ? null : () => _sendMessage(p),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            decoration: BoxDecoration(
+              color: _isSending
+                  ? AppColors.border
+                  : AppColors.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: _isSending
+                    ? AppColors.border
+                    : AppColors.primary.withValues(alpha: 0.25),
+              ),
+            ),
+            child: Text(
+              p,
+              style: TextStyle(
+                fontSize: 12,
+                color: _isSending ? AppColors.muted : AppColors.primary,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        )).toList(),
+      ),
+    );
+  }
+
+  Widget _buildInputBar() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -2))
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Container(
+                constraints: const BoxConstraints(maxHeight: 120),
+                decoration: BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: AppColors.border),
+                ),
+                child: TextField(
+                  controller: _controller,
+                  enabled: !_isSending && !_guestLimitReached,
+                  // FIX: cho phép multiline, cuộn bên trong
+                  maxLines: 4,
+                  minLines: 1,
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.multiline,
+                  decoration: const InputDecoration(
+                    hintText: 'Hỏi về du lịch, điểm đến...',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    isDense: true,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            // FIX: Send button — căn thẳng bottom
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: _isSending ? AppColors.muted : AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                    _isSending ? Icons.hourglass_bottom : Icons.send,
+                    color: Colors.white,
+                    size: 18),
+                onPressed: (_isSending || _guestLimitReached)
+                    ? null
+                    : () => _sendMessage(_controller.text),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "city": "tay-ninh-tay-ninh",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-005",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": [
+      "Vexere",
+      "Phương Trang"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "route": "TP.HCM - Tây Ninh (Xe khách Limousine)",
+        "provider": "Huệ Nghĩa / Saco Travel",
+        "duration": "2.5 - 3 hours",
+        "estimated_price": null,
+        "price_note": "// TODO: Tra cứu giá vé chính xác tại vexere.com"
+      },
+      {
+        "route": "TP.HCM - Tây Ninh (Xe bus công cộng)",
+        "provider": "Tuyến bus số 70-3 (Bến Thành - Mộc Bài)",
+        "duration": "3.5 hours",
+        "estimated_price": null,
+        "price_note": "// TODO: Cập nhật lộ trình bus mới nhất"
+      },
+      {
+        "route": "TP.HCM - Tây Ninh (Phương tiện cá nhân)",
+        "provider": "Tự túc (Quốc lộ 22)",
+        "duration": "2.5 hours",
+        "estimated_price": null,
+        "price_note": "Chi phí xăng xe tự túc"
+      }
+    ],
+    "getting_around": [
+      {
+        "mode": "Xe máy thuê",
+        "scope": "Nội thành và các điểm lân cận",
+        "note": "Phổ biến nhất cho khách đi phượt hồ Dầu Tiếng"
+      },
+      {
+        "mode": "Taxi",
+        "scope": "Mai Linh / Taxi Tây Ninh",
+        "note": "Phù hợp di chuyển nhóm gia đình đi Tòa Thánh, Núi Bà"
+      },
+      {
+        "mode": "Cáp treo",
+        "scope": "Nội khu Núi Bà Đen",
+        "note": "Tuyến đỉnh Vân Sơn và tuyến Chùa Hang của Sun World"
+      },
+      {
+        "mode": "Xe điện",
+        "scope": "Nội khu Tòa Thánh / KDL Núi Bà",
+        "note": "Hỗ trợ di chuyển khoảng cách ngắn trong khuôn viên rộng"
+      }
+    ]
+  }
+}

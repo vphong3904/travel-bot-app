@@ -1,0 +1,192 @@
+{
+  "_meta": {
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-013",
+    "status": "complete",
+    "missing_fields": [],
+    "data_sources": ["destinations.json", "hotels.json", "restaurants.json"]
+  },
+  "data": [
+    {
+      "id": "lao-cai-sapa-3n2d-explore",
+      "title": "Chinh Phục Fansipan & Bản Làng Sapa 3 Ngày 2 Đêm",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "friends_group",
+      "travel_style": "explore",
+      "estimated_budget": { "low": 2500000, "high": 4500000, "currency": "VND" },
+      "best_for_season": ["Mùa thu", "Mùa xuân"],
+      "summary": "Lịch trình lý tưởng cho nhóm bạn thích khám phá thiên nhiên và trải nghiệm văn hóa bản địa kỳ vĩ tại Sapa.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Check-in Thị Trấn Sương Mù & Leo Núi Hàm Rồng",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:00",
+              "activity": "Di chuyển bằng xe limousine từ Hà Nội lên tới Sapa, nhận phòng tại Mega Homestay Sapa nghỉ ngơi.",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019ef658-6c00-7304-8304-c12345678910",
+                "name": "Mega Homestay Sapa"
+              },
+              "estimated_cost": null,
+              "notes": "Nên chọn chuyến đi đêm hoặc sáng sớm từ Hà Nội."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Thưởng thức bữa trưa đậm đà mang phong cách núi rừng tại Nhà hàng A Phủ.",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef658-6c00-7401-8401-d12345678911",
+                "name": "Nhà hàng A Phủ"
+              },
+              "estimated_cost": null,
+              "notes": "Món lợn cắp nách nướng cực kỳ đáng thử."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Trekking nhẹ nhàng chinh phục Đỉnh Núi Hàm Rồng ngay sau quảng trường trung tâm.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7205-8205-b12345678906",
+                "name": "Núi Hàm Rồng"
+              },
+              "estimated_cost": null,
+              "notes": "Leo lên tận Sân Mây để bắt trọn khoảnh khắc hoàng hôn thị trấn."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "19:00",
+              "activity": "Ăn tối thắng cố truyền thống và trải nghiệm không gian nhộn nhịp tại Thắng Cố A Quỳnh.",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef658-6c00-7403-8403-d12345678913",
+                "name": "Thắng Cố A Quỳnh"
+              },
+              "estimated_cost": null,
+              "notes": "Nhâm nhi cùng một chút rượu ngô bản địa."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Chạnh Tay Vào Nóc Nhà Đông Dương Fansipan",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Tham gia hành trình di chuyển tuyến cáp treo săn mây tuyệt đỉnh trên đỉnh Fansipan.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7201-8201-b12345678902",
+                "name": "Đỉnh Fansipan"
+              },
+              "estimated_cost": null,
+              "notes": "Chuẩn bị trang phục ấm vì nhiệt độ trên đỉnh rất thấp."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Thuê xe máy đi tham quan dòng thác đổ tuyệt mỹ mang tên Thác Bạc.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7204-8204-b12345678905",
+                "name": "Thác Bạc"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể ghé mua đồ lưu niệm hoặc xem cá hồi dưới chân thác."
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Khám Phá Bản Cổ Người H'Mông Cát Cát",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Xuống đi bộ tham quan, chụp ảnh tại Bản Cát Cát cổ kính với suối và thác nhỏ.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7202-8202-b12345678903",
+                "name": "Bản Cát Cát"
+              },
+              "estimated_cost": null,
+              "notes": "Thuê trang phục dân tộc ngay đầu dốc lối vào bản."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["trekking", "fansipan", "bản làng"]
+    },
+    {
+      "id": "lao-cai-sapa-2n1d-relax",
+      "title": "Nghỉ Dưỡng Chữa Lành Sapa 2 Ngày 1 Đêm",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "couple",
+      "travel_style": "relax",
+      "estimated_budget": { "low": 4000000, "high": 8000000, "currency": "VND" },
+      "best_for_season": ["Quanh năm"],
+      "summary": "Kỳ nghỉ thảnh thơi trọn vẹn tại resort đẳng cấp bồng bềnh giữa mây trời Sapa dành cho các cặp đôi.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Thư Giãn Tại Resort View Ruộng Bậc Thang",
+          "blocks": [
+            {
+              "time_of_day": "noon",
+              "start_time": "12:30",
+              "activity": "Check-in nhận bungalow biệt lập tại Topas Ecolodge, ngắm toàn cảnh thung lũng.",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019ef658-6c00-7302-8302-c12345678908",
+                "name": "Topas Ecolodge"
+                  },
+              "estimated_cost": null,
+              "notes": "Tận hưởng làn nước ấm tại hồ bơi vô cực ngắm mây trời."
+                },
+            {
+              "time_of_day": "evening",
+              "start_time": "18:30",
+              "activity": "Dùng bữa tối lẩu cá hồi xứ lạnh sang trọng tinh tế tại Nhà hàng Đỗ Quyên.",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef658-6c00-7402-8402-d12345678912",
+                "name": "Nhà hàng Đỗ Quyên"
+              },
+              "estimated_cost": null,
+              "notes": "Thích hợp cho không gian lãng mạn lứa đôi."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Ngắm View Thung Lũng Mường Hoa Tuyệt Sắc",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Dạo bước ngắm vẻ hoang sơ, yên bình của những dải lụa vàng Thung lũng Mường Hoa.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7203-8203-b12345678904",
+                "name": "Thung lũng Mường Hoa"
+              },
+              "estimated_cost": null,
+              "notes": "Lưu lại những bức hình kỷ niệm thanh bình."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["nghỉ dưỡng", "chữa lành", "view đẹp"]
+    }
+  ]
+}

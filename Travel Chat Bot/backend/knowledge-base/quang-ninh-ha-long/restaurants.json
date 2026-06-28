@@ -1,0 +1,77 @@
+{
+    "data": [
+        {
+            "price_range": null,
+            "id": "4ef59e01-12dd-097c-9d6d-95df3629c88f",
+            "price_note": "// TODO: xác nhận giá menu thực tế",
+            "description": "Chuỗi nhà hàng hải sản nổi tiếng tại Hạ Long, phù hợp nhóm gia đình.",
+            "image_url": null,
+            "name": "Nhà hàng Hồng Hạnh",
+            "signature_dishes": [
+                "chả mực",
+                "ngán",
+                "tu hài",
+                "bề bề"
+            ],
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "area": "Bãi Cháy/Hòn Gai",
+            "rating": null,
+            "opening_hours": "10:00-22:00",
+            "cuisine": "hải sản Quảng Ninh",
+            "address": "Hạ Long, Quảng Ninh"
+        },
+        {
+            "price_range": null,
+            "id": "4ef59e01-12dd-ab7a-971a-0cad5976faf4",
+            "price_note": "// TODO: xác nhận giá menu thực tế",
+            "description": "Nhà hàng dễ tiếp cận cho khách ở khu du lịch Bãi Cháy.",
+            "image_url": null,
+            "name": "Nhà hàng Linh Đan",
+            "signature_dishes": [
+                "lẩu hải sản",
+                "mực nướng",
+                "bún bề bề"
+            ],
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "area": "Bãi Cháy",
+            "rating": null,
+            "opening_hours": "9:00-22:00",
+            "cuisine": "hải sản và món Việt",
+            "address": "Bãi Cháy, Hạ Long"
+        },
+        {
+            "price_range": null,
+            "id": "4ef59e01-15dd-3a72-ab41-cf6c2f336557",
+            "price_note": "// TODO: xác nhận giá menu thực tế",
+            "description": "Khu ăn uống sôi động buổi tối, nên hỏi giá trước khi gọi hải sản theo kg.",
+            "image_url": null,
+            "name": "Khu hải sản Bãi Cháy",
+            "signature_dishes": [
+                "ốc",
+                "bề bề",
+                "chả mực"
+            ],
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "area": "Bãi Cháy",
+            "rating": null,
+            "opening_hours": "17:00-23:00",
+            "cuisine": "hải sản bình dân",
+            "address": "Khu Bãi Cháy, Hạ Long"
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-004",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

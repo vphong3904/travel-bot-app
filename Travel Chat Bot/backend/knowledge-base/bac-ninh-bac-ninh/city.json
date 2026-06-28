@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "city": "bac-ninh",
+    "generated_from": "Kiến thức tổng quan (KHÔNG có trong SQL seed hiện tại) — cần bổ sung INSERT vào backend/initdb/11_seed_categories_destinations.sql trước khi dùng cho RAG production",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-014",
+    "status": "partial",
+    "partial_note": "Mở rộng 25 tỉnh/thành còn thiếu sau khi áp dụng 34 tỉnh sáp nhập. Nội dung mô tả dựa trên kiến thức địa lý/văn hóa phổ biến, KHÔNG bịa số liệu (giá, rating, lượt xem).",
+    "missing_fields": [
+      "id (UUID tạm, chưa có trong DB thật)",
+      "budget (chưa có nguồn giá thật)",
+      "stats (chưa có dữ liệu user thật)",
+      "image_url (chưa có ảnh thật)"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Bắc Ninh + Bắc Giang"
+  },
+  "data": {
+    "id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+    "name": "Bắc Ninh",
+    "slug": "bac-ninh",
+    "province": "Bắc Ninh",
+    "region": "Đồng bằng sông Hồng",
+    "description": "Quê hương quan họ với chùa Dâu, chùa Bút Tháp và làng nghề gốm Phù Lãng, tranh Đông Hồ; sau sáp nhập còn có vùng đồi núi Bắc Giang với Tây Yên Tử, vườn vải thiều Lục Ngạn.",
+    "special": "Cái nôi của dân ca Quan họ và hệ thống chùa cổ, làng nghề truyền thống",
+    "best_season": "Tháng 9–11 hoặc Tháng 1–3 (mùa hội chùa, hát quan họ)",
+    "best_months": [
+      9,
+      10,
+      11,
+      1,
+      2,
+      3
+    ],
+    "weather": "4 mùa rõ rệt, nóng ẩm mùa hè, lạnh khô mùa đông 10–18°C",
+    "budget": null,
+    "cuisine_summary": "Bánh phu thê Đình Bảng, nem Bùi, bánh tro, rượu làng Vân",
+    "image_url": null,
+    "stats": null,
+    "categories": [
+      "culture",
+      "history",
+      "family"
+    ],
+    "is_active": false,
+    "province_old": "Bắc Ninh"
+  }
+}

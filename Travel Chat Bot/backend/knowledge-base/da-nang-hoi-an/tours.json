@@ -1,0 +1,74 @@
+{
+  "_meta": {
+    "city": "da-nang-hoi-an",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "price.amount — cần xác minh ≥2 nguồn (Klook & Traveloka) trước khi điền số cụ thể"
+    ],
+    "data_sources": [
+      "Klook Việt Nam (tên tour & mô tả tham khảo, 06/2026)",
+      "Traveloka (tham khảo tour, 06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eeecc-64d3-7c81-900d-6e2d97315134",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour Bà Nà Hills & Cầu Vàng 1 ngày",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour khám phá khu nghỉ dưỡng núi Bà Nà Hills bằng cáp treo, tham quan Cầu Vàng, làng Pháp và vườn hoa, kết thúc trong ngày.",
+      "includes": ["xe đưa đón", "vé cáp treo & khu vui chơi", "hướng dẫn viên"],
+      "excludes": ["ăn trưa (tùy gói)", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa có nguồn xác thực giá tour — cần bổ sung từ Klook/Traveloka"
+    },
+    {
+      "id": "019eeecc-64d3-761f-9882-dae977a1a0df",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour thuyền thúng rừng dừa Cẩm Thanh & làng rau Trà Quế",
+      "duration": "Nửa ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Trải nghiệm ngồi thuyền thúng len lỏi rừng dừa nước Cẩm Thanh, sau đó tham gia hái rau và học nấu ăn tại làng rau Trà Quế truyền thống.",
+      "includes": ["vé thuyền thúng", "lớp học nấu ăn cơ bản", "nguyên liệu"],
+      "excludes": ["đồ uống", "tip cho người chèo thuyền"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa có nguồn xác thực giá tour — cần bổ sung từ Klook/Traveloka"
+    },
+    {
+      "id": "019eeecc-64d3-7108-86da-195236056be5",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour Ngũ Hành Sơn & Bán đảo Sơn Trà",
+      "duration": "1 ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Kết hợp tham quan quần thể núi đá Ngũ Hành Sơn, làng đá Non Nước và bán đảo Sơn Trà với chùa Linh Ứng, ngắm voọc chà vá chân nâu.",
+      "includes": ["xe đưa đón", "hướng dẫn viên", "vé tham quan Ngũ Hành Sơn"],
+      "excludes": ["ăn uống", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa có nguồn xác thực giá tour — cần bổ sung từ Klook/Traveloka"
+    },
+    {
+      "id": "019eeecc-64d3-722e-8af8-37624714b5b3",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Tour đêm thuyền hoa đăng sông Hoài",
+      "duration": "~2 giờ buổi tối",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Đi thuyền dọc sông Hoài giữa lòng phố cổ Hội An, thả hoa đăng và ngắm đèn lồng phản chiếu trên mặt nước về đêm.",
+      "includes": ["vé thuyền", "đèn hoa đăng"],
+      "excludes": ["đồ ăn/uống trên thuyền"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa có nguồn xác thực giá tour — cần bổ sung từ Klook/Traveloka"
+    }
+  ]
+}

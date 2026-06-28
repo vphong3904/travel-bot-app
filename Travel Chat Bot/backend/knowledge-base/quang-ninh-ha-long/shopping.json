@@ -1,0 +1,84 @@
+{
+    "data": [
+        {
+            "opening_hours": "18:00-23:00",
+            "source": "manual_curated",
+            "id": "4ef59e01-16dd-9f7f-9cde-cafa7236e08e",
+            "type": "market",
+            "items": [
+                "đồ lưu niệm",
+                "hải sản khô",
+                "ngọc trai",
+                "quần áo"
+            ],
+            "address": "Bãi Cháy, Hạ Long",
+            "name": "Chợ đêm Hạ Long",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "price_range": "Bình dân - trung bình",
+            "tips": "Nên trả giá và kiểm tra chất lượng đồ lưu niệm."
+        },
+        {
+            "opening_hours": "6:00-18:00",
+            "source": "manual_curated",
+            "id": "4ef59e01-16dd-9077-a232-ad6054c5cfb8",
+            "type": "market",
+            "items": [
+                "hải sản tươi",
+                "chả mực",
+                "đồ khô",
+                "trái cây"
+            ],
+            "address": "Bãi Cháy, Hạ Long",
+            "name": "Chợ Cái Dăm",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "price_range": "Theo mùa và loại hải sản",
+            "tips": "Hỏi giá theo kg trước khi mua."
+        },
+        {
+            "opening_hours": "16:00-23:00",
+            "source": "manual_curated",
+            "id": "4ef59e01-16dd-1b70-a3bb-638dd47be793",
+            "type": "street",
+            "items": [
+                "ẩm thực",
+                "quà lưu niệm",
+                "đồ uống",
+                "thời trang"
+            ],
+            "address": "Bãi Cháy, Hạ Long",
+            "name": "Bãi Cháy Walking Street",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "price_range": "Trung bình",
+            "tips": "Hợp đi dạo tối sau khi tắm biển."
+        },
+        {
+            "opening_hours": "8:00-21:00",
+            "source": "manual_curated",
+            "id": "4ef59e01-16dd-a97f-9485-8bb56412418b",
+            "type": "souvenir",
+            "items": [
+                "ngọc trai",
+                "trang sức",
+                "quà lưu niệm biển"
+            ],
+            "address": "Hạ Long, Quảng Ninh",
+            "name": "Cửa hàng ngọc trai Hạ Long",
+            "city_id": "4ef59e01-72de-af7b-9c53-b420c5caff4a",
+            "price_range": "Trung bình - cao",
+            "tips": "Yêu cầu giấy bảo hành/chứng nhận nếu mua trang sức giá trị."
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-006",
+        "city": "quang-ninh-ha-long",
+        "data_sources": [
+            "manual_curated"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

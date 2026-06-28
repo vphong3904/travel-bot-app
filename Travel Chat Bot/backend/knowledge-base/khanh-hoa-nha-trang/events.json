@@ -1,0 +1,66 @@
+{
+    "_meta": {
+        "city": "khanh-hoa-nha-trang",
+        "last_updated": "2026-06-22",
+        "agent_task": "T-006",
+        "status": "complete",
+        "partial_note": null,
+        "source": "manual_curated",
+        "missing_fields": [
+            "event_date chính xác từng năm — cần xác nhận tại Sở Du lịch Khánh Hòa"
+        ],
+        "data_sources": [
+            "manual_curated"
+        ]
+    },
+    "data": [
+        {
+            "id": "019eedf6-c8b1-75d4-b80c-d7588116bf76",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Lễ hội Tháp Bà Ponagar (Vía Bà)",
+            "event_date": "Tháng 3 âm lịch (thường tháng 4–5 dương lịch), 3 ngày",
+            "location_text": "Tháp Bà Ponagar, TP. Nha Trang",
+            "cost": "Miễn phí tham quan lễ hội — vé vào tháp theo quy định thường ngày",
+            "description": "Lễ hội truyền thống lớn nhất của người Chăm và người Kinh ở Khánh Hòa, thờ nữ thần Ponagar — thánh mẫu bảo hộ vùng đất. Nghi lễ tắm tượng, dâng hương, biểu diễn múa Chăm truyền thống thu hút hàng vạn người. Được Bộ Văn hóa công nhận là di sản văn hóa phi vật thể quốc gia.",
+            "annual": true,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-7bc8-96ab-90110671bba3",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Festival Biển Nha Trang",
+            "event_date": "Thường tổ chức tháng 6–7, cách năm (năm chẵn hoặc theo kế hoạch tỉnh)",
+            "location_text": "Quảng trường 2 tháng 4, bờ biển Trần Phú, TP. Nha Trang",
+            "cost": "Nhiều hoạt động miễn phí — xác nhận chương trình từng năm tại khanhhoa.gov.vn",
+            "description": "Sự kiện du lịch - văn hóa lớn của tỉnh Khánh Hòa với các hoạt động: biểu diễn nghệ thuật, đua thuyền, lễ hội ẩm thực biển, trình diễn ánh sáng trên bờ biển. Thu hút hàng trăm nghìn du khách trong và ngoài nước.",
+            "annual": false,
+            "highlight": true,
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-762c-b573-39ce65963d9d",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Giải Marathon Quốc tế Nha Trang",
+            "event_date": "Thường tháng 5–6 hàng năm — xác nhận lịch chính xác tại website giải",
+            "location_text": "Đường Trần Phú và các tuyến đường ven biển Nha Trang",
+            "cost": "Phí đăng ký theo cự ly — xác nhận tại website đăng ký",
+            "description": "Giải chạy marathon quốc tế với cung đường đẹp dọc bờ biển Nha Trang, thu hút vận động viên trong nước và quốc tế. Các cự ly: 5km, 10km, 21km (Half Marathon), 42km (Full Marathon).",
+            "annual": true,
+            "highlight": false,
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-761e-b0a8-e7cc97f70d8e",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Lễ hội Ăn Tết Nguyên Đán tại Nha Trang",
+            "event_date": "Tháng 1–2 (âm lịch) hàng năm",
+            "location_text": "Quảng trường 2 tháng 4, đường Trần Phú, chợ hoa Tết",
+            "cost": "Miễn phí",
+            "description": "Nha Trang tổ chức nhiều hoạt động đón Tết: chợ hoa Tết, màn pháo hoa đêm Giao Thừa trên biển, các chương trình văn nghệ. Đây cũng là thời điểm đông khách nhất — nên đặt phòng trước vài tháng.",
+            "annual": true,
+            "highlight": false,
+            "source": "manual_curated"
+        }
+    ]
+}

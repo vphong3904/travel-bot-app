@@ -1,0 +1,109 @@
+{
+    "_meta": {
+        "city": "khanh-hoa-nha-trang",
+        "last_updated": "2026-06-22",
+        "agent_task": "T-006",
+        "status": "complete",
+        "source": "manual_curated",
+        "partial_note": null,
+        "missing_fields": [
+            "opening_hours — cần xác nhận từng địa điểm tại Google Maps"
+        ],
+        "data_sources": [
+            "manual_curated"
+        ]
+    },
+    "data": [
+        {
+            "id": "019eedf6-c8b1-7058-86c3-044960548ee9",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Chợ Đầm Nha Trang",
+            "type": "market",
+            "items": [
+                "Hải sản khô",
+                "Yến sào Khánh Hòa",
+                "Nước mắm Nha Trang",
+                "Đặc sản địa phương",
+                "Hàng lưu niệm",
+                "Quần áo"
+            ],
+            "address": "Chợ Đầm, TP. Nha Trang, Khánh Hòa",
+            "opening_hours": "Thường 6:00–18:00 — xác nhận trước khi đến",
+            "price_range": "Bình dân — mặc cả được",
+            "tips": "Nơi tốt nhất mua hải sản khô và đặc sản mang về. Hỏi giá ít nhất 2 sạp trước khi mua. Tránh mua yến sào ở nơi không có tem kiểm định.",
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-7dab-b060-e8dde5f9b3c2",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Yến Sào Khánh Hòa (Cửa hàng chính thức)",
+            "type": "souvenir_shop",
+            "items": [
+                "Tổ yến thô",
+                "Yến tinh chế đóng hộp",
+                "Nước yến đóng chai",
+                "Quà tặng yến cao cấp"
+            ],
+            "address": "Nhiều chi nhánh tại TP. Nha Trang — xem yensaokhanhhoa.com.vn",
+            "opening_hours": "Thường 8:00–17:30 — xác nhận tại website hoặc gọi trước",
+            "price_range": "Cao cấp — phụ thuộc loại và trọng lượng",
+            "tips": "Chỉ mua yến sào tại cửa hàng chính thức của Công ty Yến Sào Khánh Hòa để đảm bảo chất lượng và tránh hàng giả. Có thể xuất hóa đơn VAT.",
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-73d4-8d4c-5945f9d9d65c",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Nha Trang Center (Trung tâm thương mại)",
+            "type": "mall",
+            "items": [
+                "Thời trang",
+                "Điện tử",
+                "Mỹ phẩm",
+                "Siêu thị",
+                "Khu ăn uống",
+                "Rạp chiếu phim"
+            ],
+            "address": "20 Trần Phú, TP. Nha Trang, Khánh Hòa",
+            "opening_hours": "Thường 9:30–22:00 — xác nhận trước khi đến",
+            "price_range": "Tầm trung đến cao cấp — giá niêm yết cố định",
+            "tips": "Địa điểm mua sắm hiện đại nhất Nha Trang, view biển từ tầng trên. Có siêu thị Big C bên trong phù hợp mua đặc sản đóng gói.",
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-7abd-8b02-7f77ceab52a6",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Chợ đêm Nha Trang",
+            "type": "market",
+            "items": [
+                "Quần áo",
+                "Lưu niệm biển",
+                "Đồ thủ công mỹ nghệ",
+                "Mô hình tháp Chăm",
+                "Đặc sản địa phương"
+            ],
+            "address": "Đường 19 tháng 10, TP. Nha Trang, Khánh Hòa",
+            "opening_hours": "17:00–23:00",
+            "price_range": "Bình dân — mặc cả được",
+            "tips": "Kết hợp mua sắm và ăn uống buổi tối. Mặc cả 20–30% là bình thường với hàng lưu niệm.",
+            "source": "manual_curated"
+        },
+        {
+            "id": "019eedf6-c8b1-71d8-bfac-d40b2b17704c",
+            "city_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+            "name": "Khu mua sắm đường Nguyễn Thiện Thuật",
+            "type": "street",
+            "items": [
+                "Hải sản khô",
+                "Nước mắm",
+                "Tôm khô",
+                "Mực khô",
+                "Đặc sản vùng biển"
+            ],
+            "address": "Đường Nguyễn Thiện Thuật, TP. Nha Trang, Khánh Hòa",
+            "opening_hours": "Thường 7:00–20:00",
+            "price_range": "Bình dân đến tầm trung — mặc cả được",
+            "tips": "Tuyến phố chuyên bán hải sản khô và đặc sản mang về. Mua nhiều để được giảm giá. Yêu cầu đóng gói chân không nếu mang lên máy bay.",
+            "source": "manual_curated"
+        }
+    ]
+}

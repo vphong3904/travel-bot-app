@@ -1,0 +1,129 @@
+{
+  "_meta": {
+    "city": "ha-noi",
+    "generated_from": "Kiến thức tổng quan đã xác minh tên/địa danh thật, giá là ước tính thị trường — KHÔNG có trong SQL seed",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": "Giá/đánh giá là ƯỚC TÍNH dựa trên kiến thức thị trường phổ biến, KHÔNG phải số liệu real-time đã verify — PHẢI xác nhận lại (qua đối tác/khảo sát giá thật) trước khi đưa vào production hoặc hiển thị giá cụ thể cho người dùng. Tên khách sạn là thật (nổi tiếng, dễ tra cứu), nhưng GIÁ price_per_night là ƯỚC TÍNH thị trường tham khảo — không phải giá real-time, có thể sai lệch nhiều. Bắt buộc nối API đối tác (Agoda/Booking) hoặc khảo sát giá thật trước khi hiển thị cho user.",
+    "missing_fields": [
+      "id thật từ DB (đang dùng UUID tạm)",
+      "stats/rating thật",
+      "image_url thật",
+      "giá đã verify thật"
+    ]
+  },
+  "data": [
+    {
+      "id": "b1d789b9-4335-4be6-a003-5e637954781b",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Sofitel Legend Metropole Hanoi",
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": {
+        "amount": 6500000,
+        "currency": "VND"
+      },
+      "address": "15 Phố Ngô Quyền, quận Hoàn Kiếm, Hà Nội",
+      "amenities": [
+        "Hồ bơi",
+        "Spa",
+        "Nhà hàng Pháp",
+        "Gym",
+        "Wifi miễn phí"
+      ],
+      "description": "Khách sạn lịch sử mang tính biểu tượng từ 1901, kiến trúc Pháp cổ điển, từng đón nhiều nguyên thủ và người nổi tiếng thế giới.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "ca112e78-eaf7-4aa0-b57a-100e15232f48",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Lotte Hotel Hanoi",
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": {
+        "amount": 3200000,
+        "currency": "VND"
+      },
+      "address": "54 Liễu Giai, quận Ba Đình, Hà Nội",
+      "amenities": [
+        "Hồ bơi trong nhà",
+        "Spa",
+        "Đài quan sát",
+        "Gym",
+        "Wifi miễn phí"
+      ],
+      "description": "Khách sạn cao tầng hiện đại nằm trong tòa Lotte Center, có đài quan sát Skywalk view toàn cảnh Hà Nội.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "5d8bd421-54a1-4eb2-b7fc-d0d3f4f56187",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Hanoi La Siesta Hotel & Spa (Phố cổ)",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": {
+        "amount": 1800000,
+        "currency": "VND"
+      },
+      "address": "Phố Mã Mây, quận Hoàn Kiếm, Hà Nội",
+      "amenities": [
+        "Spa",
+        "Nhà hàng tầng thượng",
+        "Wifi miễn phí",
+        "Đưa đón sân bay (phụ phí)"
+      ],
+      "description": "Khách sạn boutique nằm giữa lòng phố cổ, gần Hồ Gươm và khu ăn đêm Tạ Hiện, phong cách Đông Dương.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "9ed8694d-5d22-48e8-bbb3-89af4d3b223c",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Hanoi Backpackers Hostel",
+      "type": "hostel",
+      "stars": null,
+      "price_per_night": {
+        "amount": 250000,
+        "currency": "VND"
+      },
+      "address": "Khu vực phố cổ, quận Hoàn Kiếm, Hà Nội",
+      "amenities": [
+        "Phòng dorm có máy lạnh",
+        "Khu sinh hoạt chung",
+        "Wifi miễn phí",
+        "Tour ghép đoàn"
+      ],
+      "description": "Hostel phổ biến với khách du lịch backpacker, không gian giao lưu sôi động, tổ chức tour/pub crawl.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "1a615d22-360e-49ea-b7a2-5f1feaf02945",
+      "city_id": "0f2136b0-e9c2-4ff1-a86d-ac0cc63ff9c6",
+      "name": "Hanoi Old Quarter Homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": {
+        "amount": 450000,
+        "currency": "VND"
+      },
+      "address": "Gần phố Hàng Bạc, quận Hoàn Kiếm, Hà Nội",
+      "amenities": [
+        "Bếp chung",
+        "Wifi miễn phí",
+        "Chủ nhà hỗ trợ tư vấn lịch trình"
+      ],
+      "description": "Homestay nhỏ, ấm cúng, phù hợp khách muốn trải nghiệm gần gũi văn hóa địa phương ngay trong phố cổ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

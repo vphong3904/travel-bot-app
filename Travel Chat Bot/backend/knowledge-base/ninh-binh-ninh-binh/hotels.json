@@ -1,0 +1,137 @@
+{
+    "data": [
+        {
+            "id": "4ef59e01-07dd-957c-9af8-b4a4551a3543",
+            "amenities": [
+                "wifi",
+                "xe đạp",
+                "bữa sáng",
+                "vườn"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Chez Beo Homestay",
+            "type": "homestay",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-51dd-4177-a800-226e244296e9",
+            "booking_url": null,
+            "rating": null,
+            "stars": null,
+            "description": "Homestay mộc mạc giữa cảnh núi nước, hợp du khách thích trải nghiệm địa phương và ngân sách mềm.",
+            "address": "Khu vực Tam Cốc, Ninh Bình"
+        },
+        {
+            "id": "4ef59e01-07dd-1278-a365-940a798b0078",
+            "amenities": [
+                "wifi",
+                "hồ bơi",
+                "spa",
+                "nhà hàng",
+                "xe đạp"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Ninh Binh Hidden Charm Hotel \u0026 Resort",
+            "type": "hotel",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-51dd-4177-a800-226e244296e9",
+            "booking_url": null,
+            "rating": null,
+            "stars": 4,
+            "description": "Khách sạn/resort tiện nghi gần Tam Cốc, phù hợp gia đình hoặc cặp đôi muốn ở thoải mái.",
+            "address": "Khu Tam Cốc - Bích Động, Ninh Bình"
+        },
+        {
+            "id": "4ef59e01-07dd-4775-92d0-f93d17b363c9",
+            "amenities": [
+                "wifi",
+                "hồ bơi",
+                "nhà hàng",
+                "vườn",
+                "xe đạp"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Tam Coc Garden Resort",
+            "type": "resort",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-51dd-4177-a800-226e244296e9",
+            "booking_url": null,
+            "rating": null,
+            "stars": 4,
+            "description": "Resort boutique giữa làng quê, thiết kế gần gũi thiên nhiên và thuận tiện khám phá Tam Cốc.",
+            "address": "Xã Hải Nham, Ninh Bình"
+        },
+        {
+            "id": "4ef59e01-07dd-377d-b7ab-65580b8c133d",
+            "amenities": [
+                "wifi",
+                "nhà hàng",
+                "đỗ xe",
+                "lễ tân 24h"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Bai Dinh Garden Resort \u0026 Spa",
+            "type": "hotel",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-51dd-4177-a800-226e244296e9",
+            "booking_url": null,
+            "rating": null,
+            "stars": 3,
+            "description": "Lựa chọn thực dụng cho khách hành hương hoặc nhóm muốn ở gần Bái Đính - Tràng An.",
+            "address": "Khu vực chùa Bái Đính, Ninh Bình"
+        },
+        {
+            "id": "4ef59e01-09dd-c377-b12a-4a0bfba4ab91",
+            "amenities": [
+                "wifi",
+                "hồ bơi",
+                "spa",
+                "nhà hàng",
+                "xe đạp"
+            ],
+            "price_note": "// TODO: xác nhận giá Booking/Agoda hoặc liên hệ trực tiếp",
+            "image_url": null,
+            "name": "Emeralda Resort Ninh Binh",
+            "type": "resort",
+            "price_per_night": {
+                "currency": "VND",
+                "amount": null
+            },
+            "city_id": "4ef59e01-51dd-4177-a800-226e244296e9",
+            "booking_url": null,
+            "rating": null,
+            "stars": 5,
+            "description": "Resort cao cấp phong cách làng Bắc Bộ gần đầm Vân Long, hợp nghỉ dưỡng cuối tuần.",
+            "address": "Khu bảo tồn Vân Long, Gia Viễn, Ninh Bình"
+        }
+    ],
+    "_meta": {
+        "missing_fields": [
+            "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+        ],
+        "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+        "agent_task": "T-003",
+        "city": "ninh-binh-ninh-binh",
+        "data_sources": [
+            "manual_curated",
+            "vietnamtourism.gov.vn",
+            "kiến thức du lịch địa phương phổ biến"
+        ],
+        "last_updated": "2026-06-23",
+        "status": "complete"
+    }
+}

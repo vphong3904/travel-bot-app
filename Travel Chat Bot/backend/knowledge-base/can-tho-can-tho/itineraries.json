@@ -1,0 +1,288 @@
+{
+  "_meta": {
+    "city": "can-tho",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-013",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "estimated_cost (chưa có nguồn giá xác thực — để null)",
+      "total_estimated_cost (chưa có nguồn giá xác thực — để null)"
+    ],
+    "data_sources": [
+      "destinations.json (cùng thư mục)",
+      "hotels.json (cùng thư mục)",
+      "restaurants.json (cùng thư mục)",
+      "tours.json (cùng thư mục)",
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "can-tho-2n1d-river",
+      "title": "Cần Thơ 2N1Đ — Sông Nước Miền Tây",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "any",
+      "travel_style": "explore",
+      "estimated_budget": {
+        "low": null,
+        "high": null,
+        "currency": "VND"
+      },
+      "best_for_season": ["tháng 12", "tháng 1", "tháng 2", "tháng 3", "tháng 4"],
+      "summary": "Lịch trình 2 ngày 1 đêm trải nghiệm tinh hoa sông nước Cần Thơ: chợ nổi Cái Răng sáng sớm, bến Ninh Kiều, nhà cổ Bình Thủy và vườn trái cây. Phù hợp cho mọi nhóm du khách muốn khám phá miền Tây trong thời gian ngắn.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Bến Ninh Kiều & Di sản đô thị",
+          "blocks": [
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Đến Cần Thơ từ TP.HCM bằng xe khách hoặc tàu cao tốc, nhận phòng khách sạn khu Ninh Kiều",
+              "location_ref": {
+                "type": "hotel",
+                "id": "0c41dfc0-ff42-4560-80b2-a45c780f1b0c",
+                "name": "Khách sạn Ninh Kiều 2"
+              },
+              "estimated_cost": null,
+              "notes": "Khách sạn khu Ninh Kiều thuận tiện đi bộ đến bến tàu và chợ đêm"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "15:30",
+              "activity": "Tham quan Nhà cổ Bình Thủy và chùa Ông Bình Thủy gần đó",
+              "location_ref": {
+                "type": "destination",
+                "id": "d50e0997-fbe0-4f53-a040-5bfa2a3d550a",
+                "name": "Nhà cổ Bình Thủy"
+              },
+              "estimated_cost": null,
+              "notes": "Kết hợp 2 điểm gần nhau, đi taxi hoặc Grab từ trung tâm"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "18:00",
+              "activity": "Dạo bến Ninh Kiều, xem biểu diễn đờn ca tài tử (cuối tuần), ăn tối tại Chợ đêm Ninh Kiều",
+              "location_ref": {
+                "type": "destination",
+                "id": "1e116ed4-60b5-4070-9261-6e0d550bc4ae",
+                "name": "Bến Ninh Kiều"
+              },
+              "estimated_cost": null,
+              "notes": "Thử bánh tráng nướng, nem nướng và chè tại chợ đêm"
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Chợ Nổi & Vườn Trái Cây",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "05:00",
+              "activity": "Tour thuyền chợ nổi Cái Răng — xuất phát sáng sớm từ bến Ninh Kiều",
+              "location_ref": {
+                "type": "destination",
+                "id": "252f436c-63fd-4ad9-a7e9-7fd4a0bedd8a",
+                "name": "Chợ nổi Cái Răng"
+              },
+              "estimated_cost": null,
+              "notes": "Đặt tour thuyền từ tối hôm trước. Mang tiền mặt để mua trái cây trên ghe."
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Ăn sáng hủ tiếu Nam Vang hoặc bánh mì tại quán vỉa hè gần chợ Ninh Kiều",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "21f1c014-fe3b-4d61-9052-1b519dcf1099",
+                "name": "Chợ đêm Ninh Kiều"
+              },
+              "estimated_cost": null,
+              "notes": "Chợ đêm ban ngày vắng hơn nhưng vẫn có quán ăn sáng xung quanh"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "10:00",
+              "activity": "Thăm Làng du lịch sinh thái Mỹ Khánh — đi xe đạp trong vườn, ăn trưa trái cây tươi",
+              "location_ref": {
+                "type": "destination",
+                "id": "ef17c097-3639-4f5f-a447-8e260ab4b14c",
+                "name": "Làng du lịch sinh thái Mỹ Khánh"
+              },
+              "estimated_cost": null,
+              "notes": "Cách trung tâm ~12km, đặt trước để có chỗ ăn trưa tại nhà vườn"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Tham quan Chùa Ông và mua đặc sản tại Chợ Cần Thơ trước khi về",
+              "location_ref": {
+                "type": "destination",
+                "id": "43d0b17e-66f1-41aa-b7a3-d7b7f7284f67",
+                "name": "Chùa Ông (Quảng Triệu Hội Quán)"
+              },
+              "estimated_cost": null,
+              "notes": "Sau đó di chuyển ra bến xe Cần Thơ về TP.HCM"
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND"
+      },
+      "tags": ["sông-nước", "miền-tây", "chợ-nổi", "văn-hóa", "2-ngày", "phổ-biến"]
+    },
+    {
+      "id": "can-tho-3n2d-mekong-family",
+      "title": "Cần Thơ 3N2Đ — Gia Đình Khám Phá Mekong",
+      "duration_days": 3,
+      "duration_nights": 2,
+      "audience": "family",
+      "travel_style": "mixed",
+      "estimated_budget": {
+        "low": null,
+        "high": null,
+        "currency": "VND"
+      },
+      "best_for_season": ["tháng 12", "tháng 1", "tháng 2", "tháng 3", "tháng 9", "tháng 10", "tháng 11"],
+      "summary": "Lịch trình 3 ngày 2 đêm cho gia đình khám phá toàn diện Cần Thơ sau sáp nhập: chợ nổi, vườn trái cây, nhà vườn homestay, kết hợp tham quan Sóc Trăng (Chùa Dơi) và văn hóa Khmer Nam Bộ.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Đến Cần Thơ — Trung tâm & Ninh Kiều",
+          "blocks": [
+            {
+              "time_of_day": "afternoon",
+              "start_time": "13:00",
+              "activity": "Đến Cần Thơ, nhận phòng tại Mường Thanh Luxury Cần Thơ",
+              "location_ref": {
+                "type": "hotel",
+                "id": "19a9fcb9-8ced-4610-ad4e-61988949d054",
+                "name": "Mường Thanh Luxury Cần Thơ"
+              },
+              "estimated_cost": null,
+              "notes": "Khách sạn 4 sao phù hợp gia đình với hồ bơi"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "15:00",
+              "activity": "Tham quan Chùa Ông và khu phố người Hoa gần bến Ninh Kiều",
+              "location_ref": {
+                "type": "destination",
+                "id": "43d0b17e-66f1-41aa-b7a3-d7b7f7284f67",
+                "name": "Chùa Ông (Quảng Triệu Hội Quán)"
+              },
+              "estimated_cost": null,
+              "notes": "Miễn phí vào cửa, trẻ em thích không gian khói nhang huyền bí"
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "18:30",
+              "activity": "Ăn tối lẩu mắm miền Tây tại nhà hàng Mekong ven sông",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "1c69f7cd-58e2-4967-ae17-58bc4ad314a3",
+                "name": "Nhà hàng Mekong"
+              },
+              "estimated_cost": null,
+              "notes": "Đặt bàn trước, đặc biệt cuối tuần"
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Chợ Nổi & Trải Nghiệm Nhà Vườn",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "05:00",
+              "activity": "Tour thuyền chợ nổi Cái Răng sáng sớm",
+              "location_ref": {
+                "type": "destination",
+                "id": "252f436c-63fd-4ad9-a7e9-7fd4a0bedd8a",
+                "name": "Chợ nổi Cái Răng"
+              },
+              "estimated_cost": null,
+              "notes": "Cho trẻ em mặc áo phao. Đây thường là kỷ niệm đáng nhớ nhất của chuyến đi."
+            },
+            {
+              "time_of_day": "morning",
+              "start_time": "09:00",
+              "activity": "Ăn sáng, sau đó di chuyển đến Làng sinh thái Mỹ Khánh — đi xe đạp và hái trái cây",
+              "location_ref": {
+                "type": "destination",
+                "id": "ef17c097-3639-4f5f-a447-8e260ab4b14c",
+                "name": "Làng du lịch sinh thái Mỹ Khánh"
+              },
+              "estimated_cost": null,
+              "notes": "Trẻ em thích đạp xe trong vườn và hái trái cây ăn trực tiếp"
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "15:00",
+              "activity": "Nhận phòng homestay sông nước khu Phong Điền, đi xuồng ba lá trên kênh",
+              "location_ref": {
+                "type": "hotel",
+                "id": "fb3dbb3a-9cd6-41d6-a2ee-aed2c6e8ce87",
+                "name": "Sông Xanh Riverside Homestay"
+              },
+              "estimated_cost": null,
+              "notes": "Trải nghiệm ngủ nhà vườn miền Tây — đặt trước. Trẻ em thích đi xuồng ba lá."
+            }
+          ]
+        },
+        {
+          "day_number": 3,
+          "theme": "Khám Phá Sóc Trăng — Chùa Dơi & Văn Hóa Khmer",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "07:30",
+              "activity": "Ăn sáng cùng chủ nhà vườn, lên xe về trung tâm Cần Thơ rồi đi Sóc Trăng",
+              "location_ref": {
+                "type": "hotel",
+                "id": "fb3dbb3a-9cd6-41d6-a2ee-aed2c6e8ce87",
+                "name": "Sông Xanh Riverside Homestay"
+              },
+              "estimated_cost": null,
+              "notes": "Bữa sáng thường gồm đặc sản miền Tây do chủ nhà nấu"
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "10:00",
+              "activity": "Tham quan Chùa Dơi — xem đàn dơi quạ và kiến trúc Khmer độc đáo",
+              "location_ref": {
+                "type": "destination",
+                "id": "6378e32d-e2da-4210-be3e-3d4f8529389d",
+                "name": "Chùa Dơi (Mã Tộc)"
+              },
+              "estimated_cost": null,
+              "notes": "Khoảng 60km từ trung tâm Cần Thơ. Đến chiều thấy dơi bay ra đẹp hơn."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "14:00",
+              "activity": "Mua đặc sản tại Co.opmart Cần Thơ và về TP.HCM",
+              "location_ref": {
+                "type": "shopping",
+                "id": "8e4a6fa2-9cda-4940-86b8-3fc43487d32b",
+                "name": "Co.opmart Cần Thơ"
+              },
+              "estimated_cost": null,
+              "notes": "Mua nem nướng Cái Răng, mắm và rượu nếp than đóng gói để mang về"
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": {
+        "amount": null,
+        "currency": "VND"
+      },
+      "tags": ["gia-đình", "sông-nước", "văn-hóa-khmer", "3-ngày", "homestay", "chùa-dơi"]
+    }
+  ]
+}

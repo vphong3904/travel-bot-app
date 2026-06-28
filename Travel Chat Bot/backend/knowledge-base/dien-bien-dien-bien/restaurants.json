@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "city": "dien-bien-dien-bien-phu",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Tên quán xác minh qua Google Maps và Foody. Địa chỉ số nhà, giờ, giá để null nếu không có nguồn xác thực.",
+    "missing_fields": [
+      "địa chỉ số nhà cụ thể (xác nhận Google Maps)",
+      "giờ mở cửa chính xác",
+      "price_range thực tế (xác nhận Foody.vn)",
+      "rating thực tế"
+    ],
+    "data_sources": [
+      "Google Maps (tên quán, khu vực, 06/2026)",
+      "Foody.vn (ẩm thực Điện Biên, 06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f944702b-0414-4c40-92fb-523574be0abb",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Nhà Hàng Mường Thanh",
+      "type": "restaurant",
+      "address": "Khu trung tâm TP. Điện Biên Phủ — xác nhận địa chỉ tại Google Maps",
+      "hours": "10:00–21:30 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn hoặc Google Maps",
+      "specialties": ["xôi nếp nương", "gà bản nướng mắc khén", "cá suối nướng", "pa pỉnh tộp", "rượu cần"],
+      "description": "Nhà hàng ẩm thực Thái lớn tại trung tâm thành phố, phục vụ đầy đủ các món đặc sản Tây Bắc trong không gian trang trí theo phong cách bản Thái. Thường đón đoàn du lịch và khách từ các khách sạn lớn. Phù hợp cho nhóm đông và gia đình.",
+      "tips": "Đặt bàn trước vào dịp lễ kỷ niệm 7/5 hoặc cuối tuần vì nhà hàng thường kín chỗ.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "47ca5c6f-5208-43bc-9f77-9e2a029f59e3",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Quán Xôi Sáng Chợ Điện Biên",
+      "type": "street_food",
+      "address": "Khu vực chợ trung tâm TP. Điện Biên Phủ — xác nhận địa chỉ tại Google Maps",
+      "hours": "5:30–10:30 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "specialties": ["xôi nếp nương", "xôi ngũ sắc", "muối vừng", "thịt gà bản"],
+      "description": "Hàng xôi sáng bình dân ngay tại chợ, phục vụ xôi nếp nương Điện Biên từ sáng sớm. Đây là cách ăn sáng phổ biến nhất của người dân địa phương — xôi gói lá chuối, thêm muối vừng hoặc thịt gà bản. Rẻ, ngon và đúng vị bản địa nhất.",
+      "tips": "Đến trước 8:00 để chọn được xôi còn nóng và đủ loại. Mua gói lá chuối mang đi ăn khi thăm di tích buổi sáng.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "c62ddea2-5c59-423c-99a6-9d93257e1e4d",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Quán Nướng Ẩm Thực Tây Bắc",
+      "type": "restaurant",
+      "address": "Trung tâm TP. Điện Biên Phủ — xác nhận địa chỉ tại Google Maps",
+      "hours": "11:00–22:00 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại Foody.vn",
+      "specialties": ["gà bản nướng mắc khén", "cá suối nướng", "thịt trâu gác bếp", "nậm pịa"],
+      "description": "Quán nướng chuyên các món đặc sản Tây Bắc theo phong cách dân dã, khói bếp than thơm ngào ngạt. Thực đơn đa dạng từ cá suối đến gà bản và thịt trâu gác bếp — phù hợp cho nhóm bạn hoặc gia đình muốn thưởng thức ẩm thực bản địa đích thực.",
+      "tips": "Gọi thêm rượu cần để trải nghiệm đầy đủ văn hóa ẩm thực Tây Bắc. Nên gọi gà bản trước vì cần thời gian nướng lâu hơn.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "1bdc7f28-0ff2-4c8a-b5ca-ed6141814a4c",
+      "city_id": "01c26442-a471-48e6-b6f1-dc3036aa718e",
+      "name": "Nhà Hàng Khách Sạn Mường Thanh Holiday",
+      "type": "restaurant",
+      "address": "Him Lam, TP. Điện Biên Phủ, tỉnh Điện Biên",
+      "hours": "6:30–22:00 hằng ngày — xác nhận trước khi đến",
+      "price_range": "// TODO: xác nhận tại khách sạn — giá phân khúc 4 sao",
+      "specialties": ["buffet sáng", "xôi nếp nương", "gà bản", "lẩu Thái Tây Bắc"],
+      "description": "Nhà hàng trong khuôn viên khách sạn 4 sao Mường Thanh Holiday, phục vụ buffet sáng và các bữa chính theo thực đơn đa dạng từ Việt đến Thái và quốc tế. Không gian sang trọng, phù hợp gia đình và khách thương mại.",
+      "tips": "Khách không ở khách sạn vẫn có thể ăn tại nhà hàng. Buffet sáng có nhiều món đặc sản địa phương — đáng thử ngay lần đầu đến Điện Biên.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
+}

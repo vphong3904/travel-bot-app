@@ -1,0 +1,168 @@
+{
+  "_meta": {
+    "city": "an-giang-phu-quoc",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": "Tên khách sạn/resort là thật và nổi tiếng. Giá price_per_night là ƯỚC TÍNH thị trường theo mùa thấp (tháng 5–10) — giá mùa cao (tháng 11–4) thường cao hơn 50–100%. Bắt buộc nối API Agoda/Booking.com để hiển thị giá real-time cho user.",
+    "missing_fields": [
+      "giá thật real-time (cần API Agoda/Booking)",
+      "rating thật",
+      "image_url thật",
+      "booking_url thật"
+    ],
+    "data_sources": [
+      "Agoda.com (tên, phân khúc)",
+      "Booking.com (tên, tiện nghi)",
+      "Google Maps (địa chỉ xác minh)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee71-616e-7007-9b0e-1ab1c59b60cd",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "InterContinental Phu Quoc Long Beach Resort",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "note": "// TODO: xác nhận tại Booking.com hoặc intercontinental.com — giá mùa cao dao động lớn"
+      },
+      "address": "Bãi Trường, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi vô cực ra biển",
+        "Spa",
+        "5 nhà hàng & bar",
+        "Gym",
+        "Wifi miễn phí",
+        "Đưa đón sân bay",
+        "Bãi biển riêng"
+      ],
+      "description": "Resort 5 sao sang trọng nằm trên bãi Trường, có hồ bơi vô cực nhìn ra biển đẹp nổi tiếng. Kiến trúc lấy cảm hứng từ văn hóa Khmer, phù hợp trăng mật và du lịch sang.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7bf7-b6ef-2ea09427ed50",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "JW Marriott Phu Quoc Emerald Bay",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "note": "// TODO: xác nhận tại marriott.com hoặc Agoda"
+      },
+      "address": "Khem Beach, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Bãi biển riêng Bãi Khem",
+        "Hồ bơi nhiều khu",
+        "Spa LaGrace",
+        "6 nhà hàng",
+        "Gym",
+        "Kids club",
+        "Wifi miễn phí"
+      ],
+      "description": "Resort đẳng cấp thế giới nằm tại bãi Khem, được bình chọn là một trong những resort đẹp nhất châu Á. Thiết kế lấy cảm hứng từ trường đại học phong cách Pháp, view biển tuyệt đỉnh.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-73ea-84d5-d4199271c80b",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Sunset Sanato Resort & Villas",
+      "type": "resort",
+      "stars": 4,
+      "price_per_night": {
+        "amount": 2800000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Agoda/Traveloka"
+      },
+      "address": "Bãi Khem, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi",
+        "Bãi biển riêng",
+        "Nhà hàng",
+        "Wifi miễn phí",
+        "Đưa đón sân bay (phí thêm)"
+      ],
+      "description": "Resort 4 sao vừa túi tiền, vị trí đắc địa tại bãi Khem yên tĩnh. Phù hợp gia đình và cặp đôi muốn nghỉ dưỡng không quá xa hoa nhưng vẫn tiện nghi.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7184-b71c-ae924a2f8100",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Mango Bay Resort",
+      "type": "resort",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 1500000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Booking.com"
+      },
+      "address": "Vũng Bầu, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi",
+        "Nhà hàng hải sản",
+        "Wifi miễn phí",
+        "Bãi biển riêng nhỏ"
+      ],
+      "description": "Resort eco-friendly 3 sao ở phía bắc đảo, bungalow xây từ vật liệu tự nhiên, yên tĩnh và gần gũi thiên nhiên. Phù hợp du lịch xanh, gia đình trẻ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7150-a5bd-5bfad69996ff",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Phu Quoc Backpacker Hostel",
+      "type": "hostel",
+      "stars": null,
+      "price_per_night": {
+        "amount": 200000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH giường dorm — xác nhận tại Booking.com/Hostelworld"
+      },
+      "address": "Đường 30 Tháng 4, khu Dương Đông, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Phòng dorm máy lạnh",
+        "Khu bếp chung",
+        "Wifi miễn phí",
+        "Cho thuê xe máy",
+        "Tour ghép đoàn"
+      ],
+      "description": "Hostel bình dân ngay trung tâm Dương Đông, thuận tiện di chuyển và gần chợ đêm. Phù hợp du lịch bụi solo hoặc nhóm bạn trẻ ngân sách thấp.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7829-bcc9-5499d7c4a90c",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Cassia Cottage",
+      "type": "guesthouse",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 900000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH — xác nhận tại Agoda hoặc Traveloka"
+      },
+      "address": "Bãi Trường, TP. Phú Quốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi nhỏ",
+        "Nhà hàng",
+        "Wifi miễn phí",
+        "Sân vườn nhiệt đới"
+      ],
+      "description": "Guesthouse nhỏ xinh với thiết kế nhiệt đới, phong cách boutique, nằm ngay bãi Trường. Nhiều du khách quay lại vì không khí ấm cúng và chủ nhà thân thiện.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

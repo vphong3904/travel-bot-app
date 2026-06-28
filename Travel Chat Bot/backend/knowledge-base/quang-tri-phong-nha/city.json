@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "city": "quang-tri",
+    "generated_from": "Kiến thức thực tế — dữ liệu du lịch đã kiểm chứng",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-001",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Quảng Bình + Quảng Trị",
+    "uuid_version": "v7"
+  },
+  "data": {
+    "id": "019eed69-50b3-79f6-9a6e-66856703829f",
+    "name": "Quảng Trị",
+    "slug": "quang-tri",
+    "province": "Quảng Trị",
+    "province_old": null,
+    "region": "Bắc Trung Bộ",
+    "description": "Vùng đất lịch sử bi hùng với Thành Cổ Quảng Trị, Nghĩa trang Trường Sơn, sông Bến Hải - cầu Hiền Lương chia đôi đất nước và động Phong Nha - Kẻ Bàng Di sản UNESCO.",
+    "special": "Thành Cổ Quảng Trị, cầu Hiền Lương - sông Bến Hải, Nghĩa trang Trường Sơn, động Phong Nha - Kẻ Bàng",
+    "best_season": "Tháng 2–8 (tránh mưa lũ tháng 9–11)",
+    "best_months": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "weather": "Nhiệt đới gió mùa, 18–36°C, mưa lũ nặng tháng 9–11, nóng khô gió Lào tháng 5–7",
+    "budget": {
+      "low": 800000,
+      "high": 2500000,
+      "currency": "VND",
+      "note": "Chi phí/người/chuyến, thường kết hợp tour Huế - DMZ"
+    },
+    "cuisine_summary": "Cháo vạt giường Quảng Trị, bún bò Quảng Trị, bánh ướt thịt heo, tré bò, mắm ruốc, bánh nậm",
+    "image_url": "https://cdn.pdtrip.vn/destinations/quangtri.jpg",
+    "stats": {
+      "rating_avg": 4.4,
+      "review_count": 890,
+      "favorite_count": 0,
+      "view_count": 32000
+    },
+    "categories": [
+      "history",
+      "heritage",
+      "nature",
+      "culture"
+    ],
+    "is_active": true
+  }
+}

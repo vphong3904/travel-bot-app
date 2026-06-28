@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "city": "bac-ninh",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "missing_fields": [
+      "address (số nhà cụ thể chưa xác minh từ nguồn đáng tin cậy)",
+      "hours (cần xác nhận trên Google Maps)",
+      "price_range (chưa có nguồn Foody/Google Maps cập nhật)",
+      "rating (chưa có dữ liệu user thật)"
+    ],
+    "data_sources": [
+      "Foody.vn (tham khảo tên quán và khu vực)",
+      "Google Maps (tham khảo khu vực tổng quát)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee91-daa4-714e-659d-9719785b6000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Quán Bún Cá Rô Bà Hoa",
+      "type": "restaurant",
+      "address": "Khu vực phố Ngô Gia Tự, thành phố Bắc Ninh (xác nhận địa chỉ tại Foody hoặc Google Maps)",
+      "hours": "6:00–10:30 (buổi sáng — xác nhận trước khi đến)",
+      "price_range": null,
+      "specialties": ["bún cá rô đồng", "chả cá chiên", "bún riêu"],
+      "description": "Quán bún sáng quen thuộc của người dân Bắc Ninh, nổi tiếng với nước dùng cá rô đồng ngọt tự nhiên, chả cá chiên vàng giòn. Phong cách dân dã, phục vụ nhanh, đông khách vào sáng sớm.",
+      "tips": "Đến trước 8:00 để có chỗ ngồi và bún còn nóng. Quán đông nhất từ 7:00–8:30.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eee91-daa5-7121-62f9-e039ecadf000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Khu ẩm thực phố Lý Thái Tổ",
+      "type": "street_food",
+      "address": "Đường Lý Thái Tổ, thành phố Bắc Ninh (khu tập trung quán ăn vỉa hè buổi tối)",
+      "hours": "17:00–22:00 (tham khảo — xác nhận trước khi đến)",
+      "price_range": null,
+      "specialties": ["nem Bùi", "thịt nướng", "hải sản nướng", "nộm bò khô", "bia hơi"],
+      "description": "Khu phố ẩm thực tối sầm uất tại trung tâm Bắc Ninh, tập trung nhiều quán ăn vỉa hè và nhà hàng nhỏ. Phù hợp cho bữa tối đi theo nhóm, không khí náo nhiệt và giá cả phải chăng.",
+      "tips": "Nên đặt chỗ trước nếu đi nhóm đông vào cuối tuần. Nhiều quán mở theo mùa hoặc thay đổi địa điểm — hỏi người dân địa phương để có gợi ý mới nhất.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "019eee91-daa6-71ec-a2a6-b15b0d938000",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "Nhà hàng Quan Họ Garden",
+      "type": "restaurant",
+      "address": "Khu vực ngoại ô thành phố Bắc Ninh (xác nhận địa chỉ tại Google Maps)",
+      "hours": "10:00–21:00 (xác nhận trước khi đến)",
+      "price_range": null,
+      "specialties": ["bánh phu thê", "nem Bùi", "bún cá rô", "gà đồi hấp lá chanh", "xôi lúa"],
+      "description": "Nhà hàng quy mô phục vụ ẩm thực đặc sản Bắc Ninh trong không gian thân thiện, có khu vườn rộng. Thường được các tour du lịch chọn làm điểm ăn trưa. Phục vụ cả thực đơn theo đoàn.",
+      "tips": "Phù hợp cho đoàn gia đình hoặc nhóm đông. Gọi trước nếu muốn đặt bàn hoặc thực đơn riêng cho đoàn.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
+}

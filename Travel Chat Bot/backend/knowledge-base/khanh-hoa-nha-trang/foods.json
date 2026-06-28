@@ -1,0 +1,94 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-nha-trang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": [
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
+      "Sở Du lịch Khánh Hòa: khanhhoa.gov.vn (06/2026)",
+      "Foody: foody.vn (06/2026)"
+    ]
+  },
+  "data": [
+    {
+      "name": "Bún cá Nha Trang",
+      "local_name": "Bún cá Nha Trang",
+      "category": "main_dish",
+      "description": "Món bún đặc trưng của Nha Trang với nước dùng từ cá tươi nấu trong vắt, thanh ngọt. Thường ăn kèm chả cá chiên giòn, rau sống và mắm ruốc. Khác bún bò Huế ở chỗ nước dùng nhẹ hơn, hương vị biển đặc trưng.",
+      "where_to_eat": ["Chợ Đầm Nha Trang", "Các quán bún cá khu vực trung tâm thành phố"],
+      "price_range": "Tầm 30.000–60.000đ/tô (ước tính — xác nhận tại quán)",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "sáng", "bún", "hải sản"]
+    },
+    {
+      "name": "Nem nướng Ninh Hòa",
+      "local_name": "Nem nướng Ninh Hòa",
+      "category": "specialty",
+      "description": "Nem nướng làm từ thịt heo xay trộn gia vị, nướng trên than hồng, cuốn cùng bánh đa, rau sống và chấm nước mắm tỏi ớt ngọt. Ninh Hòa (huyện thuộc Khánh Hòa) là nơi khai sinh món này và được công nhận là đặc sản vùng.",
+      "where_to_eat": ["Các quán nem nướng khu trung tâm Nha Trang", "Thị trấn Ninh Hòa nếu đi xa hơn"],
+      "price_range": "Tầm 50.000–100.000đ/phần (ước tính — xác nhận tại quán)",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "nem", "nướng", "Ninh Hòa"]
+    },
+    {
+      "name": "Yến sào Khánh Hòa",
+      "local_name": "Yến sào Khánh Hòa",
+      "category": "specialty",
+      "description": "Tổ yến (tổ chim yến) được khai thác từ các đảo đá ven biển Khánh Hòa — vùng yến sào nổi tiếng nhất Việt Nam. Chế biến thành chè yến, súp yến, nước yến đóng chai. Được coi là thực phẩm bổ dưỡng cao cấp.",
+      "where_to_eat": ["Các cửa hàng yến sào Khánh Hòa chính thức", "Nhà hàng cao cấp tại Nha Trang"],
+      "price_range": "Cao — phụ thuộc loại yến và hình thức chế biến (xác nhận tại cửa hàng)",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "cao cấp", "bổ dưỡng", "yến sào"]
+    },
+    {
+      "name": "Bánh căn",
+      "local_name": "Bánh căn Nha Trang",
+      "category": "snack",
+      "description": "Bánh làm từ bột gạo đổ vào khuôn đất nung nhỏ, nướng trên bếp than, thường kèm trứng cút hoặc hải sản. Ăn kèm nước chấm cá hoặc mắm nêm. Món ăn vặt quen thuộc của người dân Nha Trang, đặc biệt phổ biến buổi chiều tối.",
+      "where_to_eat": ["Chợ đêm Nha Trang", "Các xe bánh căn vỉa hè khu trung tâm"],
+      "price_range": "Bình dân — tầm 20.000–40.000đ/phần (ước tính)",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["ăn vặt", "buổi chiều", "đặc sản", "đường phố"]
+    },
+    {
+      "name": "Hải sản tươi sống",
+      "local_name": "Hải sản tươi sống Nha Trang",
+      "category": "main_dish",
+      "description": "Nha Trang là thiên đường hải sản với tôm hùm, ghẹ, mực, cá mú, hào, sò điệp tươi sống từ các làng chài và đảo gần bờ. Chế biến đa dạng: hấp, nướng, xào tỏi, lẩu. Giá cả cạnh tranh hơn các thành phố lớn.",
+      "where_to_eat": ["Khu hải sản đường Phạm Văn Đồng", "Nhà hàng dọc bờ biển", "Chợ Đầm"],
+      "price_range": "Dao động rộng theo loại hải sản — nên hỏi giá trước khi gọi",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["hải sản", "đặc sản", "tươi sống", "biển"]
+    },
+    {
+      "name": "Bò né Nha Trang",
+      "local_name": "Bò né",
+      "category": "main_dish",
+      "description": "Bít tết bò áp chảo nóng hổi ăn kèm trứng ốp la, bánh mì giòn và nước sốt pate. Phong trào bò né phổ biến khắp Việt Nam nhưng Nha Trang có phiên bản riêng với nhiều quán ngon, giá bình dân.",
+      "where_to_eat": ["Các quán bò né khu trung tâm thành phố", "Chợ đêm Nha Trang"],
+      "price_range": "Tầm 50.000–90.000đ/phần (ước tính — xác nhận tại quán)",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["sáng", "bò", "bít tết", "phổ biến"]
+    },
+    {
+      "name": "Chè Nha Trang",
+      "local_name": "Chè các loại",
+      "category": "dessert",
+      "description": "Các loại chè đặc trưng miền Trung: chè thập cẩm, chè đậu xanh, chè bắp, chè yến. Đặc biệt có chè yến sào — đặc sản Khánh Hòa. Ăn kèm đá bào mát lạnh, phù hợp thời tiết nóng ở Nha Trang.",
+      "where_to_eat": ["Các quán chè khu trung tâm", "Chợ đêm Nha Trang"],
+      "price_range": "Tầm 15.000–50.000đ/ly (ước tính — xác nhận tại quán)",
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["tráng miệng", "mát lạnh", "đường phố", "chè"]
+    }
+  ]
+}

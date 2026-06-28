@@ -1,0 +1,331 @@
+{
+    "_meta": {
+        "city": "an-giang-phu-quoc",
+        "generated_from": "destinations.json + hotels.json + restaurants.json + tours.json (cùng thư mục an-giang-phu-quoc)",
+        "last_updated": "2026-06-22",
+        "agent_task": "T-013",
+        "status": "partial",
+        "missing_fields": [
+            "Tất cả estimated_cost là ƯỚC TÍNH, cần xác nhận giá thật trước production",
+            "itin2 một số location_ref.id = null vì chưa có restaurant/hotel entry tương ứng"
+        ]
+    },
+    "data": [
+        {
+            "id": "phu-quoc-3n2d-couple",
+            "title": "Phú Quốc 3N2Đ cho cặp đôi",
+            "duration_days": 3,
+            "duration_nights": 2,
+            "audience": "couple",
+            "travel_style": "relax_and_explore",
+            "estimated_budget": {
+                "low": 3500000,
+                "high": 7000000,
+                "currency": "VND",
+                "note": "Không bao gồm vé máy bay"
+            },
+            "best_for_season": [
+                "tháng 11–4 (mùa khô)"
+            ],
+            "summary": "Lịch trình 3 ngày 2 đêm lãng mạn cho cặp đôi: khám phá làng chài, tour 4 đảo, ngắm hoàng hôn Dinh Cậu, thưởng thức hải sản và thư giãn tại resort.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Khám phá làng chài \u0026 hoàng hôn Dinh Cậu",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "09:00",
+                            "activity": "Nhận phòng resort, nghỉ ngơi và tắm biển Bãi Trường",
+                            "location_ref": {
+                                "type": "hotel",
+                                "id": "019eee71-616e-7007-9b0e-1ab1c59b60cd",
+                                "name": "InterContinental Phu Quoc Long Beach Resort"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Nếu đến sớm trước giờ check-in, gửi hành lý tại sảnh và ra biển ngay."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "12:00",
+                            "activity": "Ăn trưa: gỏi cá trích và hải sản tươi",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019eee71-616e-7c7e-99b8-8d15b27e4fc6",
+                                "name": "Quán Hải Sản Hàm Ninh"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Gọi gỏi cá trích — đặc sản không thể bỏ qua. Ăn xem cảnh thuyền chài rất đẹp."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "15:00",
+                            "activity": "Thăm làng chài Hàm Ninh, đi bộ ra cầu gỗ",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616d-7457-b092-16c665bc6447",
+                                "name": "Làng chài Hàm Ninh"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Chụp ảnh đẹp tại cầu gỗ ra biển, cảnh núi rừng phía xa."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "17:30",
+                            "activity": "Ngắm hoàng hôn tại Dinh Cậu, ăn tối chợ đêm",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616e-7cf5-bbc6-a2d20b16ae09",
+                                "name": "Dinh Cậu (Dinh Cô)"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Dinh Cậu là điểm ngắm hoàng hôn đẹp nhất Phú Quốc. Sau đó dạo chợ đêm ngay bên cạnh."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Tour 4 đảo \u0026 lặn ngắm san hô",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "07:00",
+                            "activity": "Tour 4 đảo: Hòn Thơm, Hòn Móng Tay, câu cá \u0026 lặn ngắm san hô",
+                            "location_ref": {
+                                "type": "tour",
+                                "id": "019eee71-616e-7395-97e6-4cbc91bc3712",
+                                "name": "Tour câu cá \u0026 lặn ngắm san hô 4 đảo"
+                            },
+                            "estimated_cost": 350000,
+                            "notes": "Tour cả ngày, bao gồm ăn trưa hải sản trên thuyền. Mang theo kem chống nắng và kính bơi cá nhân."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "19:00",
+                            "activity": "Bữa tối lãng mạn ven biển Bãi Trường",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019eee71-616e-78c6-935e-f39d26e7688d",
+                                "name": "Nhà hàng Ganesh - Indian \u0026 Italian Restaurant"
+                            },
+                            "estimated_cost": 400000,
+                            "notes": "Nhiều nhà hàng view biển dọc Bãi Trường, chọn theo budget. Nên đặt bàn trước mùa cao điểm."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 3,
+                    "theme": "Hoang sơ Bãi Sao \u0026 mua sắm đặc sản",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tắm biển và thư giãn tại Bãi Sao",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616d-7317-b456-896589eaa20c",
+                                "name": "Bãi Sao"
+                            },
+                            "estimated_cost": 50000,
+                            "notes": "Bãi Sao đẹp nhất buổi sáng sớm trước 10:00. Thuê ghế và ô tại các quán ven bãi."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:00",
+                            "activity": "Ăn trưa bún quậy Phú Quốc",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019eee71-616e-7846-837b-e0e8fd0e22e5",
+                                "name": "Quán Bún Quậy Kiên Giang"
+                            },
+                            "estimated_cost": 70000,
+                            "notes": "Thử đặc sản bún quậy trước khi về — nhiều người bỏ lỡ món này."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "13:30",
+                            "activity": "Mua đặc sản: nước mắm, rượu sim tại Chợ đêm \u0026 cơ sở Khải Hoàn",
+                            "location_ref": {
+                                "type": "shopping",
+                                "id": "019eee71-616e-7c51-a3d1-00f1857f77ec",
+                                "name": "Chợ Đêm Dinh Cậu"
+                            },
+                            "estimated_cost": 300000,
+                            "notes": "Mua nước mắm nhĩ và rượu sim về làm quà. Nên so sánh giá nhiều điểm."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "phu-quoc-5n4d-family",
+            "title": "Phú Quốc 5N4Đ cho gia đình có trẻ em",
+            "duration_days": 5,
+            "duration_nights": 4,
+            "audience": "family",
+            "travel_style": "mixed",
+            "estimated_budget": {
+                "low": 8000000,
+                "high": 15000000,
+                "currency": "VND",
+                "note": "Tính cho 2 người lớn + 2 trẻ em, không bao gồm vé máy bay"
+            },
+            "best_for_season": [
+                "tháng 11–4 (mùa khô, biển êm)"
+            ],
+            "summary": "Lịch trình 5 ngày dài hơi cho gia đình: nghỉ dưỡng resort, Vinpearl Safari, tour 4 đảo, làng nghề nước mắm, bãi biển và mua sắm đặc sản.",
+            "days": [
+                {
+                    "day_number": 1,
+                    "theme": "Đến nơi, nhận phòng \u0026 tắm biển",
+                    "blocks": [
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:00",
+                            "activity": "Nhận phòng resort, nghỉ ngơi và tắm biển Bãi Trường",
+                            "location_ref": {
+                                "type": "hotel",
+                                "id": "019eee71-616e-7007-9b0e-1ab1c59b60cd",
+                                "name": "Khu resort Bãi Trường"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Ngày đầu nghỉ ngơi nhẹ nhàng, cho trẻ vui chơi tại bể bơi resort."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "18:30",
+                            "activity": "Ăn tối nhà hàng hải sản khu Dương Đông",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019eee71-616e-78c6-935e-f39d26e7688d",
+                                "name": "Khu nhà hàng Dương Đông"
+                            },
+                            "estimated_cost": 500000,
+                            "notes": "Chọn nhà hàng có menu tiếng Anh và menu trẻ em nếu cần."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 2,
+                    "theme": "Vinpearl Safari — trải nghiệm thú hoang dã",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:00",
+                            "activity": "Tham quan Vinpearl Safari Phú Quốc",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616d-7dc2-81e1-0521e1d2b287",
+                                "name": "Vinpearl Safari Phú Quốc"
+                            },
+                            "estimated_cost": null,
+                            "notes": "// TODO: xác nhận giá vé tại vinpearl.com. Đặt vé online trước. Dành cả buổi sáng tại đây."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "14:00",
+                            "activity": "Bãi Dài — bãi biển hoang sơ phía bắc đảo",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616e-7461-ba4b-6695feaa9e55",
+                                "name": "Bãi Dài (Kem Beach)"
+                            },
+                            "estimated_cost": 0,
+                            "notes": "Sau safari, ghé bãi Dài vì gần khu Vinpearl. Cát trắng mịn, ít người."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 3,
+                    "theme": "Tour 4 đảo \u0026 lặn biển",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "07:00",
+                            "activity": "Tour câu cá \u0026 lặn ngắm san hô 4 đảo",
+                            "location_ref": {
+                                "type": "tour",
+                                "id": "019eee71-616e-7395-97e6-4cbc91bc3712",
+                                "name": "Tour câu cá \u0026 lặn ngắm san hô 4 đảo"
+                            },
+                            "estimated_cost": 350000,
+                            "notes": "Trẻ em thích tour này. Đảm bảo áo phao cho trẻ. Tour có phục vụ hải sản trên thuyền."
+                        },
+                        {
+                            "time_of_day": "evening",
+                            "start_time": "20:00",
+                            "activity": "Tour câu mực đêm (tùy chọn cho gia đình)",
+                            "location_ref": {
+                                "type": "tour",
+                                "id": "019eee71-616e-7938-ab80-cdde5e62fc3a",
+                                "name": "Tour hoàng hôn \u0026 câu mực đêm trên biển"
+                            },
+                            "estimated_cost": 300000,
+                            "notes": "Trẻ từ 8 tuổi trở lên có thể tham gia. Trải nghiệm thú vị và khác biệt."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 4,
+                    "theme": "Làng nghề \u0026 Vườn Quốc gia",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "08:30",
+                            "activity": "Tham quan làng nghề nước mắm \u0026 rượu sim",
+                            "location_ref": {
+                                "type": "tour",
+                                "id": "019eee71-616e-72b1-968d-8d3ac3d20eba",
+                                "name": "Tour làng nghề: nước mắm \u0026 rượu sim Phú Quốc"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Trẻ em thích xem quy trình ủ cá và thử đặc sản."
+                        },
+                        {
+                            "time_of_day": "afternoon",
+                            "start_time": "13:30",
+                            "activity": "Thư giãn tại Bãi Sao — bãi biển đẹp nhất đảo",
+                            "location_ref": {
+                                "type": "destination",
+                                "id": "019eee71-616d-7317-b456-896589eaa20c",
+                                "name": "Bãi Sao"
+                            },
+                            "estimated_cost": 100000,
+                            "notes": "Chiều mát hơn sáng, phù hợp gia đình có trẻ nhỏ. Thuê phao bơi cho bé."
+                        }
+                    ]
+                },
+                {
+                    "day_number": 5,
+                    "theme": "Mua sắm \u0026 trả phòng",
+                    "blocks": [
+                        {
+                            "time_of_day": "morning",
+                            "start_time": "09:00",
+                            "activity": "Mua đặc sản tại Chợ Dương Đông và cơ sở nước mắm Khải Hoàn",
+                            "location_ref": {
+                                "type": "shopping",
+                                "id": "019eee71-616e-7473-9d1a-48c1e47036f6",
+                                "name": "Cơ sở nước mắm Khải Hoàn"
+                            },
+                            "estimated_cost": 500000,
+                            "notes": "Mua nước mắm nhĩ, rượu sim, hạt điều về quà. So sánh giá nhiều nơi."
+                        },
+                        {
+                            "time_of_day": "noon",
+                            "start_time": "11:00",
+                            "activity": "Ăn bữa cuối: bún quậy \u0026 gỏi cá trích",
+                            "location_ref": {
+                                "type": "restaurant",
+                                "id": "019eee71-616e-7846-837b-e0e8fd0e22e5",
+                                "name": "Quán Bún Quậy Kiên Giang"
+                            },
+                            "estimated_cost": 200000,
+                            "notes": "Ăn nhẹ nhàng trước khi ra sân bay."
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

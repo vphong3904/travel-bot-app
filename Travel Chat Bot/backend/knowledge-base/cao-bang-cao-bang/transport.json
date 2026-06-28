@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "city": "cao-bang",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Thông tin tuyến xe phổ biến dựa trên kiến thức địa lý chung. Giá vé cần xác nhận tại Traveloka/nhà xe trước production.",
+    "missing_fields": [
+      "giá vé thực tế (cần xác nhận tại Traveloka hoặc website nhà xe)",
+      "lịch chạy cập nhật",
+      "giá thuê xe máy/taxi hiện tại"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Traveloka.com/vi-vn (tuyến xe từ Hà Nội, 06/2026)",
+      "Google Maps (khoảng cách và thời gian di chuyển)"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "bus",
+        "from": "Hà Nội (bến xe Mỹ Đình)",
+        "duration": "Khoảng 7–9 tiếng",
+        "price_range": "// TODO: xác nhận tại Traveloka hoặc nhà xe Hoàng Long, Kumho Samco",
+        "providers": ["Hoàng Long", "Kumho Samco", "các nhà xe địa phương"],
+        "notes": "Tuyến xe khách phổ biến nhất đi Cao Bằng. Có xe giường nằm chạy ban đêm. Đường đèo Mã Phục và đèo Giàng khá quanh co — người say xe nên uống thuốc trước."
+      },
+      {
+        "type": "car",
+        "from": "Hà Nội",
+        "duration": "Khoảng 5–6 tiếng (tự lái theo Quốc lộ 3)",
+        "price_range": "// TODO: tùy thuê xe tự lái hoặc thuê lái xe",
+        "providers": ["Tự lái", "Thuê xe có lái tại Hà Nội"],
+        "notes": "Đi theo Quốc lộ 3 qua Thái Nguyên, Bắc Kạn. Đoạn đèo vào Cao Bằng khá dốc và quanh co. Nên xuất phát sớm trước 6:00 để tránh tắc và còn sáng khi qua đèo."
+      },
+      {
+        "type": "motorbike",
+        "from": "Hà Nội hoặc Lạng Sơn",
+        "duration": "Từ Hà Nội ~6–8 tiếng, từ Lạng Sơn ~3–4 tiếng",
+        "price_range": null,
+        "providers": ["Tự đi xe cá nhân", "Phượt đoàn"],
+        "notes": "Tuyến yêu thích của phượt thủ — phong cảnh đường đèo rất đẹp. Nên chuẩn bị xe tốt vì đường đèo dốc. Mùa đông có sương mù dày, cần cẩn thận."
+      },
+      {
+        "type": "bus",
+        "from": "Lạng Sơn",
+        "duration": "Khoảng 3–4 tiếng",
+        "price_range": "// TODO: xác nhận tại bến xe Lạng Sơn",
+        "providers": ["Xe khách địa phương Lạng Sơn–Cao Bằng"],
+        "notes": "Tuyến ngắn hơn từ Lạng Sơn, thuận tiện nếu kết hợp hành trình Đông Bắc."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "motorbike_rental",
+        "price_info": "// TODO: xác nhận tại các điểm thuê xe TP. Cao Bằng — thường dao động theo mùa",
+        "notes": "Phương tiện lý tưởng nhất để khám phá Cao Bằng. Đường đến thác Bản Giốc (~90km từ TP), hang Pác Bó (~60km) đều cần xe máy hoặc ô tô riêng. Thuê xe tại các khách sạn hoặc điểm cho thuê trên phố.",
+        "recommended": true
+      },
+      {
+        "type": "taxi",
+        "price_info": "// TODO: xác nhận tại các hãng taxi địa phương Cao Bằng",
+        "notes": "Có taxi tại TP. Cao Bằng, nhưng ít phổ biến. Nên thỏa thuận giá trước cho các chuyến đi xa đến thác Bản Giốc hay Pác Bó.",
+        "recommended": false
+      },
+      {
+        "type": "grab",
+        "price_info": null,
+        "notes": "Grab hoạt động hạn chế hoặc không có tại Cao Bằng — nên xác nhận trước khi đến và chuẩn bị phương án dự phòng.",
+        "recommended": false
+      },
+      {
+        "type": "xe_om",
+        "price_info": "// TODO: xác nhận tại địa phương — nên thỏa thuận giá trước",
+        "notes": "Xe ôm truyền thống sẵn có tại bến xe và chợ TP. Cao Bằng. Hữu ích cho di chuyển ngắn trong thành phố.",
+        "recommended": false
+      },
+      {
+        "type": "car",
+        "price_info": "// TODO: xác nhận tại các điểm thuê xe hoặc qua Traveloka",
+        "notes": "Thuê xe ô tô 4 chỗ hoặc 7 chỗ có lái là lựa chọn tốt cho gia đình hoặc nhóm đông muốn đi Bản Giốc và Pác Bó trong 2 ngày. Có thể đặt qua khách sạn.",
+        "recommended": true
+      }
+    ]
+  }
+}

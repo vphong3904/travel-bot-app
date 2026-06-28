@@ -1,0 +1,50 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.db
+backend/.env
+backend/all_endpoint.txt
+backend/tree.txt
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+
+# Flutter
+frontend/.dart_tool/
+frontend/build/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/.pub-cache/
+frontend/.pub/
+frontend/**/Generated.xcconfig
+frontend/**/flutter_export_environment.sh
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+backend_tree.txt
+endpoint api.txt
+Cách chạy postgresql trên docker desktop mà không cần tải.txt
+FRONTEND_ARCHITECTURE.md
+frontend_tree.txt
+HƯỚNG_DẪN_CHẠY.md
+README_FULL.md
+
+#Scripts
+scripts/test.py
+test.py
+scripts/

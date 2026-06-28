@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "city": "khanh-hoa-phan-rang",
+    "generated_from": "Kiến thức tổng quan (KHÔNG có trong SQL seed hiện tại) — cần bổ sung INSERT vào backend/initdb/11_seed_categories_destinations.sql trước khi dùng cho RAG production",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-016",
+    "status": "partial",
+    "partial_note": "Bổ sung folder bị thiếu từ T-014 (T-014 báo DONE nhưng folder này chưa từng được tạo). Nội dung mô tả dựa trên kiến thức địa lý/văn hóa phổ biến, KHÔNG bịa số liệu (giá, rating, lượt xem).",
+    "missing_fields": [
+      "id (UUID tạm — sinh bằng uuid_v7.py, chưa có trong DB thật)",
+      "budget (chưa có nguồn giá thật)",
+      "stats (chưa có dữ liệu user thật)",
+      "image_url (chưa có ảnh thật)"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Khánh Hòa + Ninh Thuận"
+  },
+  "data": {
+    "id": "019eeda8-d830-7bef-a223-4e32d5619ff0",
+    "name": "Khánh Hòa - Phan Rang",
+    "slug": "khanh-hoa-phan-rang",
+    "province": "Khánh Hòa",
+    "region": "Duyên hải Nam Trung Bộ",
+    "description": "Vùng duyên hải Nam Trung Bộ trù phú, kết hợp vịnh biển Nha Trang sầm uất sôi động và vùng đất đầy nắng gió Phan Rang - Tháp Chàm đậm đà bản sắc di sản văn hóa Chăm sau sáp nhập.",
+    "special": "Vịnh Nha Trang, Tháp Po Klong Garai, Tháp Bà Ponagar, Vườn quốc gia Núi Chúa",
+    "best_season": "Tháng 1–8 (mùa khô mát và mùa hè nhiều nắng biển)",
+    "best_months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "weather": "Khí hậu nhiệt đới xavan, Phan Rang khô hạn nắng nhiều đặc trưng, Nha Trang ôn hòa ổn định từ 24–32°C",
+    "budget": null,
+    "cuisine_summary": "Bún sứa Nha Trang, nem nướng Ninh Hòa, bánh xèo mực Phan Rang, thịt cừu Ninh Thuận, nho Phan Rang",
+    "image_url": null,
+    "stats": null,
+    "categories": [
+      "beach",
+      "culture",
+      "nature",
+      "food"
+    ],
+    "is_active": false,
+    "province_old": "Khánh Hòa"
+  }
+}

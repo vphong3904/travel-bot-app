@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "city": "vinh-long-ben-tre",
+    "last_updated": "2026-06-25",
+    "agent_task": "T-006",
+    "status": "completed",
+    "missing_fields": [],
+    "data_sources": ["manual_curated"]
+  },
+  "data": [
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000601",
+      "name": "Chợ Bến Tre",
+      "type": "traditional_market",
+      "address": "Đường Hùng Vương, Phường An Hội, TP. Bến Tre",
+      "specialty": "Kẹo dừa mộc tại lò, thạch dừa thô, đồ thủ công mỹ nghệ mỹ nghệ từ xơ dừa, gáo dừa"
+    },
+    {
+      "id": "019f4d5e-6f7a-7b8c-b2c3-d4e5f6000602",
+      "name": "Làng nghề bánh tráng Mỹ Lồng",
+      "type": "craft_village",
+      "address": "Xã Mỹ Thạnh, Huyện Giồng Trôm, Bến Tre",
+      "specialty": "Bánh tráng sữa dừa phơi nắng ngọt béo bùi, nướng lên thơm lừng"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "city": "dong-nai",
+    "generated_from": "Kiến thức tổng quan (KHÔNG có trong SQL seed hiện tại) — cần bổ sung INSERT vào backend/initdb/11_seed_categories_destinations.sql trước khi dùng cho RAG production",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-014",
+    "status": "partial",
+    "partial_note": "Mở rộng 25 tỉnh/thành còn thiếu sau khi áp dụng 34 tỉnh sáp nhập. Nội dung mô tả dựa trên kiến thức địa lý/văn hóa phổ biến, KHÔNG bịa số liệu (giá, rating, lượt xem).",
+    "missing_fields": [
+      "id (UUID tạm, chưa có trong DB thật)",
+      "budget (chưa có nguồn giá thật)",
+      "stats (chưa có dữ liệu user thật)",
+      "image_url (chưa có ảnh thật)"
+    ],
+    "admin_reform_applied": "Nghị quyết 202/2025/QH15 — Đồng Nai + Bình Phước"
+  },
+  "data": {
+    "id": "0a193ffa-e0a2-401c-8e6f-f54630558a65",
+    "name": "Đồng Nai",
+    "slug": "dong-nai",
+    "province": "Đồng Nai",
+    "region": "Đông Nam Bộ",
+    "description": "Vườn quốc gia Nam Cát Tiên với hệ sinh thái rừng nguyên sinh và thác Giang Điền gần TP.HCM; sau sáp nhập còn có vùng biên giới Bình Phước với vườn quốc gia Bù Gia Mập, thác Đứng Gió.",
+    "special": "Vườn quốc gia Nam Cát Tiên — khu dự trữ sinh quyển thế giới",
+    "best_season": "Tháng 12–4 (mùa khô, dễ trekking)",
+    "best_months": [
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "weather": "Nóng ẩm 25–34°C, mùa mưa tháng 5–11",
+    "budget": null,
+    "cuisine_summary": "Gỏi cá Biên Hòa, bưởi Tân Triều, dế chiên, lẩu cá kèo",
+    "image_url": null,
+    "stats": null,
+    "categories": [
+      "nature",
+      "adventure"
+    ],
+    "is_active": false,
+    "province_old": "Đồng Nai"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "city": "da-nang-da-nang",
+    "last_updated": "2026-06-23",
+    "agent_task": "T-001",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": ["vietnamtourism.gov.vn (06/2026)", "danangtourism.gov.vn (06/2026)"]
+  },
+  "data": {
+    "id": "019ef543-a001-7000-8000-000000000001",
+    "name": "Đà Nẵng",
+    "slug": "da-nang-da-nang",
+    "province": "Đà Nẵng",
+    "region": "Miền Trung",
+    "description": "Thành phố đáng sống bậc nhất Việt Nam, là trung tâm kinh tế, văn hóa, giáo dục và du lịch lớn của khu vực miền Trung - Tây Nguyên, sở hữu cả tài nguyên biển nguyên sơ lẫn núi non kỳ vĩ.",
+    "special": "Thành phố của những cây cầu nghệ thuật và điểm kết nối Di sản miền Trung",
+    "best_season": "Mùa khô ráo, sóng êm lý tưởng cho du lịch biển nghỉ dưỡng diễn ra từ tháng 4 đến tháng 8 hàng năm.",
+    "best_months": [4, 5, 6, 7, 8],
+    "weather": "Khí hậu nhiệt đới gió mùa đan tính, chia làm hai mùa mưa và khô rõ rệt. Mùa mưa thường kéo dài vào các tháng cuối năm gây hạn chế các hoạt động ngoài trời.",
+    "budget": {
+      "low": null,
+      "high": null,
+      "currency": "VND"
+    },
+    "cuisine_summary": "Thiên đường ẩm thực giao thoa phong phú giữa phong vị xứ Quảng đậm đà và hải sản biển tươi sống miền duyên hải.",
+    "image_url": null,
+    "stats": {
+      "rating_avg": null,
+      "review_count": null,
+      "favorite_count": null,
+      "view_count": null
+    },
+    "categories": ["beach", "city", "cuisine", "nature"],
+    "is_active": true
+  }
+}

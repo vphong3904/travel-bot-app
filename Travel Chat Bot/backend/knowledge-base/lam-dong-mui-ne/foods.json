@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "city": "lam-dong-mui-ne",
+    "last_updated": "2026-06-24",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": ["Foody", "vietnamtourism.gov.vn"]
+  },
+  "data": [
+    {
+      "name": "Lẩu thả Mũi Né",
+      "local_name": "Lẩu thả",
+      "category": "main_dish",
+      "description": "Món lẩu đặc sản bày trí tinh tế trên những cánh hoa chuối, nguyên liệu chính gồm cá mai tươi lọc xương cùng thịt ba chỉ, trứng rán, rau sống chấm nước sốt chuối sứ và đậu phộng dẻo bùi.",
+      "where_to_eat": ["Nhà hàng Seahorse Bistro", "Các nhà hàng dọc đường Nguyễn Đình Chiểu"],
+      "price_range": "Thường từ 350.000đ - 600.000đ/nồi tùy cỡ",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["hải sản", "đặc sản", "món chính"]
+    },
+    {
+      "name": "Bánh xèo Phan Thiết",
+      "local_name": "Bánh xèo",
+      "category": "main_dish",
+      "description": "Bánh xèo kích thước nhỏ đổ trong khuôn đất, ngập nhân tôm, mực tươi roi rói, ăn kèm với tô nước mắm đậu phộng giã nhuyễn pha sẵn đậm đà chứ không cuốn bánh tráng như miền Tây.",
+      "where_to_eat": ["Khu đường Tuyên Quang, Phan Thiết"],
+      "price_range": "Khoảng 10.000đ - 20.000đ/cái",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["ăn vặt", "bánh xèo", "bình dân"]
+    },
+    {
+      "name": "Bánh căn hải sản",
+      "local_name": "Bánh căn",
+      "category": "snack",
+      "description": "Bánh làm từ bột gạo đổ khuôn giòn rụm bên dưới, phủ nhân mực, tôm hoặc trứng, thả trực tiếp vào bát nước mắm xíu mại, cá kho cay nồng nàn hành lá.",
+      "where_to_eat": ["Quán ăn vỉa hè dọc Nguyễn Đình Chiểu hoặc trung tâm Phan Thiết"],
+      "price_range": "Khoảng 30.000đ - 50.000đ/phần",
+      "must_try": true,
+      "vegetarian": null,
+      "tags": ["ăn sáng", "ăn vặt", "hải sản"]
+    },
+    {
+      "name": "Gỏi cá mai",
+      "local_name": "Gỏi cá mai",
+      "category": "specialty",
+      "description": "Cá mai tươi rút xương, bóp tái chanh rắc thính thơm dẻo, cuốn bánh tráng rau sống, chấm sâu vào thứ nước chấm sệt nấu từ me và đậu phộng đặc chế ngon trứ danh.",
+      "where_to_eat": ["Các quán hải sản bờ kè ven biển Mũi Né"],
+      "price_range": "Thường từ 80.000đ - 150.000đ/đĩa",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["gỏi cá", "hải sản", "nhậu"]
+    },
+    {
+      "name": "Bánh quai vạc",
+      "local_name": "Bánh quai vạc",
+      "category": "snack",
+      "description": "Lớp vỏ bột lọc trong suốt dai giòn bọc nhân tôm thịt đậm vị, rắc hành phi béo ngậy chấm mắm chua ngọt sệt cay xè đặc trưng vị biển miền Trung.",
+      "where_to_eat": ["Khu chợ Mũi Né hoặc các gánh hàng rong Đồi Cát Bay"],
+      "price_range": "Khoảng 20.000đ - 35.000đ/đĩa",
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["ăn vặt", "bình dân", "bột lọc"]
+    }
+  ]
+}

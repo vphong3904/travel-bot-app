@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "city": "an-giang-phu-quoc",
+    "last_updated": "2026-06-22",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Tên nhà hàng là thật, nổi tiếng tại địa phương. Giá là ƯỚC TÍNH thị trường — xác nhận qua Foody.vn hoặc Google Maps trước production. Địa chỉ số nhà để null nếu không có nguồn xác thực.",
+    "missing_fields": [
+      "địa chỉ số nhà chính xác một số quán",
+      "giá thật (xác nhận Foody/Google Maps)",
+      "booking_url"
+    ],
+    "data_sources": [
+      "Foody.vn",
+      "Google Maps",
+      "TripAdvisor (tên nhà hàng)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019eee71-616e-78c6-935e-f39d26e7688d",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Nhà hàng Ganesh – Indian & Italian Restaurant",
+      "area": "Bãi Trường (Long Beach)",
+      "address": "Đường Trần Hưng Đạo, Bãi Trường, TP. Phú Quốc, tỉnh An Giang",
+      "cuisine": ["Ấn Độ", "Ý", "Châu Âu"],
+      "price_range": "150.000–350.000đ/người (ƯỚC TÍNH)",
+      "hours": "10:00–22:30",
+      "specialties": ["Cà ri bơ gà", "Pizza lò đất", "Naan"],
+      "tips": "Phù hợp khách quốc tế và ai muốn đổi vị sau nhiều bữa hải sản. Đặt bàn trước vào mùa cao điểm.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7c7e-99b8-8d15b27e4fc6",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Quán Hải Sản Hàm Ninh",
+      "area": "Làng chài Hàm Ninh (phía đông đảo)",
+      "address": "Cầu cảng Hàm Ninh, xã Hàm Ninh, TP. Phú Quốc, tỉnh An Giang",
+      "cuisine": ["Hải sản", "Việt Nam"],
+      "price_range": "100.000–300.000đ/người (ƯỚC TÍNH, tùy hải sản chọn)",
+      "hours": "7:00–20:00",
+      "specialties": ["Ghẹ hấp bia", "Mực nướng sa tế", "Tôm sú hấp sả", "Gỏi cá trích"],
+      "tips": "Nhiều quán tương tự dọc cầu cảng, so sánh giá hải sản tươi sống trước khi đặt. Ăn trưa xem hoàng hôn chiều rất đẹp.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-77ff-ada9-1b6963ab18be",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Chợ đêm Dinh Cậu – Các quầy ẩm thực",
+      "area": "Khu Dinh Cậu – Dương Đông",
+      "address": "Đường Bạch Đằng, TP. Phú Quốc, tỉnh An Giang",
+      "cuisine": ["Hải sản nướng", "Ẩm thực đường phố", "Nước ép"],
+      "price_range": "30.000–150.000đ/món (ƯỚC TÍNH)",
+      "hours": "17:00–23:00",
+      "specialties": ["Mực nướng muối ớt", "Nhum nướng", "Bắp nướng bơ", "Nước dừa"],
+      "tips": "Nên thử nhum nướng mỡ hành tại đây (theo mùa). Ăn sớm lúc 17:30–18:30 trước khi quầy ngon bán hết.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019eee71-616e-7846-837b-e0e8fd0e22e5",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "Quán Bún Quậy Kiên Giang",
+      "area": "Dương Đông (trung tâm)",
+      "address": "Đường 30 Tháng 4, khu Dương Đông, TP. Phú Quốc, tỉnh An Giang",
+      "cuisine": ["Việt Nam", "Bún"],
+      "price_range": "40.000–80.000đ/tô (ƯỚC TÍNH)",
+      "hours": "6:00–13:00 (chỉ buổi sáng)",
+      "specialties": ["Bún quậy hải sản", "Bánh canh ghẹ"],
+      "tips": "Đây là món bữa sáng địa phương, đến trước 9:00 để tránh hết. Nhiều quán cùng khu, tìm quán đông khách địa phương là ngon nhất.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}
