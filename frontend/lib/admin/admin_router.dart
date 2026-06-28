@@ -14,6 +14,17 @@ import 'web/screens/kb_health_screen.dart';
 import 'web/screens/rag_monitoring_screen.dart';
 import 'web/screens/city_mapping_screen.dart';
 import 'web/screens/intent_patterns_screen.dart';
+import 'web/screens/destinations_screen.dart';
+import 'web/screens/hotels_screen.dart';
+import 'web/screens/tours_screen.dart';
+import 'web/screens/foods_screen.dart';
+import 'web/screens/restaurants_screen.dart';
+import 'web/screens/shopping_screen.dart';
+import 'web/screens/itineraries_screen.dart';
+import 'web/screens/events_screen.dart';
+import 'web/screens/transport_screen.dart';
+import 'web/screens/faq_screen.dart';
+import 'web/screens/experiences_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
 /// Provider cho GoRouter — reactive theo authProvider
@@ -96,6 +107,61 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/intent-patterns',
             name: 'intent-patterns',
             builder: (_, __) => const IntentPatternsScreen(),
+          ),
+          GoRoute(
+            path: '/content/destinations',
+            name: 'content-destinations',
+            builder: (_, __) => const DestinationsScreen(),
+          ),
+          GoRoute(
+            path: '/content/hotels',
+            name: 'content-hotels',
+            builder: (_, __) => const HotelsScreen(),
+          ),
+          GoRoute(
+            path: '/content/tours',
+            name: 'content-tours',
+            builder: (_, __) => const ToursScreen(),
+          ),
+          GoRoute(
+            path: '/content/foods',
+            name: 'content-foods',
+            builder: (_, __) => const FoodsScreen(),
+          ),
+          GoRoute(
+            path: '/content/restaurants',
+            name: 'content-restaurants',
+            builder: (_, __) => const RestaurantsScreen(),
+          ),
+          GoRoute(
+            path: '/content/shopping',
+            name: 'content-shopping',
+            builder: (_, __) => const ShoppingScreen(),
+          ),
+          GoRoute(
+            path: '/content/itineraries',
+            name: 'content-itineraries',
+            builder: (_, __) => const ItinerariesScreen(),
+          ),
+          GoRoute(
+            path: '/content/events',
+            name: 'content-events',
+            builder: (_, __) => const EventsScreen(),
+          ),
+          GoRoute(
+            path: '/content/transport',
+            name: 'content-transport',
+            builder: (_, __) => const TransportScreen(),
+          ),
+          GoRoute(
+            path: '/content/faq',
+            name: 'content-faq',
+            builder: (_, __) => const FaqScreen(),
+          ),
+          GoRoute(
+            path: '/content/experiences',
+            name: 'content-experiences',
+            builder: (_, __) => const ExperiencesScreen(),
           ),
         ],
       ),
