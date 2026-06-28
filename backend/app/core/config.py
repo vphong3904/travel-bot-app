@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     # Qdrant
-    QDRANT_URL: str = "https://50787b25-0f82-4ed7-878a-8ab676ff3023.us-west-1-0.aws.cloud.qdrant.io"
+    QDRANT_URL: str
     # Qdrant Cloud: set QDRANT_API_KEY trong .env — để trống khi chạy Docker local
-    QDRANT_API_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6NWQzYjRkMzItNWUyZi00YjNlLThjNmItMGRjMjdiMDlkNGE4In0.NgyejkC9QiY3Yjv_lXvj7IkUWRypOZFi9mwKxUqcPME"
+    QDRANT_API_KEY: str
     QDRANT_COLLECTION: str = "pdtrip_knowledge"
     # T-011/T-012: collection riêng cho knowledge-base/ files, tách khỏi collection cũ
     QDRANT_COLLECTION_KB_FILES: str = "pdtrip_knowledge_kb_files"

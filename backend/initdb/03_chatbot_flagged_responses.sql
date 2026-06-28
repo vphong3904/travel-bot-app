@@ -1,0 +1,17 @@
+-- ============================================================
+-- chatbot_flagged_responses
+-- Lưu các câu trả lời bị Hallucination Guard (YÊU CẦU 3) đánh dấu
+-- cần review: grounding thấp hoặc citation trỏ tới nguồn không tồn tại.
+-- Dùng để admin/dev review định kỳ và bổ sung knowledge base.
+--
+-- ĐÃ CHUYỂN SANG MONGODB (collection "chatbot_flagged_responses").
+-- Xem app/db/mongo.py (COLLECTION_FLAGGED_RESPONSES) +
+-- app/services/log_service.py (log_flagged_response / list_flagged_responses /
+-- review_flagged_response). Toàn bộ logic ghi/đọc dữ liệu này dùng Motor (Mongo),
+-- KHÔNG còn ghi vào PostgreSQL — bảng SQL tương ứng đã bị gỡ khỏi đây để tránh
+-- 2 nguồn dữ liệu trùng tên/tác dụng (lý do giống chatbot_unanswered_questions,
+-- xem 05_schema_destination_view_logs.sql).
+--
+-- File này được giữ lại (rỗng về schema) chỉ để không phải đổi số thứ tự các
+-- file initdb khác.
+-- ============================================================
