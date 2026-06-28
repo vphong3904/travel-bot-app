@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "city": "phu-tho-phu-tho",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (nhiều món chưa có nguồn xác thực)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
+    ]
+  },
+  "data": [
+    {
+      "name": "Cá Anh Vũ Sông Đà",
+      "local_name": "Cá anh vũ",
+      "category": "main_dish",
+      "description": "Cá hiếm quý sông Đà, thịt trắng ngọt thanh, thường hấp gừng hoặc nướng muối ớt — từng là cống phẩm vua.",
+      "where_to_eat": [
+        "Nhà hàng ven sông Lô",
+        "Nhà hàng đặc sản Phú Thọ"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản hiếm",
+        "hải sản sông"
+      ]
+    },
+    {
+      "name": "Bánh Sắn Phú Thọ",
+      "local_name": "Bánh sắn",
+      "category": "snack",
+      "description": "Bánh làm từ bột sắn, nhân đậu xanh mỡ hành, gói lá chuối hấp chín — đặc sản vùng trung du.",
+      "where_to_eat": [
+        "Chợ trung tâm Việt Trì",
+        "Các cửa hàng đặc sản Phú Thọ"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": [
+        "ăn vặt",
+        "truyền thống"
+      ]
+    },
+    {
+      "name": "Thịt Chua Thanh Sơn",
+      "local_name": "Thịt chua",
+      "category": "specialty",
+      "description": "Thịt lợn ủ chua với thính gạo và lá ổi theo phương pháp truyền thống Mường, vị đặc biệt chua ngọt mặn hài hòa.",
+      "where_to_eat": [
+        "Chợ Thanh Sơn",
+        "Cửa hàng đặc sản Việt Trì"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản",
+        "mang về"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "_meta": {
+    "city": "nghe-an-nghe-an",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "empty",
+    "partial_note": "Chưa có dữ liệu locations type='restaurant' từ SQL — cần bổ sung từ Foody/Google Maps",
+    "missing_fields": [
+      "id",
+      "address",
+      "hours",
+      "rating",
+      "price_range"
+    ],
+    "data_sources": []
+  },
+  "data": []
+}

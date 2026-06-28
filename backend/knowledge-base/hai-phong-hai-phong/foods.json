@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "city": "hai-phong-hai-phong",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (nhiều món chưa có nguồn xác thực)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
+    ]
+  },
+  "data": [
+    {
+      "name": "Bánh Đa Cua",
+      "local_name": "Bánh đa cua Hải Phòng",
+      "category": "main_dish",
+      "description": "Bún bánh đa đỏ nấu với cua đồng, chả cá, rau muống và cà chua — đặc sản độc nhất vô nhị của Hải Phòng.",
+      "where_to_eat": [
+        "Khu vực chợ Sắt",
+        "Khu ẩm thực Tam Bạc"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng",
+        "đặc sản"
+      ]
+    },
+    {
+      "name": "Bánh Mì Que Hải Phòng",
+      "local_name": "Bánh mì que",
+      "category": "snack",
+      "description": "Bánh mì thanh nhỏ dài giòn tan, ăn kèm pate và chả — phiên bản đặc trưng của Hải Phòng nổi tiếng khắp miền Bắc.",
+      "where_to_eat": [
+        "Khu vực phố cũ Hải Phòng"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng",
+        "street food"
+      ]
+    },
+    {
+      "name": "Nem Cua Bể",
+      "local_name": "Nem cua bể",
+      "category": "snack",
+      "description": "Nem cuốn nhân cua biển tươi, rán vàng giòn, chấm mắm chua ngọt — đặc sản biển của Hải Phòng.",
+      "where_to_eat": [
+        "Nhà hàng hải sản khu vực Đồ Sơn",
+        "Khu ẩm thực trung tâm"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "hải sản",
+        "đặc sản"
+      ]
+    }
+  ]
+}

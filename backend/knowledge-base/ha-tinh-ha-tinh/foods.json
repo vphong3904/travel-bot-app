@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "city": "ha-tinh-ha-tinh",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (nhiều món chưa có nguồn xác thực)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
+    ]
+  },
+  "data": [
+    {
+      "name": "Kẹo Cu Đơ",
+      "local_name": "Kẹo cu đơ",
+      "category": "dessert",
+      "description": "Kẹo lạc kéo mật mía truyền thống Hà Tĩnh, vị giòn thơm ngọt đậm đà — quà đặc sản không thể thiếu khi đến đây.",
+      "where_to_eat": [
+        "Chợ thành phố Hà Tĩnh",
+        "Cửa hàng đặc sản trên QL1A"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": true,
+      "tags": [
+        "mang về",
+        "quà tặng"
+      ]
+    },
+    {
+      "name": "Cháo Hàu Lộc Hà",
+      "local_name": "Cháo hàu",
+      "category": "main_dish",
+      "description": "Cháo nấu hàu biển tươi vùng Lộc Hà, béo ngọt tự nhiên, thường ăn sáng hoặc ăn tối.",
+      "where_to_eat": [
+        "Khu vực ven biển Thiên Cầm",
+        "Nhà hàng hải sản Hà Tĩnh"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "hải sản",
+        "ăn sáng"
+      ]
+    },
+    {
+      "name": "Bún Bò Hà Tĩnh",
+      "local_name": "Bún bò",
+      "category": "main_dish",
+      "description": "Bún bò nấu theo phong cách miền Trung đậm gia vị, nước dùng sả ớt đậm đà hơn phiên bản miền Nam.",
+      "where_to_eat": [
+        "Chợ TP. Hà Tĩnh",
+        "Quán bún bò khu vực trung tâm"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng",
+        "bún"
+      ]
+    }
+  ]
+}

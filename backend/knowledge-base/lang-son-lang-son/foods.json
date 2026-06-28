@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "city": "lang-son-lang-son",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (nhiều món chưa có nguồn xác thực)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
+    ]
+  },
+  "data": [
+    {
+      "name": "Khau Nhục",
+      "local_name": "Khau nhục",
+      "category": "main_dish",
+      "description": "Thịt ba chỉ hầm tương đen và gia vị Trung Hoa qua nhiều giờ cho đến khi mềm tan, đặc sản ngày tết của người Tày, Nùng.",
+      "where_to_eat": [
+        "Nhà hàng đặc sản Lạng Sơn",
+        "Chợ Đông Kinh"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản",
+        "dịp lễ"
+      ]
+    },
+    {
+      "name": "Bánh Cuốn Cao Bằng – Lạng Sơn",
+      "local_name": "Bánh cuốn trứng",
+      "category": "main_dish",
+      "description": "Bánh cuốn thêm trứng đổ thẳng lên lá bánh, ăn kèm chả và nước chấm chua ngọt.",
+      "where_to_eat": [
+        "Khu vực chợ Kỳ Lừa",
+        "Phố ẩm thực TP. Lạng Sơn"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng"
+      ]
+    },
+    {
+      "name": "Vịt Quay Lạng Sơn",
+      "local_name": "Vịt quay",
+      "category": "main_dish",
+      "description": "Vịt quay mật ong theo công thức gia truyền, da giòn đỏ bóng, thịt thơm ngọt — mang cả con về làm quà là phổ biến.",
+      "where_to_eat": [
+        "Khu vực chợ Kỳ Lừa",
+        "Cửa hàng vịt quay phố Nhị Thanh"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "đặc sản",
+        "mang về"
+      ]
+    }
+  ]
+}
