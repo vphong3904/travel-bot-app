@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum as PyEnum
 
 from sqlalchemy import (
     Column, String, Boolean, Text, TIMESTAMP, ForeignKey, func, Index
@@ -10,6 +11,14 @@ from app.db.database import Base
 from app.db.models.chat import ChatSession
 
 
+class UserRole(str, PyEnum):
+    SUPER_ADMIN     = "super_admin"
+    ADMIN           = "admin"
+    CONTENT_MANAGER = "content_manager"
+    MODERATOR       = "moderator"
+    USER            = "user"
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -19,7 +28,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=True)   # nullable: Google OAuth user có thể không có password
     full_name     = Column(String(100))
     avatar_url    = Column(Text)
-    role          = Column(String(20), default="user")
+    role          = Column(String(30), default=UserRole.USER, nullable=False)
     is_active     = Column(Boolean, default=True)
     is_deleted    = Column(Boolean, default=False)
     # Google OAuth

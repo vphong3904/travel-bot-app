@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
+from app.db.models.user import UserRole
 
 
 # ── Knowledge Base ────────────────────────────────────────────────────────────
@@ -133,6 +134,19 @@ class SearchResultOut(BaseModel):
     destinations: list[dict]
     hotels: list[dict]
     tours: list[dict]
+
+
+# ── RBAC ─────────────────────────────────────────────────────────────────────
+
+class UserRoleUpdate(BaseModel):
+    role: UserRole
+
+    @field_validator("role")
+    @classmethod
+    def cannot_assign_super_admin_via_api(cls, v: UserRole) -> UserRole:
+        if v == UserRole.SUPER_ADMIN:
+            raise ValueError("Không thể gán role super_admin qua API")
+        return v
 
 
 # ── Aliases tương thích ngược ─────────────────────────────────────────────────
