@@ -1,16 +1,18 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "completed",
     "missing_fields": [
       "ticket_price (xác thực biến động 2026)",
-      "image_url"
+      "image_url",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "vietnamtourism.gov.vn",
-      "Sở Văn hóa Thể thao và Du lịch Tây Ninh"
+      "Sở Văn hóa Thể thao và Du lịch Tây Ninh",
+      "T-037: Sun World Núi Bà Đen — sunworld.vn & Traveloka (2025)"
     ]
   },
   "data": [
@@ -58,6 +60,24 @@
       "rating": null,
       "ticket_price": null,
       "price_note": "// TODO: cập nhật lệ phí thuyết minh đoàn tại di tích"
+    },
+    {
+      "id": "cdfedee0-1e60-43f0-a54f-1dd99125b555",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Sun World Núi Bà Đen (Cáp treo & khu vui chơi)",
+      "type": "entertainment",
+      "address": "Khu phố Ninh Phú, phường Ninh Sơn, TP. Tây Ninh, tỉnh Tây Ninh (cách trung tâm ~11km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cáp treo tuyến Chùa Hang: T2–T6 7:00–18:00, T7 7:00–19:15, CN 6:00–19:15; tuyến Vân Sơn theo khung giờ — xác nhận trước khi đến",
+      "description": "Quần thể du lịch trên núi Bà Đen (nóc nhà Nam Bộ) với hệ thống cáp treo hiện đại (tuyến Vân Sơn, Chùa Hang, Tâm An), khu tâm linh trên đỉnh, vườn hoa và nhiều trải nghiệm vui chơi, check-in biển mây.",
+      "tips": "Lên đỉnh bằng tuyến Vân Sơn để ngắm tượng Phật Bà và biển mây; tuyến Chùa Hang để viếng chùa Bà. Đi sáng sớm tránh nắng.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Cáp treo khứ hồi (khách ngoại tỉnh): tuyến Chùa Hang từ 150.000đ, tuyến Vân Sơn từ 300.000đ. (nguồn: sunworld.vn & Traveloka, 2025 — có thể thay đổi)"
     }
   ]
 }

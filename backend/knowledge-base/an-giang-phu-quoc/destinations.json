@@ -1,19 +1,21 @@
 {
   "_meta": {
     "city": "an-giang-phu-quoc",
-    "last_updated": "2026-06-22",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "partial",
     "partial_note": "Tên địa điểm là thật, đã xác minh qua nguồn công khai. Giá vé/rating là ƯỚC TÍNH hoặc null — PHẢI xác nhận qua vietnamtourism.gov.vn hoặc Google Maps trước production.",
     "missing_fields": [
       "stats/rating thật",
       "image_url thật",
-      "giá vé một số điểm cần xác nhận thực tế"
+      "giá vé một số điểm cần xác nhận thực tế",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "vietnamtourism.gov.vn",
       "Google Maps (tên + toạ độ)",
-      "Sở Du lịch tỉnh Kiên Giang (nay thuộc An Giang)"
+      "Sở Du lịch tỉnh Kiên Giang (nay thuộc An Giang)",
+      "T-037: VinWonders Phú Quốc — vinwonders.com & Traveloka (2025)"
     ]
   },
   "data": [
@@ -42,7 +44,7 @@
       "type": "attraction",
       "address": "Đường Vòng Quanh Đảo, xã Gành Dầu, TP. Phú Quốc, tỉnh An Giang",
       "coordinates": {
-        "lat": 10.3800,
+        "lat": 10.38,
         "lng": 103.8383
       },
       "hours": "8:00–17:00 hằng ngày",
@@ -79,8 +81,8 @@
       "type": "nature",
       "address": "Xã Gành Dầu – Bãi Thơm, TP. Phú Quốc, tỉnh An Giang",
       "coordinates": {
-        "lat": 10.3200,
-        "lng": 103.9000
+        "lat": 10.32,
+        "lng": 103.9
       },
       "hours": "7:00–17:00 hằng ngày",
       "description": "Vùng rừng nguyên sinh được UNESCO công nhận, chiếm hơn 50% diện tích đảo Phú Quốc. Có nhiều loài động thực vật quý hiếm, hệ thống suối và thác nước, tuyến trek băng rừng nguyên sinh.",
@@ -117,7 +119,7 @@
       "address": "Đường Bạch Đằng, TP. Phú Quốc, tỉnh An Giang",
       "coordinates": {
         "lat": 10.2165,
-        "lng": 103.9580
+        "lng": 103.958
       },
       "hours": "6:00–18:00 hằng ngày",
       "description": "Ngôi miếu thờ cá Ông (cá voi) nhỏ xinh nằm trên mỏm đá nhô ra biển. Đây là điểm linh thiêng với ngư dân địa phương và là điểm ngắm hoàng hôn tuyệt đẹp nhất Phú Quốc.",
@@ -134,8 +136,8 @@
       "type": "beach",
       "address": "Xã Gành Dầu, TP. Phú Quốc, tỉnh An Giang",
       "coordinates": {
-        "lat": 10.3500,
-        "lng": 103.8500
+        "lat": 10.35,
+        "lng": 103.85
       },
       "hours": "Mở 24/7",
       "description": "Bãi biển hoang sơ dài hơn 15km ở phía bắc đảo, cát trắng mịn, ít người hơn khu nam đảo. Hiện có khu Vinpearl Bãi Dài nhưng vẫn còn nhiều đoạn bãi công cộng tự nhiên.",
@@ -144,6 +146,24 @@
       "stats": null,
       "verified": true,
       "entry_fee": "Miễn phí (khu công cộng)"
+    },
+    {
+      "id": "70215d60-7a1a-4a47-9b88-651704700e8e",
+      "city_id": "019eee7d-cd94-744b-86d1-ca07059a9949",
+      "name": "VinWonders Phú Quốc",
+      "type": "theme_park",
+      "address": "Khu Bãi Dài, đặc khu Phú Quốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "9:00–19:30 hằng ngày; Thế giới phiêu lưu 10:00–18:00, công viên nước (Thế giới lốc xoáy) 10:00–17:30",
+      "description": "Công viên chủ đề lớn nhất Phú Quốc với khu trò chơi cảm giác mạnh, công viên nước, thủy cung, làng bí mật và show Once buổi tối. Vé trọn gói bao gồm toàn bộ trò chơi và show, không phụ phí.",
+      "tips": "Đi cả ngày để chơi hết các phân khu; xem show Once tại lâu đài trung tâm khoảng 18:45.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Cao từ 1m4: 950.000đ; cao 1m–dưới 1m4 & người trên 60 tuổi: 710.000đ; dưới 1m miễn phí. (nguồn: vinwonders.com & Traveloka, 2025 — có thể thay đổi)"
     }
   ]
 }

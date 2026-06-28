@@ -1,14 +1,15 @@
 {
   "_meta": {
     "city": "dak-lak-buon-ma-thuot",
-    "last_updated": "2026-06-22",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "partial",
     "partial_note": null,
     "missing_fields": [
       "coordinates chính xác cho một số điểm (Buôn Ako Dhong, Buôn Đôn) — đang dùng tọa độ khu vực ước lượng từ Google Maps, cần xác minh lại trước khi dùng cho chỉ đường chính xác",
       "entry_fee Buôn Ako Dhong, Nhà đày Buôn Ma Thuột — chưa tìm được giá vé cập nhật ≥2 nguồn khớp nhau, để null",
-      "stats.rating_avg / review_count toàn bộ — không tự sinh số theo RULE-02, cần lấy từ Google Maps/TripAdvisor khi triển khai"
+      "stats.rating_avg / review_count toàn bộ — không tự sinh số theo RULE-02, cần lấy từ Google Maps/TripAdvisor khi triển khai",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "Traveloka: traveloka.com/vi-vn (06/2026)",
@@ -17,7 +18,8 @@
       "Xanh SM: xanhsm.com/news (06/2026)",
       "Vexere blog cẩm nang Buôn Ma Thuột (06/2026)",
       "Mường Thanh booking — thông tin Yok Đôn, Buôn Đôn (06/2026)",
-      "Google Maps (xác nhận khu vực, 06/2026)"
+      "Google Maps (xác nhận khu vực, 06/2026)",
+      "T-037: Khu du lịch KoTam — Du lịch Việt Du & Xanh SM (2025)"
     ]
   },
   "data": [
@@ -28,12 +30,18 @@
       "type": "nature",
       "theme": "thien_nhien",
       "address": "Thôn Buôn Kuốp, xã Ea Na (giáp ranh Đắk Lắk – Đắk Nông)",
-      "coordinates": { "lat": 12.5667, "lng": 108.0167 },
+      "coordinates": {
+        "lat": 12.5667,
+        "lng": 108.0167
+      },
       "hours": "6:00–18:00 hằng ngày — xác nhận trước khi đến",
       "description": "Ngọn thác lớn nhất trên hệ thống sông Sêrêpôk, còn gọi là 'thác Vợ' (Dray Nur tiếng Ê Đê), cao khoảng 30m và dài hơn 250m, tạo thành bức tường nước trắng xóa nối liền hai tỉnh Đắk Lắk và Đắk Nông qua một cây cầu treo. Phía sau màn nước có hang đá tự nhiên, là nơi sinh sống của một đàn dơi lớn thường bay ra vào buổi chiều.",
       "tips": "Đẹp nhất vào mùa mưa (tháng 6–10) khi nước đổ mạnh, nhưng mùa khô (tháng 2–5) lại an toàn hơn để tắm suối và dễ chụp ảnh hơn vì nước chia thành nhiều nhánh nhỏ. Nên kết hợp tham quan luôn thác Dray Sáp liền kề qua cầu treo.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -44,12 +52,18 @@
       "type": "nature",
       "theme": "thien_nhien",
       "address": "Thị trấn Liên Sơn, huyện Lắk, tỉnh Đắk Lắk",
-      "coordinates": { "lat": 12.4333, "lng": 108.2 },
+      "coordinates": {
+        "lat": 12.4333,
+        "lng": 108.2
+      },
       "hours": "Cả ngày — xác nhận giờ hoạt động dịch vụ thuyền trước khi đến",
       "description": "Hồ nước ngọt tự nhiên lớn thứ hai Việt Nam (chỉ sau hồ Ba Bể), bao quanh bởi rừng thông, núi đồi và các buôn làng người M'nông như buôn Jun, buôn Lê. Du khách có thể ngồi thuyền độc mộc ngắm hoàng hôn, tham quan nhà dài truyền thống và nghe trình diễn cồng chiêng, đàn đá, đàn T'rưng.",
       "tips": "Kết hợp tham quan Buôn Jun – Buôn Lê ngay cạnh hồ để tìm hiểu văn hóa M'nông. Hồ cách trung tâm Buôn Ma Thuột khá xa (khoảng 56km) nên cần bố trí cả ngày hoặc nghỉ đêm tại khu vực này.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -60,12 +74,18 @@
       "type": "attraction",
       "theme": "lich_su_van_hoa",
       "address": "Xã Krông Na, huyện Buôn Đôn, tỉnh Đắk Lắk",
-      "coordinates": { "lat": 12.95, "lng": 107.8333 },
+      "coordinates": {
+        "lat": 12.95,
+        "lng": 107.8333
+      },
       "hours": "7:00–17:00 — xác nhận trước khi đến",
       "description": "Vùng đất gắn liền với nghề săn bắt và thuần dưỡng voi rừng nổi tiếng của người Ê Đê, M'nông, nằm bên dòng sông Sêrêpôk. Du khách có thể tham quan cầu treo bắc qua sông, mộ vua săn voi Khunjunop, nhà dài cổ và tìm hiểu đời sống văn hóa bản địa.",
       "tips": "Các hoạt động cưỡi voi truyền thống đang dần được thay thế bằng các hình thức du lịch thân thiện với voi (xem voi, cho voi ăn) theo xu hướng bảo vệ động vật — nên hỏi trực tiếp đơn vị tổ chức về hình thức trải nghiệm trước khi đặt tour.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -76,12 +96,18 @@
       "type": "nature",
       "theme": "thach_thuc_mao_hiem",
       "address": "Xã Krông Na, huyện Buôn Đôn, tỉnh Đắk Lắk",
-      "coordinates": { "lat": 13.0167, "lng": 107.6833 },
+      "coordinates": {
+        "lat": 13.0167,
+        "lng": 107.6833
+      },
       "hours": "7:00–17:00 — xác nhận trước khi đến",
       "description": "Khu rừng đặc dụng lớn nhất Việt Nam, diện tích hơn 115.000ha, là nơi duy nhất tại Việt Nam còn bảo tồn hệ sinh thái rừng khộp (rừng thưa rụng lá theo mùa). Du khách có thể trekking xuyên rừng, chèo thuyền trên sông Sêrêpôk, cắm trại qua đêm tại trạm kiểm lâm và quan sát động vật hoang dã như voi, bò tót.",
       "tips": "Phù hợp cho người yêu trekking và khám phá sinh thái hoang dã — nên mang giày leo núi, áo dài tay và thuê hướng dẫn viên kiểm lâm vì rừng rộng và một số khu vực không có sóng điện thoại.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Khoảng 60.000đ/người lớn (Nam Thiên Travel, 06/2026 — có thể thay đổi, nên xác nhận lại tại quầy vé)"
     },
@@ -92,12 +118,18 @@
       "type": "attraction",
       "theme": "lich_su",
       "address": "18 Tán Thuật, thành phố Buôn Ma Thuột, tỉnh Đắk Lắk",
-      "coordinates": { "lat": 12.6803, "lng": 108.0408 },
+      "coordinates": {
+        "lat": 12.6803,
+        "lng": 108.0408
+      },
       "hours": "7:30–17:00 (thứ Hai – thứ Sáu) — xác nhận trước khi đến vì có thể đóng cửa cuối tuần",
       "description": "Di tích lịch sử quốc gia đặc biệt do thực dân Pháp xây dựng năm 1930 để giam giữ các chiến sĩ cách mạng Việt Nam. Hiện được bảo tồn nguyên trạng với hệ thống xà lim, cùm sắt và nhiều hiện vật lịch sử, giúp du khách hiểu thêm về một giai đoạn đấu tranh của dân tộc tại Tây Nguyên.",
       "tips": "Phù hợp cho du khách yêu thích tìm hiểu lịch sử; nên dành khoảng 45–60 phút để tham quan đầy đủ các khu trưng bày.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -108,12 +140,18 @@
       "type": "museum",
       "theme": "van_hoa_ca_phe",
       "address": "Đường Nguyễn Đình Chiểu, phường Tân Lợi, thành phố Buôn Ma Thuột (khu đô thị Thành phố Cà phê)",
-      "coordinates": { "lat": 12.6964, "lng": 108.0508 },
+      "coordinates": {
+        "lat": 12.6964,
+        "lng": 108.0508
+      },
       "hours": "7:00–18:00 hằng ngày (giờ đóng cửa bán vé có thể sớm hơn giờ đóng cửa tham quan) — xác nhận trước khi đến vì giờ mở cửa được báo cáo có chênh lệch nhẹ giữa các nguồn",
       "description": "Tổ hợp văn hóa rộng khoảng 45ha do Tập đoàn Trung Nguyên Legend xây dựng, khai trương tháng 11/2018, lấy cảm hứng kiến trúc từ nhà dài truyền thống của người Ê Đê. Trưng bày hơn 10.000 hiện vật liên quan đến văn hóa cà phê từ nhiều quốc gia trên thế giới, kết hợp không gian triển lãm tương tác đa giác quan và khu vực thưởng thức cà phê.",
       "tips": "Nên đến vào buổi sáng hoặc đầu giờ chiều để có ánh sáng tự nhiên đẹp cho việc chụp ảnh tại khu kiến trúc 5 mái nhà cong và thư viện ánh sáng.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Khoảng 70.000–75.000đ/người lớn, 40.000đ/trẻ em (Traveloka & KKday, 06/2026 — giá có thể đã bao gồm 1 ly cà phê, nên xác nhận lại khi mua vé)"
     },
@@ -124,12 +162,18 @@
       "type": "attraction",
       "theme": "lich_su_van_hoa",
       "address": "Phường Tân Lợi, thành phố Buôn Ma Thuột (cách trung tâm khoảng 2–3km về phía Bắc)",
-      "coordinates": { "lat": 12.6917, "lng": 108.0444 },
+      "coordinates": {
+        "lat": 12.6917,
+        "lng": 108.0444
+      },
       "hours": "Cả ngày — nên tham quan ban ngày để gặp được người dân sinh hoạt",
       "description": "Được gọi là 'buôn trong phố' vì nằm ngay trong lòng thành phố Buôn Ma Thuột, là nơi cư ngụ của đồng bào Ê Đê còn lưu giữ kiến trúc nhà dài truyền thống, nghề dệt thổ cẩm và văn hóa cồng chiêng. 'Ako' trong tiếng Ê Đê nghĩa là đầu nguồn, 'Dhong' là lũng — phản ánh vị trí buôn nằm ở đầu một con suối nhỏ.",
       "tips": "Có thể kết hợp ghé thăm các quán cà phê sân vườn trong buôn để vừa thưởng thức cà phê vừa quan sát kiến trúc nhà dài; nên giữ ý tứ và xin phép trước khi chụp ảnh người dân hoặc vào nhà dài.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -140,14 +184,41 @@
       "type": "nature",
       "theme": "thach_thuc_mao_hiem",
       "address": "Huyện Krông Năng, tỉnh Đắk Lắk",
-      "coordinates": { "lat": 12.9333, "lng": 108.3833 },
+      "coordinates": {
+        "lat": 12.9333,
+        "lng": 108.3833
+      },
       "hours": "6:00–18:00 — xác nhận trước khi đến vì đường vào còn ít được khai thác dịch vụ",
       "description": "Còn gọi là thác Ba Tầng, dòng thác chia thành ba tầng nước đổ qua rừng nguyên sinh, tầng thấp nhất tạo thành hồ nước có thể tắm được. Vào mùa khô thác chảy hiền hòa như suối tóc, mùa mưa thì nước đổ mạnh và hoang dại hơn. Ít được khai thác du lịch đại trà nên còn giữ được nét hoang sơ.",
       "tips": "Đường vào thác khá xa trung tâm và chưa thuận tiện, phù hợp với người thích khám phá/trekking hơn là đi nghỉ dưỡng; nên đi cùng nhóm hoặc người địa phương rành đường.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
+    },
+    {
+      "id": "0e9239f9-b5c5-48f7-9b9a-204f10889b21",
+      "city_id": "9193ad16-91b7-43cd-86bf-e208fcdc43f1",
+      "name": "Khu du lịch sinh thái KoTam",
+      "type": "entertainment",
+      "address": "789 Phạm Văn Đồng, TP. Buôn Ma Thuột, Đắk Lắk",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "7:30–18:30 hằng ngày",
+      "description": "Khu du lịch sinh thái rộng khoảng 13ha với hồ nước, vườn hoa, nhà dài Ê Đê, trải nghiệm văn hóa Tây Nguyên cùng khu vui chơi và ẩm thực — điểm dã ngoại quen thuộc gần Buôn Ma Thuột.",
+      "tips": "Phù hợp dã ngoại gia đình; có biểu diễn cồng chiêng và món ăn đặc trưng Tây Nguyên.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào khoảng 20.000–30.000đ/người (tham khảo, có thể thay đổi). (nguồn: Du lịch Việt Du & Xanh SM, 2025)"
     }
   ]
 }
