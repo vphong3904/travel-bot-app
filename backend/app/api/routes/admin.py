@@ -29,8 +29,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select, func, desc, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_db, get_current_user, require_admin
-from app.db.models.user import User
+from app.api.deps import get_db, get_current_user, require_admin, require_role
+from app.db.models.user import User, UserRole
+from app.db.mongo import get_mongo_db
 from app.db.models.chat import ChatSession, ChatMessage
 from app.db.models.admin import KnowledgeEntry, EmbeddingJob
 from app.services import log_service
@@ -45,6 +46,7 @@ from app.db.schemas.admin import (
     StatsUsersOut,
     UserAdminOut,
     UserAdminUpdate,
+    UserRoleUpdate,
     ChatLogOut,
 )
 
@@ -304,6 +306,41 @@ async def update_user(
         setattr(user, field, value)
     await db.commit()
     await db.refresh(user)
+    return user
+
+
+@router.patch("/users/{user_id}/role", response_model=UserAdminOut)
+async def update_user_role(
+    user_id: UUID,
+    body: UserRoleUpdate,
+    db: AsyncSession = Depends(get_db),
+    mongo_db=Depends(get_mongo_db),
+    current_user: User = Depends(require_role([UserRole.SUPER_ADMIN])),
+):
+    """Chỉ Super Admin được đổi role người dùng."""
+    result = await db.execute(
+        select(User).where(User.id == user_id, User.is_deleted.is_(False))
+    )
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User không tồn tại")
+
+    before_role = user.role
+    user.role = body.role
+    await db.commit()
+    await db.refresh(user)
+
+    await mongo_db["admin_audit_logs"].insert_one({
+        "actor_id": str(current_user.id),
+        "actor_email": current_user.email,
+        "action": "role_change",
+        "resource_type": "user",
+        "resource_id": str(user_id),
+        "before_value": {"role": before_role},
+        "after_value": {"role": body.role},
+        "created_at": datetime.now(timezone.utc),
+    })
+
     return user
 
 
