@@ -1,8 +1,0 @@
-{
-  "_meta": {
-    "description": "Mapping tên điểm đến → slug → UUID cho 34 tỉnh/thành Việt Nam sau sáp nhập (Nghị quyết 202/2025/QH15). Slug = {tỉnh-mới}-{tên-điểm-đến}. Các entry có uuid_note cần INSERT vào DB app khi triển khai.",
-    "admin_reform_note": "Việt Nam giảm từ 63 xuống 34 đơn vị hành chính cấp tỉnh (28 tỉnh + 6 thành phố trực thuộc TW). UUID giữ nguyên từ SQL cũ — KHÔNG đổi UUID, chỉ đổi slug/folder/province.",
-    "see_also": ".agent/context/provinces-34.md",
-    "total_provinces_covered": 34
-  }
-}
