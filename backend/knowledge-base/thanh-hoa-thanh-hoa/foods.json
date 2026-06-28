@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "city": "thanh-hoa-thanh-hoa",
+    "last_updated": "2026-06-28",
+    "agent_task": "T-004",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [
+      "price_range (nhiều món chưa có nguồn xác thực)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (06/2026)",
+      "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
+    ]
+  },
+  "data": [
+    {
+      "name": "Nem Chua Thanh Hóa",
+      "local_name": "Nem chua",
+      "category": "specialty",
+      "description": "Nem chua đặc trưng của Thanh Hóa, gói trong lá chuối và lá ổi, vị chua ngọt hài hòa.",
+      "where_to_eat": [
+        "Chợ Đông Thành",
+        "Các cửa hàng đặc sản phố Lê Lợi"
+      ],
+      "price_range": "Bình dân",
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "mang về",
+        "ăn vặt"
+      ]
+    },
+    {
+      "name": "Bánh Cuốn Bà Anh",
+      "local_name": "Bánh cuốn Thanh Hóa",
+      "category": "main_dish",
+      "description": "Bánh cuốn mỏng nhân thịt, nấm mèo, hành phi, ăn kèm chả lụa và nước chấm pha theo kiểu Thanh Hóa.",
+      "where_to_eat": [
+        "Khu vực chợ Đông Thành",
+        "Phố ẩm thực TP. Thanh Hóa"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "ăn sáng"
+      ]
+    },
+    {
+      "name": "Cá Lồng Sầm Sơn",
+      "local_name": "Cá nướng",
+      "category": "main_dish",
+      "description": "Cá biển tươi nướng mọi theo kiểu truyền thống, đặc sản của bãi biển Sầm Sơn.",
+      "where_to_eat": [
+        "Bãi biển Sầm Sơn",
+        "Nhà hàng ven biển Sầm Sơn"
+      ],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": [
+        "hải sản",
+        "nướng"
+      ]
+    }
+  ]
+}
