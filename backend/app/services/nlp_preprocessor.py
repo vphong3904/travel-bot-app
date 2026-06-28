@@ -18,6 +18,7 @@ import json
 import re
 import unicodedata
 from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
@@ -339,10 +340,40 @@ def _keyword_in_text(keyword: str, text: str) -> bool:
 # Dùng để so khớp keyword với câu hỏi không dấu (vd: "thoi tiet da nang
 # thang may dep") — _remove_accents áp cho cả 2 phía (keyword lẫn câu hỏi)
 # thay vì chỉ 1 phía như code cũ (xem detect_intent()).
-INTENT_PATTERNS_NO_ACCENT: dict[str, list[str]] = {
-    intent: [_remove_accents(kw) for kw in keywords]
-    for intent, keywords in INTENT_PATTERNS.items()
-}
+
+_INTENT_PATTERNS_FILE = Path(__file__).resolve().parent.parent / "data" / "intent_patterns.json"
+
+
+@lru_cache(maxsize=1)
+def _load_intent_patterns_from_file() -> dict[str, list[str]]:
+    try:
+        return json.loads(_INTENT_PATTERNS_FILE.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return INTENT_PATTERNS
+
+
+def _build_no_accent(patterns: dict[str, list[str]]) -> dict[str, list[str]]:
+    return {
+        intent: [_remove_accents(kw) for kw in keywords]
+        for intent, keywords in patterns.items()
+    }
+
+
+def reload_intent_patterns() -> None:
+    """Gọi sau khi file intent_patterns.json được cập nhật qua Admin API."""
+    _load_intent_patterns_from_file.cache_clear()
+    global INTENT_PATTERNS, INTENT_PATTERNS_NO_ACCENT
+    INTENT_PATTERNS = _load_intent_patterns_from_file()
+    INTENT_PATTERNS_NO_ACCENT = _build_no_accent(INTENT_PATTERNS)
+
+
+# Tải từ file khi startup (fallback sang hardcode nếu file chưa có)
+try:
+    INTENT_PATTERNS = _load_intent_patterns_from_file()
+except Exception:
+    pass  # keep hardcoded INTENT_PATTERNS
+
+INTENT_PATTERNS_NO_ACCENT: dict[str, list[str]] = _build_no_accent(INTENT_PATTERNS)
 
 
 def normalize_vietnamese(text: str) -> str:

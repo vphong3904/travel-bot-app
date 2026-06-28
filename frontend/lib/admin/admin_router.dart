@@ -12,6 +12,8 @@ import 'web/screens/chat_screen.dart';
 import 'web/screens/knowledge_screen.dart';
 import 'web/screens/kb_health_screen.dart';
 import 'web/screens/rag_monitoring_screen.dart';
+import 'web/screens/city_mapping_screen.dart';
+import 'web/screens/intent_patterns_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
 /// Provider cho GoRouter — reactive theo authProvider
@@ -84,6 +86,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/rag-monitoring',
             name: 'rag-monitoring',
             builder: (_, __) => const RagMonitoringScreen(),
+          ),
+          GoRoute(
+            path: '/city-mapping',
+            name: 'city-mapping',
+            builder: (_, __) => const CityMappingScreen(),
+          ),
+          GoRoute(
+            path: '/intent-patterns',
+            name: 'intent-patterns',
+            builder: (_, __) => const IntentPatternsScreen(),
           ),
         ],
       ),
