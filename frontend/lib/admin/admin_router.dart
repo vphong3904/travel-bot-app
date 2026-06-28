@@ -8,6 +8,7 @@ import 'web/screens/forgot_password_screen.dart';
 import 'web/screens/reset_password_screen.dart';
 import 'web/screens/dashboard_screen.dart';
 import 'web/screens/users_screen.dart';
+import 'web/screens/chat_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
 /// Provider cho GoRouter — reactive theo authProvider
@@ -60,6 +61,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/users',
             name: 'users',
             builder: (_, __) => const UsersScreen(),
+          ),
+          GoRoute(
+            path: '/chat',
+            name: 'chat',
+            builder: (_, __) => const ChatScreen(),
           ),
         ],
       ),
