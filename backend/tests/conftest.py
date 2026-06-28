@@ -23,6 +23,7 @@ import os
 _FAKE_ENV_DEFAULTS = {
     "JWT_SECRET_KEY": "test-only-fake-secret-key-not-for-production",
     "GEMINI_API_KEY": "test-only-fake-gemini-key",
+    "GEMINI_MODEL": "gemini-2.0-flash",
     # DATABASE_URL/MONGODB_URL/QDRANT_URL đã có default trong Settings,
     # nhưng đặt lại rõ ràng ở đây để test integration (nếu chạy thật) không
     # vô tình nối nhầm vào DB thật của ai đó khi chạy local.
