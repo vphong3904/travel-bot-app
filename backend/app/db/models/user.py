@@ -5,7 +5,7 @@ import uuid
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from app.db.database import Base
@@ -36,6 +36,11 @@ class User(Base):
     # Google OAuth
     google_id: Mapped[Optional[str]] = mapped_column(String(255), unique=True)
     auth_provider: Mapped[str] = mapped_column(String(20), default="email")
+
+    # Relationships
+    sessions: Mapped[list["ChatSession"]] = relationship(  # noqa: F821
+        "ChatSession", back_populates="user", lazy="noload"
+    )
 
 
 class RefreshToken(Base):
