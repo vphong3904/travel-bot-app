@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "ca-mau-bac-lieu",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch Nhà Mát — dulichnhamat.vn & Viet Fun Travel (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "0afc2f27-9e2f-4645-9178-8f0c06c43694",
+      "city_id": "019f10ce-2dd2-711c-a8ab-b6fa893d800a",
+      "name": "Khu du lịch Nhà Mát Bạc Liêu",
+      "type": "entertainment",
+      "address": "Đường Bạch Đằng, phường Nhà Mát, TP. Bạc Liêu (cách trung tâm ~7km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu du lịch giải trí rộng hơn 21ha ở Bạc Liêu với bãi tắm nhân tạo, công viên trò chơi (tàu lượn siêu tốc, xe điện đụng, nhà cười, rạp phim 6D, đu quay) và khu thương mại - lưu trú.",
+      "tips": "Vé gồm tắm biển + tham quan công viên; nhiều trò chơi cảm giác mạnh trong khu giải trí.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn 150.000đ, trẻ em 130.000đ (gồm tắm biển + tham quan công viên). (nguồn: dulichnhamat.vn & Viet Fun Travel, 2025 — có thể thay đổi)"
+    }
+  ]
+}
