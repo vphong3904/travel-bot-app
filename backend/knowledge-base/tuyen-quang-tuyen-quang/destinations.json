@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-tuyen-quang",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Suối khoáng nóng Mỹ Lâm — soctrangtourism.vn & wyndham-thanhthuy.com (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "1e079302-970a-4f99-86d0-e53896fa5c9e",
+      "city_id": "019f10ce-2dc5-76f9-b836-afb993d40d3e",
+      "name": "Suối khoáng nóng Mỹ Lâm",
+      "type": "entertainment",
+      "address": "Xã Phú Lâm, huyện Yên Sơn, Tuyên Quang (cách trung tâm TP. Tuyên Quang ~13km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày cho khách tắm khoáng — xác nhận trước khi đến",
+      "description": "Khu suối khoáng nóng tự nhiên duy nhất của Tuyên Quang (mạch khoáng sâu hơn 150m), nay phát triển thành quần thể nghỉ dưỡng - giải trí Mỹ Lâm với dịch vụ tắm khoáng, Onsen kiểu Nhật, spa và bể bơi.",
+      "tips": "Có nhiều cơ sở (Vinpearl, khách sạn Á Châu, Hà Phú...); chọn gói tắm khoáng cơ bản hoặc combo tắm bùn + massage.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Tắm khoáng thường 70.000–80.000đ/người; tắm khoáng sục đơn 120.000đ; combo tắm bùn + massage từ 300.000đ. (nguồn: soctrangtourism.vn & wyndham-thanhthuy.com, 2025 — có thể thay đổi)"
+    }
+  ]
+}
