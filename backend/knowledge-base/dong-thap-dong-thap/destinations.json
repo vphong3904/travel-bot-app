@@ -1,11 +1,19 @@
 {
   "_meta": {
     "city": "dong-thap-dong-thap",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "completed",
-    "missing_fields": ["ticket_price (mùa sếu đầu đỏ 2026)", "image_url"],
-    "data_sources": ["vietnamtourism.gov.vn", "Sở VHTTDL tỉnh Đồng Tháp"]
+    "missing_fields": [
+      "ticket_price (mùa sếu đầu đỏ 2026)",
+      "image_url",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Sở VHTTDL tỉnh Đồng Tháp",
+      "T-037: Happy Land Hùng Thy — vietnamtourism.gov.vn & dulich.dongthap.gov.vn (2025)"
+    ]
   },
   "data": [
     {
@@ -52,6 +60,24 @@
       "rating": null,
       "ticket_price": null,
       "price_note": "// TODO: tra cứu giá buffet bánh dân gian tại KDL"
+    },
+    {
+      "id": "51dc1d2d-83bf-4491-a52a-fd25449666cf",
+      "city_id": "019eee23-1730-7352-8c9a-09c5b0bed755",
+      "name": "Khu vui chơi Happy Land Hùng Thy",
+      "type": "entertainment",
+      "address": "Đối diện 113A đường Hoa, Khóm Tân Hiệp, phường Sa Đéc, TP. Sa Đéc, Đồng Tháp",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu vui chơi giải trí miệt vườn nằm tại làng hoa Sa Đéc, phục vụ ẩm thực đồng quê, tham quan check-in và các trò chơi dân gian gần gũi của miền Tây.",
+      "tips": "Kết hợp tham quan làng hoa Sa Đéc và chùa Lá Sen trong cùng chuyến đi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Vé vào ~10.000đ/khách (trẻ dưới 6 tuổi miễn phí). (nguồn: vietnamtourism.gov.vn & dulich.dongthap.gov.vn, 2025 — có thể thay đổi)"
     }
   ]
 }
