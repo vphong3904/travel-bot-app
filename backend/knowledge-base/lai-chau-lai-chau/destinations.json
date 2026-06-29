@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "lai-chau-lai-chau",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Cầu kính Rồng Mây — caukinhrongmay.net & dulich.laichau.gov.vn (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "dac42f7d-3cde-427a-a9a0-532937adfa40",
+      "city_id": "019f10ce-2dc7-795f-8c57-6f6f1fd5d4b3",
+      "name": "Khu du lịch Cầu kính Rồng Mây",
+      "type": "entertainment",
+      "address": "QL4D, đèo Ô Quy Hồ, xã Sơn Bình, huyện Tam Đường, Lai Châu (gần Sa Pa)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "7:30–18:00 hằng ngày",
+      "description": "Khu du lịch sinh thái với hệ thống thang máy lồng kính và cầu kính cao nhất Việt Nam bên đèo Ô Quy Hồ — điểm săn mây, check-in giữa mây trời Tây Bắc, kèm trò xích đu mạo hiểm.",
+      "tips": "Đi sáng sớm hoặc khi trời quang để săn mây; có vé xích đu trải nghiệm riêng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn 500.000đ, trẻ em 1m–1m4 300.000đ, dưới 1m miễn phí; vé xích đu 150.000đ. (nguồn: caukinhrongmay.net & dulich.laichau.gov.vn, 2025 — có thể thay đổi)"
+    }
+  ]
+}

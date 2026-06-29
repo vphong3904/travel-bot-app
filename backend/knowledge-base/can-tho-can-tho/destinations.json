@@ -1,20 +1,22 @@
 {
   "_meta": {
     "city": "can-tho",
-    "last_updated": "2026-06-22",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "partial",
     "partial_note": null,
     "missing_fields": [
       "coordinates (lat/lng chưa xác minh chính xác — cần Google Maps)",
       "entry_fee (chưa có nguồn giá vé cập nhật — cần Klook hoặc trang chính thức)",
-      "stats.rating_avg và stats.review_count (chưa có nguồn)"
+      "stats.rating_avg và stats.review_count (chưa có nguồn)",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
       "Sở Du lịch Cần Thơ: cantho.gov.vn (06/2026)",
       "Google Maps (06/2026)",
-      "Foody.vn (06/2026)"
+      "Foody.vn (06/2026)",
+      "T-037: Làng du lịch Ông Đề — vietnamtourism.gov.vn & Mia.vn (2025)"
     ]
   },
   "data": [
@@ -24,12 +26,18 @@
       "name": "Chợ nổi Cái Răng",
       "type": "market",
       "address": "Quận Cái Răng, TP. Cần Thơ",
-      "coordinates": { "lat": 10.0131, "lng": 105.7620 },
+      "coordinates": {
+        "lat": 10.0131,
+        "lng": 105.762
+      },
       "hours": "Họp từ khoảng 5:00–9:00, đông nhất 5:30–7:00 — xác nhận trước khi đến",
       "description": "Chợ nổi lớn nhất miền Tây Nam Bộ, nơi hàng trăm ghe thuyền chở đầy trái cây, rau củ trao đổi ngay trên sông. Đặc trưng nhận biết là mỗi ghe cắm cây sào treo mặt hàng đang bán (gọi là 'bẹo hàng'). Là điểm tham quan không thể bỏ qua khi đến Cần Thơ.",
       "tips": "Xuất phát từ bến Ninh Kiều khoảng 5:00–5:30 để kịp thấy chợ đông nhất. Đặt tour xuồng máy từ tối hôm trước. Mang tiền mặt nhỏ để mua trái cây trực tiếp trên ghe.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -39,12 +47,18 @@
       "name": "Bến Ninh Kiều",
       "type": "attraction",
       "address": "Đường Hai Bà Trưng, Quận Ninh Kiều, TP. Cần Thơ",
-      "coordinates": { "lat": 10.0317, "lng": 105.7889 },
+      "coordinates": {
+        "lat": 10.0317,
+        "lng": 105.7889
+      },
       "hours": "Mở cửa 24/7, sôi động nhất 18:00–22:00",
       "description": "Bến tàu và khu phố đi bộ ven sông Cần Thơ — trung tâm sinh hoạt văn hóa, ẩm thực của thành phố. Cuối tuần có phố đi bộ với biểu diễn đờn ca tài tử Nam Bộ, chợ đêm và nhiều gian hàng đặc sản miền Tây.",
       "tips": "Đến vào buổi tối cuối tuần để xem đờn ca tài tử và thưởng thức chợ đêm. Từ đây có thể đặt tour thuyền đi chợ nổi Cái Răng sáng sớm hôm sau.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
     },
@@ -54,12 +68,18 @@
       "name": "Nhà cổ Bình Thủy",
       "type": "museum",
       "address": "144 Bùi Hữu Nghĩa, Phường Bình Thủy, Quận Bình Thủy, TP. Cần Thơ",
-      "coordinates": { "lat": 10.0556, "lng": 105.7608 },
+      "coordinates": {
+        "lat": 10.0556,
+        "lng": 105.7608
+      },
       "hours": "8:00–17:00, nghỉ thứ Hai — xác nhận trước khi đến",
       "description": "Biệt thự phong cách Pháp xây năm 1870, còn được gọi là Villa Dương Chí Diệu, từng là bối cảnh phim 'L'Amant' (Người Tình) của đạo diễn Jean-Jacques Annaud (1992). Kết hợp kiến trúc Pháp và nghệ thuật trang trí Á Đông với đồ cổ, tranh ảnh và không gian vườn xanh mát.",
       "tips": "Nên đến buổi sáng khi còn mát. Hỏi người canh gác để nghe câu chuyện về lịch sử ngôi nhà. Kết hợp tham quan chùa Ông Bình Thủy gần đó.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -69,12 +89,18 @@
       "name": "Làng du lịch sinh thái Mỹ Khánh",
       "type": "nature",
       "address": "Xã Mỹ Khánh, Huyện Phong Điền, TP. Cần Thơ (cách trung tâm ~12km)",
-      "coordinates": { "lat": 9.9965, "lng": 105.7167 },
+      "coordinates": {
+        "lat": 9.9965,
+        "lng": 105.7167
+      },
       "hours": "7:00–17:00 — xác nhận trước khi đến",
       "description": "Khu du lịch sinh thái vườn trái cây rộng lớn với các loại đặc sản miền Tây như xoài, sầu riêng, chôm chôm, mít... theo mùa. Du khách có thể đi xe đạp trong vườn, thả lưới bắt cá, đi xuồng ba lá qua kênh rạch và thưởng thức trái cây tươi ngay tại chỗ.",
       "tips": "Đến mùa sầu riêng (tháng 5–7) hoặc xoài (tháng 3–5) để có trái cây ngon nhất. Nên đặt trước để chắc chắn có chỗ ăn trưa.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -84,12 +110,18 @@
       "name": "Chùa Ông (Quảng Triệu Hội Quán)",
       "type": "temple",
       "address": "32 Hai Bà Trưng, Quận Ninh Kiều, TP. Cần Thơ",
-      "coordinates": { "lat": 10.0310, "lng": 105.7870 },
+      "coordinates": {
+        "lat": 10.031,
+        "lng": 105.787
+      },
       "hours": "6:00–17:30 — xác nhận trước khi đến",
       "description": "Ngôi chùa Hoa (người Hoa Quảng Đông) xây dựng từ thế kỷ 19, thờ Quan Công và các vị thần. Nổi tiếng với kiến trúc mái cong nhiều lớp, đồ gốm sứ trang trí tinh xảo và những vòng nhang khổng lồ treo lơ lửng trên trần tạo không gian huyền bí, rất thu hút khách chụp ảnh.",
       "tips": "Miễn phí vào cửa. Buổi sáng sớm không gian yên tĩnh và khói nhang đẹp nhất. Nằm gần bến Ninh Kiều nên dễ kết hợp.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
     },
@@ -99,12 +131,18 @@
       "name": "Chợ nổi Ngã Bảy (Phụng Hiệp)",
       "type": "market",
       "address": "Thị xã Ngã Bảy, TP. Cần Thơ (tỉnh Hậu Giang cũ, sau sáp nhập thuộc Cần Thơ)",
-      "coordinates": { "lat": 9.8289, "lng": 105.9793 },
+      "coordinates": {
+        "lat": 9.8289,
+        "lng": 105.9793
+      },
       "hours": "5:00–9:00 — xác nhận trước khi đến",
       "description": "Chợ nổi độc đáo ở ngã ba 7 con kênh gặp nhau, từng là một trong những chợ nổi sầm uất nhất miền Tây. Sau khi sáp nhập tỉnh 2025, Ngã Bảy thuộc địa phận Cần Thơ. Chợ hiện có quy mô nhỏ hơn Cái Răng nhưng còn giữ được nét chân thực.",
       "tips": "Ít khách du lịch hơn Cái Răng — trải nghiệm chân thực hơn. Cách trung tâm Cần Thơ khoảng 50km, nên kết hợp tour 1 ngày.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
     },
@@ -114,14 +152,41 @@
       "name": "Chùa Dơi (Mã Tộc)",
       "type": "temple",
       "address": "Phường 3, TP. Sóc Trăng (thuộc Cần Thơ sau sáp nhập)",
-      "coordinates": { "lat": 9.5982, "lng": 105.9715 },
+      "coordinates": {
+        "lat": 9.5982,
+        "lng": 105.9715
+      },
       "hours": "7:00–17:00 — xác nhận trước khi đến",
       "description": "Ngôi chùa Khmer hơn 400 năm tuổi của người Khmer Nam Bộ, nổi tiếng với đàn dơi quạ hàng chục nghìn con sinh sống trên cây cổ thụ trong khuôn viên. Chùa có kiến trúc Khmer tinh xảo với mái đầu rồng đặc trưng. Thuộc địa phận Sóc Trăng cũ, nay thuộc Cần Thơ sau sáp nhập 2025.",
       "tips": "Đến chiều tà để xem đàn dơi bay ra kiếm ăn — cảnh tượng ấn tượng. Ăn mặc lịch sự vì đây là nơi thờ tự linh thiêng của cộng đồng Khmer.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "c1245cbd-a2f4-426c-b898-7af6869b386b",
+      "city_id": "e1b4d4cb-8d60-4a03-8b98-bc54991eff17",
+      "name": "Làng du lịch sinh thái Ông Đề",
+      "type": "entertainment",
+      "address": "Tổ 26, ấp Mỹ Ái, xã Mỹ Khánh, huyện Phong Điền, TP. Cần Thơ (cách trung tâm ~11km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "8:00–18:00 hằng ngày",
+      "description": "Làng du lịch sinh thái miệt vườn với chèo thuyền tham quan vườn, nhiều trò chơi dân gian (đua heo, bắt cá, cầu khỉ) và ẩm thực đồng quê — điểm vui chơi đậm chất miền Tây.",
+      "tips": "Đi theo nhóm để chơi các trò dân gian; nên liên hệ trước để biết giá vé/combo hiện hành.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Giá vé cập nhật trực tiếp tại khu du lịch (ongde.vn) — cần xác nhận. (nguồn: vietnamtourism.gov.vn & Mia.vn, 2025)"
     }
   ]
 }

@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Tây Ninh",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Long An",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food",
+      "heritage"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dcf-7bbf-b477-4526beae3d9a",
+    "cuisine_summary": "Canh chua cá chốt, lạp xưởng tươi Cần Giuộc, gạo Nàng Thơm Chợ Đào, rượu đế Gò Đen",
+    "description": "Cửa ngõ miền Tây với làng nổi Tân Lập giữa rừng tràm, vùng Đồng Tháp Mười và nhà trăm cột Cần Đước.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; vùng Đồng Tháp Mười ngập nước mùa lũ.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "tay-ninh-long-an",
+    "special": "Làng nổi Tân Lập, Đồng Tháp Mười, nhà trăm cột Cần Đước, khu di tích Bình Thành",
+    "image_url": null,
+    "stats": null,
+    "name": "Long An (Tân An)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "tay-ninh-long-an",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Sơn La",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "nature",
+      "mountain",
+      "resort",
+      "food"
+    ],
+    "best_months": [
+      1,
+      2,
+      11,
+      12,
+      9
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc7-7c93-aa77-dbfdc0cdb63c",
+    "cuisine_summary": "Bê chao Mộc Châu, sữa và sữa chua Mộc Châu, cá suối nướng, nậm pịa, thịt trâu gác bếp",
+    "description": "Cao nguyên Mộc Châu mát lành với đồi chè, mùa hoa mận hoa cải, cùng di tích Nhà tù Sơn La lịch sử.",
+    "weather": "Cao nguyên mát mẻ quanh năm; mùa đông lạnh, mùa hoa mận trắng tháng 1-2.",
+    "best_season": "Mùa hoa mận - cải (tháng 11-2) và lúa chín",
+    "slug": "son-la-son-la",
+    "special": "Cao nguyên Mộc Châu (đồi chè, hoa mận, hoa cải), Tà Xùa săn mây, nhà tù Sơn La, thác Dải Yếm",
+    "image_url": null,
+    "stats": null,
+    "name": "Sơn La (Mộc Châu)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "son-la-son-la",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

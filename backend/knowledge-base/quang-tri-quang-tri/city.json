@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Quảng Trị",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Quảng Trị",
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "history",
+      "beach",
+      "food"
+    ],
+    "best_months": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "region": "Bắc Trung Bộ",
+    "id": "019f10ce-2dca-7fca-8106-196444df2c9d",
+    "cuisine_summary": "Bún hến Mai Xá, cháo vạt giường (cháo bột), bánh ướt Phương Lang, nem chợ Sãi",
+    "description": "Vùng đất lịch sử với Thành cổ Quảng Trị, địa đạo Vịnh Mốc, đôi bờ Hiền Lương - Bến Hải và đảo Cồn Cỏ.",
+    "weather": "Nhiệt đới gió mùa khắc nghiệt, hè nóng gió Lào, mùa mưa bão lớn tháng 9-11.",
+    "best_season": "Tháng 3-7 (khô ráo)",
+    "slug": "quang-tri-quang-tri",
+    "special": "Thành cổ Quảng Trị, địa đạo Vịnh Mốc, cầu Hiền Lương - sông Bến Hải, đảo Cồn Cỏ",
+    "image_url": null,
+    "stats": null,
+    "name": "Quảng Trị (Đông Hà)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "quang-tri-quang-tri",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

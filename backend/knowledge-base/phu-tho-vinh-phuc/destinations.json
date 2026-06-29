@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "phu-tho-vinh-phuc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Flamingo Đại Lải Resort — flamingoresortdailai.com & VTeambuilding (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "144b7d2f-c8d2-40c7-8e1e-adaeb169d8a5",
+      "city_id": "019f10ce-2dc1-7a69-88e4-2baed02897e7",
+      "name": "Flamingo Đại Lải Resort",
+      "type": "entertainment",
+      "address": "Đại Quang, Ngọc Thanh, TP. Phúc Yên, Vĩnh Phúc",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Tổ hợp nghỉ dưỡng - giải trí ven hồ Đại Lải với bãi tắm hồ, bể bơi, khu vui chơi trẻ em, bảo tàng nghệ thuật, rạp chiếu phim và chuỗi nhà hàng Á - Âu.",
+      "tips": "Vé vào cổng đã cho dùng một số tiện ích; nhiều dịch vụ vui chơi giải trí tính phí riêng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào cổng: người lớn 280.000đ, trẻ em 125.000đ (trẻ 2–5 tuổi 120.000đ, dưới 2 tuổi miễn phí). (nguồn: flamingoresortdailai.com & VTeambuilding, 2025 — có thể thay đổi)"
+    }
+  ]
+}

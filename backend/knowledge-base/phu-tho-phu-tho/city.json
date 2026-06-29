@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Phú Thọ",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "food",
+      "nature"
+    ],
+    "best_months": [
+      1,
+      2,
+      3,
+      4,
+      9,
+      10
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc2-7295-bb75-5bc7ac09120a",
+    "cuisine_summary": "Thịt chua Thanh Sơn, bưởi Đoan Hùng, cọ ỏm, rêu đá, bánh tai",
+    "description": "Vùng đất Tổ Hùng Vương với Khu di tích Đền Hùng, hát Xoan di sản và suối khoáng nóng.",
+    "weather": "Cận nhiệt đới ẩm vùng trung du, hè nóng mưa nhiều, đông se lạnh.",
+    "best_season": "Tháng 3-4 (Giỗ Tổ) và 9-10",
+    "slug": "phu-tho-phu-tho",
+    "special": "Đền Hùng (Giỗ Tổ 10/3 âm lịch), hát Xoan, vườn quốc gia Xuân Sơn, đầm Ao Châu",
+    "image_url": null,
+    "stats": null,
+    "name": "Phú Thọ"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "phu-tho-phu-tho",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

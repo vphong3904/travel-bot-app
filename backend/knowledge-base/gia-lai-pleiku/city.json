@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Gia Lai",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "nature",
+      "mountain",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "region": "Tây Nguyên",
+    "id": "019f10ce-2dcc-7b4e-bd86-925a17ed5831",
+    "cuisine_summary": "Phở khô Gia Lai (phở hai tô), bún mắm cua, cơm lam gà nướng, muối kiến vàng, cà phê",
+    "description": "Phố núi cao nguyên với Biển Hồ T'Nưng trong xanh, núi lửa Chư Đăng Ya và chùa Minh Thành.",
+    "weather": "Khí hậu cao nguyên mát mẻ, hai mùa mưa - khô; mùa khô tháng 11-4 dễ chịu.",
+    "best_season": "Tháng 11-3 (mùa khô)",
+    "slug": "gia-lai-pleiku",
+    "special": "Biển Hồ (T'Nưng), núi lửa Chư Đăng Ya, chùa Minh Thành, thác Phú Cường",
+    "image_url": null,
+    "stats": null,
+    "name": "Pleiku"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "gia-lai-pleiku",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

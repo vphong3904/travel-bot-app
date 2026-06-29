@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/auth_user.dart';
 import '../models/login_response.dart';
 import '../providers/dio_provider.dart';
 
@@ -9,11 +10,24 @@ class AuthRepository {
   AuthRepository(this._dio);
 
   Future<LoginResponse> login(String email, String password) async {
-    final res = await _dio.post<Map<String, dynamic>>(
+    // Step 1: Get tokens
+    final tokenRes = await _dio.post<Map<String, dynamic>>(
       '/auth/login',
       data: {'email': email, 'password': password},
     );
-    return LoginResponse.fromJson(res.data!);
+    final token = tokenRes.data!['access_token'] as String;
+
+    // Step 2: Get user info with the new token
+    final meRes = await _dio.get<Map<String, dynamic>>(
+      '/auth/me',
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
+    );
+
+    return LoginResponse(
+      accessToken: token,
+      tokenType: tokenRes.data!['token_type'] as String? ?? 'bearer',
+      user: AuthUser.fromJson(meRes.data!),
+    );
   }
 
   Future<void> logout() async {

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "quang-ngai-kon-tum",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu sinh thái Măng Đen (Thác Pa Sỹ) — mangdentrip.com & VinWonders Wonderpedia (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "7e9135b2-4529-43ca-af54-e8adde0dd48a",
+      "city_id": "019f10ce-2dcd-7599-84fe-501568b307cc",
+      "name": "Khu du lịch sinh thái Măng Đen (Thác Pa Sỹ)",
+      "type": "entertainment",
+      "address": "Thôn Măng Đen, xã Đắk Long, huyện Kon Plông, Kon Tum (tỉnh Quảng Ngãi)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — Thác Pa Sỹ đẹp nhất sau 16:00",
+      "description": "Khu du lịch sinh thái Măng Đen ('Đà Lạt thứ hai' của Tây Nguyên) với thác Pa Sỹ, vườn tượng gỗ, nhà rông và hồ Đăk Ke giữa rừng thông mát lạnh.",
+      "tips": "Khí hậu se lạnh quanh năm; thác Pa Sỹ đẹp nhất buổi chiều khi nắng dịu.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Thác Pa Sỹ ~20.000đ/người; hồ Đăk Ke miễn phí. (nguồn: mangdentrip.com & VinWonders Wonderpedia, 2025 — có thể thay đổi)"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Tuyên Quang",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Hà Giang",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "mountain",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      9,
+      10,
+      11,
+      3,
+      4
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+    "cuisine_summary": "Thắng cố, cháo ấu tẩu, bánh tam giác mạch, thịt trâu gác bếp, mèn mén, rượu ngô",
+    "description": "Cực bắc Tổ quốc với Công viên địa chất toàn cầu cao nguyên đá Đồng Văn, đèo Mã Pí Lèng và cột cờ Lũng Cú.",
+    "weather": "Khí hậu núi cao, mát mẻ; mùa đông rất lạnh trên cao nguyên đá, mùa hoa tam giác mạch tháng 10-11.",
+    "best_season": "Tháng 10-11 (hoa tam giác mạch) và xuân",
+    "slug": "tuyen-quang-ha-giang",
+    "special": "Cao nguyên đá Đồng Văn, đèo Mã Pí Lèng, cột cờ Lũng Cú, dinh Vua Mèo, hoa tam giác mạch",
+    "image_url": null,
+    "stats": null,
+    "name": "Hà Giang"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "tuyen-quang-ha-giang",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

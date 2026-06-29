@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Phú Thọ",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Hòa Bình",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "resort",
+      "food"
+    ],
+    "best_months": [
+      3,
+      4,
+      9,
+      10,
+      11
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc3-7069-aaed-3557c2228116",
+    "cuisine_summary": "Cơm lam, thịt lợn mán, cá nướng sông Đà, rượu cần, măng chua nấu thịt",
+    "description": "Vùng núi Tây Bắc với thủy điện Hòa Bình, thung lũng Mai Châu, bản Lác và suối khoáng Kim Bôi.",
+    "weather": "Khí hậu miền núi mát mẻ; thung lũng Mai Châu dịu mát, mùa lúa chín tháng 9-10.",
+    "best_season": "Tháng 3-4 và 9-11",
+    "slug": "phu-tho-hoa-binh",
+    "special": "Mai Châu (bản Lác), hồ Hòa Bình, suối khoáng Kim Bôi, thung Nai",
+    "image_url": null,
+    "stats": null,
+    "name": "Hòa Bình"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "phu-tho-hoa-binh",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

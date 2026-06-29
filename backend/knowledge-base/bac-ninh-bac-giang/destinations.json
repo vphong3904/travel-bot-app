@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "bac-ninh-bac-giang",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch Tây Yên Tử — tayyentu.vn & PYS Travel (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "eeb0fcf4-24ce-4f3f-9af3-6da8658ea4d3",
+      "city_id": "019f10ce-2dc1-7f4a-8394-c8678a522876",
+      "name": "Khu du lịch Tây Yên Tử (cáp treo)",
+      "type": "entertainment",
+      "address": "Thị trấn Tây Yên Tử, huyện Sơn Động, Bắc Giang",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cáp treo 7:00–17:00 hằng ngày",
+      "description": "Khu du lịch tâm linh - sinh thái sườn tây Yên Tử với hệ thống cáp treo lên khu chùa Thượng (đường tùng, chùa Đồng), kết hợp khám phá rừng nguyên sinh Tây Yên Tử.",
+      "tips": "Đi cáp treo để lên nhanh; mùa xuân (lễ hội Tây Yên Tử) đông, nên đi sớm.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Cáp treo khứ hồi 290.000đ (người lớn & trẻ ≥1m3), miễn phí trẻ <1m3; xe điện tuyến chùa Hạ 15.000–20.000đ. (nguồn: tayyentu.vn & PYS Travel, 2025 — có thể thay đổi)"
+    }
+  ]
+}

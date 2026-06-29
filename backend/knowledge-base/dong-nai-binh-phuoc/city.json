@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Đồng Nai",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bình Phước",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đông Nam Bộ",
+    "id": "019f10ce-2dce-7515-a4a3-d13c1c1d689b",
+    "cuisine_summary": "Hạt điều Bình Phước, gỏi hạt điều, lá nhíp xào, đọt mây, cơm lam, ve sầu sữa chiên",
+    "description": "Vùng đất đỏ bazan miền Đông Nam Bộ với vườn quốc gia Bù Gia Mập, trảng cỏ Bù Lạch và sóc Bom Bo lịch sử.",
+    "weather": "Khí hậu nhiệt đới cận xích đạo, hai mùa mưa - khô; nóng quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "dong-nai-binh-phuoc",
+    "special": "Vườn quốc gia Bù Gia Mập, trảng cỏ Bù Lạch, sóc Bom Bo, hồ Thác Mơ",
+    "image_url": null,
+    "stats": null,
+    "name": "Bình Phước (Đồng Xoài)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "dong-nai-binh-phuoc",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

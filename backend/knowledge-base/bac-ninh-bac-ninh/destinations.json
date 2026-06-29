@@ -1,19 +1,21 @@
 {
   "_meta": {
     "city": "bac-ninh",
-    "last_updated": "2026-06-22",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "missing_fields": [
       "coordinates.lat/lng (chưa xác minh tọa độ chính xác)",
       "entry_fee (chưa có nguồn giá vé cập nhật)",
-      "stats.rating_avg / stats.review_count (chưa có dữ liệu user thật)"
+      "stats.rating_avg / stats.review_count (chưa có dữ liệu user thật)",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "Vietnam Tourism: vietnamtourism.gov.vn",
       "Cổng thông tin điện tử tỉnh Bắc Ninh: bacninh.gov.vn",
       "Cục Di sản Văn hóa: dsvh.gov.vn",
-      "Google Maps (giờ mở cửa tham khảo)"
+      "Google Maps (giờ mở cửa tham khảo)",
+      "T-037: TiNiWorld Vincom Bắc Ninh — VinWonders Wonderpedia & Việt Global (2025)"
     ]
   },
   "data": [
@@ -23,12 +25,18 @@
       "name": "Chùa Dâu (Pháp Vân)",
       "type": "temple",
       "address": "Xã Thanh Khương, huyện Thuận Thành, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "6:00–18:00 hàng ngày (xác nhận trước khi đến)",
       "description": "Ngôi chùa cổ nhất Việt Nam, được xây dựng từ thế kỷ 2–3 SCN, là trung tâm Phật giáo đầu tiên của người Việt. Chùa thờ Tứ Pháp — bốn vị thần bảo hộ nông nghiệp. Tháp Hòa Phong 3 tầng là biểu tượng nổi bật nhất còn lại. Di tích Quốc gia đặc biệt.",
       "tips": "Đến buổi sáng sớm 6:30–8:00 để không khí thanh tịnh, ánh sáng đẹp chụp tháp Hòa Phong. Kết hợp tham quan cùng chùa Bút Tháp (cách 5km) trong cùng buổi.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -38,12 +46,18 @@
       "name": "Chùa Bút Tháp (Ninh Phúc Tự)",
       "type": "temple",
       "address": "Thôn Bút Tháp, xã Đình Tổ, huyện Thuận Thành, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "7:00–17:30 hàng ngày (xác nhận trước khi đến)",
       "description": "Ngôi chùa thế kỷ 17 còn giữ nguyên kiến trúc gốc hoàn chỉnh nhất miền Bắc. Nổi tiếng với tòa tháp Báo Nghiêm 11 tầng bằng đá và tượng Quan Âm nghìn tay nghìn mắt (Phật Bà Thiên Thủ Thiên Nhãn) cao 3,7m — kiệt tác điêu khắc thời Lê. Di tích Quốc gia đặc biệt.",
       "tips": "Ánh sáng đẹp nhất để chụp ảnh vào 7:30–9:00 sáng khi nắng chiếu qua các cây đại cổ thụ. Trang phục kín đáo khi vào chánh điện.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -53,12 +67,18 @@
       "name": "Đền Đô (Đền Lý Bát Đế)",
       "type": "temple",
       "address": "Làng Đình Bảng, phường Đình Bảng, thị xã Từ Sơn, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "7:00–17:00 hàng ngày (xác nhận trước khi đến)",
       "description": "Đền thờ 8 vị vua triều Lý — triều đại đặt kinh đô Thăng Long và xây Văn Miếu. Đây là công trình lớn và trang nghiêm nhất trong hệ thống đền vua miền Bắc, được trùng tu quy mô vào thế kỷ 21. Lễ hội Đền Đô tổ chức vào ngày 14–16 tháng 3 âm lịch hàng năm.",
       "tips": "Làng Đình Bảng là nơi tốt nhất để mua bánh phu thê chính gốc — mua ngay tại các hộ gia đình sau khi thăm đền.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -68,12 +88,18 @@
       "name": "Làng tranh dân gian Đông Hồ",
       "type": "attraction",
       "address": "Xã Song Hồ, huyện Thuận Thành, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "7:00–17:00 (tại các gia đình nghệ nhân — liên hệ trước)",
       "description": "Làng nghề làm tranh dân gian lâu đời nhất Việt Nam, nơi sản xuất tranh khắc gỗ với màu sắc từ nguyên liệu tự nhiên. Hiện chỉ còn một số gia đình nghệ nhân gìn giữ nghề. Tranh Đông Hồ được UNESCO ghi nhận là Di sản văn hóa phi vật thể cần bảo vệ khẩn cấp.",
       "tips": "Hỏi thăm nhà nghệ nhân Nguyễn Đăng Chế để xem quy trình làm tranh thực tế và mua tranh authentic. Đặt lịch trước qua điện thoại để đảm bảo có người tiếp.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -83,12 +109,18 @@
       "name": "Làng gốm Phù Lãng",
       "type": "attraction",
       "address": "Xã Phù Lãng, huyện Quế Võ, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "Hoạt động cả ngày (làng nghề — thích hợp ghé thăm sáng sớm)",
       "description": "Làng gốm truyền thống hàng trăm năm tuổi nổi tiếng với sản phẩm màu da lươn và đỏ gạch đặc trưng, khác biệt hoàn toàn với gốm Bát Tràng. Gốm Phù Lãng được nung bằng than và có độ bóng tự nhiên độc đáo. Là điểm đến lý tưởng để tìm hiểu làng nghề thủ công miền Bắc.",
       "tips": "Mua gốm trực tiếp tại lò rẻ hơn nhiều so với ngoài chợ. Đến buổi sáng để xem thợ làm gốm — buổi chiều nhiều lò đã tắt.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
     },
@@ -98,14 +130,41 @@
       "name": "Đồi Lim – Hội Lim",
       "type": "attraction",
       "address": "Thị trấn Lim, huyện Tiên Du, tỉnh Bắc Ninh",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "Cả ngày (địa điểm mở). Hội Lim: 12–13 tháng Giêng âm lịch hàng năm.",
       "description": "Đồi Lim là trung tâm của Hội Lim — lễ hội quan họ lớn nhất và nổi tiếng nhất Bắc Ninh, được tổ chức vào ngày 12–13 tháng Giêng âm lịch. Đây là nơi diễn ra các buổi hát quan họ trên thuyền, trên đồi và trong đình làng. Quan họ Bắc Ninh đã được UNESCO công nhận là Di sản văn hóa phi vật thể đại diện của nhân loại năm 2009.",
       "tips": "Đến sớm trước 8:00 sáng để xem hát quan họ trên thuyền tại hồ — đây là cảnh đẹp nhất của Hội Lim. Đường ùn tắc nặng từ 9:00 trở đi.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null
+    },
+    {
+      "id": "403a8ede-0507-42ec-a1d1-e481b20979e6",
+      "city_id": "3d01b622-f917-44bb-9054-c5b6001c52ee",
+      "name": "TiNiWorld Vincom Bắc Ninh",
+      "type": "kids_zone",
+      "address": "Tầng 2, TTTM Vincom Plaza Bắc Ninh, khu Ngã 6, phường Kinh Bắc (Suối Hoa cũ), TP. Bắc Ninh",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "T2–T6 10:00–21:30; T7 & Chủ nhật 9:30–21:30",
+      "description": "Khu vui chơi trong nhà cho trẻ em tại TTTM Vincom với nhà bóng, cầu trượt, trò chơi vận động và khu hóa trang — điểm giải trí cho gia đình có trẻ nhỏ ở trung tâm Bắc Ninh.",
+      "tips": "Mang tất (vớ) cho trẻ theo quy định khu chơi; vé combo cuối tuần có thể khác ngày thường.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé theo gói/giờ chơi, tham khảo ~80.000–120.000đ tùy ngày và combo — xác nhận tại quầy. (nguồn: VinWonders Wonderpedia & Việt Global, 2025)"
     }
   ]
 }

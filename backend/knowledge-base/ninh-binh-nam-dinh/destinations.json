@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "ninh-binh-nam-dinh",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch sinh thái Núi Ngăm — vietnamtourism.gov.vn & Booking.com (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "dc2f32bf-97af-4191-a7b6-c54cba7d4886",
+      "city_id": "019f10ce-2dc0-728f-928c-5aa34148de47",
+      "name": "Khu du lịch sinh thái Núi Ngăm",
+      "type": "entertainment",
+      "address": "Thôn Kim Thái, xã Minh Tân, huyện Vụ Bản, Nam Định (cách TP. Nam Định ~10km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "7:00–22:00 hằng ngày",
+      "description": "Khu du lịch sinh thái dưới chân núi Ngăm với cảnh quan xanh, hồ nước, vườn hoa, khu vui chơi, đi thuyền và ẩm thực địa phương — điểm dã ngoại quen thuộc của Nam Định.",
+      "tips": "Một số trò chơi bán vé riêng; phù hợp dã ngoại gia đình cuối tuần.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Người lớn 50.000đ, trẻ em 30.000đ; một số hoạt động vui chơi tính phí riêng. (nguồn: vietnamtourism.gov.vn & Booking.com, 2025 — có thể thay đổi)"
+    }
+  ]
+}

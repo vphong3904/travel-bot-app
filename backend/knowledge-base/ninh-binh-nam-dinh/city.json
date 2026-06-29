@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Ninh Bình",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Nam Định",
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "food",
+      "beach"
+    ],
+    "best_months": [
+      1,
+      2,
+      3,
+      8,
+      9,
+      10
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dc0-728f-928c-5aa34148de47",
+    "cuisine_summary": "Phở bò Nam Định, bánh xíu páo, kẹo Sìu Châu, nem nắm Giao Thủy, bánh gai Bà Thi",
+    "description": "Vùng đất Thành Nam với đền Trần, Phủ Dầy, nhà thờ Phú Nhai và biển Thịnh Long, Quất Lâm.",
+    "weather": "Cận nhiệt đới ẩm, hè nóng ẩm, đông lạnh; ven biển có gió mùa.",
+    "best_season": "Tháng 1-3 (lễ hội) và 8-10",
+    "slug": "ninh-binh-nam-dinh",
+    "special": "Đền Trần (lễ Khai ấn rằm tháng Giêng), Phủ Dầy, nhà thờ Phú Nhai, biển Thịnh Long",
+    "image_url": null,
+    "stats": null,
+    "name": "Nam Định"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "ninh-binh-nam-dinh",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

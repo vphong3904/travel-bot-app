@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: H'Mong Village Resort — hmongvillage.com.vn & Booking.com (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f46a88ca-0701-49ed-b7a5-fb82ad8b0522",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Khu du lịch H'Mong Village",
+      "type": "entertainment",
+      "address": "Khu Tráng Kìm, xã Đông Hà, huyện Quản Bạ, Hà Giang (trên QL4C đi cao nguyên đá Đồng Văn, cách TP. Hà Giang ~50km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Theo lịch khu nghỉ dưỡng — xác nhận trước khi đến",
+      "description": "Khu du lịch cấp tỉnh đầu tiên của Hà Giang theo phong cách bản người Mông, có bungalow trình tường đất, bể bơi vô cực, sân bóng, sân tennis, Sky Bar ngoài trời và trải nghiệm văn hóa vùng cao.",
+      "tips": "Dừng chân trên đường lên Đồng Văn; bể bơi vô cực và Sky Bar ngắm núi rất đẹp.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Giá lưu trú/dịch vụ xác nhận tại hmongvillage.com.vn (Booking/Agoda/Traveloka). (nguồn: hmongvillage.com.vn & Booking.com, 2025)"
+    }
+  ]
+}

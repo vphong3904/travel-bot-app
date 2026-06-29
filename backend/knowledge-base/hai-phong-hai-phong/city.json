@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Hải Phòng",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "city",
+      "beach",
+      "food",
+      "heritage"
+    ],
+    "best_months": [
+      4,
+      5,
+      6,
+      7,
+      9,
+      10
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dbd-78c4-83bb-6a4eed461b3c",
+    "cuisine_summary": "Bánh đa cua, nem cua bể, bánh mì cay, bún cá cay, ốc",
+    "description": "Thành phố cảng lớn nhất miền Bắc, nổi tiếng với hoa phượng đỏ, gần đảo Cát Bà và bãi biển Đồ Sơn.",
+    "weather": "Cận nhiệt đới ẩm, hè nóng (tháng 5-8), đông se lạnh; mùa hoa phượng đỏ tháng 5.",
+    "best_season": "Tháng 4-10 (biển hè đẹp)",
+    "slug": "hai-phong-hai-phong",
+    "special": "Cảng biển, đảo Cát Bà, biển Đồ Sơn, di sản kiến trúc Pháp",
+    "image_url": null,
+    "stats": null,
+    "name": "Hải Phòng"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "hai-phong-hai-phong",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}
