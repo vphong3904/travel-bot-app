@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "lao-cai-yen-bai",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Le Champ Tú Lệ Resort — Booking.com & Lữ Hành Việt Nam (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "7fe9abff-6db2-4446-9d9d-809267a65d3f",
+      "city_id": "019f10ce-2dc6-7c86-a40e-d19818349372",
+      "name": "Le Champ Tú Lệ Resort (suối khoáng & khu vui chơi Aeris Hill)",
+      "type": "entertainment",
+      "address": "Bản Nước Nóng, xã Tú Lệ, huyện Văn Chấn, Yên Bái (tỉnh Lào Cai)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Dịch vụ trong ngày 8:00–15:00 và 18:00–20:50 hằng ngày",
+      "description": "Khu nghỉ dưỡng - vui chơi giữa thung lũng Tú Lệ với suối khoáng nóng Onsen, khu vui chơi Aeris Hill (zipline, trò chơi mạo hiểm) và động Tiên Nữ, nằm giữa các bản người Thái.",
+      "tips": "Vé chia nhiều hạng (gồm/không gồm zipline); kết hợp ngắm ruộng bậc thang Tú Lệ - Mù Cang Chải.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé tham quan + chụp ảnh 200.000đ; vé trò chơi từ 399.000đ (Nhà Thám Hiểm) đến 699.000đ (Thống Soái — gồm tắm khoáng + động Tiên Nữ). (nguồn: Booking.com & Lữ Hành Việt Nam, 2025 — có thể thay đổi)"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "hai-phong-hai-duong",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Đảo Cò Chi Lăng Nam — vietnamtourism.gov.vn & VinWonders Wonderpedia (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "420f1af2-207b-4502-9185-e0ee7794d8ba",
+      "city_id": "019f10ce-2dbe-7787-8724-22f029c6b0d5",
+      "name": "Khu sinh thái Đảo Cò Chi Lăng Nam",
+      "type": "entertainment",
+      "address": "Xã Chi Lăng Nam (nay xã Nam Thanh Miện), huyện Thanh Miện, Hải Dương",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — đẹp nhất sáng sớm và chiều tối",
+      "description": "Khu du lịch sinh thái trên hồ An Dương rộng ~69ha, nơi cư trú của hàng vạn cò, vạc; trải nghiệm đi thuyền quanh đảo ngắm chim — danh lam thắng cảnh cấp quốc gia của Hải Dương.",
+      "tips": "Đi tháng 9–4 khi cò vạc tụ về đông; ngắm chim lúc sáng sớm hoặc chiều tối khi chúng bay về tổ.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé tham quan ~5.000đ/người (dịch vụ thuyền tính riêng). (nguồn: vietnamtourism.gov.vn & VinWonders Wonderpedia, 2025 — có thể thay đổi)"
+    }
+  ]
+}
