@@ -5,7 +5,7 @@ import 'auth_provider.dart';
 
 const _kApiBase = String.fromEnvironment(
   'API_BASE_URL',
-  defaultValue: 'http://localhost:8000',
+  defaultValue: 'http://localhost:8000/api',
 );
 
 final BaseOptions _baseOptions = BaseOptions(

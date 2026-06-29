@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "thai-nguyen-thai-nguyen",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch Hồ Núi Cốc — dulichhonuicoc.vn & Leadtour (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "bf4dc0d6-970c-4f1a-8292-edc33df745f5",
+      "city_id": "019f10ce-2dc3-737a-a466-232d90cbf438",
+      "name": "Khu du lịch Hồ Núi Cốc",
+      "type": "entertainment",
+      "address": "Xóm Tân Lập, xã Tân Thái, huyện Đại Từ, Thái Nguyên (cách TP. Thái Nguyên ~18,5km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu du lịch ven hồ Núi Cốc với công viên nước ~3,4ha, hệ thống hang động nhân tạo (huyền thoại nàng Công - chàng Cốc), vườn thú, biểu diễn nhạc nước và 8 trò chơi cảm giác mạnh.",
+      "tips": "Vé trọn gói gồm tham quan + công viên nước + trò chơi; phù hợp gia đình đi cả ngày.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé trọn gói: người lớn (từ 1m3) 130.000đ, người cao tuổi/thương binh 91.000đ, trẻ dưới 1m2 miễn phí. (nguồn: dulichhonuicoc.vn & Leadtour, 2025 — có thể thay đổi)"
+    }
+  ]
+}

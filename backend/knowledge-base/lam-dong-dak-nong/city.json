@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Lâm Đồng",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Đắk Nông",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "geopark",
+      "lake",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "region": "Tây Nguyên",
+    "id": "019f10ce-2dcd-7c75-9379-e8d01f822a16",
+    "cuisine_summary": "Canh thụt, cơm lam, gà nướng, cá lăng sông Sêrêpốk, cà phê, bơ sáp",
+    "description": "Vùng cao nguyên với Công viên địa chất toàn cầu UNESCO Đắk Nông, hồ Tà Đùng 'vịnh Hạ Long Tây Nguyên' và hệ thống hang động núi lửa.",
+    "weather": "Khí hậu cao nguyên mát mẻ, hai mùa mưa - khô rõ rệt.",
+    "best_season": "Tháng 11-3 (mùa khô)",
+    "slug": "lam-dong-dak-nong",
+    "special": "Công viên địa chất toàn cầu Đắk Nông, hồ Tà Đùng, thác Dray Sáp - Gia Long, hang động núi lửa Krông Nô",
+    "image_url": null,
+    "stats": null,
+    "name": "Đắk Nông (Gia Nghĩa)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "lam-dong-dak-nong",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "phu-tho-phu-tho",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Wyndham Thanh Thủy (OHAYO Onsen) — wyndham-thanhthuy.com & Booking.com (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "d27cadb3-ce50-4187-80fb-761b2778d373",
+      "city_id": "019f10ce-2dc2-7295-bb75-5bc7ac09120a",
+      "name": "Khu khoáng nóng Wyndham Thanh Thủy (OHAYO Onsen)",
+      "type": "entertainment",
+      "address": "Xã La Phù, huyện Thanh Thủy, Phú Thọ (cách Hà Nội ~65km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày cho khách tắm khoáng — xác nhận trước khi đến",
+      "description": "Khu nghỉ dưỡng khoáng nóng ~87ha với tổ hợp tắm khoáng OHAYO Onsen kiểu Nhật (Natural/Themed/Herbal/Foot Onsen, sauna), phố đi bộ Nhật Bản, hồ cá Koi và khu vui chơi trẻ em trong nhà.",
+      "tips": "Mua vé Onsen riêng hoặc combo gồm phòng + vé VIP + buffet; nhớ mang đồ bơi.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé tắm khoáng Onsen từ ~500.000đ; combo nghỉ dưỡng từ ~3.000.000đ/2 người lớn + 1 trẻ. (nguồn: wyndham-thanhthuy.com & Booking.com, 2025 — có thể thay đổi)"
+    }
+  ]
+}

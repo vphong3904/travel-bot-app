@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "dong-nai-binh-phuoc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch sinh thái Mỹ Lệ — binhphuoc.gov.vn & Mia.vn (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "b577fa6d-d5d7-44a5-af25-914217ac447d",
+      "city_id": "019f10ce-2dce-7515-a4a3-d13c1c1d689b",
+      "name": "Khu du lịch sinh thái Mỹ Lệ",
+      "type": "entertainment",
+      "address": "Đường ĐT741, thôn 1, xã Long Hưng, huyện Phú Riềng, Bình Phước (tỉnh Đồng Nai)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu du lịch sinh thái lớn nhất Bình Phước (~72ha, được công nhận khu du lịch cấp tỉnh) với hồ nước, vườn cây ăn trái, các trò chơi giải trí và dịch vụ nghỉ dưỡng.",
+      "tips": "Có hái trái cây theo mùa; phù hợp dã ngoại gia đình và nhóm bạn.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào ~50.000đ/người, trẻ dưới 1m2 miễn phí. (nguồn: binhphuoc.gov.vn & Mia.vn, 2025 — có thể thay đổi)"
+    }
+  ]
+}

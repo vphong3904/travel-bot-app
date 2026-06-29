@@ -1,16 +1,21 @@
 {
   "_meta": {
     "city": "khanh-hoa-nha-trang",
-    "last_updated": "2026-06-22",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "partial_note": null,
-    "missing_fields": [],
+    "missing_fields": [
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
     "data_sources": [
       "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
       "Google Maps (06/2026)",
       "Klook VN: klook.com/vi (06/2026)",
-      "Sở Du lịch Khánh Hòa: khanhhoa.gov.vn (06/2026)"
+      "Sở Du lịch Khánh Hòa: khanhhoa.gov.vn (06/2026)",
+      "T-037 điểm vui chơi: skylightnhatrang.com & KKday (06/2026)",
+      "T-037 điểm vui chơi: vinwonders.com & Traveloka — Nhà hát Đó / Rối Mơ (2026)",
+      "T-037 điểm vui chơi: galina.vn & Klook — Galina Mud Bath (06/2026)"
     ]
   },
   "data": [
@@ -133,6 +138,51 @@
       "stats": { "rating_avg": null, "review_count": null },
       "verified": true,
       "entry_fee": null
+    },
+    {
+      "id": "2dd0129a-0629-42df-9a9e-2afec4cae97d",
+      "destination_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Skylight Nha Trang (Đài quan sát 360°)",
+      "type": "entertainment",
+      "address": "Tầng 43, khách sạn Premier Havana, 38 Trần Phú, phường Lộc Thọ, Nha Trang, Khánh Hòa",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Thứ 3–Chủ nhật; Skydeck 360° 17:00–23:30; Rooftop Beach Club 17:00–00:45 — xác nhận trước khi đến",
+      "description": "Đài quan sát 360° đầu tiên của Nha Trang trên tầng cao khách sạn Havana, có sàn kính Skywalk và Rooftop Beach Club, nơi ngắm toàn cảnh vịnh Nha Trang, thành phố và đồi núi lúc hoàng hôn về đêm.",
+      "tips": "Lên lúc chiều tối để xem hoàng hôn rồi ở lại cảnh đêm. Vé vào đã kèm 1 welcome drink; đi giày thoải mái cho sàn kính.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "100.000đ (gồm Skydeck 360°, sàn kính Skywalk và 1 welcome drink); có thể thay đổi vào lễ/Tết. (nguồn: skylightnhatrang.com & KKday, 06/2026)"
+    },
+    {
+      "id": "29781390-839e-4057-886c-07838b76d8bb",
+      "destination_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Nhà hát Đó — Show Rối Mơ (Life Puppets)",
+      "type": "entertainment",
+      "address": "Nhà hát Đó, Vega City Nha Trang, khu Bãi Tiên, phường Vĩnh Hòa, Nha Trang, Khánh Hòa",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Suất diễn buổi tối theo lịch (thường khoảng 18:00 hoặc 19:30), thời lượng ~60 phút — đặt vé trước để xác nhận suất",
+      "description": "Nhà hát biểu tượng hình chiếc đó (ngư cụ truyền thống) tại Vega City, nơi trình diễn show Rối Mơ kết hợp rối nước, rối dây, rối bóng và múa đương đại cùng nhạc sống — một trải nghiệm nghệ thuật văn hóa bản địa nổi bật của Nha Trang.",
+      "tips": "Đặt vé trước qua kênh chính thức vì hay kín chỗ dịp cao điểm. Đến sớm để chụp ảnh kiến trúc nhà hát bên biển lúc hoàng hôn.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "420.000–630.000đ/vé tùy hạng ghế (Dragon/Tiger/Zodiac). (nguồn: vinwonders.com & Traveloka, 2026 — có thể thay đổi)"
+    },
+    {
+      "id": "f9909100-dca2-4478-a587-19c169dc0e10",
+      "destination_id": "019eed69-50b3-743c-b2d0-2107e58ca38d",
+      "name": "Galina Mud Bath & Spa (Tắm bùn khoáng)",
+      "type": "entertainment",
+      "address": "Tầng 4, khách sạn Galina, số 5 Hùng Vương, Nha Trang, Khánh Hòa",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "9:00–18:00 hằng ngày; nên đặt trước tối thiểu 2 giờ",
+      "description": "Khu tắm bùn khoáng nóng ngay trung tâm Nha Trang với bồn jacuzzi, xông hơi và hồ khoáng, cách biển và chợ đêm vài phút — lựa chọn thư giãn tiện lợi không phải ra ngoại ô.",
+      "tips": "Đặt trước để giữ chỗ; mang theo đồ bơi. Tắm bùn xong nên nghỉ ngơi, uống nhiều nước trước khi ra biển.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "350.000đ/người lớn, 250.000đ/trẻ em (gói tắm bùn khoáng). (nguồn: galina.vn & Klook, 06/2026 — có thể thay đổi)"
     }
   ]
 }

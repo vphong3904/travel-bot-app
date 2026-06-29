@@ -1,11 +1,19 @@
 {
   "_meta": {
     "city": "quang-tri-phong-nha",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "completed",
-    "missing_fields": ["ticket_price (Động Thiên Đường cao điểm 2026)", "image_url"],
-    "data_sources": ["vietnamtourism.gov.vn", "BQL Vườn quốc gia Phong Nha - Kẻ Bàng"]
+    "missing_fields": [
+      "ticket_price (Động Thiên Đường cao điểm 2026)",
+      "image_url",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "BQL Vườn quốc gia Phong Nha - Kẻ Bàng",
+      "T-037: Ozo Treetop Park — phongnhaexplorer.com & PYS Travel (2025)"
+    ]
   },
   "data": [
     {
@@ -52,6 +60,24 @@
       "rating": null,
       "ticket_price": null,
       "price_note": "Bao gồm vé tham quan phòng trưng bày di vật vĩ tuyến"
+    },
+    {
+      "id": "3a97b685-8bf6-453e-850c-c6575d8f18eb",
+      "city_id": "019eed69-50b3-79f6-9a6e-66856703829f",
+      "name": "Công viên Ozo Treetop Park",
+      "type": "entertainment",
+      "address": "Đường 20 Quyết Thắng, xã Sơn Trạch (Phong Nha), huyện Bố Trạch, Quảng Bình — trong VQG Phong Nha - Kẻ Bàng",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Khoảng 7:00–17:00 hằng ngày (có dịch vụ cắm trại qua đêm) — xác nhận trước khi đến",
+      "description": "Công viên phiêu lưu sinh thái gần 5ha trong VQG Phong Nha - Kẻ Bàng, nổi bật hệ thống trò chơi trên cây dài nhất Việt Nam (~800m), zipline xuyên rừng, chèo kayak/SUP và thuyền xuôi suối Ozo.",
+      "tips": "Trò chơi trên cây áp dụng cho người cao từ 1m4 và dưới 80kg; vé full đã gồm HDV, thiết bị an toàn và ăn trưa.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Full OZO Ticket ~899.000đ/người lớn (gồm HDV, thiết bị an toàn, ăn trưa, nước). (nguồn: phongnhaexplorer.com & PYS Travel, 2025 — có thể thay đổi)"
     }
   ]
 }

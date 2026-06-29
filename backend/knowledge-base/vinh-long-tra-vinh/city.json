@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Vĩnh Long",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Trà Vinh",
+    "is_active": true,
+    "categories": [
+      "culture",
+      "heritage",
+      "nature",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd2-7ac3-8256-abc27c14f772",
+    "cuisine_summary": "Bún nước lèo Trà Vinh, bún suông, cốm dẹp, chù ụ rang me, dừa sáp Cầu Kè",
+    "description": "Vùng đất Khmer Nam Bộ với ao Bà Om huyền thoại, hệ thống chùa Khmer cổ và biển Ba Động.",
+    "weather": "Khí hậu nhiệt đới gió mùa ven biển, hai mùa mưa - khô; mát dịu dưới tán cổ thụ.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "vinh-long-tra-vinh",
+    "special": "Ao Bà Om, chùa Âng, biển Ba Động, cù lao Long Trị, văn hóa Khmer",
+    "image_url": null,
+    "stats": null,
+    "name": "Trà Vinh"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "vinh-long-tra-vinh",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "data": {
+    "province": "Đắk Lắk",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Phú Yên",
+    "is_active": true,
+    "categories": [
+      "beach",
+      "nature",
+      "heritage",
+      "food"
+    ],
+    "best_months": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "region": "Duyên hải Nam Trung Bộ",
+    "id": "019f10ce-2dcc-7335-b3eb-b09a0712dfa2",
+    "cuisine_summary": "Mắt cá ngừ đại dương, bánh canh hẹ, sò huyết Ô Loan, cơm gà, bánh bèo",
+    "description": "'Xứ hoa vàng cỏ xanh' với Gành Đá Đĩa độc đáo, Mũi Điện, tháp Nhạn và đầm Ô Loan.",
+    "weather": "Nhiệt đới gió mùa ven biển, nắng nhiều, mùa mưa bão tháng 9-12.",
+    "best_season": "Tháng 1-8 (biển đẹp, nắng vàng)",
+    "slug": "dak-lak-tuy-hoa",
+    "special": "Gành Đá Đĩa, Mũi Điện (Đại Lãnh), Bãi Xép, tháp Nhạn, đầm Ô Loan",
+    "image_url": null,
+    "stats": null,
+    "name": "Tuy Hòa (Phú Yên)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "dak-lak-tuy-hoa",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

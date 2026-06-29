@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "thai-nguyen-ba-be",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Du thuyền hồ Ba Bể — Tour.Pro.Vn & homestay Ba Bể (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "54aad4e9-0c53-4585-9343-cb4dbb8b31c0",
+      "city_id": "019f10ce-2dc4-718e-8f9d-3c82092f8f5e",
+      "name": "Du thuyền tham quan hồ Ba Bể",
+      "type": "entertainment",
+      "address": "Vườn quốc gia Ba Bể, xã Nam Mẫu, huyện Ba Bể, Bắc Kạn (nay xã Ba Bể, tỉnh Thái Nguyên)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận lịch thuyền trước khi đến",
+      "description": "Trải nghiệm du thuyền/xuồng tham quan hồ Ba Bể - hồ nước ngọt tự nhiên lớn nhất Việt Nam, ghé động Puông, ao Tiên, thác Đầu Đẳng và đền An Mã giữa rừng núi đá vôi.",
+      "tips": "Thuê thuyền theo tuyến (tính theo thuyền, đi nhóm tiết kiệm); kết hợp tham quan động Hua Mạ.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé tham quan VQG Ba Bể 70.000đ/khách; thuê thuyền theo tuyến ~400.000–800.000đ/thuyền. (nguồn: Tour.Pro.Vn & homestay Ba Bể, 2025 — có thể thay đổi)"
+    }
+  ]
+}

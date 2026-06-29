@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Thanh Hóa",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "beach",
+      "heritage",
+      "nature",
+      "food"
+    ],
+    "best_months": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "region": "Bắc Trung Bộ",
+    "id": "019f10ce-2dc9-74a4-a9d9-215e3deda7b4",
+    "cuisine_summary": "Nem chua Thanh Hóa, bánh gai Tứ Trụ, gỏi cá nhệch, chả tôm, ốc mút, bánh cuốn",
+    "description": "Vùng đất 'địa linh nhân kiệt' với biển Sầm Sơn, Thành nhà Hồ di sản UNESCO, suối cá thần và khu bảo tồn Pù Luông.",
+    "weather": "Nhiệt đới gió mùa, hè nóng, mùa mưa bão tháng 8-10; vùng núi Pù Luông mát mẻ.",
+    "best_season": "Tháng 4-8 (biển Sầm Sơn)",
+    "slug": "thanh-hoa-thanh-hoa",
+    "special": "Biển Sầm Sơn, Thành nhà Hồ, Lam Kinh, Pù Luông, suối cá thần Cẩm Lương",
+    "image_url": null,
+    "stats": null,
+    "name": "Thanh Hóa (Sầm Sơn)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "thanh-hoa-thanh-hoa",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

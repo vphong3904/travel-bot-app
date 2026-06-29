@@ -1,12 +1,18 @@
 {
   "_meta": {
     "city": "lam-dong-mui-ne",
-    "last_updated": "2026-06-24",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "partial_note": null,
-    "missing_fields": [],
-    "data_sources": ["vietnamtourism.gov.vn", "Google Maps"]
+    "missing_fields": [
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "Google Maps",
+      "T-037: Bàu Trắng — Bàu Sen — Du lịch Bình Thuận & SaigonStar Travel (2025)"
+    ]
   },
   "data": [
     {
@@ -15,12 +21,18 @@
       "name": "Đồi Cát Bay (Đồi Cát Đỏ)",
       "type": "nature",
       "address": "Khu phố 5, Phường Mũi Né, Thành phố Phan Thiết, Bình Thuận",
-      "coordinates": { "lat": 10.9472, "lng": 108.2861 },
+      "coordinates": {
+        "lat": 10.9472,
+        "lng": 108.2861
+      },
       "hours": "Thường mở 05:00–18:00, xác nhận trước khi đến",
       "description": "Đồi cát khổng lồ có màu đỏ hồng đặc trưng, liên tục thay đổi hình dáng do tác động của gió biển.",
       "tips": "Nên đi vào sáng sớm trước 8h hoặc chiều sau 16h30 để tránh cát nóng và chụp ảnh đẹp nhất.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí vé vào cửa"
     },
@@ -30,12 +42,18 @@
       "name": "Suối Tiên (Fairy Stream)",
       "type": "nature",
       "address": "Khu phố 4, Phường Hàm Tiến, Thành phố Phan Thiết, Bình Thuận",
-      "coordinates": { "lat": 10.9515, "lng": 108.2104 },
+      "coordinates": {
+        "lat": 10.9515,
+        "lng": 108.2104
+      },
       "hours": "Thường mở 06:00–18:00, xác nhận trước khi đến",
       "description": "Một khe nước nhỏ đi bộ trải nghiệm lội dòng nước mát mẻ, hai bên là những vách nhũ cát màu đỏ và trắng tạo hình kỳ vĩ.",
       "tips": "Chuẩn bị túi nilon bỏ giày dép đi tay để đi bộ lội suối dễ dàng.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Có phí vệ sinh/quản lý khoảng 15.000đ - cần xác nhận tại chỗ"
     },
@@ -45,12 +63,18 @@
       "name": "Bãi biển Hòn Rơm",
       "type": "beach",
       "address": "Xuân Thủy, Phường Mũi Né, Thành phố Phan Thiết, Bình Thuận",
-      "coordinates": { "lat": 10.9412, "lng": 108.3015 },
+      "coordinates": {
+        "lat": 10.9412,
+        "lng": 108.3015
+      },
       "hours": "Tự do 24/7",
       "description": "Bãi biển lặng sóng, cát mịn rực rỡ nắng, thích hợp để tắm biển, tổ chức hoạt động ngoài trời và ăn hải sản tươi sống.",
       "tips": "Biển sóng khá êm nhưng nên chú ý các biển báo dòng chảy xa bờ nếu có.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Miễn phí bãi tắm công cộng"
     },
@@ -60,12 +84,18 @@
       "name": "Tháp Chàm Poshanư",
       "type": "temple",
       "address": "Đồi Bà Nài, Phường Phú Hài, Thành phố Phan Thiết, Bình Thuận",
-      "coordinates": { "lat": 10.9324, "lng": 108.1385 },
+      "coordinates": {
+        "lat": 10.9324,
+        "lng": 108.1385
+      },
       "hours": "Thường mở 07:00–17:00, xác nhận trước khi đến",
       "description": "Cụm di tích đền tháp Chăm cổ kính được xây dựng từ cuối thế kỷ thứ VIII, thờ thần Shiva, mang phong cách kiến trúc Hòa Lai cổ.",
       "tips": "Mặc trang phục lịch sự khi vào tháp chính, có thể kết hợp tham quan Lầu Ông Hoàng ngay gần đó.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Có phí vé vào cửa khoảng 15.000đ - cần xác nhận tại quầy vé"
     },
@@ -75,14 +105,41 @@
       "name": "Làng Chài Mũi Né",
       "type": "market",
       "address": "Đường Huỳnh Thúc Kháng, Phường Mũi Né, Thành phố Phan Thiết, Bình Thuận",
-      "coordinates": { "lat": 10.9439, "lng": 108.2672 },
+      "coordinates": {
+        "lat": 10.9439,
+        "lng": 108.2672
+      },
       "hours": "Tấp nập nhất từ 05:00–08:00 sáng",
       "description": "Bến cảng tàu thuyền neo đậu thanh bình, nơi diễn ra cảnh mua bán hải sản tươi sống tấp nập mỗi sớm mai của ngư dân địa phương.",
       "tips": "Đến lúc bình minh để ngắm cảnh thuyền bè rực rỡ và mua hải sản chế biến ăn liền tại chỗ ngon rẻ.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Tự do tham quan"
+    },
+    {
+      "id": "7c4dc28c-e361-4498-b4fe-0798e833358f",
+      "city_id": "01904a43-6df2-7000-8451-ab73e215d8f1",
+      "name": "Bàu Trắng — Bàu Sen (đồi cát trắng)",
+      "type": "entertainment",
+      "address": "Xã Hòa Thắng, huyện Bắc Bình, tỉnh Bình Thuận (tỉnh Lâm Đồng), cách Mũi Né ~35km",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Tham quan cả ngày; dịch vụ xe jeep/trượt cát ban ngày — đẹp nhất sáng sớm hoặc chiều muộn",
+      "description": "Quần thể đồi cát trắng bên hồ sen (Bàu Sen) với các trải nghiệm vui chơi: trượt cát, xe jeep địa hình vượt đồi, mô tô địa hình và cưỡi lạc đà chụp ảnh — 'tiểu sa mạc' nổi tiếng của Bình Thuận.",
+      "tips": "Vào cửa miễn phí; nên thỏa thuận giá dịch vụ trước. Đi sáng sớm hoặc chiều muộn để tránh nắng và có ánh sáng đẹp.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí vé vào. Dịch vụ: trượt cát từ 20.000đ; xe jeep 150.000–200.000đ/khách; cưỡi lạc đà ~200.000đ/người. (nguồn: Du lịch Bình Thuận & SaigonStar Travel, 2025 — có thể thay đổi)"
     }
   ]
 }

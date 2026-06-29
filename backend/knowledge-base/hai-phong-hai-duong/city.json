@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Hải Phòng",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Hải Dương",
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "food",
+      "nature"
+    ],
+    "best_months": [
+      3,
+      4,
+      9,
+      10,
+      11
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dbe-7787-8724-22f029c6b0d5",
+    "cuisine_summary": "Bánh đậu xanh, vải thiều Thanh Hà, bánh gai Ninh Giang, bún cá rô đồng",
+    "description": "Vùng đồng bằng giàu di tích với Côn Sơn - Kiếp Bạc, đảo cò Chi Lăng Nam và đặc sản bánh đậu xanh, vải thiều Thanh Hà.",
+    "weather": "Cận nhiệt đới ẩm, 4 mùa rõ rệt, hè nóng ẩm, đông lạnh khô.",
+    "best_season": "Tháng 3-4 và 9-11",
+    "slug": "hai-phong-hai-duong",
+    "special": "Côn Sơn - Kiếp Bạc, đảo cò Chi Lăng Nam, văn miếu Mao Điền",
+    "image_url": null,
+    "stats": null,
+    "name": "Hải Dương"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "hai-phong-hai-duong",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

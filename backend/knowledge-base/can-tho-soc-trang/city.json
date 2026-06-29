@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Cần Thơ",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Sóc Trăng",
+    "is_active": true,
+    "categories": [
+      "culture",
+      "heritage",
+      "food",
+      "nature"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd1-764a-806b-78fae7e6013c",
+    "cuisine_summary": "Bún nước lèo, bánh pía, lạp xưởng Sóc Trăng, mè láo, bún gỏi dà, bánh cống",
+    "description": "Vùng đất giao thoa văn hóa Kinh - Khmer - Hoa với chùa Dơi, chùa Đất Sét và lễ hội đua ghe Ngo.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; nắng ấm quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô); lễ hội Oóc Om Bóc",
+    "slug": "can-tho-soc-trang",
+    "special": "Chùa Dơi (Mahatup), chùa Đất Sét, chùa Khleang, lễ hội Oóc Om Bóc - đua ghe Ngo",
+    "image_url": null,
+    "stats": null,
+    "name": "Sóc Trăng"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "can-tho-soc-trang",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

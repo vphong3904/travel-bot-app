@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "can-tho-soc-trang",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu văn hóa Hồ Nước Ngọt — vietnamtourism.gov.vn & Mia.vn (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "0591c746-3ff6-4be7-af2b-66bd534b5a41",
+      "city_id": "019f10ce-2dd1-764a-806b-78fae7e6013c",
+      "name": "Khu văn hóa Hồ Nước Ngọt Sóc Trăng",
+      "type": "entertainment",
+      "address": "Số 2 đường Hùng Vương, trung tâm TP. Sóc Trăng",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Mở cửa tự do hằng ngày (chợ đêm vào buổi tối)",
+      "description": "Khu văn hóa - giải trí rộng ~20ha quanh hồ nước ngọt giữa trung tâm Sóc Trăng, có khu vui chơi thiếu nhi, chợ đêm, hồ bơi Hoàng Châu, sân khấu ngoài trời và khu hội chợ - triển lãm.",
+      "tips": "Vào cổng thường miễn phí (trừ dịp sự kiện lớn); buổi tối có chợ đêm sôi động.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Miễn phí vào cổng (chỉ thu vé vào dịp tổ chức sự kiện văn hóa lớn); khu vui chơi/hồ bơi tính phí riêng. (nguồn: vietnamtourism.gov.vn & Mia.vn, 2025)"
+    }
+  ]
+}

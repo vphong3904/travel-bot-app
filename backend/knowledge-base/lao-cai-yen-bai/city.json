@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Lào Cai",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Yên Bái",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "mountain",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      9,
+      10,
+      3,
+      4,
+      5
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc6-7c86-a40e-d19818349372",
+    "cuisine_summary": "Cốm Tú Lệ, chè Suối Giàng, pa pỉnh tộp, xôi ngũ sắc, muồm muỗm rang",
+    "description": "Vùng núi Tây Bắc với ruộng bậc thang Mù Cang Chải kỳ vĩ, hồ Thác Bà rộng lớn và đồi chè Suối Giàng.",
+    "weather": "Khí hậu núi cao, mát mẻ; mùa lúa chín ruộng bậc thang tháng 9-10 đẹp nhất.",
+    "best_season": "Tháng 9-10 (lúa chín Mù Cang Chải) và xuân",
+    "slug": "lao-cai-yen-bai",
+    "special": "Ruộng bậc thang Mù Cang Chải, hồ Thác Bà, Tú Lệ, đèo Khau Phạ",
+    "image_url": null,
+    "stats": null,
+    "name": "Yên Bái"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "lao-cai-yen-bai",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

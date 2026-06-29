@@ -1,21 +1,23 @@
 {
   "_meta": {
     "city": "hue-hue",
-    "last_updated": "2025-06-23",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "complete",
     "partial_note": null,
     "missing_fields": [
       "coordinates.lat/lng — cần xác nhận chính xác từ Google Maps",
       "entry_fee chùa Thiên Mụ — miễn phí nhưng cần xác nhận lại",
-      "entry_fee bãi biển Lăng Cô — miễn phí nhưng cần xác nhận phí dịch vụ"
+      "entry_fee bãi biển Lăng Cô — miễn phí nhưng cần xác nhận phí dịch vụ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "Trung tâm Bảo tồn Di tích Cố đô Huế: hueworldheritage.org.vn (06/2025)",
       "luhanhvietnam.com.vn — Giá vé tham quan Huế 2025 (06/2025)",
       "sovaba.travel — Giá vé lăng tẩm Huế 2026 (02/2026)",
       "daivietourist.vn — Giá vé tham quan Huế (06/2025)",
-      "Vietnam Tourism: vietnamtourism.gov.vn"
+      "Vietnam Tourism: vietnamtourism.gov.vn",
+      "T-037: Suối khoáng nóng Alba Thanh Tân — eholiday & BestPrice (2026)"
     ]
   },
   "data": [
@@ -25,12 +27,18 @@
       "name": "Đại Nội Huế (Hoàng thành Huế)",
       "type": "attraction",
       "address": "Cổng Ngọ Môn, 23 Tống Duy Tân, phường Phú Hội, TP. Huế",
-      "coordinates": { "lat": 16.4698, "lng": 107.5796 },
+      "coordinates": {
+        "lat": 16.4698,
+        "lng": 107.5796
+      },
       "hours": "Mùa hè (tháng 4–9): 6:30–17:30. Mùa đông (tháng 10–3): 7:00–17:00. Xác nhận trước khi đến.",
       "description": "Quần thể cung điện triều Nguyễn (1802–1945), Di sản Văn hóa Thế giới UNESCO từ năm 1993. Bao gồm Ngọ Môn, Điện Thái Hòa, Tử Cấm Thành, Cung Diên Thọ và nhiều công trình kiến trúc lịch sử độc đáo của Cố đô.",
       "tips": "Nên đến sớm trước 8h để tránh nắng và đông khách. Mặc áo dài hoặc cổ phục để trải nghiệm trọn vẹn và chụp ảnh đẹp. Mua vé online qua Klook hoặc Hue-S để tiết kiệm thời gian.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Người lớn: 200.000 đồng/người.\nTrẻ em từ 7–12 tuổi: 40.000 đồng/người.\nTrẻ em dưới 7 tuổi: MIỄN PHÍ.\nHọc sinh tiểu học, THCS, THPT tỉnh Thừa Thiên Huế (ngoại khóa): MIỄN PHÍ.\nNgười khuyết tật nặng: MIỄN PHÍ.\nMiễn phí toàn bộ: Tết Nguyên Đán mùng 1–3 âm lịch, ngày 26/3, ngày 2/9, ngày 23/11.\n(Nguồn: luhanhvietnam.com.vn & hueworldheritage.org.vn, 06/2025 — cần xác nhận giá hiện hành)"
     },
@@ -40,12 +48,18 @@
       "name": "Lăng Tự Đức",
       "type": "attraction",
       "address": "Khu vực Dương Xuân Thượng, phường Thủy Xuân, TP. Huế",
-      "coordinates": { "lat": 16.4533, "lng": 107.5533 },
+      "coordinates": {
+        "lat": 16.4533,
+        "lng": 107.5533
+      },
       "hours": "7:00–17:00 hàng ngày. Xác nhận trước khi đến.",
       "description": "Lăng mộ vua Tự Đức (1848–1883), một trong những công trình kiến trúc đẹp nhất của triều Nguyễn. Tổng thể gồm hồ Lưu Khiêm, điện Hòa Khiêm, lầu Khiêm Cung và các công trình thơ mộng hòa hợp với thiên nhiên. Đây cũng là nơi vua Tự Đức sống và sáng tác thơ văn.",
       "tips": "Kết hợp tham quan lăng Đồng Khánh gần đó để tối ưu lộ trình. Mua vé combo tuyến Tự Đức–Đồng Khánh tiết kiệm hơn mua lẻ.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Người lớn: 150.000 đồng/người.\nTrẻ em từ 7–12 tuổi: 30.000 đồng/người.\nTrẻ em dưới 7 tuổi: MIỄN PHÍ.\nHọc sinh, sinh viên (có thẻ): 75.000 đồng/người.\nVé combo tuyến Tự Đức + Đồng Khánh: 240.000 đồng/người lớn, 30.000 đồng/trẻ em.\n(Nguồn: sovaba.travel & luhanhvietnam.com.vn, 02/2026 — cần xác nhận giá hiện hành)"
     },
@@ -55,12 +69,18 @@
       "name": "Lăng Khải Định",
       "type": "attraction",
       "address": "Thôn Châu Chữ, xã Thủy Bằng, thành phố Huế",
-      "coordinates": { "lat": 16.4368, "lng": 107.5778 },
+      "coordinates": {
+        "lat": 16.4368,
+        "lng": 107.5778
+      },
       "hours": "7:00–17:00 hàng ngày. Xác nhận trước khi đến.",
       "description": "Lăng mộ vua Khải Định (1916–1925), nổi bật với kiến trúc pha trộn phong cách Đông–Tây độc đáo. Nội thất điện Khải Thành được khảm sành sứ và thủy tinh tinh xảo, tạo nên vẻ lộng lẫy hiếm thấy. Đây là lăng có vị trí trên cao, cần leo nhiều bậc thang.",
       "tips": "Cần leo khoảng 127 bậc thang, nên chuẩn bị sức lực. Ánh sáng trong điện khá tối, nên chụp ảnh với chế độ phù hợp. Có thể thuê hướng dẫn viên tại chỗ.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "Người lớn: 150.000 đồng/người.\nTrẻ em từ 7–12 tuổi: 30.000 đồng/người.\nTrẻ em dưới 7 tuổi: MIỄN PHÍ.\nHọc sinh, sinh viên (có thẻ): 75.000 đồng/người.\n(Nguồn: sovaba.travel & luhanhvietnam.com.vn, 02/2026 — cần xác nhận giá hiện hành)"
     },
@@ -70,12 +90,18 @@
       "name": "Chùa Thiên Mụ",
       "type": "temple",
       "address": "Đường Nguyễn Phúc Nguyên, phường Kim Long, TP. Huế",
-      "coordinates": { "lat": 16.4531, "lng": 107.5491 },
+      "coordinates": {
+        "lat": 16.4531,
+        "lng": 107.5491
+      },
       "hours": "Thường mở cửa 8:00–17:00. Xác nhận trước khi đến.",
       "description": "Ngôi chùa cổ nhất và nổi tiếng nhất tại Huế, được xây dựng từ năm 1601 bên bờ sông Hương. Tháp Phước Duyên 7 tầng cao 21m là biểu tượng của Huế. Nơi đây còn lưu giữ nhiều cổ vật quý và gắn liền với lịch sử phong trào Phật giáo miền Nam.",
       "tips": "Đây là điểm dừng lý tưởng khi đi thuyền trên sông Hương. Trang phục kín đáo, lịch sự khi vào chùa. Không có phí vào cổng chính thức — nên xác nhận tại chỗ.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "MIỄN PHÍ (xác nhận trước khi đến — có thể có phí giữ xe hoặc đóng góp tự nguyện)"
     },
@@ -85,12 +111,18 @@
       "name": "Biển Lăng Cô",
       "type": "beach",
       "address": "Thị trấn Lăng Cô, huyện Phú Lộc, TP. Huế (cách trung tâm Huế khoảng 65km)",
-      "coordinates": { "lat": 16.2167, "lng": 108.0667 },
+      "coordinates": {
+        "lat": 16.2167,
+        "lng": 108.0667
+      },
       "hours": "Không giới hạn giờ.",
       "description": "Bãi biển dài hơn 10km được xếp vào danh sách những vịnh đẹp nhất thế giới. Nước biển trong xanh, bãi cát trắng mịn, phía sau có núi và đầm phá Lăng Cô tạo nên cảnh quan thiên nhiên hữu tình. Là điểm dừng chân lý tưởng trên hành trình Huế–Đà Nẵng.",
       "tips": "Đi theo QL1A qua hầm đường bộ Hải Vân hoặc đường đèo cũ (đèo Hải Vân). Tránh đi vào mùa mưa (tháng 10–12) vì biển thường động. Kết hợp đèo Hải Vân khi di chuyển.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "MIỄN PHÍ vào bãi biển (có thể có phí dịch vụ tại các khu resort — xác nhận tại chỗ)"
     },
@@ -100,12 +132,18 @@
       "name": "Chợ Đông Ba",
       "type": "market",
       "address": "Trần Hưng Đạo, phường Phú Hòa, TP. Huế",
-      "coordinates": { "lat": 16.4714, "lng": 107.5861 },
+      "coordinates": {
+        "lat": 16.4714,
+        "lng": 107.5861
+      },
       "hours": "5:00–20:00 hàng ngày (tầng trệt mở cửa sớm hơn). Xác nhận trước khi đến.",
       "description": "Khu chợ lớn nhất và lâu đời nhất Huế, được xây dựng từ năm 1899 bên bờ sông Hương. Nơi đây bán đầy đủ đặc sản Huế như mè xửng, tôm chua, nón lá, vải lụa, bánh kẹo truyền thống và các mặt hàng thủ công mỹ nghệ địa phương.",
       "tips": "Nên mặc cả giá khi mua quà lưu niệm. Tầng 1 tập trung thực phẩm, tầng 2 có quần áo và đồ lưu niệm. Đến buổi sáng sớm để trải nghiệm không khí mua bán tươi sống nhộn nhịp nhất.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": "MIỄN PHÍ vào cổng (mua sắm tùy nhu cầu)"
     },
@@ -115,15 +153,42 @@
       "name": "Đồi Thiên An",
       "type": "nature",
       "address": "Xã Thủy Bằng, thành phố Huế (cách trung tâm khoảng 7km)",
-      "coordinates": { "lat": null, "lng": null },
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
       "hours": "Thường 6:00–17:30. Xác nhận trước khi đến.",
       "description": "Khu đồi thông rộng lớn với rừng thông xanh mướt quanh năm, hồ nước trong mát và không khí trong lành. Nơi đây nổi tiếng với Tu viện Thiên An của dòng Bênêđíctô được xây dựng từ năm 1940. Điểm lý tưởng để picnic, dã ngoại và nghỉ ngơi thoát khỏi phố thị.",
       "tips": "Tuyệt vời để đi xe đạp hoặc đi bộ trong rừng thông. Nhiệt độ mát hơn trung tâm thành phố. Tôn trọng không gian tu viện khi đến thăm.",
       "image_url": null,
-      "stats": { "rating_avg": null, "review_count": null },
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
       "verified": true,
       "entry_fee": null,
       "price_note": "// TODO: xác nhận phí vào cổng tại Google Maps hoặc Klook (klook.com/vi)"
+    },
+    {
+      "id": "ec1a18a1-90d2-4d28-bc02-89c5e557839a",
+      "city_id": "019eed69-50b3-73da-a651-2515b15db7c2",
+      "name": "Suối khoáng nóng Alba Thanh Tân",
+      "type": "water_park",
+      "address": "Xã Phong Sơn, huyện Phong Điền, Huế (cách trung tâm Huế ~30km về phía Tây Bắc)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Mở cửa ban ngày theo lịch khu nghỉ — nên đặt trước và xác nhận giờ trước khi đến",
+      "description": "Khu suối khoáng nóng (nhiệt độ tới ~68°C) kết hợp công viên nước, zipline, hệ thống highwire và làng nghề Alba — điểm vui chơi, ngâm khoáng và thư giãn gần Huế.",
+      "tips": "Chọn combo gồm vé vào + công viên nước + 1 lượt zipline + ăn trưa sẽ tiết kiệm; nhớ mang đồ bơi.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Combo phổ biến ~390.000đ/khách (vé vào ngâm khoáng + công viên nước + 1 lượt zipline/highwire + ăn trưa). (nguồn: eholiday & BestPrice, 2026 — có thể thay đổi)"
     }
   ]
 }

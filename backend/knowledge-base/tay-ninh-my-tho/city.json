@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Tây Ninh",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Tiền Giang",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food",
+      "heritage"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dcf-7745-a532-fc3b84ce944b",
+    "cuisine_summary": "Hủ tiếu Mỹ Tho, bún gỏi già, vú sữa Lò Rèn, mắm tôm chà, hủ tiếu sa tế",
+    "description": "Cửa ngõ đồng bằng sông Cửu Long với cù lao Thới Sơn miệt vườn, chợ nổi Cái Bè và chùa Vĩnh Tràng cổ kính.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; sông nước miệt vườn quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô); mùa trái cây hè",
+    "slug": "tay-ninh-my-tho",
+    "special": "Cù lao Thới Sơn (miệt vườn), chợ nổi Cái Bè, chùa Vĩnh Tràng, trại rắn Đồng Tâm, biển Tân Thành",
+    "image_url": null,
+    "stats": null,
+    "name": "Mỹ Tho (Tiền Giang)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "tay-ninh-my-tho",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "hung-yen-thai-binh",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch sinh thái Cồn Vành — dulichthaibinh.gov.vn & Traveloka (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "e21f53b9-dca7-46ee-8bb2-4617ead701e1",
+      "city_id": "019f10ce-2dbf-76b3-a131-15888d59b72f",
+      "name": "Khu du lịch sinh thái biển Cồn Vành",
+      "type": "entertainment",
+      "address": "Xã Nam Phú, huyện Tiền Hải, Thái Bình (cách TP. Thái Bình ~25km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Mở cửa tự do 24/7",
+      "description": "Khu du lịch sinh thái biển với bãi tắm Cồn Vành hoang sơ dài ~6km và rừng ngập mặn phong phú; trải nghiệm cào ngao cùng ngư dân và thưởng thức hải sản tươi.",
+      "tips": "Đi mùa hè (tháng 4–9); trải nghiệm cào ngao và ăn hải sản ngay tại chỗ.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Bãi tắm công cộng miễn phí; dịch vụ ăn uống/trải nghiệm tính riêng. (nguồn: dulichthaibinh.gov.vn & Traveloka, 2025)"
+    }
+  ]
+}
