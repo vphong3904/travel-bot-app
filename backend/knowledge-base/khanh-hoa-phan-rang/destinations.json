@@ -1,16 +1,19 @@
 {
   "_meta": {
     "city": "khanh-hoa-phan-rang",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-002",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
     "status": "completed",
     "missing_fields": [
       "ticket_price (biến động mùa du lịch 2026)",
-      "image_url"
+      "image_url",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
     ],
     "data_sources": [
       "vietnamtourism.gov.vn",
-      "Sở Văn hóa Thể thao và Du lịch Ninh Thuận - Khánh Hòa"
+      "Sở Văn hóa Thể thao và Du lịch Ninh Thuận - Khánh Hòa",
+      "T-037: Khu du lịch Tanyoli — VinWonders Wonderpedia & Ninh Thuận Green (2025)",
+      "T-037: Công viên nước TTC Resort Ninh Chữ — TTC Hospitality & Booking.com (2025)"
     ]
   },
   "data": [
@@ -58,6 +61,42 @@
       "rating": null,
       "ticket_price": 0,
       "price_note": "Bãi biển công cộng miễn phí"
+    },
+    {
+      "id": "2790e561-eb08-435b-89e4-11f144846d88",
+      "city_id": "019eeda8-d830-7bef-a223-4e32d5619ff0",
+      "name": "Khu du lịch Tanyoli",
+      "type": "entertainment",
+      "address": "Xã Phước Dinh, huyện Ninh Phước, Ninh Thuận (tỉnh Khánh Hòa)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Theo lịch khu du lịch — xác nhận trước khi đến",
+      "description": "Khu cắm trại phong cách du mục Mông Cổ với lều trắng, đồng cừu và đồi cát, có các hoạt động bắn cung, chèo kayak trên hồ, cưỡi ngựa và zipline — điểm check-in, vui chơi nổi bật ở Ninh Thuận.",
+      "tips": "Đẹp nhất lúc chiều khi nắng dịu; mang giày phù hợp để đi trên đồi cát.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Vé tham quan/chụp ảnh ~60.000đ/người (các dịch vụ trải nghiệm tính phí riêng). (nguồn: VinWonders Wonderpedia & Ninh Thuận Green, 2025 — có thể thay đổi)"
+    },
+    {
+      "id": "8b329207-3bac-431b-bd34-387c7c172a77",
+      "city_id": "019eeda8-d830-7bef-a223-4e32d5619ff0",
+      "name": "Công viên nước TTC Resort (Ninh Chữ)",
+      "type": "water_park",
+      "address": "Biển Ninh Chữ, đường Yên Ninh, Văn Hải, TP. Phan Rang - Tháp Chàm, Ninh Thuận",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "8:00–18:00 hằng ngày",
+      "description": "Công viên nước trong khuôn viên TTC Resort sát biển Ninh Chữ với các đường trượt, hồ bơi và khu vui chơi dưới nước — điểm giải nhiệt cho gia đình ở Phan Rang.",
+      "tips": "Vé đã gồm nước khoáng, ghế và ô che nắng, gửi xe miễn phí.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Người lớn 100.000đ, trẻ em 50.000đ (gồm nước khoáng, ghế, ô che, gửi xe). (nguồn: TTC Hospitality & Booking.com, 2025 — có thể thay đổi)"
     }
   ]
 }
