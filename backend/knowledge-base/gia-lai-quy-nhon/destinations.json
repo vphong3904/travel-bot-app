@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "city": "gia-lai-quy-nhon",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Seagate Park & FLC Zoo Safari Quy Nhơn — BestPrice & Xanh SM / FLC Resorts (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "58d988a9-816e-4549-ac6c-a19c3a887043",
+      "city_id": "019f10ce-2dcb-7e8f-942a-69628555cc3c",
+      "name": "Seagate Park (Khu vui chơi Cửa Biển)",
+      "type": "entertainment",
+      "address": "Phía Bắc cầu Thị Nại, khu Nhơn Hội, TP. Quy Nhơn, Bình Định (tỉnh Gia Lai)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Theo lịch khu vui chơi — xác nhận trước khi đến",
+      "description": "Tổ hợp vui chơi ngoài trời ở Quy Nhơn với hàng chục trò chơi vận động như leo núi, bắn cung, cầu tuột, cưỡi bò tót — điểm giải trí cho nhóm bạn và gia đình.",
+      "tips": "Phù hợp nhóm bạn trẻ thích vận động; nên đi buổi chiều cho mát.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé/dịch vụ xác nhận trực tiếp tại khu vui chơi — cần xác nhận. (nguồn: BestPrice & Xanh SM, 2025)"
+    },
+    {
+      "id": "6750f831-0fbf-41e5-92e1-f2a3c476e3f8",
+      "city_id": "019f10ce-2dcb-7e8f-942a-69628555cc3c",
+      "name": "FLC Zoo Safari Park Quy Nhơn",
+      "type": "zoo",
+      "address": "Khu 4, xã Nhơn Lý, TP. Quy Nhơn, Bình Định (tỉnh Gia Lai)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Theo lịch quần thể FLC — xác nhận trước khi đến",
+      "description": "Công viên bán hoang dã trong quần thể FLC Quy Nhơn với hơn 1.000 cá thể động vật thuộc nhiều loài — điểm tham quan, vui chơi cho gia đình.",
+      "tips": "Kết hợp tham quan quần thể FLC và các bãi biển Nhơn Lý, Kỳ Co lân cận.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé xác nhận tại quần thể FLC Quy Nhơn — cần xác nhận. (nguồn: FLC Resorts & Xanh SM, 2025)"
+    }
+  ]
+}
