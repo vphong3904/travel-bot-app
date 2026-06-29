@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "hai-phong-hai-phong",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Hòn Dấu Resort — vietnamtourism.gov.vn & hondauresort.com (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "fe593d35-508c-4bd4-9c38-b2c63dfd5c89",
+      "city_id": "019f10ce-2dbd-78c4-83bb-6a4eed461b3c",
+      "name": "Hòn Dấu Resort (công viên nước Đồ Sơn)",
+      "type": "entertainment",
+      "address": "Khu 3, phường Vạn Hương, quận Đồ Sơn, TP. Hải Phòng (cách trung tâm ~27km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Công viên nước hoạt động theo mùa hè — xác nhận trước khi đến",
+      "description": "Khu nghỉ dưỡng - vui chơi ở Đồ Sơn với công viên nước lọc nước biển (cầu trượt, nhà phao, mê cung mini) và quần thể kiến trúc mô phỏng lâu đài, phố cổ châu Âu để check-in.",
+      "tips": "Công viên nước đông vào cuối tuần hè; kết hợp tham quan khu kiến trúc châu Âu để chụp ảnh.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé công viên nước/dịch vụ xác nhận tại hondauresort.com (lưu trú bungalow từ ~900.000đ/đêm). (nguồn: vietnamtourism.gov.vn & hondauresort.com, 2025)"
+    }
+  ]
+}
