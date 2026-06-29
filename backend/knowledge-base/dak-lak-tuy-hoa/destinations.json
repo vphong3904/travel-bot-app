@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "dak-lak-tuy-hoa",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Công viên Hồ Sơn Tuy Hòa — Báo Phú Yên & Xanh SM (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "d1870ed2-186b-4708-883a-159be33e95d1",
+      "city_id": "019f10ce-2dcc-7335-b3eb-b09a0712dfa2",
+      "name": "Công viên Hồ Sơn (giải trí dưới nước)",
+      "type": "entertainment",
+      "address": "Hồ điều hòa Hồ Sơn, TP. Tuy Hòa, Phú Yên (tỉnh Đắk Lắk)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Hồ điều hòa giữa lòng TP. Tuy Hòa với các dịch vụ giải trí dưới nước như chèo SUP, kayak, đạp vịt và xe đạp nước — điểm trải nghiệm mới cho người dân và du khách.",
+      "tips": "Đi chiều mát để chèo SUP/kayak ngắm hoàng hôn; dịch vụ tính phí theo lượt.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Dịch vụ chèo SUP/kayak/đạp vịt tính phí theo lượt — xác nhận tại chỗ. (nguồn: Báo Phú Yên & Xanh SM, 2025)"
+    }
+  ]
+}
