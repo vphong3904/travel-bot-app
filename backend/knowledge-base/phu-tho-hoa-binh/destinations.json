@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "phu-tho-hoa-binh",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Serena Resort Kim Bôi — serena.com.vn & Eholiday (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "5a7f7833-e5e4-4cdb-995b-13d8dd2410bb",
+      "city_id": "019f10ce-2dc3-7069-aaed-3557c2228116",
+      "name": "Suối khoáng nóng Serena Resort Kim Bôi",
+      "type": "entertainment",
+      "address": "Huyện Kim Bôi, Hòa Bình (cách Hà Nội ~2 giờ xe)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày cho khách tham quan/tắm khoáng — xác nhận trước khi đến",
+      "description": "Khu nghỉ dưỡng suối khoáng nóng tự nhiên Kim Bôi (34–36°C) với bể bơi khoáng trong nhà, bể vô cực ngoài trời, khu tắm Onsen kiểu Nhật cùng các hoạt động kayak, đạp xe, yoga giữa thiên nhiên.",
+      "tips": "Vé tham quan/tắm khoáng trong ngày tính riêng; có gói nghỉ dưỡng 2N1Đ trọn gói. Nhớ mang đồ bơi.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé tham quan + tắm khoáng: người lớn 180.000đ, trẻ em 90.000đ. Gói nghỉ 2N1Đ từ ~2.050.000đ/người. (nguồn: serena.com.vn & Eholiday, 2025 — có thể thay đổi)"
+    }
+  ]
+}
