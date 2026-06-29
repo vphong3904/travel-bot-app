@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Phú Thọ",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Vĩnh Phúc",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "resort",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      4,
+      5,
+      9,
+      10,
+      11
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dc1-7a69-88e4-2baed02897e7",
+    "cuisine_summary": "Bánh trùng mật mía, su su Tam Đảo, cá thính Lập Thạch, bò tái kiến đốt",
+    "description": "Cửa ngõ tây bắc Hà Nội với khu nghỉ mát Tam Đảo trên núi, thiền viện Tây Thiên và hồ Đại Lải.",
+    "weather": "Cận nhiệt đới ẩm; khu Tam Đảo mát mẻ quanh năm, mây mù đặc trưng.",
+    "best_season": "Tháng 4-5 và 9-11",
+    "slug": "phu-tho-vinh-phuc",
+    "special": "Tam Đảo, Tây Thiên, hồ Đại Lải, vườn quốc gia Tam Đảo",
+    "image_url": null,
+    "stats": null,
+    "name": "Vĩnh Phúc"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "phu-tho-vinh-phuc",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

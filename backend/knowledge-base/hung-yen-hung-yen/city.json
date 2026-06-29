@@ -1,0 +1,53 @@
+{
+  "data": {
+    "province": "Hưng Yên",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      3,
+      4,
+      8,
+      9,
+      10
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dbe-74e9-8a17-7fcb4c59a295",
+    "cuisine_summary": "Nhãn lồng Hưng Yên, gà Đông Tảo, bún thang lươn, chè sen long nhãn, ếch om Phượng Tường",
+    "description": "Vùng đất Phố Hiến cổ kính một thời 'thứ nhất Kinh Kỳ, thứ nhì Phố Hiến', nổi tiếng nhãn lồng tiến vua.",
+    "weather": "Cận nhiệt đới ẩm, hè nóng ẩm, đông lạnh khô.",
+    "best_season": "Tháng 3-4 và 8-10 (mùa nhãn)",
+    "slug": "hung-yen-hung-yen",
+    "special": "Phố Hiến, đền Chử Đồng Tử - Tiên Dung, đền Mẫu",
+    "image_url": null,
+    "stats": null,
+    "name": "Hưng Yên"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "hung-yen-hung-yen",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

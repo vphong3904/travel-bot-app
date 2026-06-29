@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Quảng Ngãi",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Kon Tum",
+    "is_active": true,
+    "categories": [
+      "culture",
+      "nature",
+      "heritage",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3
+    ],
+    "region": "Tây Nguyên",
+    "id": "019f10ce-2dcd-7599-84fe-501568b307cc",
+    "cuisine_summary": "Gỏi lá, cá tầm Măng Đen, heo rẫy nướng, rượu cần, cà phê, gỏi kiến vàng",
+    "description": "Vùng Bắc Tây Nguyên với nhà thờ gỗ Kon Tum trăm tuổi, cầu treo Kon Klor và 'Đà Lạt thứ hai' Măng Đen.",
+    "weather": "Cao nguyên mát mẻ, hai mùa mưa - khô; Măng Đen se lạnh quanh năm.",
+    "best_season": "Tháng 11-3 (mùa khô); Măng Đen mát quanh năm",
+    "slug": "quang-ngai-kon-tum",
+    "special": "Nhà thờ gỗ Kon Tum, cầu treo Kon Klor, Măng Đen, ngục Kon Tum, nhà rông",
+    "image_url": null,
+    "stats": null,
+    "name": "Kon Tum"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "quang-ngai-kon-tum",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

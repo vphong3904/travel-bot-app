@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Cà Mau",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bạc Liêu",
+    "is_active": true,
+    "categories": [
+      "culture",
+      "heritage",
+      "food",
+      "nature"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd2-711c-a8ab-b6fa893d800a",
+    "cuisine_summary": "Bún bò cay, bánh tằm Ngan Dừa, ba khía, lẩu mắm, bánh củ cải",
+    "description": "Quê hương bản Dạ cổ hoài lang với nhà Công tử Bạc Liêu, cánh đồng điện gió và chùa Xiêm Cán Khmer.",
+    "weather": "Khí hậu nhiệt đới gió mùa ven biển, hai mùa mưa - khô; nhiều gió vùng ven biển.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "ca-mau-bac-lieu",
+    "special": "Nhà Công tử Bạc Liêu, cánh đồng điện gió Bạc Liêu, chùa Xiêm Cán, khu lưu niệm Cao Văn Lầu (đờn ca tài tử)",
+    "image_url": null,
+    "stats": null,
+    "name": "Bạc Liêu"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "ca-mau-bac-lieu",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

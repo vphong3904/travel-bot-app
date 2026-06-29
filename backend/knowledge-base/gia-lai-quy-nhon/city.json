@@ -1,0 +1,56 @@
+{
+  "data": {
+    "province": "Gia Lai",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bình Định",
+    "is_active": true,
+    "categories": [
+      "beach",
+      "nature",
+      "heritage",
+      "food"
+    ],
+    "best_months": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "region": "Duyên hải Nam Trung Bộ",
+    "id": "019f10ce-2dcb-7e8f-942a-69628555cc3c",
+    "cuisine_summary": "Bún chả cá Quy Nhơn, bánh xèo tôm nhảy, nem chợ Huyện, bánh ít lá gai, rượu Bàu Đá",
+    "description": "Thành phố biển của đất võ Bình Định với Kỳ Co - Eo Gió, Ghềnh Ráng - mộ Hàn Mặc Tử và các tháp Chăm cổ.",
+    "weather": "Nhiệt đới gió mùa ven biển, nắng nhiều, mùa mưa bão tháng 9-12.",
+    "best_season": "Tháng 3-8 (biển lặng, nắng đẹp)",
+    "slug": "gia-lai-quy-nhon",
+    "special": "Kỳ Co, Eo Gió, Ghềnh Ráng (mộ Hàn Mặc Tử), Tháp Đôi, võ cổ truyền Bình Định",
+    "image_url": null,
+    "stats": null,
+    "name": "Quy Nhơn (Bình Định)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "gia-lai-quy-nhon",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

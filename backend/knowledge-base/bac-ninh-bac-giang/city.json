@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Bắc Ninh",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bắc Giang",
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "nature",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      1,
+      2,
+      3,
+      6,
+      9,
+      10
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc1-7f4a-8394-c8678a522876",
+    "cuisine_summary": "Vải thiều Lục Ngạn, bánh đa Kế, mỳ Chũ, gà đồi Yên Thế, rượu làng Vân",
+    "description": "Vùng trung du với khu Tây Yên Tử, chùa Vĩnh Nghiêm lưu giữ mộc bản và thủ phủ vải thiều Lục Ngạn.",
+    "weather": "Cận nhiệt đới ẩm, hè nóng ẩm, đông lạnh khô vùng trung du.",
+    "best_season": "Tháng 1-3 (lễ hội) và mùa vải tháng 6",
+    "slug": "bac-ninh-bac-giang",
+    "special": "Tây Yên Tử, chùa Vĩnh Nghiêm (mộc bản), vải thiều Lục Ngạn, thành Xương Giang",
+    "image_url": null,
+    "stats": null,
+    "name": "Bắc Giang"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "bac-ninh-bac-giang",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

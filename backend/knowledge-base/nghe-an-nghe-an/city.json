@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Nghệ An",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "beach",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "region": "Bắc Trung Bộ",
+    "id": "019f10ce-2dc9-7876-9552-6355fcf4ef12",
+    "cuisine_summary": "Cháo lươn Vinh, súp lươn, bánh mướt, nhút Thanh Chương, tương Nam Đàn, cam Vinh",
+    "description": "Quê hương Chủ tịch Hồ Chí Minh với Khu di tích Kim Liên, biển Cửa Lò sôi động và đảo chè Thanh Chương.",
+    "weather": "Nhiệt đới gió mùa, hè nóng có gió Lào, mùa mưa bão tháng 8-10.",
+    "best_season": "Tháng 4-8 (biển hè)",
+    "slug": "nghe-an-nghe-an",
+    "special": "Khu di tích Kim Liên (làng Sen), biển Cửa Lò, đảo chè Thanh Chương, vườn quốc gia Pù Mát",
+    "image_url": null,
+    "stats": null,
+    "name": "Nghệ An (Vinh)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "nghe-an-nghe-an",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

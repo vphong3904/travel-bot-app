@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "TP. Hồ Chí Minh",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bình Dương",
+    "is_active": true,
+    "categories": [
+      "culture",
+      "entertainment",
+      "heritage",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đông Nam Bộ",
+    "id": "019f10ce-2dce-7460-8381-c6575c97c1d4",
+    "cuisine_summary": "Bánh bèo bì Mỹ Liên, gỏi gà măng cụt, nem Lái Thiêu, trái cây Lái Thiêu",
+    "description": "Đô thị công nghiệp năng động với khu du lịch Đại Nam quy mô lớn, chùa Bà Thiên Hậu và các làng nghề gốm, sơn mài.",
+    "weather": "Khí hậu nhiệt đới cận xích đạo, hai mùa mưa - khô; nắng nóng quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "tp-ho-chi-minh-binh-duong",
+    "special": "Khu du lịch Đại Nam, chùa Bà Thiên Hậu (lễ hội rằm tháng Giêng), làng gốm Tân Phước Khánh, vườn cây Lái Thiêu",
+    "image_url": null,
+    "stats": null,
+    "name": "Bình Dương (Thủ Dầu Một)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "tp-ho-chi-minh-binh-duong",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

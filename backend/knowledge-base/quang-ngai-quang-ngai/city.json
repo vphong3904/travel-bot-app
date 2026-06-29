@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Quảng Ngãi",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "beach",
+      "nature",
+      "heritage",
+      "food"
+    ],
+    "best_months": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "region": "Duyên hải Nam Trung Bộ",
+    "id": "019f10ce-2dca-70d4-a5af-095e4230b598",
+    "cuisine_summary": "Don, cá bống sông Trà kho tiêu, tỏi Lý Sơn, ram bắp, kẹo gương, mạch nha",
+    "description": "Vùng biển miền Trung với đảo Lý Sơn 'vương quốc tỏi', biển Mỹ Khê và chứng tích Sơn Mỹ.",
+    "weather": "Nhiệt đới gió mùa ven biển, hè nóng, mùa mưa bão tháng 9-12.",
+    "best_season": "Tháng 3-8 (biển đảo đẹp)",
+    "slug": "quang-ngai-quang-ngai",
+    "special": "Đảo Lý Sơn, biển Mỹ Khê, biển Sa Huỳnh, chứng tích Sơn Mỹ",
+    "image_url": null,
+    "stats": null,
+    "name": "Quảng Ngãi"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "quang-ngai-quang-ngai",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}
