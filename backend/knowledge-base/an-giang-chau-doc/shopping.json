@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-006",
+    "status": "partial",
+    "partial_note": null,
+    "missing_fields": [
+      "giá xác thực tại từng điểm (Foody/Google Maps)"
+    ],
+    "data_sources": [
+      "Kiến thức địa phương An Giang",
+      "angiang.gov.vn",
+      "Google Maps"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce3-7f32-8b4e-bb1024353495",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Chợ Châu Đốc – Khu Sạp Mắm",
+      "type": "wet_market",
+      "items": [
+        "Mắm cá linh",
+        "Mắm cá sặc",
+        "Mắm ba khía",
+        "Khô cá tra",
+        "Khô bò",
+        "Đường thốt nốt",
+        "Hạt điều"
+      ],
+      "address": "Đường Chi Lăng, phường Châu Phú B, TP. Châu Đốc, tỉnh An Giang",
+      "opening_hours": "4:00–18:00 hằng ngày (nhộn nhịp nhất sáng sớm)",
+      "price_range": "Thấp – trung bình, có thể trả giá nhẹ với đồ khô và lưu niệm",
+      "tips": "Đây là nơi mua mắm và khô đặc sản Châu Đốc chất lượng và giá gốc nhất. Mua nhiều có thể xin giảm giá. Nên mang túi xách chắc chắn vì mắm đóng gói khá nặng.",
+      "source": "Kiến thức địa phương"
+    },
+    {
+      "id": "019f10d3-1ce3-77d0-b2c7-2083275039c1",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Các Cơ Sở Sản Xuất Mắm Ven Đường Quốc Lộ",
+      "type": "specialty_store",
+      "items": [
+        "Mắm cá linh ủ truyền thống",
+        "Mắm tôm chà",
+        "Mắm cá sặc",
+        "Mắm chưng đóng hũ sẵn"
+      ],
+      "address": "Dọc Quốc lộ 91 và đường Trần Hưng Đạo, TP. Châu Đốc – Tịnh Biên",
+      "opening_hours": "7:00–18:00 hằng ngày",
+      "price_range": "Trung bình — giá theo hũ/kg, có giải thích quy trình sản xuất",
+      "tips": "Nhiều cơ sở cho phép tham quan quy trình ủ mắm truyền thống, rất thú vị. Mua trực tiếp tại cơ sở thường tươi hơn và rẻ hơn chợ. Một số cơ sở đóng gói hút chân không để mang máy bay.",
+      "source": "Kiến thức địa phương"
+    },
+    {
+      "id": "019f10d3-1ce3-7f73-aedc-0901047990dd",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Làng Dệt Thổ Cẩm Chăm – Châu Giang",
+      "type": "craft_village",
+      "items": [
+        "Vải thổ cẩm dệt tay",
+        "Khăn quàng",
+        "Túi xách vải",
+        "Trang phục truyền thống Chăm",
+        "Đồ trang sức nhỏ"
+      ],
+      "address": "Xã Châu Phong, TX. Tân Châu, tỉnh An Giang (đối diện TP. Châu Đốc qua sông)",
+      "opening_hours": "8:00–17:00 hằng ngày (ngoài giờ cầu kinh)",
+      "price_range": "Trung bình — vải thổ cẩm dệt tay giá cao hơn hàng công nghiệp nhưng bền và đẹp hơn",
+      "tips": "Mua trực tiếp từ người thợ dệt — vừa được giá tốt, vừa hỗ trợ nghề truyền thống. Có thể xem biểu diễn dệt trực tiếp tại các gia đình trong làng.",
+      "source": "Kiến thức địa phương"
+    },
+    {
+      "id": "019f10d3-1ce3-74ee-bcac-c4385387fec9",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Chợ Tịnh Biên – Biên Giới",
+      "type": "border_market",
+      "items": [
+        "Hàng điện tử Thái Lan",
+        "Mỹ phẩm Thái – Campuchia",
+        "Thực phẩm đặc sản biên giới",
+        "Quần áo may sẵn",
+        "Đồ gia dụng"
+      ],
+      "address": "Thị trấn Tịnh Biên, huyện Tịnh Biên, tỉnh An Giang (gần cửa khẩu)",
+      "opening_hours": "6:00–18:00 hằng ngày",
+      "price_range": "Thấp – trung bình, cần trả giá và kiểm tra kỹ hàng",
+      "tips": "Khu chợ biên giới sầm uất với nhiều hàng nhập khẩu không chính ngạch — kiểm tra kỹ trước khi mua, đặc biệt điện tử. Không nên mua hàng có giá quá thấp so với thị trường.",
+      "source": "Kiến thức địa phương"
+    },
+    {
+      "id": "019f10d3-1ce3-7a56-8af8-c0692a261770",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Các Quầy Đặc Sản Khu Núi Sam",
+      "type": "souvenir",
+      "items": [
+        "Mắm các loại đóng gói",
+        "Khô bò, khô cá",
+        "Bánh bò thốt nốt",
+        "Đường thốt nốt",
+        "Đồ thờ cúng lưu niệm Miếu Bà"
+      ],
+      "address": "Dọc đường Lê Đại Hành và khu quanh Miếu Bà Chúa Xứ, Núi Sam",
+      "opening_hours": "6:00–20:00 hằng ngày (kéo dài hơn dịp lễ vía)",
+      "price_range": "Thấp – trung bình; hàng lưu niệm tôn giáo và đặc sản đặc trưng",
+      "tips": "Rất đông và nhộn nhịp dịp lễ vía (tháng 4–5 âm lịch). Giá có thể cao hơn chợ chính vì vị trí du lịch — so sánh giá một vài quầy trước khi mua số lượng nhiều.",
+      "source": "Kiến thức địa phương"
+    }
+  ]
+}

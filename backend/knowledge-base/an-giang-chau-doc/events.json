@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-006",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": [
+      "vietnamtourism.gov.vn",
+      "angiang.gov.vn",
+      "Kiến thức văn hóa địa phương An Giang"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce3-7a59-a90d-3eda97f54278",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Lễ Vía Bà Chúa Xứ Núi Sam",
+      "event_date": "23–27 tháng 4 âm lịch hằng năm (thường tháng 5–6 dương lịch)",
+      "location_text": "Miếu Bà Chúa Xứ, khu Núi Sam, TP. Châu Đốc",
+      "cost": "free",
+      "description": "Lễ hội tâm linh lớn nhất miền Nam Việt Nam, thu hút hàng triệu lượt khách hành hương mỗi năm. Diễn ra trong 5 ngày với nghi lễ tắm Bà (lau tượng bằng nước thơm), lễ thỉnh sắc, múa bóng rỗi và các hoạt động văn hóa dân gian. Không khí trang nghiêm nhưng cũng rất nhộn nhịp với hàng vạn người đổ về.",
+      "annual": true,
+      "highlight": true,
+      "source": "vietnamtourism.gov.vn"
+    },
+    {
+      "id": "019f10d3-1ce3-704c-80de-c17d2052e2f8",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Mùa Nước Nổi An Giang",
+      "event_date": "Tháng 8–11 hằng năm (đỉnh điểm tháng 9–10)",
+      "location_text": "Toàn tỉnh An Giang, đặc biệt rừng tràm Trà Sư và vùng Tứ giác Long Xuyên",
+      "cost": "free",
+      "description": "Hiện tượng thủy văn đặc trưng miền Tây khi nước từ thượng nguồn sông Mekong dâng tràn đồng bằng. Không chỉ là thiên tai, mùa nước nổi còn là mùa đặc sản cá linh, bông điên điển, cá lóc đồng. Rừng Trà Sư đẹp nhất năm vào mùa này. Người dân tận dụng giăng lưới, đặt lọp, bắt cá linh theo lối truyền thống.",
+      "annual": true,
+      "highlight": true,
+      "source": "angiang.gov.vn"
+    },
+    {
+      "id": "019f10d3-1ce3-7cb6-a083-7f05a119735f",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tết Nguyên Đán & Lễ Chùa Đầu Năm",
+      "event_date": "Tháng 1 hoặc 2 (theo lịch âm)",
+      "location_text": "Các chùa, miếu khu Núi Sam và trung tâm Châu Đốc",
+      "cost": "free",
+      "description": "Châu Đốc là điểm hành hương đầu năm lớn nhất miền Tây. Hàng triệu người đến cúng bái tại Miếu Bà Chúa Xứ, Chùa Hang và các đền thờ khu Núi Sam để cầu bình an, sức khỏe và tài lộc cho năm mới. Đây cũng là thời điểm khu vực đông nhất và khách sạn cần đặt sớm nhất.",
+      "annual": true,
+      "highlight": true,
+      "source": "Kiến thức văn hóa địa phương"
+    },
+    {
+      "id": "019f10d3-1ce3-7e58-84ce-b570ccb5b899",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Lễ Hội Đua Bò Bảy Núi",
+      "event_date": "Tháng 8–9 âm lịch (thường tháng 9–10 dương lịch), gắn với Lễ Sen Dolta của người Khmer",
+      "location_text": "Huyện Tri Tôn và Tịnh Biên, tỉnh An Giang",
+      "cost": "free",
+      "description": "Lễ hội đua bò truyền thống độc đáo của người Khmer vùng Bảy Núi, được tổ chức trên những cánh đồng lúa sau mùa gặt. Từng đôi bò kéo theo bừa gỗ, người điều khiển đứng trên bừa để cân bằng và thúc bò chạy. Không khí sôi động với cổ động viên chen kín bờ ruộng.",
+      "annual": true,
+      "highlight": true,
+      "source": "vietnamtourism.gov.vn / angiang.gov.vn"
+    },
+    {
+      "id": "019f10d3-1ce3-7d29-a32a-d3059841fe67",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Lễ Ramadan & Eid al-Fitr tại Làng Chăm",
+      "event_date": "Theo lịch Hồi giáo (thay đổi mỗi năm)",
+      "location_text": "Các thánh đường và làng Chăm dọc sông Hậu, TX. Tân Châu và TP. Châu Đốc",
+      "cost": "free",
+      "description": "Tháng Ramadan và lễ Eid al-Fitr (Tết Hồi giáo) là thời điểm đặc biệt của cộng đồng Chăm Islam tại Châu Đốc. Sau tháng nhịn chay, ngày lễ Eid có không khí rất sôi động: lễ cầu nguyện lớn tại thánh đường, gia đình sum vầy, chia sẻ thức ăn và thăm hỏi nhau. Du khách tôn trọng được chào đón tham dự không khí lễ hội bên ngoài.",
+      "annual": true,
+      "highlight": false,
+      "source": "Kiến thức văn hóa địa phương"
+    }
+  ]
+}
