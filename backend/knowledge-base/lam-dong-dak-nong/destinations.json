@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "lam-dong-dak-nong",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch sinh thái Phước Sơn — dulich.daknong.gov.vn & Lữ Hành Việt Nam (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "bfc02635-417e-42f0-a134-481c9553f689",
+      "city_id": "019f10ce-2dcd-7c75-9379-e8d01f822a16",
+      "name": "Khu du lịch sinh thái Phước Sơn",
+      "type": "entertainment",
+      "address": "Thôn 13, xã Đắk Wer, huyện Đắk R'Lấp, Đắk Nông",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu du lịch sinh thái ở Đắk Nông với hệ thống ao hồ, vườn hoa, chòi câu cá, nhà thờ vua Hùng và nhà hàng — điểm dã ngoại, câu cá thư giãn gần Gia Nghĩa.",
+      "tips": "Mùa khô (tháng 11–4) đẹp nhất; trải nghiệm câu cá tại hồ và chụp ảnh vườn hoa.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Giá vé/dịch vụ xác nhận trực tiếp tại khu du lịch — cần xác nhận. (nguồn: dulich.daknong.gov.vn & Lữ Hành Việt Nam, 2025)"
+    }
+  ]
+}
