@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Tên món và mô tả là kiến thức ẩm thực địa phương xác thực — đây là các đặc sản nổi tiếng của Châu Đốc. Giá là ƯỚC TÍNH thị trường — thực tế dao động theo nơi bán.",
+    "missing_fields": [
+      "giá thật tại các điểm cụ thể (xác nhận qua Foody/Google Maps)"
+    ],
+    "data_sources": [
+      "Kiến thức ẩm thực địa phương Châu Đốc",
+      "Foody.vn",
+      "vietnamtourism.gov.vn",
+      "angiang.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce2-70c6-967d-2c978f4fdec9",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Bún Cá Châu Đốc",
+      "category": "noodle",
+      "description": "Đặc sản số một của Châu Đốc và cũng là một trong những tô bún ngon nổi tiếng nhất miền Tây. Nước lèo nấu từ cá lóc hoặc cá linh tươi, thêm mắm ruốc tạo màu đỏ sậm và hương vị đậm đà đặc trưng. Ăn kèm bún tươi, rau sống, sả tươi và ớt. Người Châu Đốc thường ăn sáng với tô bún này.",
+      "price_range": "25.000–45.000đ/tô (ƯỚC TÍNH)",
+      "best_at": "Các quán bún cá dọc đường Chi Lăng và khu chợ Châu Đốc; quán gần Miếu Bà khu Núi Sam cũng có",
+      "is_vegetarian": false,
+      "allergens": ["cá", "tôm (mắm ruốc)"]
+    },
+    {
+      "id": "019f10d3-1ce2-719a-abf8-7951b74faa1c",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Mắm Châu Đốc",
+      "category": "condiment",
+      "description": "Châu Đốc được mệnh danh là 'thủ đô mắm' của miền Tây. Các loại mắm nổi tiếng gồm mắm cá linh, mắm cá sặc, mắm ba khía, mắm tôm chà. Mắm được ủ theo công thức truyền thống với muối và đường thốt nốt, tạo hương vị đặc trưng không nơi nào có. Là đặc sản mua về làm quà số 1 từ Châu Đốc.",
+      "price_range": "50.000–200.000đ/hũ tùy loại và trọng lượng (ƯỚC TÍNH)",
+      "best_at": "Chợ Châu Đốc (khu sạp mắm), các cơ sở sản xuất mắm ven đường Trần Hưng Đạo và khu Núi Sam",
+      "is_vegetarian": false,
+      "allergens": ["cá", "tôm cua (tùy loại mắm)"]
+    },
+    {
+      "id": "019f10d3-1ce2-73b2-9491-0a246e601f57",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Bò Bảy Món Núi Sam",
+      "category": "beef",
+      "description": "Thực đơn đặc biệt gồm bảy món chế biến từ thịt bò: bò nhúng giấm, bò nướng lá lốt, bò lúc lắc, chả lụa bò, bò xào sả ớt, cháo bò và bánh hỏi bò. Món ăn tổng hợp này là trải nghiệm ẩm thực đặc trưng không thể bỏ qua khi đến khu vực Núi Sam. Nhiều nhà hàng xung quanh Miếu Bà phục vụ món này.",
+      "price_range": "150.000–250.000đ/người (ƯỚC TÍNH, tùy nhà hàng)",
+      "best_at": "Các nhà hàng khu Núi Sam, đặc biệt dọc đường Lê Đại Hành và quanh khu Miếu Bà",
+      "is_vegetarian": false,
+      "allergens": ["thịt bò"]
+    },
+    {
+      "id": "019f10d3-1ce3-7967-b3f9-798382bcb339",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Bánh Bò Thốt Nốt",
+      "category": "dessert",
+      "description": "Bánh làm từ bột gạo kết hợp nước đường thốt nốt — loại đường đặc sản từ cây thốt nốt của người Khmer vùng Bảy Núi. Bánh có màu vàng nâu tự nhiên, vị ngọt thanh nhẹ và mùi thốt nốt thơm đặc trưng, xốp nhẹ. Thốt nốt là nguyên liệu mang tính biểu tượng văn hóa của vùng đất An Giang – Campuchia.",
+      "price_range": "5.000–15.000đ/bánh (ƯỚC TÍNH)",
+      "best_at": "Chợ Châu Đốc, chợ Tịnh Biên (gần cửa khẩu), các sạp hàng khu Núi Sam",
+      "is_vegetarian": true,
+      "allergens": ["gluten", "đường"]
+    },
+    {
+      "id": "019f10d3-1ce3-7f53-a25c-4ec6e417f860",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Bún Nước Lèo",
+      "category": "noodle",
+      "description": "Món bún đặc trưng của người Khmer miền Tây, nước lèo nấu từ cá lóc và mắm prohok (mắm Campuchia) tạo màu đặc và hương vị đậm đà khác biệt hoàn toàn với bún thông thường. Ăn kèm rau muống, bắp chuối bào, giá đỗ và sả. Phổ biến ở vùng đồng bào Khmer huyện Tri Tôn và Tịnh Biên.",
+      "price_range": "25.000–40.000đ/tô (ƯỚC TÍNH)",
+      "best_at": "Các quán ăn khu huyện Tri Tôn và Tịnh Biên; một số quán ở chợ Châu Đốc cũng có",
+      "is_vegetarian": false,
+      "allergens": ["cá", "mắm"]
+    },
+    {
+      "id": "019f10d3-1ce3-7507-9b9a-eae29f225f31",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Nước Thốt Nốt",
+      "category": "beverage",
+      "description": "Nước uống lấy từ hoa cây thốt nốt — loài cây đặc trưng của người Khmer vùng Bảy Núi An Giang và Campuchia. Nước trong và mát, vị ngọt thanh tự nhiên, được uống trực tiếp hoặc nấu thành đường thốt nốt. Rất giải nhiệt trong tiết trời nắng nóng của đồng bằng. Ngoài nước uống còn có kem thốt nốt và chè thốt nốt.",
+      "price_range": "10.000–20.000đ/ly (ƯỚC TÍNH)",
+      "best_at": "Các quán dọc đường vào khu Bảy Núi (Tri Tôn, Tịnh Biên), chợ Tịnh Biên, khu Núi Sam",
+      "is_vegetarian": true,
+      "allergens": []
+    }
+  ]
+}

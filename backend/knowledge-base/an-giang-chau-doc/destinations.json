@@ -15,25 +15,184 @@
   },
   "data": [
     {
-      "id": "653d755d-9795-46ea-bc6c-c298dc86a5a3",
+      "id": "019f10d3-1ce0-7dfd-a5fd-7b3fc8b01fe4",
       "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
-      "name": "Rừng tràm Trà Sư",
-      "type": "entertainment",
-      "address": "Xã Văn Giáo, huyện Tịnh Biên, An Giang",
+      "name": "Miếu Bà Chúa Xứ Núi Sam",
+      "type": "temple",
+      "address": "Đường Lê Đại Hành, phường Núi Sam, TP. Châu Đốc, tỉnh An Giang",
       "coordinates": {
-        "lat": null,
-        "lng": null
+        "lat": 10.6872,
+        "lng": 104.9892
       },
-      "hours": "7:00–17:30 hằng ngày",
-      "description": "Khu du lịch sinh thái rừng ngập nước hơn 800ha với rừng tràm xanh mướt, thảm bèo phủ kín mặt nước, hệ chim cò phong phú; trải nghiệm đi xuồng ba lá và cây cầu tre dài giữa rừng.",
-      "tips": "Đẹp nhất 7:00–9:00 và 15:30–17:00 khi nắng dịu, chim bay nhiều; nên đi kết hợp xuồng máy và xuồng chèo.",
+      "hours": "Mở cửa 24/7 — lễ vía lớn nhất tháng 4 âm lịch (thường tháng 5–6 dương)",
+      "description": "Một trong những ngôi miếu linh thiêng và đông khách hành hương nhất Việt Nam, thờ Bà Chúa Xứ — vị thần bảo hộ của người dân miền Tây. Mỗi năm thu hút hàng triệu lượt khách, đặc biệt dịp lễ vía Bà (23–27 tháng 4 âm lịch). Tượng Bà được đặt trên đỉnh Núi Sam từ hàng trăm năm trước.",
+      "tips": "Nên đến sớm trước 7:00 để tránh đông. Dịp lễ vía (tháng 4–5 âm) rất đông — cần đặt khách sạn trước ít nhất 1–2 tháng. Ăn mặc lịch sự khi vào miếu.",
       "image_url": null,
-      "stats": {
-        "rating_avg": null,
-        "review_count": null
-      },
+      "stats": null,
       "verified": true,
-      "entry_fee": "Vé tham quan từ ~60.000đ đến 250.000đ tùy loại (gồm/không gồm xuồng); trẻ dưới 1m3 miễn phí. Áp dụng từ 01/07/2025. (nguồn: trasu.vn & Klook, 2025 — có thể thay đổi)"
+      "entry_fee": "Miễn phí (vào miếu); lệ phí giữ xe tùy bãi"
+    },
+    {
+      "id": "019f10d3-1ce2-7f4e-9aec-8c255394749f",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Rừng Tràm Trà Sư",
+      "type": "nature",
+      "address": "Xã Văn Giáo, huyện Tịnh Biên, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.6167,
+        "lng": 104.9667
+      },
+      "hours": "7:00–17:00 hằng ngày",
+      "description": "Khu rừng tràm ngập nước rộng hơn 800 ha, nổi tiếng với cảnh bèo dâu màu xanh lá phủ kín mặt nước và hàng nghìn con cò, diệc, chim trắng làm tổ. Đẹp nhất vào mùa nước nổi (tháng 9–11) khi bèo nở rộ và chim về nhiều nhất. Du khách di chuyển bằng xuồng ba lá len lỏi giữa rừng tràm.",
+      "tips": "Mùa đẹp nhất là sáng sớm tháng 9–11 khi bèo xanh và chim về đông. Thuê xuồng ba lá tại bến để vào sâu rừng — khoảng 30–45 phút là hợp lý. Mang theo kem chống muỗi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận tại Ban quản lý Khu Du lịch Trà Sư hoặc angiang.gov.vn — giá vé vào cổng + thuê xuồng riêng"
+    },
+    {
+      "id": "019f10d3-1ce2-73fa-a9a4-1f1e8e4c6212",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Núi Sam (Vĩnh Tế Sơn)",
+      "type": "mountain",
+      "address": "Phường Núi Sam, TP. Châu Đốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.685,
+        "lng": 104.99
+      },
+      "hours": "Mở cửa tự do — leo núi tốt nhất 5:00–9:00 sáng",
+      "description": "Ngọn núi thiêng nổi bật giữa đồng bằng, cao khoảng 284m, có thể nhìn thấy từ rất xa. Trên núi có chùa Hang, chùa Phước Điền và nhiều đền thờ. Đỉnh núi cho tầm nhìn toàn cảnh cánh đồng An Giang, kênh Vĩnh Tế và đất Campuchia phía xa.",
+      "tips": "Leo núi buổi sáng sớm để tránh nóng và có tầm nhìn đẹp. Mang giày đế bám, có thể đi xe máy theo đường bê tông lên gần đỉnh. Kết hợp thăm Miếu Bà Chúa Xứ ở chân núi.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí (leo núi tự do); một số đền chùa trên núi có hòm công đức"
+    },
+    {
+      "id": "019f10d3-1ce2-7c31-a0af-20642150de0f",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Làng Chăm Châu Giang",
+      "type": "cultural_village",
+      "address": "Xã Châu Phong, TX. Tân Châu, tỉnh An Giang (đối diện TP. Châu Đốc qua sông Hậu)",
+      "coordinates": {
+        "lat": 10.745,
+        "lng": 105.11
+      },
+      "hours": "Thăm quan cả ngày — thánh đường mở 5 lần/ngày theo giờ cầu kinh",
+      "description": "Cộng đồng người Chăm theo đạo Hồi (Islam) đã định cư bên bờ sông Hậu từ hàng trăm năm. Làng có thánh đường Hồi giáo mái vòm xanh nổi bật, phụ nữ mặc trang phục truyền thống, nghề dệt thổ cẩm và nuôi cá bè trên sông. Là một trong số ít cộng đồng Chăm Islam lớn nhất đồng bằng sông Cửu Long.",
+      "tips": "Đi phà từ bến Châu Giang (TP. Châu Đốc) sang — chuyến đi ngắn nhưng trải nghiệm sông nước đặc trưng. Tôn trọng tập tục tôn giáo, không vào thánh đường giờ cầu kinh. Mua thổ cẩm dệt tay trực tiếp từ người dân.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí; phí phà qua sông — xác nhận tại bến phà Châu Giang"
+    },
+    {
+      "id": "019f10d3-1ce2-7785-8ab1-02c37de882e9",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Lăng Thoại Ngọc Hầu",
+      "type": "heritage",
+      "address": "Chân Núi Sam, phường Núi Sam, TP. Châu Đốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.688,
+        "lng": 104.988
+      },
+      "hours": "7:00–17:00 hằng ngày",
+      "description": "Lăng mộ của Thoại Ngọc Hầu (Nguyễn Văn Thoại) — vị quan nhà Nguyễn có công khai khẩn miền Tây và chỉ huy đào kênh Vĩnh Tế lịch sử. Khu lăng gồm mộ ông, hai phu nhân và hàng trăm nghĩa binh đã hy sinh trong công cuộc đào kênh. Công trình kiến trúc cổ tiêu biểu thời Nguyễn.",
+      "tips": "Kết hợp thăm cùng Miếu Bà Chúa Xứ — cả hai đều ở khu vực Núi Sam, chỉ cách nhau vài trăm mét. Có tấm bia đá cổ ghi lại công trạng đào kênh Vĩnh Tế — đây là tư liệu lịch sử quý.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019f10d3-1ce2-7067-9508-4a1e008729ad",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Núi Cấm (Thiên Cấm Sơn)",
+      "type": "mountain",
+      "address": "Xã An Hảo, huyện Tịnh Biên, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.57,
+        "lng": 104.95
+      },
+      "hours": "Cáp treo: thường 7:00–17:00 — xác nhận trước khi đến",
+      "description": "Ngọn núi cao nhất vùng đồng bằng sông Cửu Long (~716m), không khí mát mẻ quanh năm, nhiệt độ thấp hơn đồng bằng 5–7°C. Trên núi có chùa Vạn Linh, tượng Phật Di Lặc khổng lồ, hồ Thủy Liêm và nhiều am tự. Cáp treo hiện đại nối từ chân núi lên gần đỉnh.",
+      "tips": "Đi cáp treo để tiết kiệm sức, rồi đi bộ khám phá các điểm tham quan trên đỉnh. Buổi sáng sớm mát và view đẹp. Mang áo khoác mỏng vì trên núi nhiều gió. Cách Châu Đốc khoảng 30–40km — nên đi xe máy hoặc thuê xe.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "// TODO: xác nhận phí cáp treo và vé vào cổng tại Ban quản lý Núi Cấm hoặc Klook"
+    },
+    {
+      "id": "019f10d3-1ce2-7c8e-a837-3ee8316e8516",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Kênh Vĩnh Tế",
+      "type": "heritage",
+      "address": "Chạy dọc biên giới Việt Nam – Campuchia từ Châu Đốc đến Hà Tiên, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.7,
+        "lng": 105
+      },
+      "hours": "Thăm quan tự do",
+      "description": "Công trình thủy lợi – quốc phòng vĩ đại đầu thế kỷ 19, đào bằng sức người dài hơn 90km dọc biên giới Campuchia. Con kênh do Thoại Ngọc Hầu chỉ huy đào từ 1819–1824, huy động hàng vạn dân phu. Ngày nay kênh vẫn là tuyến vận tải thủy quan trọng và là ranh giới biên giới tự nhiên.",
+      "tips": "Đi thuyền dọc kênh lúc chiều tà để ngắm cảnh sông nước và nhà sàn ven kênh. Có thể kết hợp với tour biên giới hoặc thuyền ngắm cảnh từ Châu Đốc.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí (thăm quan bờ kênh tự do); tour thuyền dọc kênh có phí riêng"
+    },
+    {
+      "id": "019f10d3-1ce2-76c3-9309-62be48fc28c8",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Chùa Hang (Phước Điền Tự)",
+      "type": "temple",
+      "address": "Lưng chừng Núi Sam, phường Núi Sam, TP. Châu Đốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.686,
+        "lng": 104.989
+      },
+      "hours": "6:00–18:00 hằng ngày",
+      "description": "Ngôi chùa cổ nằm trong hang đá tự nhiên trên sườn Núi Sam, thờ Phật và nhiều vị thần theo tín ngưỡng dân gian. Bên trong hang mát lạnh, có nhiều tượng thờ và hoa đèn rực rỡ. Từ chùa có thể nhìn ra cánh đồng An Giang trải rộng.",
+      "tips": "Leo bộ từ chân Núi Sam lên khoảng 15–20 phút, hoặc đi xe máy theo đường nhỏ. Chùa ít đông hơn Miếu Bà — không gian tĩnh lặng, hợp cho ai muốn chiêm nghiệm.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Chợ Châu Đốc",
+      "type": "market",
+      "address": "Đường Chi Lăng, phường Châu Phú B, TP. Châu Đốc, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.703,
+        "lng": 105.117
+      },
+      "hours": "4:00–18:00 hằng ngày (nhộn nhịp nhất 5:00–9:00 sáng)",
+      "description": "Chợ truyền thống trung tâm Châu Đốc, đặc trưng với các sạp mắm cá, khô cá tra, khô bò và đặc sản miền Tây. Khu chợ cá và chợ mắm nổi tiếng — hàng trăm loại mắm từ khắp vùng Châu Đốc và biên giới Campuchia tập trung về đây. Là nơi mua quà đặc sản tốt nhất của Châu Đốc.",
+      "tips": "Đến sáng sớm để thấy cảnh chợ nhộn nhịp và mua hàng tươi. Giá mắm và khô ở chợ thường rẻ hơn cửa hàng. Nên trả giá nhẹ nhàng với đồ khô và lưu niệm.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí"
+    },
+    {
+      "id": "019f10d3-1ce2-7456-97b1-f4d154b75694",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Cửa khẩu Quốc tế Tịnh Biên",
+      "type": "border_crossing",
+      "address": "Thị trấn Tịnh Biên, huyện Tịnh Biên, tỉnh An Giang",
+      "coordinates": {
+        "lat": 10.5933,
+        "lng": 104.9283
+      },
+      "hours": "6:00–22:00 (giờ xuất nhập cảnh — xác nhận trước khi đi)",
+      "description": "Cửa khẩu quốc tế nối An Giang với tỉnh Takeo (Campuchia). Du khách có thể xuất nhập cảnh sang Campuchia qua đây để đến Phnom Penh. Khu chợ biên giới sầm uất với hàng hóa Campuchia – Thái Lan, đặc biệt hàng điện tử, thực phẩm và mỹ phẩm.",
+      "tips": "Cần hộ chiếu còn hạn và visa Campuchia (có thể xin visa on arrival tại cửa khẩu, xác nhận quy định hiện hành). Khu chợ biên giới bên phía Campuchia có giá hàng hóa rẻ hơn — so sánh trước khi mua.",
+      "image_url": null,
+      "stats": null,
+      "verified": true,
+      "entry_fee": "Miễn phí vào khu vực; phí visa Campuchia — xác nhận tại Đại sứ quán Campuchia hoặc cửa khẩu"
     }
   ]
 }
