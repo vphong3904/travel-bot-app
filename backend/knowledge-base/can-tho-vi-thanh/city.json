@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Cần Thơ",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Hậu Giang",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd1-7b49-896c-b388b9c3439f",
+    "cuisine_summary": "Khóm (dứa) Cầu Đúc, cá thát lát Hậu Giang, đọt choại, bưởi Năm Roi, cháo lòng Cái Tắc",
+    "description": "Vùng đất Hậu Giang với chợ nổi Ngã Bảy nổi tiếng, khu bảo tồn thiên nhiên Lung Ngọc Hoàng và đặc sản khóm Cầu Đúc.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; sông nước miệt vườn quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô)",
+    "slug": "can-tho-vi-thanh",
+    "special": "Chợ nổi Ngã Bảy (Phụng Hiệp), khu bảo tồn Lung Ngọc Hoàng, khóm Cầu Đúc",
+    "image_url": null,
+    "stats": null,
+    "name": "Vị Thanh (Hậu Giang)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "can-tho-vi-thanh",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

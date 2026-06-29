@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "An Giang",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "nature",
+      "food"
+    ],
+    "best_months": [
+      9,
+      10,
+      11,
+      1,
+      2,
+      3
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+    "cuisine_summary": "Bún cá Châu Đốc, mắm Châu Đốc, bún nước lèo, thốt nốt, bò bảy món núi Sam",
+    "description": "Vùng đất tâm linh và biên giới với miếu Bà Chúa Xứ núi Sam, rừng tràm Trà Sư mùa nước nổi và làng Chăm Châu Giang.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; mùa nước nổi tháng 8-11 đặc trưng miền Tây.",
+    "best_season": "Mùa nước nổi (tháng 9-11) và mùa khô",
+    "slug": "an-giang-chau-doc",
+    "special": "Miếu Bà Chúa Xứ núi Sam (lễ vía tháng 4 âm), rừng tràm Trà Sư, núi Cấm, làng Chăm Châu Giang",
+    "image_url": null,
+    "stats": null,
+    "name": "Châu Đốc (An Giang)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "an-giang-chau-doc",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Hưng Yên",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Thái Bình",
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "beach",
+      "food"
+    ],
+    "best_months": [
+      4,
+      5,
+      6,
+      9,
+      10
+    ],
+    "region": "Đồng bằng sông Hồng",
+    "id": "019f10ce-2dbf-76b3-a131-15888d59b72f",
+    "cuisine_summary": "Bánh cáy làng Nguyễn, canh cá Quỳnh Côi, gỏi nhệch, nem chạo Vị Thủy",
+    "description": "Quê lúa đồng bằng sông Hồng với chùa Keo cổ kính, biển Cồn Vành hoang sơ và đền Trần Thái Bình.",
+    "weather": "Cận nhiệt đới ẩm, hè nóng, đông lạnh; vùng ven biển nhiều gió.",
+    "best_season": "Tháng 4-6 và 9-10",
+    "slug": "hung-yen-thai-binh",
+    "special": "Chùa Keo, biển Cồn Vành, đền Trần (Tiến Đức), làng vườn Bách Thuận",
+    "image_url": null,
+    "stats": null,
+    "name": "Thái Bình"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "hung-yen-thai-binh",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

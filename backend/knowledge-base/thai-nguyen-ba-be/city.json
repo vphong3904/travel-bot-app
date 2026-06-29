@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Thái Nguyên",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": "Bắc Kạn",
+    "is_active": true,
+    "categories": [
+      "nature",
+      "lake",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      4,
+      5,
+      9,
+      10,
+      11
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc4-718e-8f9d-3c82092f8f5e",
+    "cuisine_summary": "Cá nướng Ba Bể, tôm chua, lạp sườn gác bếp, bánh trời (pẻng phạ), xôi Đăm Đeng",
+    "description": "Vùng núi đá vôi với hồ Ba Bể - hồ nước ngọt tự nhiên lớn nhất Việt Nam, động Puông và thác Đầu Đẳng.",
+    "weather": "Khí hậu miền núi, mát mẻ, mùa thu trời trong đẹp cho du thuyền hồ.",
+    "best_season": "Tháng 4-5 và 9-11",
+    "slug": "thai-nguyen-ba-be",
+    "special": "Hồ Ba Bể, động Puông, thác Đầu Đẳng, ao Tiên",
+    "image_url": null,
+    "stats": null,
+    "name": "Ba Bể (Bắc Kạn)"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "thai-nguyen-ba-be",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

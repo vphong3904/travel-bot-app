@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Lai Châu",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "nature",
+      "mountain",
+      "culture",
+      "food"
+    ],
+    "best_months": [
+      9,
+      10,
+      11,
+      3,
+      4
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc7-795f-8c57-6f6f1fd5d4b3",
+    "cuisine_summary": "Lam nhọ, cá bống vùi tro, xôi tím, thịt trâu gác bếp, rượu ngô, măng đắng",
+    "description": "Vùng núi cao Tây Bắc với đỉnh Pu Ta Leng, cao nguyên Sìn Hồ, đèo Ô Quy Hồ và các bản dân tộc nguyên sơ.",
+    "weather": "Khí hậu núi cao Tây Bắc, mát mẻ, mùa đông lạnh, nhiều mây mù trên đỉnh.",
+    "best_season": "Tháng 9-11 (lúa chín) và mùa xuân",
+    "slug": "lai-chau-lai-chau",
+    "special": "Pu Ta Leng, cao nguyên Sìn Hồ, đèo Ô Quy Hồ, bản Sin Suối Hồ, chợ phiên",
+    "image_url": null,
+    "stats": null,
+    "name": "Lai Châu"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "lai-chau-lai-chau",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

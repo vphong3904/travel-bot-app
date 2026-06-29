@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Vĩnh Long",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food",
+      "heritage"
+    ],
+    "best_months": [
+      11,
+      12,
+      1,
+      2,
+      3,
+      4
+    ],
+    "region": "Đồng bằng sông Cửu Long",
+    "id": "019f10ce-2dd3-7607-91a3-bfba8bedf9cd",
+    "cuisine_summary": "Cá tai tượng chiên xù, bánh xèo hến cù lao, khoai lang Bình Tân, trái cây miệt vườn, cá lóc nướng trui",
+    "description": "Vùng đất giữa hai dòng Tiền - Hậu với cù lao An Bình trĩu trái, chợ nổi Trà Ôn và 'vương quốc gạch gốm' Mang Thít.",
+    "weather": "Khí hậu nhiệt đới gió mùa, hai mùa mưa - khô; sông nước miệt vườn quanh năm.",
+    "best_season": "Tháng 11-4 (mùa khô); mùa trái cây hè",
+    "slug": "vinh-long-vinh-long",
+    "special": "Cù lao An Bình (miệt vườn), chợ nổi Trà Ôn, làng nghề gạch gốm Mang Thít, văn miếu Vĩnh Long",
+    "image_url": null,
+    "stats": null,
+    "name": "Vĩnh Long"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "vinh-long-vinh-long",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

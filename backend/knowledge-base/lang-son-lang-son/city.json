@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Lạng Sơn",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "food",
+      "nature"
+    ],
+    "best_months": [
+      1,
+      2,
+      3,
+      9,
+      10,
+      11
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc4-74f5-bcca-307ce017a052",
+    "cuisine_summary": "Vịt quay, lợn quay lá mắc mật, phở chua, khâu nhục, đào Mẫu Sơn, bánh cuốn trứng",
+    "description": "Xứ Lạng nơi biên giới với động Tam Thanh - Nhị Thanh, núi Mẫu Sơn, chợ Kỳ Lừa và ải Chi Lăng lịch sử.",
+    "weather": "Khí hậu vùng núi đông bắc, đông lạnh nhất cả nước (đỉnh Mẫu Sơn có thể có băng), hè mát.",
+    "best_season": "Tháng 1-3 (lễ hội, hoa đào) và 9-11",
+    "slug": "lang-son-lang-son",
+    "special": "Mẫu Sơn, động Tam Thanh, chợ Kỳ Lừa - Đông Kinh, ải Chi Lăng, đền Mẫu Đồng Đăng",
+    "image_url": null,
+    "stats": null,
+    "name": "Lạng Sơn"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "lang-son-lang-son",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

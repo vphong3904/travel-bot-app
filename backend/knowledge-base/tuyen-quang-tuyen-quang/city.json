@@ -1,0 +1,55 @@
+{
+  "data": {
+    "province": "Tuyên Quang",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "heritage",
+      "culture",
+      "nature",
+      "food"
+    ],
+    "best_months": [
+      8,
+      9,
+      10,
+      11,
+      1,
+      2
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc5-76f9-b836-afb993d40d3e",
+    "cuisine_summary": "Bánh gai Chiêm Hóa, thịt trâu gác bếp, cơm lam, gỏi cá bỗng, mắm cá ruộng",
+    "description": "Thủ đô kháng chiến với Khu di tích Tân Trào, suối khoáng Mỹ Lâm và Lễ hội Thành Tuyên rước đèn Trung thu lớn nhất nước.",
+    "weather": "Khí hậu vùng núi phía bắc, hè mát, đông lạnh; suối khoáng nóng quanh năm.",
+    "best_season": "Trung thu (tháng 8-9 âm) và mùa xuân",
+    "slug": "tuyen-quang-tuyen-quang",
+    "special": "Khu di tích Tân Trào, Lễ hội Thành Tuyên (Trung thu), suối khoáng Mỹ Lâm, thác Bản Ba",
+    "image_url": null,
+    "stats": null,
+    "name": "Tuyên Quang"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "tuyen-quang-tuyen-quang",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "data": {
+    "province": "Thái Nguyên",
+    "budget": {
+      "low": null,
+      "currency": "VND",
+      "note": "Chi phí biến động theo mùa, cần xác minh realtime",
+      "high": null
+    },
+    "province_old": null,
+    "is_active": true,
+    "categories": [
+      "nature",
+      "culture",
+      "food",
+      "heritage"
+    ],
+    "best_months": [
+      4,
+      5,
+      9,
+      10,
+      11
+    ],
+    "region": "Trung du và miền núi phía Bắc",
+    "id": "019f10ce-2dc3-737a-a466-232d90cbf438",
+    "cuisine_summary": "Chè Tân Cương, cơm lam, bánh chưng Bờ Đậu, nem chua Đại Từ, tương nếp Úc Kỳ",
+    "description": "Thủ phủ chè Việt Nam với vùng chè Tân Cương, hồ Núi Cốc thơ mộng và khu di tích ATK Định Hóa.",
+    "weather": "Cận nhiệt đới ẩm vùng trung du, hè nóng mưa, đông lạnh khô.",
+    "best_season": "Tháng 4-5 và 9-11",
+    "slug": "thai-nguyen-thai-nguyen",
+    "special": "Chè Tân Cương, hồ Núi Cốc, ATK Định Hóa, hang Phượng Hoàng",
+    "image_url": null,
+    "stats": null,
+    "name": "Thái Nguyên"
+  },
+  "_meta": {
+    "missing_fields": [
+      "price/rating/image_url cần xác minh từ nguồn vận hành trước production"
+    ],
+    "partial_note": "manual_curated; giá, rating và URL ảnh để null khi chưa có nguồn xác minh.",
+    "agent_task": "T-001 (bổ sung — nền cho T-037)",
+    "city": "thai-nguyen-thai-nguyen",
+    "data_sources": [
+      "manual_curated",
+      "vietnamtourism.gov.vn",
+      "kiến thức du lịch địa phương phổ biến",
+      ".agent/context/provinces-34.md"
+    ],
+    "last_updated": "2026-06-29",
+    "status": "complete",
+    "uuid_version": "v7"
+  }
+}
