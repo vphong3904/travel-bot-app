@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "tay-ninh-long-an",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Làng nổi Tân Lập — langnoitanlap.com.vn & Klook (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "7f520d7a-32fc-462a-ad78-35b9e360ca7b",
+      "city_id": "019f10ce-2dcf-7bbf-b477-4526beae3d9a",
+      "name": "Khu du lịch Làng nổi Tân Lập",
+      "type": "entertainment",
+      "address": "Xã Tân Lập, huyện Mộc Hóa, Long An (tỉnh Tây Ninh)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "7:30–17:30 (dịch vụ trong ngày); nghỉ qua đêm 24/7",
+      "description": "Khu du lịch sinh thái giữa rừng tràm Đồng Tháp Mười với con đường xuyên rừng tràm dài, đi xuồng/tắc ráng ngắm chim cùng các hoạt động dã ngoại, cắm trại.",
+      "tips": "Đi tháng 11–4 (mùa khô) để tránh mưa; trải nghiệm xuyên rừng tràm cả đường bộ và xuồng.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé vào cổng 85.000đ/khách; combo trải nghiệm ~240.000đ/người. (nguồn: langnoitanlap.com.vn & Klook, 2025 — có thể thay đổi)"
+    }
+  ]
+}
