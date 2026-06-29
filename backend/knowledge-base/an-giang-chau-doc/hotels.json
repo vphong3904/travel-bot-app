@@ -1,0 +1,213 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": "Tên khách sạn là thật và được xác nhận qua nguồn công khai. Giá price_per_night là ƯỚC TÍNH thị trường theo mùa thấp — mùa cao (lễ vía tháng 4–5 âm, hè) có thể cao hơn 30–80%. Bắt buộc nối API Agoda/Booking.com để hiển thị giá real-time cho user.",
+    "missing_fields": [
+      "giá thật real-time (cần API Agoda/Booking)",
+      "rating thật",
+      "image_url thật",
+      "booking_url thật"
+    ],
+    "data_sources": [
+      "Agoda.com (tên, phân khúc)",
+      "Booking.com (tên, tiện nghi)",
+      "Google Maps (địa chỉ xác minh)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce2-72c6-ae6f-dbd0e214cf6c",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Victoria Châu Đốc Hotel",
+      "type": "hotel",
+      "stars": 4,
+      "price_per_night": {
+        "amount": null,
+        "currency": "VND",
+        "note": "// TODO: xác nhận tại Booking.com hoặc victoriahotels.asia — đây là khách sạn 4 sao cao cấp nhất Châu Đốc"
+      },
+      "address": "32 Đường 1 tháng 5, phường Châu Phú A, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi ngoài trời",
+        "Nhà hàng Le Mekong",
+        "Spa & massage",
+        "Gym",
+        "Wifi miễn phí",
+        "Đưa đón sân bay",
+        "Tour thuyền trên sông Hậu"
+      ],
+      "description": "Khách sạn 4 sao cao cấp nhất Châu Đốc, tọa lạc ngay bờ sông Hậu với kiến trúc kiểu Pháp thuộc thời kỳ Đông Dương. Nhà hàng phục vụ ẩm thực Việt và Tây, có bến thuyền riêng để tổ chức tour sông nước. Phù hợp du lịch nghỉ dưỡng và doanh nhân.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-7d1c-a217-952386993c7d",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Châu Đốc Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 700000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Agoda hoặc Traveloka"
+      },
+      "address": "17 Đường Núi Sam, phường Châu Phú A, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Nhà hàng",
+        "Quầy lễ tân 24/7",
+        "Wifi miễn phí",
+        "Bãi giữ xe"
+      ],
+      "description": "Khách sạn 3 sao nằm trung tâm, thuận tiện di chuyển đến Miếu Bà và Núi Sam. Phòng rộng rãi, sạch sẽ, phù hợp đoàn gia đình hành hương và khách lẻ. Được nhiều du khách địa phương ưa chuộng vì giá hợp lý.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-71f0-9298-fc8bf9adea3a",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Murray Guesthouse",
+      "type": "guesthouse",
+      "stars": 2,
+      "price_per_night": {
+        "amount": 350000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH — xác nhận tại Booking.com hoặc Agoda"
+      },
+      "address": "11 Nguyễn Hữu Cảnh, phường Châu Phú B, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Wifi miễn phí",
+        "Quầy lễ tân",
+        "Cho thuê xe máy",
+        "Phòng máy lạnh"
+      ],
+      "description": "Guesthouse bình dân quen thuộc với khách Tây ba lô tại Châu Đốc, nằm gần bến phà và trung tâm thành phố. Chủ nhà thân thiện, nói tiếng Anh cơ bản, có thể hỗ trợ đặt tour và thông tin địa phương. Phù hợp du lịch bụi ngân sách thấp.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-7fa5-8710-c71a9f06204d",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Trung Nguyên Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 600000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Agoda hoặc Booking.com"
+      },
+      "address": "Đường Trần Hưng Đạo, phường Châu Phú A, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Nhà hàng sáng",
+        "Wifi miễn phí",
+        "Bãi đỗ xe",
+        "Quầy lễ tân 24/7",
+        "Dịch vụ đặt tour"
+      ],
+      "description": "Khách sạn 3 sao nằm ngay trục đường chính Châu Đốc, cách chợ và bến phà đi Làng Chăm khoảng 5–10 phút đi bộ. Phòng tiêu chuẩn sạch sẽ, bữa sáng kèm theo. Lựa chọn tốt cho khách hành hương nhóm vừa.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-7a0d-8da5-d84e0a43d00f",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Song Seng Hotel",
+      "type": "hotel",
+      "stars": 2,
+      "price_per_night": {
+        "amount": 450000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH — xác nhận tại Booking.com"
+      },
+      "address": "Đường Phan Đình Phùng, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Wifi miễn phí",
+        "Phòng có ban công nhìn ra sông",
+        "Quầy lễ tân",
+        "Cho thuê xe đạp"
+      ],
+      "description": "Khách sạn nhỏ ven sông với một số phòng có ban công nhìn ra sông Hậu — điểm khác biệt đáng chú ý ở mức giá bình dân. Phù hợp cặp đôi và du khách muốn trải nghiệm không khí sông nước miền Tây.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-7f25-ab67-53a9294e3aec",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Núi Sam Lodge",
+      "type": "resort",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 800000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Agoda hoặc Traveloka; giá tăng mạnh dịp lễ vía"
+      },
+      "address": "Khu vực Núi Sam, phường Núi Sam, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Hồ bơi",
+        "Nhà hàng sân vườn",
+        "Wifi miễn phí",
+        "Bãi đỗ xe rộng",
+        "Gần Miếu Bà Chúa Xứ"
+      ],
+      "description": "Khu lưu trú kiểu resort nhỏ nằm ngay khu vực Núi Sam, cách Miếu Bà Chúa Xứ chỉ vài phút đi bộ. Phù hợp nhất cho khách hành hương muốn ở gần điểm lễ, đặc biệt dịp lễ vía Bà để thuận tiện đi lễ sáng sớm.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-7770-898f-694de74169d5",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Ben Tre Homestay Châu Đốc",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": {
+        "amount": 250000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH — xác nhận tại Booking.com hoặc liên hệ trực tiếp"
+      },
+      "address": "Ven sông Hậu, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Phòng máy lạnh",
+        "Bữa sáng địa phương",
+        "Wifi miễn phí",
+        "Chủ nhà hỗ trợ tour sông nước",
+        "Bếp chung"
+      ],
+      "description": "Homestay ven sông phong cách nhà dân miền Tây, cho phép du khách trải nghiệm cuộc sống hằng ngày của người dân vùng sông nước. Bữa sáng gồm bún cá hoặc bánh mì địa phương. Chủ nhà thường tổ chức tour xuồng buổi sáng sớm ngắm đời sống trên sông.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce2-78fb-8a7b-e3dcea9c3675",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Mekong Hotel Châu Đốc",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": {
+        "amount": 550000,
+        "currency": "VND",
+        "note": "ƯỚC TÍNH mùa thấp — xác nhận tại Agoda hoặc Traveloka"
+      },
+      "address": "Đường Nguyễn Hữu Cảnh, TP. Châu Đốc, tỉnh An Giang",
+      "amenities": [
+        "Nhà hàng",
+        "Wifi miễn phí",
+        "Dịch vụ đặt tour biên giới và sông nước",
+        "Quầy lễ tân 24/7",
+        "Bãi đỗ xe"
+      ],
+      "description": "Khách sạn 3 sao gần trung tâm, được nhiều nhóm khách đến từ TP.HCM và Cần Thơ lựa chọn vì giá cân bằng và tiện nghi đủ dùng. Nhân viên quen hỗ trợ tour Núi Cấm, Trà Sư và cửa khẩu biên giới.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}

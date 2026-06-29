@@ -1,0 +1,151 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Tên và nội dung tour là thật — đây là các tour phổ biến xác thực tại Châu Đốc. Giá là ƯỚC TÍNH thị trường — cần xác nhận tại Klook, Traveloka hoặc đại lý tour địa phương trước production.",
+    "missing_fields": [
+      "giá thật real-time (xác nhận Klook/Traveloka/đại lý địa phương)",
+      "booking_url thật"
+    ],
+    "data_sources": [
+      "Klook.com (tên tour phổ biến)",
+      "Traveloka Experiences",
+      "Kiến thức địa phương Châu Đốc / An Giang"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce3-71f5-b529-96235fd1ee66",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tour Rừng Tràm Trà Sư mùa nước nổi",
+      "duration": "Nửa ngày (4–5 tiếng, thường 6:00–11:00)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận tại Klook hoặc đại lý tour địa phương tại Châu Đốc — giá thường bao gồm vé vào cổng + xuồng ba lá"
+      },
+      "group_size": "2–20 người",
+      "description": "Tour khám phá rừng tràm ngập nước hơn 800ha, đi xuồng ba lá len lỏi giữa những hàng cây tràm xanh mướt, mặt nước phủ bèo dâu. Mùa đẹp nhất tháng 9–11 khi bèo nở rộ và đàn chim trắng về làm tổ hàng nghìn con.",
+      "includes": [
+        "Xuồng ba lá có chèo",
+        "Hướng dẫn viên địa phương",
+        "Vé vào cổng khu rừng tràm"
+      ],
+      "excludes": [
+        "Ăn sáng",
+        "Di chuyển từ Châu Đốc đến Trà Sư (~35km)",
+        "Đồ uống"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["gia đình", "cặp đôi", "nhiếp ảnh gia", "yêu thiên nhiên"]
+    },
+    {
+      "id": "019f10d3-1ce3-7735-aafa-8bcd91f7d617",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tour Hành hương Miếu Bà & Núi Sam",
+      "duration": "Nửa ngày đến 1 ngày",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận tại đại lý tour địa phương hoặc thăm tự do không cần mua tour"
+      },
+      "group_size": "Cá nhân đến đoàn lớn",
+      "description": "Chương trình hành hương kết hợp thăm Miếu Bà Chúa Xứ, leo Núi Sam, viếng Lăng Thoại Ngọc Hầu và Chùa Hang. Là hành trình tâm linh phổ biến nhất vùng An Giang, đặc biệt đông dịp lễ vía Bà (tháng 4–5 âm lịch).",
+      "includes": [
+        "Xe di chuyển nếu đặt qua công ty tour",
+        "Hướng dẫn viên giải thích lịch sử văn hóa"
+      ],
+      "excludes": [
+        "Tiền lễ vật, hương đèn",
+        "Ăn uống",
+        "Lệ phí cáp treo Núi Sam (nếu có)"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["gia đình", "người cao tuổi", "hành hương tâm linh"]
+    },
+    {
+      "id": "019f10d3-1ce3-7270-a1f1-0a5dc2ef0e80",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tour Làng Chăm & Sông Hậu",
+      "duration": "Nửa ngày (3–4 tiếng)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận tại Klook hoặc đại lý tour địa phương — thường bao gồm phí phà và xuồng"
+      },
+      "group_size": "2–15 người",
+      "description": "Tour kết hợp đi thuyền trên sông Hậu và thăm làng Chăm Châu Giang. Du khách trải nghiệm cuộc sống cộng đồng Hồi giáo Chăm: thánh đường mái vòm xanh, phụ nữ dệt thổ cẩm, nghề nuôi cá bè ven sông. Có thể mua vải thổ cẩm dệt tay trực tiếp.",
+      "includes": [
+        "Thuyền/phà qua sông Hậu",
+        "Hướng dẫn viên",
+        "Ghé nhà dệt thổ cẩm"
+      ],
+      "excludes": [
+        "Ăn uống",
+        "Mua sắm thổ cẩm"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["văn hóa", "gia đình", "nhiếp ảnh gia"]
+    },
+    {
+      "id": "019f10d3-1ce3-7062-b093-0e70b6e143ed",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tour Núi Cấm – Thiên Cấm Sơn",
+      "duration": "1 ngày (7:00–17:00)",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận phí cáp treo và tour tại đại lý địa phương — Núi Cấm cách Châu Đốc ~30–40km"
+      },
+      "group_size": "2–20 người",
+      "description": "Tour khám phá Thiên Cấm Sơn — ngọn núi cao nhất ĐBSCL (716m), khí hậu mát mẻ quanh năm. Cáp treo lên đỉnh, thăm chùa Vạn Linh, tượng Phật Di Lặc khổng lồ, hồ Thủy Liêm, vườn cây nhiệt đới. Nhiệt độ trên đỉnh mát hơn đồng bằng 5–7°C.",
+      "includes": [
+        "Xe đưa đón từ Châu Đốc (nếu đặt qua công ty tour)",
+        "Hướng dẫn viên"
+      ],
+      "excludes": [
+        "Vé cáp treo (mua riêng tại chân núi)",
+        "Ăn uống",
+        "Phí vào cổng"
+      ],
+      "image_url": null,
+      "difficulty": "easy_to_moderate",
+      "audience": ["gia đình", "hành hương", "yêu thiên nhiên"]
+    },
+    {
+      "id": "019f10d3-1ce3-7308-8290-508b7c610cea",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Tour Biên Giới Campuchia – Chợ Tịnh Biên",
+      "duration": "Nửa ngày đến 1 ngày",
+      "price": {
+        "amount": null,
+        "currency": "VND",
+        "per": "person",
+        "note": "// TODO: xác nhận tại đại lý tour địa phương — cần kiểm tra yêu cầu giấy tờ xuất nhập cảnh"
+      },
+      "group_size": "2–15 người",
+      "description": "Tham quan khu vực cửa khẩu Tịnh Biên, khám phá chợ biên giới với hàng hóa Campuchia – Thái Lan giá rẻ (điện tử, mỹ phẩm, thực phẩm). Tùy gói có thể bao gồm tham quan nhanh phía Campuchia. Trải nghiệm văn hóa biên giới đặc trưng miền Tây.",
+      "includes": [
+        "Xe đưa đón",
+        "Hướng dẫn viên thông thạo khu vực biên giới"
+      ],
+      "excludes": [
+        "Phí visa Campuchia (nếu có)",
+        "Ăn uống",
+        "Mua sắm"
+      ],
+      "image_url": null,
+      "difficulty": "easy",
+      "audience": ["mua sắm", "văn hóa", "khám phá biên giới"]
+    }
+  ]
+}
