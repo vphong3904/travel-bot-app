@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "vinh-long-tra-vinh",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu du lịch sinh thái Huỳnh Kha — Lữ Hành Việt Nam & Du Lịch Việt (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "3de32e4a-cf68-491a-b764-06c6f2bd0fd1",
+      "city_id": "019f10ce-2dd2-7ac3-8256-abc27c14f772",
+      "name": "Khu du lịch sinh thái Huỳnh Kha",
+      "type": "entertainment",
+      "address": "Xã Long Đức, huyện Châu Thành, Trà Vinh (cách TP. Trà Vinh ~10km)",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Ban ngày — xác nhận trước khi đến",
+      "description": "Khu du lịch sinh thái rộng ~57.000m² ở Trà Vinh với nhiều hạng mục vui chơi giải trí, hồ nước, cây xanh và khu ẩm thực — điểm dã ngoại gần thành phố.",
+      "tips": "Phù hợp gia đình, nhóm bạn dã ngoại; kết hợp tham quan ao Bà Om và các chùa Khmer gần đó.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé/dịch vụ xác nhận trực tiếp tại khu du lịch — cần xác nhận. (nguồn: Lữ Hành Việt Nam & Du Lịch Việt, 2025)"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "city": "lang-son-lang-son",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-002 (tạo mới) + T-037 điểm vui chơi",
+    "status": "partial",
+    "partial_note": "Mới có điểm vui chơi (T-037); địa điểm tham quan chung cần bổ sung sau (T-002).",
+    "missing_fields": [
+      "địa điểm tham quan chung (T-002) chưa đầy đủ",
+      "coordinates các điểm vui chơi (chưa verify — để null)"
+    ],
+    "data_sources": [
+      "T-037: Khu vui chơi Phú Lộc Plaza — Phú Lộc Plaza & Công ty thiết kế khu vui chơi (2025)"
+    ]
+  },
+  "data": [
+    {
+      "id": "1bcc08b3-9275-486a-8ee2-9b548bf4376c",
+      "city_id": "019f10ce-2dc4-74f5-bcca-307ce017a052",
+      "name": "Khu vui chơi Phú Lộc Plaza",
+      "type": "kids_zone",
+      "address": "TTTM Phú Lộc Plaza, khu đô thị Phú Lộc 4, phường Hoàng Văn Thụ, TP. Lạng Sơn",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Theo giờ trung tâm thương mại — xác nhận trước khi đến",
+      "description": "Khu vui chơi trong nhà ở trung tâm Lạng Sơn với công viên nước trong nhà, nhà bóng liên hoàn, sàn nhún trampoline, cầu trượt cầu vồng và hơn 60 trò chơi cho trẻ em.",
+      "tips": "Mang tất (vớ) cho trẻ; phù hợp gia đình có trẻ nhỏ vào những ngày thời tiết lạnh.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": "Vé theo gói/giờ chơi — xác nhận tại quầy. (nguồn: Phú Lộc Plaza & Công ty thiết kế khu vui chơi, 2025)"
+    }
+  ]
+}
