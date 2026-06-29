@@ -69,6 +69,8 @@ class ChatMessageOut(BaseModel):
 
 class FeedbackUpdate(BaseModel):
     feedback: int = Field(..., ge=-1, le=1)
+    reason: Optional[str] = None       # "sai_thong_tin" | "khong_lien_quan" | "thieu_nguon" | "khac"
+    category: Optional[str] = None     # domain category của lỗi (free text)
 
 
 # Aliases tương thích ngược

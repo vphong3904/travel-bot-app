@@ -210,11 +210,11 @@ class _LatencyTab extends ConsumerWidget {
         }
         final searchSpots = rows.asMap().entries
             .map((e) => FlSpot(e.key.toDouble(),
-                (e.value['avg_search_ms'] as num).toDouble()))
+                (e.value['avg_ms'] as num? ?? 0).toDouble()))
             .toList();
         final llmSpots = rows.asMap().entries
             .map((e) => FlSpot(e.key.toDouble(),
-                (e.value['avg_llm_ms'] as num).toDouble()))
+                (e.value['p95_ms'] as num? ?? 0).toDouble()))
             .toList();
 
         return Column(
@@ -266,9 +266,9 @@ class _LatencyTab extends ConsumerWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                _legendDot(Colors.blue, 'Search ms'),
+                _legendDot(Colors.blue, 'Avg ms'),
                 const SizedBox(width: 16),
-                _legendDot(Colors.orange, 'LLM ms'),
+                _legendDot(Colors.orange, 'P95 ms'),
               ],
             ),
           ],
@@ -474,13 +474,15 @@ class _ErrorsTab extends ConsumerWidget {
                 Colors.grey.shade50),
             columns: const [
               DataColumn(label: Text('Thời gian')),
-              DataColumn(label: Text('Loại lỗi')),
-              DataColumn(label: Text('Message')),
+              DataColumn(label: Text('Intent')),
+              DataColumn(label: Text('Confidence')),
+              DataColumn(label: Text('Nội dung')),
             ],
             rows: errors
                 .map((e) => DataRow(cells: [
                       DataCell(Text(
-                          e['timestamp'] as String? ?? '—',
+                          (e['created_at'] as String? ?? '—')
+                              .substring(0, 19),
                           style:
                               const TextStyle(fontSize: 12))),
                       DataCell(Container(
@@ -492,16 +494,21 @@ class _ErrorsTab extends ConsumerWidget {
                               BorderRadius.circular(4),
                         ),
                         child: Text(
-                          e['error_type'] as String? ?? '—',
+                          e['intent'] as String? ?? '—',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.red.shade700),
                         ),
                       )),
+                      DataCell(Text(
+                          (e['confidence_score'] as num?)
+                                  ?.toStringAsFixed(2) ??
+                              '—',
+                          style: const TextStyle(fontSize: 12))),
                       DataCell(SizedBox(
-                        width: 400,
+                        width: 360,
                         child: Text(
-                          e['message'] as String? ?? '—',
+                          e['content'] as String? ?? '—',
                           style: const TextStyle(fontSize: 12),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

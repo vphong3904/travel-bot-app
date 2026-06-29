@@ -14,13 +14,17 @@ from typing import Any, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, status
-from sqlalchemy import func, select, update, delete
+from sqlalchemy import cast, func, select, update, delete, Date
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DB, CurrentUser, ADMIN_ROLES, require_admin, require_role
 from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
 from app.db.models.chat import ChatMessage, ChatSession
+from app.db.models.travel import (
+    Destination, Location, Tour, Ticket,
+    Itinerary, ItineraryItem, IntentPattern, LocationAlias,
+)
 from app.db.models.user import User
 from app.services.knowledge import KnowledgeService
 from app.services.embedding_jobs import EmbeddingJobService
@@ -49,32 +53,125 @@ async def stats_overview(
     db: DB = None,
     _: User = Depends(require_admin),
 ):
-    """Dashboard tổng quan: users, sessions, messages, feedback."""
+    """Dashboard tổng quan — trả về đúng cấu trúc DashboardOverview cho Flutter."""
     now = datetime.now(timezone.utc)
     delta = {"day": 1, "week": 7, "month": 30, "year": 365}[period]
     since = now - timedelta(days=delta)
 
-    total_users = await db.scalar(select(func.count(User.id)).where(User.is_deleted == False))
+    # ── KPI counts ────────────────────────────────────────────────────────────
+    total_users = await db.scalar(
+        select(func.count(User.id)).where(User.is_deleted == False)
+    )
     new_users = await db.scalar(
-        select(func.count(User.id)).where(User.created_at >= since, User.is_deleted == False)
+        select(func.count(User.id)).where(
+            User.created_at >= since, User.is_deleted == False
+        )
     )
     total_sessions = await db.scalar(select(func.count(ChatSession.id)))
+
+    # Chỉ đếm assistant messages để tính answered_rate
     total_messages = await db.scalar(select(func.count(ChatMessage.id)))
-    positive_fb = await db.scalar(
-        select(func.count(ChatMessage.id)).where(ChatMessage.feedback == 1)
+    assistant_messages = await db.scalar(
+        select(func.count(ChatMessage.id)).where(ChatMessage.role == "assistant")
     )
-    negative_fb = await db.scalar(
-        select(func.count(ChatMessage.id)).where(ChatMessage.feedback == -1)
+    user_messages = await db.scalar(
+        select(func.count(ChatMessage.id)).where(ChatMessage.role == "user")
     )
 
+    # answered_rate = số assistant msg / số user msg (tối đa 1.0)
+    answered_rate: float = 0.0
+    if user_messages and user_messages > 0:
+        answered_rate = min(1.0, (assistant_messages or 0) / user_messages)
+
+    # Pending: session bị flag / messages không có câu trả lời (heuristic)
+    pending_flagged = await db.scalar(
+        select(func.count(ChatSession.id)).where(ChatSession.is_flagged == True)
+    )
+    # Unanswered = user messages có feedback âm hoặc chưa có feedback
+    pending_unanswered = await db.scalar(
+        select(func.count(ChatMessage.id)).where(
+            ChatMessage.role == "user",
+            ChatMessage.feedback == None,  # noqa: E711
+            ChatMessage.created_at >= since,
+        )
+    )
+
+    # ── Time-series: users_over_time ─────────────────────────────────────────
+    users_ts_rows = await db.execute(
+        select(
+            cast(func.date_trunc("day", User.created_at), Date).label("date"),
+            func.count(User.id).label("count"),
+        )
+        .where(User.created_at >= since, User.is_deleted == False)
+        .group_by("date")
+        .order_by("date")
+    )
+    users_over_time = [
+        {"date": str(r.date), "count": int(r.count)}
+        for r in users_ts_rows
+    ]
+
+    # ── Time-series: messages_over_time ──────────────────────────────────────
+    messages_ts_rows = await db.execute(
+        select(
+            cast(func.date_trunc("day", ChatMessage.created_at), Date).label("date"),
+            func.count(ChatMessage.id).label("count"),
+        )
+        .where(ChatMessage.created_at >= since)
+        .group_by("date")
+        .order_by("date")
+    )
+    messages_over_time = [
+        {"date": str(r.date), "count": int(r.count)}
+        for r in messages_ts_rows
+    ]
+
+    # ── Top destinations (by favorite_count + view_count) ────────────────────
+    top_dest_rows = await db.execute(
+        select(Destination.name, Destination.favorite_count, Destination.view_count)
+        .where(Destination.is_active == True)
+        .order_by((Destination.favorite_count + Destination.view_count).desc())
+        .limit(10)
+    )
+    top_destinations = [
+        {"destination": r.name, "count": int((r.favorite_count or 0) + (r.view_count or 0))}
+        for r in top_dest_rows
+    ]
+
+    # ── Intent breakdown (từ ChatMessage.intent trong period) ─────────────────
+    intent_rows = await db.execute(
+        select(
+            ChatMessage.intent.label("intent"),
+            func.count(ChatMessage.id).label("count"),
+        )
+        .where(
+            ChatMessage.intent != None,  # noqa: E711
+            ChatMessage.created_at >= since,
+        )
+        .group_by(ChatMessage.intent)
+        .order_by(func.count(ChatMessage.id).desc())
+        .limit(10)
+    )
+    intent_breakdown = [
+        {"intent": r.intent, "count": int(r.count)}
+        for r in intent_rows
+    ]
+
     return {
-        "total_users": total_users or 0,
-        "new_users": new_users or 0,
-        "total_sessions": total_sessions or 0,
-        "total_messages": total_messages or 0,
-        "positive_feedback": positive_fb or 0,
-        "negative_feedback": negative_fb or 0,
         "period": period,
+        "kpi": {
+            "total_users": total_users or 0,
+            "new_users_this_period": new_users or 0,
+            "total_chat_sessions": total_sessions or 0,
+            "total_messages": total_messages or 0,
+            "answered_rate": round(answered_rate, 4),
+            "pending_unanswered": pending_unanswered or 0,
+            "pending_flagged": pending_flagged or 0,
+        },
+        "users_over_time": users_over_time,
+        "messages_over_time": messages_over_time,
+        "top_destinations": top_destinations,
+        "intent_breakdown": intent_breakdown,
     }
 
 
@@ -360,10 +457,12 @@ async def list_knowledge(
             {
                 "id": e.id,
                 "title": e.title,
+                "content": e.content or "",
                 "category": e.category,
                 "tags": e.tags or [],
                 "is_active": e.is_active,
                 "qdrant_id": e.qdrant_id,
+                "embedding_status": "done" if e.qdrant_id else "not_embedded",
                 "source": e.source,
                 "created_at": str(e.created_at),
                 "updated_at": str(e.updated_at),
@@ -507,27 +606,101 @@ async def rag_overview(
     delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
     since = datetime.now(timezone.utc) - timedelta(days=delta)
 
-    avg_latency = await db.scalar(
-        select(func.avg(ChatMessage.latency_ms)).where(
-            ChatMessage.created_at >= since, ChatMessage.latency_ms.isnot(None)
-        )
-    )
     avg_confidence = await db.scalar(
         select(func.avg(ChatMessage.confidence_score)).where(
             ChatMessage.created_at >= since, ChatMessage.confidence_score.isnot(None)
         )
     )
-    total_queries = await db.scalar(
-        select(func.count(ChatMessage.id)).where(
-            ChatMessage.role == "assistant", ChatMessage.created_at >= since
+    avg_search_ms = await db.scalar(
+        select(func.avg(ChatMessage.search_ms)).where(
+            ChatMessage.created_at >= since, ChatMessage.search_ms.isnot(None)
+        )
+    )
+    avg_llm_ms = await db.scalar(
+        select(func.avg(ChatMessage.llm_ms)).where(
+            ChatMessage.created_at >= since, ChatMessage.llm_ms.isnot(None)
+        )
+    )
+    avg_chunk_count = await db.scalar(
+        select(func.avg(ChatMessage.chunk_count)).where(
+            ChatMessage.created_at >= since, ChatMessage.chunk_count.isnot(None)
         )
     )
 
+    # hallucination_rate = tỉ lệ messages có confidence < 0.3
+    total_assistant = await db.scalar(
+        select(func.count(ChatMessage.id)).where(
+            ChatMessage.role == "assistant",
+            ChatMessage.created_at >= since,
+            ChatMessage.confidence_score.isnot(None),
+        )
+    ) or 0
+    low_confidence = await db.scalar(
+        select(func.count(ChatMessage.id)).where(
+            ChatMessage.role == "assistant",
+            ChatMessage.created_at >= since,
+            ChatMessage.confidence_score < 0.3,
+        )
+    ) or 0
+    hallucination_rate = (low_confidence / total_assistant) if total_assistant > 0 else 0.0
+
+    # cache_hit_rate breakdown
+    cache_rows = await db.execute(
+        select(ChatMessage.cache_hit, func.count(ChatMessage.id).label("cnt"))
+        .where(ChatMessage.created_at >= since, ChatMessage.cache_hit.isnot(None))
+        .group_by(ChatMessage.cache_hit)
+    )
+    total_cache = 0
+    cache_counts: dict = {}
+    for r in cache_rows:
+        cache_counts[r.cache_hit] = r.cnt
+        total_cache += r.cnt
+    cache_hit_rate = {
+        k: round(v / total_cache, 3) if total_cache > 0 else 0.0
+        for k, v in cache_counts.items()
+    }
+
+    # search_method breakdown
+    method_rows = await db.execute(
+        select(ChatMessage.search_method, func.count(ChatMessage.id).label("cnt"))
+        .where(ChatMessage.created_at >= since, ChatMessage.search_method.isnot(None))
+        .group_by(ChatMessage.search_method)
+    )
+    total_methods = 0
+    method_counts: dict = {}
+    for r in method_rows:
+        method_counts[r.search_method] = r.cnt
+        total_methods += r.cnt
+    search_method_breakdown = {
+        k: round(v / total_methods, 3) if total_methods > 0 else 0.0
+        for k, v in method_counts.items()
+    }
+
+    # confidence_over_time
+    conf_rows = await db.execute(
+        select(
+            cast(func.date_trunc("day", ChatMessage.created_at), Date).label("date"),
+            func.avg(ChatMessage.confidence_score).label("avg_score"),
+        )
+        .where(ChatMessage.created_at >= since, ChatMessage.confidence_score.isnot(None))
+        .group_by("date")
+        .order_by("date")
+    )
+    confidence_over_time = [
+        {"date": str(r.date), "avg_score": round(float(r.avg_score or 0), 3)}
+        for r in conf_rows
+    ]
+
     return {
         "period": period,
-        "avg_latency_ms": round(float(avg_latency or 0), 1),
-        "avg_confidence": round(float(avg_confidence or 0), 3),
-        "total_queries": total_queries or 0,
+        "avg_confidence_score": round(float(avg_confidence or 0), 3),
+        "avg_search_ms": round(float(avg_search_ms or 0), 1),
+        "avg_llm_ms": round(float(avg_llm_ms or 0), 1),
+        "avg_chunk_count": round(float(avg_chunk_count or 0), 1),
+        "hallucination_rate": round(hallucination_rate, 3),
+        "cache_hit_rate": cache_hit_rate,
+        "search_method_breakdown": search_method_breakdown,
+        "confidence_over_time": confidence_over_time,
     }
 
 
@@ -550,14 +723,16 @@ async def rag_latency(
         .group_by("date")
         .order_by("date")
     )
-    return [
-        {
-            "date": str(r.date)[:10],
-            "avg_ms": round(float(r.avg_ms or 0), 1),
-            "p95_ms": round(float(r.p95_ms or 0), 1),
-        }
-        for r in rows
-    ]
+    return {
+        "items": [
+            {
+                "date": str(r.date)[:10],
+                "avg_ms": round(float(r.avg_ms or 0), 1),
+                "p95_ms": round(float(r.p95_ms or 0), 1),
+            }
+            for r in rows
+        ]
+    }
 
 
 @router.get("/rag-monitoring/errors")
@@ -580,16 +755,18 @@ async def rag_errors(
         .limit(50)
     )
     messages = rows.scalars().all()
-    return [
-        {
-            "id": m.id,
-            "content": m.content[:200],
-            "confidence_score": m.confidence_score,
-            "intent": m.intent,
-            "created_at": str(m.created_at),
-        }
-        for m in messages
-    ]
+    return {
+        "items": [
+            {
+                "id": m.id,
+                "content": m.content[:200],
+                "confidence_score": m.confidence_score,
+                "intent": m.intent,
+                "created_at": str(m.created_at),
+            }
+            for m in messages
+        ]
+    }
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -630,16 +807,18 @@ async def validate_city_mappings(
 
 @router.get("/city-mappings/valid-slugs")
 async def valid_slugs(
+    db: DB = None,
     _: User = Depends(require_admin),
 ):
-    import os
-    kb_path = "knowledge-base"
-    if not os.path.isdir(kb_path):
-        return []
-    return sorted(
-        d for d in os.listdir(kb_path)
-        if os.path.isdir(os.path.join(kb_path, d))
+    """Trả danh sách city slug từ bảng destinations."""
+    from app.db.models.travel import Destination
+    rows = await db.execute(
+        select(Destination.slug)
+        .where(Destination.slug.isnot(None), Destination.is_active == True)
+        .order_by(Destination.slug)
     )
+    slugs = [r[0] for r in rows if r[0]]
+    return slugs or []
 
 
 @router.patch("/city-mappings/{old_province}")
@@ -661,11 +840,7 @@ async def list_intent_patterns(
     _: User = Depends(require_admin),
 ):
     from app.services.nlp_preprocessor import INTENT_PATTERNS
-    result = []
-    all_kws: list[str] = []
-    for intent, kws in INTENT_PATTERNS.items():
-        all_kws.extend(kws)
-
+    result: dict = {}
     for intent, kws in INTENT_PATTERNS.items():
         keyword_list = [
             {
@@ -674,7 +849,7 @@ async def list_intent_patterns(
             }
             for kw in kws
         ]
-        result.append({"intent": intent, "keywords": keyword_list})
+        result[intent] = {"keywords": keyword_list, "collision_warnings": []}
     return result
 
 
@@ -722,6 +897,20 @@ async def test_intent(body: dict):
     return {"intent": intent, "confidence": confidence, "matched_keywords": []}
 
 
+@router.post("/intent-patterns/reload")
+async def reload_intent_patterns_db(
+    db: DB,
+    _: User = Depends(require_admin),
+):
+    """
+    [OPT-3.1/3.3] Nạp lại intent patterns từ bảng DB `intent_patterns` vào runtime
+    chatbot — không cần restart server. Gọi sau khi sửa pattern qua Admin.
+    """
+    from app.services.intent_loader import load_intent_patterns_from_db
+    total = await load_intent_patterns_from_db(db)
+    return {"ok": True, "applied_keywords": total}
+
+
 def _save_intent_patterns(patterns: dict) -> None:
     """Lưu patterns về file JSON."""
     import os
@@ -738,10 +927,19 @@ def _save_intent_patterns(patterns: dict) -> None:
 # CONTENT MANAGEMENT (generic CRUD)
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Map content_type → table name (đơn giản hoá, dùng knowledge_entries làm demo)
-CONTENT_TYPES = {
-    "destinations", "hotels", "tours", "foods", "restaurants",
-    "shopping", "itineraries", "events", "transport", "faq", "experiences",
+# Map content_type (URL param) → DB category value (phải khớp CHECK constraint)
+CONTENT_TYPES: dict[str, str] = {
+    "destinations": "destination",
+    "hotels":       "hotel",
+    "tours":        "tour",
+    "foods":        "food",
+    "restaurants":  "food",       # food category
+    "shopping":     "shopping",
+    "itineraries":  "activity",
+    "events":       "event",
+    "transport":    "transport",
+    "faq":          "faq",
+    "experiences":  "tip",        # tip category
 }
 
 
@@ -757,8 +955,9 @@ async def list_content(
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, f"Content type '{content_type}' không hợp lệ")
 
-    # Trả dữ liệu từ knowledge_entries với category = content_type
-    stmt = select(KnowledgeEntry).where(KnowledgeEntry.category == content_type)
+    db_category = CONTENT_TYPES[content_type]
+    # Trả dữ liệu từ knowledge_entries với category = db_category
+    stmt = select(KnowledgeEntry).where(KnowledgeEntry.category == db_category)
     if city_slug:
         stmt = stmt.where(KnowledgeEntry.tags.any(city_slug))
 
@@ -799,10 +998,11 @@ async def create_content(
 ):
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, "Content type không hợp lệ")
+    db_category = CONTENT_TYPES[content_type]
     svc = KnowledgeService(db)
     entry = await svc.create(
         title=body.get("name", "Untitled"),
-        category=content_type,
+        category=db_category,
         content=str(body),
         tags=[city_slug] if city_slug else [],
     )
@@ -1139,4 +1339,256 @@ def _user_dict(u: User) -> dict:
         "auth_provider": u.auth_provider,
         "created_at": str(u.created_at),
         "updated_at": str(u.updated_at),
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# STRUCTURED CONTENT CRUD (T-028)
+# CRUD cho các bảng: locations, tours, itineraries, intent_patterns, locations_alias
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Locations (attractions) ───────────────────────────────────────────────
+
+@router.get("/locations")
+async def list_locations(
+    destination_id: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    stmt = select(Location)
+    if destination_id:
+        stmt = stmt.where(Location.destination_id == destination_id)
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows  = await db.execute(stmt.order_by(Location.created_at.desc()).offset((page - 1) * 20).limit(20))
+    items = rows.scalars().all()
+    return {
+        "total": total or 0, "page": page,
+        "items": [{"id": str(i.id), "name": i.name, "type": i.type,
+                   "verified": i.verified, "data_source": i.data_source} for i in items],
+    }
+
+
+@router.post("/locations", status_code=201)
+async def create_location(body: dict, db: DB = None, _: User = Depends(require_admin)):
+    import uuid as _uuid
+    obj = Location(
+        id=_uuid.uuid4(),
+        destination_id=body.get("destination_id"),
+        name=body["name"],
+        type=body.get("type"),
+        address=body.get("address"),
+        hours=body.get("hours"),
+        description=body.get("description"),
+        tips=body.get("tips"),
+        image_url=body.get("image_url"),
+        data_source=body.get("data_source"),
+    )
+    db.add(obj)
+    await db.commit()
+    await db.refresh(obj)
+    return {"id": str(obj.id)}
+
+
+@router.patch("/locations/{loc_id}")
+async def update_location(loc_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Location, loc_id)
+    for field in ("name", "type", "address", "hours", "description", "tips", "image_url", "data_source", "verified"):
+        if field in body:
+            setattr(obj, field, body[field])
+    await db.commit()
+    return {"id": str(obj.id)}
+
+
+@router.delete("/locations/{loc_id}", status_code=204)
+async def delete_location(loc_id: str, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Location, loc_id)
+    await db.delete(obj)
+    await db.commit()
+
+
+# ── Tours ─────────────────────────────────────────────────────────────────
+
+@router.get("/tours")
+async def list_tours(
+    destination_id: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    stmt = select(Tour)
+    if destination_id:
+        stmt = stmt.where(Tour.destination_id == destination_id)
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows  = await db.execute(stmt.order_by(Tour.created_at.desc()).offset((page - 1) * 20).limit(20))
+    items = rows.scalars().all()
+    return {
+        "total": total or 0, "page": page,
+        "items": [{"id": str(i.id), "name": i.name, "duration": i.duration,
+                   "price": i.price, "verified": i.verified} for i in items],
+    }
+
+
+@router.post("/tours", status_code=201)
+async def create_tour(body: dict, db: DB = None, _: User = Depends(require_admin)):
+    import uuid as _uuid
+    obj = Tour(
+        id=_uuid.uuid4(),
+        destination_id=body["destination_id"],
+        name=body["name"],
+        duration=body.get("duration"),
+        price=body.get("price"),
+        group_size=body.get("group_size"),
+        description=body.get("description"),
+        includes=body.get("includes", []),
+        excludes=body.get("excludes", []),
+        data_source=body.get("data_source"),
+    )
+    db.add(obj)
+    await db.commit()
+    await db.refresh(obj)
+    return {"id": str(obj.id)}
+
+
+@router.patch("/tours/{tour_id}")
+async def update_tour(tour_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Tour, tour_id)
+    for field in ("name", "duration", "price", "group_size", "description", "includes", "excludes", "data_source", "verified"):
+        if field in body:
+            setattr(obj, field, body[field])
+    await db.commit()
+    return {"id": str(obj.id)}
+
+
+@router.delete("/tours/{tour_id}", status_code=204)
+async def delete_tour(tour_id: str, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Tour, tour_id)
+    await db.delete(obj)
+    await db.commit()
+
+
+# ── Itineraries ────────────────────────────────────────────────────────────
+
+@router.get("/itineraries")
+async def list_itineraries(
+    city_slug: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    stmt = select(Itinerary)
+    if city_slug:
+        stmt = stmt.where(Itinerary.city_slug == city_slug)
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows  = await db.execute(stmt.order_by(Itinerary.created_at.desc()).offset((page - 1) * 20).limit(20))
+    items = rows.scalars().all()
+    return {
+        "total": total or 0, "page": page,
+        "items": [{"id": str(i.id), "title": i.title, "city_slug": i.city_slug,
+                   "duration_days": i.duration_days, "is_active": i.is_active} for i in items],
+    }
+
+
+@router.get("/itineraries/{itin_id}")
+async def get_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Itinerary, itin_id)
+    result = await db.execute(
+        select(ItineraryItem).where(ItineraryItem.itinerary_id == itin_id).order_by(
+            ItineraryItem.day_no, ItineraryItem.order_no
+        )
+    )
+    sub_items = result.scalars().all()
+    return {
+        "id": str(obj.id), "title": obj.title, "city_slug": obj.city_slug,
+        "duration_days": obj.duration_days, "group_type": obj.group_type,
+        "is_active": obj.is_active, "data_source": obj.data_source,
+        "days": [{"day_no": i.day_no, "order_no": i.order_no, "time_slot": i.time_slot,
+                  "title": i.title, "ref_type": i.ref_type} for i in sub_items],
+    }
+
+
+@router.patch("/itineraries/{itin_id}")
+async def update_itinerary(itin_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Itinerary, itin_id)
+    for field in ("title", "duration_days", "group_type", "budget_low", "budget_high", "is_active", "data_source", "verified"):
+        if field in body:
+            setattr(obj, field, body[field])
+    await db.commit()
+    return {"id": str(obj.id)}
+
+
+@router.delete("/itineraries/{itin_id}", status_code=204)
+async def delete_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, Itinerary, itin_id)
+    await db.delete(obj)
+    await db.commit()
+
+
+# ── Intent patterns (DB) ─────────────────────────────────────────────────
+
+@router.get("/intent-patterns-db")
+async def list_intent_patterns_db(
+    intent: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    stmt = select(IntentPattern).where(IntentPattern.is_active == True)  # noqa: E712
+    if intent:
+        stmt = stmt.where(IntentPattern.intent == intent)
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows  = await db.execute(stmt.order_by(IntentPattern.intent, IntentPattern.keyword).offset((page - 1) * 50).limit(50))
+    items = rows.scalars().all()
+    return {
+        "total": total or 0, "page": page,
+        "items": [{"id": str(i.id), "intent": i.intent, "keyword": i.keyword,
+                   "weight": i.weight, "is_active": i.is_active} for i in items],
+    }
+
+
+@router.post("/intent-patterns-db", status_code=201)
+async def create_intent_pattern_db(body: dict, db: DB = None, _: User = Depends(require_admin)):
+    import uuid as _uuid
+    obj = IntentPattern(id=_uuid.uuid4(), intent=body["intent"], keyword=body["keyword"].strip().lower(), weight=body.get("weight", 1))
+    db.add(obj)
+    await db.commit()
+    return {"id": str(obj.id)}
+
+
+@router.patch("/intent-patterns-db/{pat_id}")
+async def update_intent_pattern_db(pat_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, IntentPattern, pat_id)
+    for field in ("keyword", "weight", "is_active"):
+        if field in body:
+            setattr(obj, field, body[field])
+    await db.commit()
+    return {"id": str(obj.id)}
+
+
+@router.delete("/intent-patterns-db/{pat_id}", status_code=204)
+async def delete_intent_pattern_db(pat_id: str, db: DB = None, _: User = Depends(require_admin)):
+    obj = await _get_or_404(db, IntentPattern, pat_id)
+    await db.delete(obj)
+    await db.commit()
+
+
+# ── Locations alias ───────────────────────────────────────────────────────
+
+@router.get("/locations-alias")
+async def list_locations_alias(
+    level: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    stmt = select(LocationAlias).where(LocationAlias.is_active == True)  # noqa: E712
+    if level:
+        stmt = stmt.where(LocationAlias.level == level)
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows  = await db.execute(stmt.order_by(LocationAlias.new_slug).offset((page - 1) * 50).limit(50))
+    items = rows.scalars().all()
+    return {
+        "total": total or 0, "page": page,
+        "items": [{"id": str(i.id), "old_name": i.old_name,
+                   "new_slug": i.new_slug, "level": i.level} for i in items],
     }

@@ -40,6 +40,7 @@ BUG FIXES (kế thừa từ trước):
 from __future__ import annotations
 
 import asyncio
+import os
 import time
 import uuid
 from typing import AsyncGenerator, Optional
@@ -57,10 +58,37 @@ from app.services import hallucination_guard as guard
 from app.services import gemini_optimizer as gopt
 from app.services import retrieval_optimizer as ropt
 from app.services import hybrid_search as hybrid
+from app.services import structured_search
+from app.services import quick_replies
 from app.services import evaluation_monitor as evalmon
 from app.utils import get_logger
 
 logger = get_logger("rag_pipeline")
+
+import re as _re
+
+# [FAQ-direct] Ngưỡng cosine để trả thẳng đáp án FAQ (không gọi Gemini). Cao để
+# tránh trả nhầm FAQ khác ý. Chỉnh qua RAG_FAQ_DIRECT.
+_FAQ_DIRECT_THRESHOLD: float = float(os.getenv("RAG_FAQ_DIRECT", "0.68"))
+
+
+def _clean_faq(text: str) -> str:
+    """Tách phần đáp án từ nội dung faq dạng 'Q: ...\\nA: ...\\n## ...'."""
+    if not text:
+        return ""
+    if "A:" in text:
+        text = text.split("A:", 1)[1]
+    # cắt phần heading markdown thừa (## ...) bị lẫn khi parse faq.md — kể cả khi
+    # không đứng đầu dòng (parser đôi lúc nối liền).
+    text = _re.split(r"#{2,}\s", text)[0]
+    return text.strip()
+
+
+# [OPT-2.3] Cross-encoder rerank (bge-reranker-v2-m3, 568M) tốn ~7s/query khi
+# chạy cùng bge-m3 trên GPU 6GB (tranh VRAM) — phá vỡ mục tiêu <2s. RRF fusion
+# (Qdrant semantic + PG keyword) đã cho thứ hạng tốt, structured DB lại đứng đầu
+# sources, nên TẮT rerank mặc định. Bật lại qua RAG_RERANK=1 nếu có GPU mạnh.
+_RERANK_ENABLED: bool = os.getenv("RAG_RERANK", "0") == "1"
 
 
 # ── Lazy singletons ───────────────────────────────────────────────────────────
@@ -70,15 +98,33 @@ _qdrant: Optional[QdrantClient] = None
 _genai_client: Optional[genai.Client] = None
 
 
+def _detect_device() -> str:
+    """
+    [OPT-1.3] Tự nhận thiết bị: 'cuda' nếu có GPU NVIDIA + torch bản CUDA, ngược
+    lại 'cpu'. An toàn khi torch là bản CPU-only hoặc không có driver — luôn
+    fallback 'cpu', không bao giờ raise.
+    """
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "cuda"
+    except Exception as e:
+        logger.warning(f"[Device] Không kiểm tra được CUDA, dùng CPU: {e}")
+    return "cpu"
+
+
 def _get_embed_model() -> SentenceTransformer:
     global _embed_model
     if _embed_model is None:
-        logger.info(f"Loading embedding model: {settings.EMBEDDING_MODEL}")
+        device = _detect_device()
+        logger.info(f"Loading embedding model: {settings.EMBEDDING_MODEL} | device={device}")
         t0 = time.monotonic()
-        _embed_model = SentenceTransformer(settings.EMBEDDING_MODEL)
-        # Warm-up: encode 1 câu rỗng để load weights lên RAM/GPU ngay
+        _embed_model = SentenceTransformer(settings.EMBEDDING_MODEL, device=device)
+        # Warm-up: encode 1 câu để load weights lên RAM/GPU ngay (giảm cold-start)
         _embed_model.encode(["warm-up"], normalize_embeddings=True)
-        logger.info(f"Embedding model loaded in {int((time.monotonic()-t0)*1000)}ms")
+        logger.info(
+            f"Embedding model loaded in {int((time.monotonic()-t0)*1000)}ms (device={device})"
+        )
     return _embed_model
 
 
@@ -135,6 +181,18 @@ def _ensure_collection_sync() -> None:
             logger.info(f"[Qdrant] Auto-created collection '{col_name}'")
         else:
             logger.info(f"[Qdrant] Collection '{col_name}' already exists")
+
+    # [FAQ-direct] Payload index để lọc category/destination_id (bắt buộc, nếu
+    # không Qdrant trả 400 khi filter). Idempotent — gọi lại không sao.
+    for field in ("category", "destination_id"):
+        try:
+            client.create_payload_index(
+                collection_name=settings.QDRANT_COLLECTION,
+                field_name=field,
+                field_schema="keyword",
+            )
+        except Exception:
+            pass  # đã tồn tại hoặc không cần
 
 
 def _search_qdrant_sync(query_vec: list[float], top_k: int) -> list[dict]:
@@ -316,7 +374,7 @@ def _upsert_qdrant_sync(entries: list[dict]) -> int:
     vectors = model.encode(
         texts,
         normalize_embeddings=True,
-        batch_size=16,
+        batch_size=64,
         show_progress_bar=False,
     ).tolist()
 
@@ -332,6 +390,8 @@ def _upsert_qdrant_sync(entries: list[dict]) -> int:
                     "title": e.get("title", ""),
                     "category": e.get("category", ""),
                     "source_id": e["id"],
+                    # [FAQ-direct] cho phép lọc theo thành phố khi trả FAQ trực tiếp
+                    "destination_id": e.get("destination_id", ""),
                 },
             )
         )
@@ -343,6 +403,38 @@ def _upsert_qdrant_sync(entries: list[dict]) -> int:
     )
     logger.info(f"[Qdrant] Upserted {len(points)} points into '{settings.QDRANT_COLLECTION}'")
     return len(points)
+
+
+def _faq_direct_sync(query_vec: list[float], destination_id: str) -> Optional[str]:
+    """
+    [FAQ-direct] Tìm FAQ khớp nhất cho ĐÚNG thành phố (lọc category=faq +
+    destination_id). Trả đáp án đã làm sạch nếu cosine ≥ ngưỡng, ngược lại None.
+    Lọc theo destination_id để tránh trả FAQ của tỉnh khác.
+    """
+    if not destination_id:
+        return None
+    client = _get_qdrant()
+    try:
+        res = client.search(
+            collection_name=settings.QDRANT_COLLECTION,
+            query_vector=query_vec,
+            limit=1,
+            with_payload=True,
+            score_threshold=_FAQ_DIRECT_THRESHOLD,
+            query_filter=qmodels.Filter(must=[
+                qmodels.FieldCondition(key="category", match=qmodels.MatchValue(value="faq")),
+                qmodels.FieldCondition(key="destination_id", match=qmodels.MatchValue(value=destination_id)),
+            ]),
+        )
+    except Exception as e:
+        logger.warning(f"[FAQ-direct] search lỗi: {e}")
+        return None
+    if not res:
+        return None
+    answer = _clean_faq(res[0].payload.get("text", "") if res[0].payload else "")
+    if answer:
+        logger.info(f"[FAQ-direct] hit score={res[0].score:.3f} dest={destination_id[:8]}")
+    return answer or None
 
 
 def _delete_qdrant_sync(entry_id: str) -> None:
@@ -451,39 +543,38 @@ def _build_rag_fallback_answer(sources: list[dict], question: str) -> str:
     """
     if not sources:
         return (
-            "⚠️ Hệ thống AI đang tạm thời quá tải. "
-            "Mình chưa tìm được thông tin phù hợp cho câu hỏi này. "
-            "Bạn vui lòng thử lại sau ít phút nhé!"
+            "Xin lỗi, trợ lý AI đang tạm bận. "
+            "Mình chưa tìm được thông tin phù hợp cho câu hỏi này — "
+            "bạn thử hỏi lại cụ thể hơn (kèm tên địa danh) nhé!"
         )
 
-    lines = [
-        "⚠️ *Hệ thống AI đang tạm thời quá tải — đây là thông tin tham khảo trực tiếp từ cơ sở dữ liệu:*\n"
-    ]
-    seen_titles = set()
-    for i, src in enumerate(sources[:5]):
-        title = src.get("title", "").strip()
-        text = src.get("text", "").strip()
-        city = src.get("city", "").strip()
-        category = src.get("category", "").strip()
-
-        if not text:
+    # [OPT-2.2] Khi LLM lỗi/hết quota: vẫn trả lời HỮU ÍCH bằng dữ liệu thật từ DB,
+    # nhóm theo loại cho dễ đọc thay vì dump thô. Đây là "graceful degradation".
+    _CAT_LABEL = {
+        "hotel": "🏨 Khách sạn", "tour": "🧳 Tour", "transport": "🚗 Di chuyển",
+        "shopping": "🛍 Mua sắm", "attraction": "📍 Điểm đến", "event": "🎉 Sự kiện",
+        "ticket": "🎟 Vé/giá", "itinerary": "🗺 Lịch trình",
+        "food": "🍜 Ẩm thực", "faq": "ℹ️ Hỏi đáp", "tip": "💡 Kinh nghiệm",
+    }
+    grouped: dict[str, list[str]] = {}
+    seen = set()
+    for src in sources[:10]:
+        text = (src.get("text") or "").strip()
+        if not text or text in seen:
             continue
-        if title in seen_titles:
-            continue
-        seen_titles.add(title)
+        seen.add(text)
+        cat = (src.get("category") or "").strip()
+        grouped.setdefault(cat, []).append(text[:300] + ("…" if len(text) > 300 else ""))
 
-        header = f"**{title}**" if title else f"**Kết quả {i+1}**"
-        if city:
-            header += f" ({city})"
-        if category:
-            header += f" [{category}]"
-
-        # Giới hạn độ dài mỗi chunk để không quá dài
-        snippet = text[:400] + "..." if len(text) > 400 else text
-        lines.append(f"{header}\n{snippet}")
-
-    lines.append("\n*Bạn thử lại sau ít phút để nhận tư vấn chi tiết hơn từ AI nhé!*")
-    return "\n\n".join(lines)
+    lines = ["Dưới đây là thông tin từ cơ sở dữ liệu PDTrip cho câu hỏi của bạn:\n"]
+    for cat, items in grouped.items():
+        label = _CAT_LABEL.get(cat, "•")
+        lines.append(f"**{label}**")
+        for it in items[:6]:
+            lines.append(f"- {it}")
+        lines.append("")
+    lines.append("_(Tư vấn AI chi tiết hơn sẽ sẵn sàng ngay khi hệ thống bớt tải.)_")
+    return "\n".join(lines)
 
 # ── RAGPipeline ───────────────────────────────────────────────────────────────
 
@@ -503,6 +594,24 @@ class RAGPipeline:
         vec = await asyncio.to_thread(_embed_sync, text)
         ms = int((time.monotonic() - t0) * 1000)
         return vec, ms
+
+    async def _faq_direct(
+        self, query_vec: list[float], location: Optional[str], city_slug: Optional[str]
+    ) -> Optional[str]:
+        """[FAQ-direct] Trả đáp án FAQ của đúng thành phố nếu khớp cao — không gọi LLM."""
+        if not location and not city_slug:
+            return None
+        try:
+            from app.db.database import AsyncSessionLocal
+            from app.services.structured_search import resolve_destination
+            async with AsyncSessionLocal() as db:
+                did, _ = await resolve_destination(db, location, city_slug)
+            if not did:
+                return None
+            return await asyncio.to_thread(_faq_direct_sync, query_vec, str(did))
+        except Exception as e:
+            logger.warning(f"[FAQ-direct] lỗi: {e}")
+            return None
 
     async def _embed_cached(self, text: str) -> tuple[list[float], int, bool]:
         """
@@ -596,12 +705,17 @@ class RAGPipeline:
             return []
 
     async def _get_sources(
-        self, question: str, query_vec: list[float], intent: Optional[str] = None
+        self, question: str, query_vec: list[float], intent: Optional[str] = None,
+        entities: Optional[dict] = None,
     ) -> tuple[list[dict], int, str]:
         """
         [YÊU CẦU 7] Hybrid Search thực sự: chạy SONG SONG Qdrant (semantic) +
         PostgreSQL FTS (keyword), hợp nhất bằng Reciprocal Rank Fusion,
         sau đó re-rank bằng cross-encoder để lấy top-K cuối cùng.
+
+        [OPT-2.2] Ngoài knowledge_entries, lấy thêm dữ liệu CÓ CẤU TRÚC từ Postgres
+        (hotels/tours/tickets/transport/shopping/locations/events/itineraries) theo
+        intent + địa danh, đưa lên đầu sources để Gemini grounding + đề xuất.
 
         [YÊU CẦU 6] top_k động theo intent (FAQ=3, itinerary=8...).
         [YÊU CẦU 3] Dynamic threshold áp dụng sau khi có kết quả Qdrant.
@@ -613,6 +727,9 @@ class RAGPipeline:
             return [], 0, "skipped"
 
         rrf_pool_k = max(final_top_k * 3, 15)
+
+        # [OPT-2.3] Rerank tắt mặc định (xem _RERANK_ENABLED) — quá chậm trên GPU 6GB.
+        use_reranking = _RERANK_ENABLED
 
         async def qdrant_branch():
             hits, _ms = await self._search(query_vec, rrf_pool_k)
@@ -629,18 +746,32 @@ class RAGPipeline:
             postgres_search_fn=pg_branch,
             rrf_top_k=rrf_pool_k,
             final_top_k=final_top_k,
-            use_reranking=True,
+            use_reranking=use_reranking,
         )
         search_ms = int((time.monotonic() - t0) * 1000)
 
-        # Nếu cả 2 nhánh đều trống (KB chưa có data liên quan) → search_method rõ ràng
-        if not final_results:
-            search_method = "no_results"
-        else:
-            search_method = meta["method"]
-
         # [YÊU CẦU 3] Đánh dấu rõ nguồn PostgreSQL FTS là "gần đúng"
         final_results = guard.annotate_fallback_sources(final_results)
+
+        # [OPT-2.2] Bổ sung dữ liệu có cấu trúc (DB) theo intent + địa danh. Đưa
+        # LÊN ĐẦU vì là dữ liệu thật, đầy đủ (giá, sao, địa chỉ...) — Gemini ưu
+        # tiên dùng để trả lời chính xác + đề xuất theo sở thích.
+        ent = entities or {}
+        structured = await structured_search.fetch_structured_sources(
+            intent=intent,
+            location=ent.get("location"),
+            city_slug=ent.get("city_slug"),
+        )
+        if structured:
+            final_results = structured + final_results
+
+        # search_method phản ánh nguồn đã dùng
+        if not final_results:
+            search_method = "no_results"
+        elif structured:
+            search_method = "db_structured+" + (meta["method"] if meta else "kb")
+        else:
+            search_method = meta["method"]
 
         return final_results, search_ms, search_method
 
@@ -653,6 +784,12 @@ class RAGPipeline:
         session_id: str,
     ) -> dict:
         t0 = time.monotonic()
+
+        # [Quick reply] Câu quen thuộc/meta (bạn là ai, giúp được gì, cảm ơn...) →
+        # trả mẫu tức thì, KHÔNG embedding, KHÔNG Gemini.
+        quick = quick_replies.match(question)
+        if quick:
+            return self._short_circuit_response(quick, t0, intent="quick_reply")
 
         # [YÊU CẦU 2] NLP preprocessing: normalize, intent, entities, rewriting,
         # clarification flow, out-of-scope / greeting short-circuit.
@@ -676,6 +813,16 @@ class RAGPipeline:
         effective_question = nlp_result.rewritten_query
         intent = nlp_result.intent
 
+        # [Anti-hallucination theo nhóm] Nếu user hỏi đúng 1 nhóm (khách sạn/tour/
+        # mua sắm/di chuyển/ẩm thực) cho 1 thành phố mà thành phố đó KHÔNG có dữ
+        # liệu nhóm đó → trả câu "chưa có dữ liệu" + gợi ý nhóm có data, KHÔNG gọi
+        # LLM (tránh bịa từ vài entry faq lạc).
+        gap_msg = await structured_search.category_gap_message(
+            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
+        )
+        if gap_msg:
+            return self._short_circuit_response(gap_msg, t0, intent=intent)
+
         # [YÊU CẦU 4] Cache: thử exact-match trước, rồi semantic cache
         cached_response = await cache_layer.get_cached_response(effective_question)
         if cached_response:
@@ -698,9 +845,28 @@ class RAGPipeline:
 
         evalmon.performance_monitor.record_cache_lookup(hit=False)
 
-        sources, search_ms, search_method = await self._get_sources(
-            effective_question, query_vec, intent
+        # [FAQ-direct] Nếu câu hỏi khớp cao 1 FAQ của đúng thành phố → trả thẳng
+        # đáp án FAQ, KHÔNG gọi Gemini (tiết kiệm quota, <1s).
+        faq_ans = await self._faq_direct(
+            query_vec, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
         )
+        if faq_ans:
+            return self._short_circuit_response(faq_ans, t0, intent=intent)
+
+        sources, search_ms, search_method = await self._get_sources(
+            effective_question, query_vec, intent, entities=nlp_result.entities
+        )
+
+        # [OPT-2.1] No-context guard: KB không có nguồn liên quan → trả câu mẫu
+        # "chưa có dữ liệu" thay vì gọi Gemini (nhanh < 500ms + chặn hallucination).
+        if not sources:
+            logger.info(
+                f"[RAG] session={session_id} | intent={intent} | "
+                f"NO sources ({search_method}) → missing-knowledge guard (bỏ qua LLM)"
+            )
+            return self._short_circuit_response(
+                nlp.MISSING_KNOWLEDGE_RESPONSE, t0, intent=intent
+            )
 
         # [YÊU CẦU 5] Sliding summary nếu history dài
         client = _get_genai_client()
@@ -842,6 +1008,13 @@ class RAGPipeline:
     ) -> AsyncGenerator[dict, None]:
         t0 = time.monotonic()
 
+        # [Quick reply] (bản stream) — câu quen thuộc/meta → trả mẫu tức thì.
+        quick = quick_replies.match(question)
+        if quick:
+            async for ev in self._short_circuit_stream(quick, t0, "quick_reply"):
+                yield ev
+            return
+
         # [YÊU CẦU 2] NLP preprocessing — short-circuit cho greeting/out-of-scope/clarification
         nlp_result = nlp.preprocess(question, history)
 
@@ -869,6 +1042,15 @@ class RAGPipeline:
         effective_question = nlp_result.rewritten_query
         intent = nlp_result.intent
 
+        # [Anti-hallucination theo nhóm] (bản stream) — xem chú thích ở query().
+        gap_msg = await structured_search.category_gap_message(
+            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
+        )
+        if gap_msg:
+            async for ev in self._short_circuit_stream(gap_msg, t0, intent):
+                yield ev
+            return
+
         # [YÊU CẦU 4] Cache check — nếu hit, "giả lập" stream bằng cách trả nguyên answer
         cached_response = await cache_layer.get_cached_response(effective_question)
         if cached_response:
@@ -889,9 +1071,30 @@ class RAGPipeline:
 
         evalmon.performance_monitor.record_cache_lookup(hit=False)
 
-        sources, search_ms, search_method = await self._get_sources(
-            effective_question, query_vec, intent
+        # [FAQ-direct] (bản stream) — khớp cao FAQ đúng thành phố → trả thẳng, bỏ Gemini.
+        faq_ans = await self._faq_direct(
+            query_vec, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
         )
+        if faq_ans:
+            async for ev in self._short_circuit_stream(faq_ans, t0, intent):
+                yield ev
+            return
+
+        sources, search_ms, search_method = await self._get_sources(
+            effective_question, query_vec, intent, entities=nlp_result.entities
+        )
+
+        # [OPT-2.1] No-context guard (bản stream): không nguồn → câu mẫu, bỏ qua LLM.
+        if not sources:
+            logger.info(
+                f"[RAG:stream] session={session_id} | intent={intent} | "
+                f"NO sources ({search_method}) → missing-knowledge guard (bỏ qua LLM)"
+            )
+            async for ev in self._short_circuit_stream(
+                nlp.MISSING_KNOWLEDGE_RESPONSE, t0, intent
+            ):
+                yield ev
+            return
 
         client = _get_genai_client()
         recent_history, summary_text = await gopt.build_sliding_history(

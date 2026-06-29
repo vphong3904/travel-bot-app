@@ -223,6 +223,10 @@ INTENT_PATTERNS: dict[str, list[str]] = {
     "ask_activity": [
         "có gì chơi", "có gì hay", "nên đi đâu", "địa điểm nào",
         "gợi ý chơi gì", "tham quan", "check in", "trải nghiệm",
+        # [OPT-3.2] bổ sung: câu hỏi "có gì đặc biệt/nổi tiếng" rất phổ biến
+        "có gì đặc biệt", "có gì nổi tiếng", "nổi tiếng", "điểm tham quan",
+        "danh lam", "thắng cảnh", "bãi biển", "khám phá gì", "nên ghé",
+        "chơi gì", "vui chơi", "chơi ở", "tham quan gì", "đi chơi",
     ],
     "ask_safety": [
         "an toàn", "nguy hiểm", "lừa đảo", "bệnh viện", "cấp cứu",
@@ -233,7 +237,10 @@ INTENT_PATTERNS: dict[str, list[str]] = {
         "ngân sách", "budget", "phí", "vé vào",
     ],
     "ask_destination": [
-        "du lịch", "địa điểm", "nơi nào", "đi đâu",
+        # [OPT-3.2] Bỏ "du lịch" — quá chung chung, có mặt trong vô số câu (kể cả
+        # "đổi tiền khi du lịch") khiến hòa/thắng intent đặc trưng hơn như ask_faq.
+        # Câu chỉ có địa danh vẫn rơi về ask_destination qua nhánh fallback location.
+        "địa điểm", "nơi nào", "đi đâu",
         "thăm quan", "khám phá", "điểm đến", "cảnh đẹp",
     ],
     "find_tour": [
@@ -245,12 +252,18 @@ INTENT_PATTERNS: dict[str, list[str]] = {
     "ask_faq": [
         "đổi tiền", "sim", "wifi", "ngôn ngữ", "múi giờ", "tiền tệ",
     ],
+    "ask_shopping": [
+        "chợ", "chợ đêm", "trung tâm thương mại", "tttm", "siêu thị",
+        "mua sắm", "quà lưu niệm", "mua gì", "shopping", "outlet", "mua quà",
+    ],
     "out_of_scope": [
         "code", "lập trình", "python", "javascript", "git",
         "hacking", "crypto", "bitcoin", "chứng khoán",
         "toán học", "công thức", "giải phương trình",
         "thể thao", "bóng đá", "game", "anime",
         "chính trị", "bầu cử", "chiến tranh",
+        # [OPT-3.2] tài chính/tin tức ngoài phạm vi du lịch
+        "giá vàng", "tỷ giá", "xổ số", "lô đề", "thời sự",
     ],
 }
 
@@ -303,6 +316,13 @@ def _remove_accents(text: str) -> str:
     text = text.replace("đ", "d").replace("Đ", "D")
     nfkd = unicodedata.normalize("NFKD", text)
     return "".join(c for c in nfkd if not unicodedata.combining(c))
+
+
+# [OPT-3.2] Keyword đơn âm tiết của thời tiết rất dễ VA CHẠM khi bỏ dấu:
+#   "nắng"→"nang" trùng "Nẵng"; "bão"→"bao" trùng "bao nhiêu"; "mưa"→"mua" trùng
+#   "mua"(sắm); "nóng"→"nong"; "lạnh"→"lanh". Các keyword này CHỈ khớp khi câu có
+#   dấu (so trên `lower`), KHÔNG khớp bản không dấu — chặn false positive ask_weather.
+_ACCENT_SENSITIVE_KEYWORDS: set[str] = {"nắng", "mưa", "nóng", "lạnh", "bão"}
 
 
 _KEYWORD_PATTERN_CACHE: dict[str, re.Pattern] = {}
@@ -364,6 +384,20 @@ def reload_intent_patterns() -> None:
     _load_intent_patterns_from_file.cache_clear()
     global INTENT_PATTERNS, INTENT_PATTERNS_NO_ACCENT
     INTENT_PATTERNS = _load_intent_patterns_from_file()
+    INTENT_PATTERNS_NO_ACCENT = _build_no_accent(INTENT_PATTERNS)
+
+
+def apply_intent_patterns(patterns: dict[str, list[str]]) -> None:
+    """
+    [OPT-3.1] Áp bộ intent patterns nạp từ DB (bảng intent_patterns) vào runtime.
+
+    Gọi khi startup và sau khi admin sửa pattern (qua endpoint reload). Bỏ qua
+    nếu `patterns` rỗng để tránh xoá mất bộ keyword đang dùng (giữ fallback file).
+    """
+    if not patterns:
+        return
+    global INTENT_PATTERNS, INTENT_PATTERNS_NO_ACCENT
+    INTENT_PATTERNS = patterns
     INTENT_PATTERNS_NO_ACCENT = _build_no_accent(INTENT_PATTERNS)
 
 
@@ -469,9 +503,17 @@ def resolve_city_slug(location_text: str) -> tuple[Optional[str], bool]:
     if slug:
         return slug, True
 
-    # Thử match theo substring (vd "đi vũng tàu chơi gì" chứa "vũng tàu")
+    # Thử match alias trong câu (vd "đi vũng tàu chơi gì" chứa "vũng tàu").
+    # [FIX] Yêu cầu khớp THEO RANH GIỚI TỪ + alias đủ dài (≥4 ký tự) để tránh
+    # false positive — trước đây dùng `in` thô khiến tên hiện tại như "Đà Lạt"
+    # khớp nhầm một alias tỉnh cũ là substring → gắn city_slug sai + chèn câu
+    # "thuộc X sau sáp nhập" lạc đề vào câu trả lời.
+    no_accent_sp = _remove_accents(location_text).lower()
     for old_name_lower, mapped_slug in _OLD_NAME_TO_SLUG.items():
-        if old_name_lower and (old_name_lower in lower or old_name_lower in no_accent):
+        if not old_name_lower or len(old_name_lower) < 4:
+            continue
+        na = _remove_accents(old_name_lower).lower()
+        if re.search(r"(?<!\w)" + re.escape(na) + r"(?!\w)", no_accent_sp):
             return mapped_slug, True
 
     return None, False
@@ -548,6 +590,18 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
     lower = text.lower()
     no_acc = _remove_accents(lower)
 
+    # [OPT-3.2] Loại bỏ tên địa danh khỏi text dùng để CHẤM ĐIỂM intent.
+    # Lý do: bỏ dấu tiếng Việt gây va chạm giữa tên riêng và keyword — vd
+    # "Đà Nẵng" → "da nang" chứa "nang" trùng keyword "nắng" của ask_weather,
+    # khiến "Biển Mỹ Khê ở Đà Nẵng có gì đặc biệt?" bị nhận nhầm là ask_weather.
+    # Địa danh đã được tách ra entities['location'] nên bỏ khỏi text là an toàn.
+    loc = entities.get("location")
+    if loc:
+        for token in (loc.lower(), _remove_accents(loc.lower())):
+            if token:
+                lower = lower.replace(token, " ")
+                no_acc = no_acc.replace(_remove_accents(token), " ")
+
     # Check out_of_scope trước
     oos_score = sum(1 for kw in INTENT_PATTERNS_NO_ACCENT["out_of_scope"] if _keyword_in_text(kw, no_acc))
     if oos_score >= 1:
@@ -591,7 +645,12 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
         # substring collision kiểu "an gi" khớp nhầm vào trong "can gi".
         score = sum(
             len(kw.split()) for kw, kw_na in zip(keywords, kw_no_acc_list)
-            if _keyword_in_text(kw, lower) or _keyword_in_text(kw_na, no_acc)
+            if (
+                # [OPT-3.2] keyword nhạy dấu: chỉ khớp bản CÓ dấu để tránh va chạm
+                _keyword_in_text(kw, lower)
+                if kw in _ACCENT_SENSITIVE_KEYWORDS
+                else (_keyword_in_text(kw, lower) or _keyword_in_text(kw_na, no_acc))
+            )
         )
         if score > 0:
             scores[intent] = score
@@ -762,7 +821,12 @@ def preprocess(
     # knowledge-base (đã được tổ chức theo slug/tên mới, vd "tp-ho-chi-minh").
     # Không sửa lại original/normalized_query — chỉ enrich bản dùng để
     # embedding + retrieval.
-    if not needs_clarification and entities.get("is_legacy_location_name") and entities.get("city_slug"):
+    # [FIX] Chỉ chèn note khi LOCATION là tên tỉnh/thành CŨ THẬT SỰ (khớp chính
+    # xác bảng alias) — tránh false positive khi ward/city resolver gắn nhầm
+    # city_slug từ chữ lạc (vd "Đà Lạt có chợ đêm" từng bị gắn slug bac-ninh).
+    _loc = (entities.get("location") or "").lower()
+    _is_genuine_legacy = _loc in _OLD_NAME_TO_SLUG or _remove_accents(_loc) in _OLD_NAME_TO_SLUG
+    if not needs_clarification and _is_genuine_legacy and entities.get("city_slug"):
         new_city_name = CITY_SLUG_TO_DISPLAY_NAME.get(entities["city_slug"])
         if new_city_name and new_city_name.lower() not in rewritten.lower():
             rewritten = f"{rewritten} (thuộc {new_city_name} sau sáp nhập hành chính 2025)"

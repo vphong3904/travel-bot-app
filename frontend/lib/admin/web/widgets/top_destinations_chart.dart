@@ -27,6 +27,7 @@ class TopDestinationsChart extends StatelessWidget {
     return ChartCard(
       title: 'Địa điểm được hỏi nhiều nhất',
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: top.asMap().entries.map((entry) {
           final item = entry.value;
           final pct = maxVal > 0 ? item.count / maxVal : 0.0;

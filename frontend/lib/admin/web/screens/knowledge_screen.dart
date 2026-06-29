@@ -115,17 +115,18 @@ class _KnowledgeScreenState extends ConsumerState<KnowledgeScreen> {
                             : filter.category,
                         hint: const Text('Tất cả category'),
                         items: const [
-                          DropdownMenuItem(
-                              value: null,
-                              child: Text('Tất cả')),
-                          DropdownMenuItem(
-                              value: 'faq', child: Text('FAQ')),
-                          DropdownMenuItem(
-                              value: 'policy',
-                              child: Text('Policy')),
-                          DropdownMenuItem(
-                              value: 'destination',
-                              child: Text('Destination')),
+                          DropdownMenuItem(value: null, child: Text('Tất cả')),
+                          DropdownMenuItem(value: 'faq', child: Text('FAQ')),
+                          DropdownMenuItem(value: 'policy', child: Text('Policy')),
+                          DropdownMenuItem(value: 'destination', child: Text('Địa điểm')),
+                          DropdownMenuItem(value: 'hotel', child: Text('Khách sạn')),
+                          DropdownMenuItem(value: 'tour', child: Text('Tour')),
+                          DropdownMenuItem(value: 'food', child: Text('Ẩm thực')),
+                          DropdownMenuItem(value: 'shopping', child: Text('Mua sắm')),
+                          DropdownMenuItem(value: 'activity', child: Text('Lịch trình')),
+                          DropdownMenuItem(value: 'event', child: Text('Sự kiện')),
+                          DropdownMenuItem(value: 'transport', child: Text('Di chuyển')),
+                          DropdownMenuItem(value: 'tip', child: Text('Trải nghiệm')),
                         ],
                         onChanged: (v) => ref
                             .read(knowledgeFilterProvider.notifier)
