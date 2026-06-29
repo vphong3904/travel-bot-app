@@ -1,0 +1,385 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-013",
+    "status": "complete",
+    "partial_note": null,
+    "missing_fields": [],
+    "data_sources": [
+      "Kiến thức địa phương An Giang",
+      "vietnamtourism.gov.vn",
+      "angiang.gov.vn"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce3-7e4e-871a-99f341b6f9f1",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "title": "2N1Đ – Hành hương & Văn hóa Châu Đốc",
+      "duration_nights": 1,
+      "audience": ["gia đình", "hành hương tâm linh", "người cao tuổi"],
+      "difficulty": "easy",
+      "summary": "Lịch trình ngắn tập trung vào hành hương Núi Sam, khám phá văn hóa sông nước và thưởng thức ẩm thực đặc trưng Châu Đốc.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Núi Sam & Tâm linh",
+          "stops": [
+            {
+              "time": "6:00",
+              "location_ref": {
+                "id": "019f10d3-1ce0-7dfd-a5fd-7b3fc8b01fe4",
+                "name": "Miếu Bà Chúa Xứ Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Đến sớm khi ít người, không khí linh thiêng nhất. Thắp hương, chiêm bái."
+            },
+            {
+              "time": "7:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+                "name": "Chợ Châu Đốc",
+                "type": "destinations"
+              },
+              "duration_minutes": 45,
+              "notes": "Ăn sáng bún cá tại chợ, khám phá khu sạp mắm và mua đặc sản."
+            },
+            {
+              "time": "9:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7c31-a0af-20642150de0f",
+                "name": "Lăng Thoại Ngọc Hầu",
+                "type": "destinations"
+              },
+              "duration_minutes": 30,
+              "notes": "Tìm hiểu lịch sử đào kênh Vĩnh Tế, kiến trúc lăng mộ thời Nguyễn."
+            },
+            {
+              "time": "9:45",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+                "name": "Chùa Hang (Phước Điền Tự)",
+                "type": "destinations"
+              },
+              "duration_minutes": 45,
+              "notes": "Leo bộ lên chùa trong hang đá — mát mẻ, ít đông hơn Miếu Bà, view đẹp."
+            },
+            {
+              "time": "11:30",
+              "location_ref": {
+                "id": "019f10d3-1ce3-7dc6-96c6-14156f1fae04",
+                "name": "Nhà hàng Bò 7 Món Núi Sam",
+                "type": "restaurants"
+              },
+              "duration_minutes": 60,
+              "notes": "Bữa trưa đặc sản khu Núi Sam. Gọi set bò 7 món để thử đủ vị."
+            },
+            {
+              "time": "13:00",
+              "notes": "Nghỉ trưa tại khách sạn / resort khu Núi Sam."
+            },
+            {
+              "time": "15:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-73fa-a9a4-1f1e8e4c6212",
+                "name": "Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 90,
+              "notes": "Leo núi buổi chiều mát — đi bộ hoặc xe máy lên lưng chừng. Xem hoàng hôn từ đỉnh núi."
+            },
+            {
+              "time": "19:00",
+              "location_ref": {
+                "id": "019f10d3-1ce3-776f-b44c-d5e50738f86d",
+                "name": "Quán Lẩu Mắm Cô Ba",
+                "type": "restaurants"
+              },
+              "duration_minutes": 75,
+              "notes": "Bữa tối lẩu mắm — món đặc trưng không thể thiếu của Châu Đốc."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Sông Hậu & Làng Chăm",
+          "stops": [
+            {
+              "time": "6:30",
+              "notes": "Ăn sáng bún cá tại quán địa phương gần khách sạn."
+            },
+            {
+              "time": "7:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7785-8ab1-02c37de882e9",
+                "name": "Làng Chăm Châu Giang",
+                "type": "destinations"
+              },
+              "duration_minutes": 120,
+              "notes": "Đi phà từ bến Châu Giang. Thăm thánh đường, xem dệt thổ cẩm, mua vải làm quà."
+            },
+            {
+              "time": "10:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+                "name": "Chợ Châu Đốc – Khu Sạp Mắm",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Mua đặc sản về: mắm, khô bò, bánh bò thốt nốt. Nghỉ ăn trưa gần chợ."
+            },
+            {
+              "time": "13:30",
+              "notes": "Trả phòng và về."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "019f10d3-1ce3-7b61-9234-a18d85db8d46",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "title": "3N2Đ – Thiên nhiên, Biên giới & Văn hóa đa dân tộc",
+      "duration_nights": 2,
+      "audience": ["nhóm bạn", "cặp đôi", "khám phá"],
+      "difficulty": "easy_to_moderate",
+      "summary": "Lịch trình toàn diện: từ hành hương Núi Sam đến rừng tràm Trà Sư, chợ biên giới Tịnh Biên và Làng Chăm độc đáo.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Đến & Khu Núi Sam",
+          "stops": [
+            {
+              "time": "Buổi sáng",
+              "notes": "Di chuyển từ TP.HCM hoặc Cần Thơ đến Châu Đốc. Nhận phòng và ăn trưa."
+            },
+            {
+              "time": "14:00",
+              "location_ref": {
+                "id": "019f10d3-1ce0-7dfd-a5fd-7b3fc8b01fe4",
+                "name": "Miếu Bà Chúa Xứ Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Thăm Miếu Bà buổi chiều — ít đông hơn sáng sớm, ánh sáng đẹp."
+            },
+            {
+              "time": "15:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7c31-a0af-20642150de0f",
+                "name": "Lăng Thoại Ngọc Hầu",
+                "type": "destinations"
+              },
+              "duration_minutes": 30,
+              "notes": "Kết hợp thăm lăng — cách Miếu Bà chỉ vài trăm mét."
+            },
+            {
+              "time": "17:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-73fa-a9a4-1f1e8e4c6212",
+                "name": "Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Leo núi ngắm hoàng hôn — đẹp nhất khoảng 17:30–18:00."
+            },
+            {
+              "time": "19:00",
+              "location_ref": {
+                "id": "019f10d3-1ce3-7db5-a35a-f99e2d0504fe",
+                "name": "Nhà hàng Bò 7 Món Núi Sam",
+                "type": "restaurants"
+              },
+              "duration_minutes": 75,
+              "notes": "Bữa tối bò 7 món ngay khu Núi Sam."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Rừng Trà Sư & Biên giới Tịnh Biên",
+          "stops": [
+            {
+              "time": "5:30",
+              "notes": "Dậy sớm, ăn nhẹ và chuẩn bị đi Rừng Tràm Trà Sư (~35km). Đặt tour hoặc tự đi xe máy."
+            },
+            {
+              "time": "7:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7f4e-9aec-8c255394749f",
+                "name": "Rừng Tràm Trà Sư",
+                "type": "destinations"
+              },
+              "duration_minutes": 150,
+              "notes": "Đi xuồng ba lá vào rừng 30–45 phút. Ngắm bèo dâu và đàn chim. Đến trước 8:00 để có ánh sáng và không khí tốt nhất."
+            },
+            {
+              "time": "10:00",
+              "notes": "Ăn sáng/trưa sớm tại quán gần rừng Trà Sư. Nghỉ ngơi."
+            },
+            {
+              "time": "13:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7456-97b1-f4d154b75694",
+                "name": "Cửa khẩu Quốc tế Tịnh Biên & Chợ biên giới",
+                "type": "destinations"
+              },
+              "duration_minutes": 120,
+              "notes": "Tham quan khu chợ biên giới (~15km từ Trà Sư). Mua sắm, trải nghiệm không khí biên giới đặc trưng."
+            },
+            {
+              "time": "16:00",
+              "notes": "Về Châu Đốc nghỉ ngơi. Tối tự do ăn uống gần khách sạn — thử lẩu mắm hoặc hải sản sông."
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Làng Chăm & Về",
+          "stops": [
+            {
+              "time": "7:00",
+              "notes": "Ăn sáng bún cá Châu Đốc — lần cuối trước khi về."
+            },
+            {
+              "time": "8:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7785-8ab1-02c37de882e9",
+                "name": "Làng Chăm Châu Giang",
+                "type": "destinations"
+              },
+              "duration_minutes": 120,
+              "notes": "Đi phà sáng qua sông — thăm thánh đường, xem dệt, mua thổ cẩm."
+            },
+            {
+              "time": "10:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+                "name": "Chợ Châu Đốc – Mua quà",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Mua mắm, khô đặc sản về làm quà. Trả phòng và lên đường."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "019f10d3-1ce3-704e-9a58-8c962071125a",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "title": "3N2Đ – Mùa Nước Nổi (tháng 9–11) — Trải nghiệm đặc sản",
+      "duration_nights": 2,
+      "audience": ["nhiếp ảnh gia", "yêu thiên nhiên", "ẩm thực"],
+      "difficulty": "easy",
+      "season_note": "Lịch trình này thiết kế đặc biệt cho mùa nước nổi tháng 9–11. Ngoài mùa này, trải nghiệm sẽ khác (Trà Sư ít bèo dâu, không có cá linh mùa nổi).",
+      "summary": "Tận dụng mùa đặc biệt nhất của đồng bằng — rừng tràm bèo dâu rộ nhất, cá linh và bông điên điển đúng mùa, không khí mùa nước nổi đặc trưng miền Tây.",
+      "days": [
+        {
+          "day": 1,
+          "title": "Đến & Sông Hậu mùa nổi",
+          "stops": [
+            {
+              "time": "Buổi sáng",
+              "notes": "Di chuyển đến Châu Đốc. Nhận phòng homestay ven sông nếu có thể — trải nghiệm sẽ chân thực hơn khách sạn lớn mùa nước nổi."
+            },
+            {
+              "time": "14:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7c8e-a837-3ee8316e8516",
+                "name": "Kênh Vĩnh Tế",
+                "type": "destinations"
+              },
+              "duration_minutes": 90,
+              "notes": "Thuê xuồng máy đi dọc kênh Vĩnh Tế buổi chiều — ngắm cảnh nước nổi, nhà sàn ven kênh và người dân giăng lưới bắt cá linh."
+            },
+            {
+              "time": "18:30",
+              "notes": "Bữa tối: cá linh kho lạt, canh chua cá linh bông điên điển, bông súng — bộ tứ đặc sản chỉ có mùa nước nổi. Hỏi nhà hàng địa phương có cá linh tươi hay không."
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "Rừng Trà Sư đỉnh mùa — Sáng sớm",
+          "stops": [
+            {
+              "time": "5:00",
+              "notes": "Khởi hành sớm đến Rừng Trà Sư — đây là ngày quan trọng nhất của lịch trình mùa nước nổi."
+            },
+            {
+              "time": "6:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7f4e-9aec-8c255394749f",
+                "name": "Rừng Tràm Trà Sư",
+                "type": "destinations"
+              },
+              "duration_minutes": 180,
+              "notes": "3 tiếng tại Trà Sư: đi xuồng sáng sớm khi bèo dâu xanh nhất, ánh sáng vàng của sáng sớm, hàng nghìn chim trắng chuẩn bị bay đi kiếm ăn. Đây là khoảng thời gian vàng cho nhiếp ảnh."
+            },
+            {
+              "time": "10:00",
+              "notes": "Ăn sáng muộn tại quán địa phương gần Trà Sư. Nghỉ ngơi và về Châu Đốc."
+            },
+            {
+              "time": "14:00",
+              "location_ref": {
+                "id": "019f10d3-1ce0-7dfd-a5fd-7b3fc8b01fe4",
+                "name": "Miếu Bà Chúa Xứ Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Thăm Miếu Bà buổi chiều, kết hợp Lăng Thoại Ngọc Hầu."
+            },
+            {
+              "time": "16:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-73fa-a9a4-1f1e8e4c6212",
+                "name": "Núi Sam",
+                "type": "destinations"
+              },
+              "duration_minutes": 90,
+              "notes": "Leo Núi Sam ngắm cảnh nước nổi trải dài từ trên cao — mùa nước nổi đồng bằng nhìn từ đỉnh núi rất đặc biệt."
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "Làng Chăm & Mua quà đặc sản",
+          "stops": [
+            {
+              "time": "7:00",
+              "notes": "Ăn sáng bún cá Châu Đốc."
+            },
+            {
+              "time": "8:00",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7785-8ab1-02c37de882e9",
+                "name": "Làng Chăm Châu Giang",
+                "type": "destinations"
+              },
+              "duration_minutes": 120,
+              "notes": "Thăm Làng Chăm — đi phà sông Hậu mùa nước nổi cũng là trải nghiệm khác hơn mùa thường."
+            },
+            {
+              "time": "10:30",
+              "location_ref": {
+                "id": "019f10d3-1ce2-7cd3-b776-c51fd9affec2",
+                "name": "Chợ Châu Đốc",
+                "type": "destinations"
+              },
+              "duration_minutes": 60,
+              "notes": "Mua mắm, khô, đường thốt nốt. Mùa nước nổi có thêm cá linh khô tươi — mua mang về ngâm rượu hoặc kho."
+            },
+            {
+              "time": "12:00",
+              "notes": "Trả phòng, ăn trưa và về."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

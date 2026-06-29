@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "city": "an-giang-chau-doc",
+    "last_updated": "2026-06-29",
+    "agent_task": "T-004",
+    "status": "partial",
+    "partial_note": "Tên nhà hàng là thật, nổi tiếng tại địa phương. Giá là ƯỚC TÍNH thị trường — xác nhận qua Foody.vn hoặc Google Maps trước production.",
+    "missing_fields": [
+      "địa chỉ số nhà chính xác một số quán",
+      "giá thật (xác nhận Foody/Google Maps)",
+      "booking_url"
+    ],
+    "data_sources": [
+      "Foody.vn",
+      "Google Maps",
+      "TripAdvisor (tên nhà hàng)"
+    ]
+  },
+  "data": [
+    {
+      "id": "019f10d3-1ce3-74a7-949f-06c8f5e4f240",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Nhà hàng Mekong (Victoria Hotel)",
+      "area": "Bờ sông Hậu, trung tâm TP. Châu Đốc",
+      "address": "32 Đường 1 tháng 5, phường Châu Phú A, TP. Châu Đốc, tỉnh An Giang",
+      "cuisine": ["Việt Nam", "Âu", "Miền Tây"],
+      "price_range": "150.000–400.000đ/người (ƯỚC TÍNH)",
+      "hours": "6:00–22:00 hằng ngày",
+      "specialties": ["Bún cá Châu Đốc", "Cá kho tộ miền Tây", "Lẩu mắm", "Bò 7 món"],
+      "tips": "Nhà hàng sang nhất Châu Đốc, view nhìn ra sông Hậu rất đẹp. Phù hợp bữa ăn đặc biệt. Đặt bàn trước dịp lễ vía.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce3-773f-ace8-18b5dacd8281",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Quán Bún Cá Dì Năm",
+      "area": "Khu chợ Châu Đốc",
+      "address": "Gần chợ Châu Đốc, đường Chi Lăng, TP. Châu Đốc, tỉnh An Giang",
+      "cuisine": ["Ẩm thực địa phương", "Bún cá"],
+      "price_range": "25.000–45.000đ/tô (ƯỚC TÍNH)",
+      "hours": "5:00–11:00 (sáng sớm đến hết buổi trưa, có thể hết sớm)",
+      "specialties": ["Bún cá Châu Đốc", "Bún cá lóc đồng"],
+      "tips": "Quán nổi tiếng địa phương, nên đến trước 8:00 để tránh hết. Đây là trải nghiệm ẩm thực sáng đích thực của người Châu Đốc.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce3-7db5-a35a-f99e2d0504fe",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Nhà hàng Bò 7 Món Núi Sam",
+      "area": "Khu Núi Sam",
+      "address": "Đường Lê Đại Hành, khu Núi Sam, TP. Châu Đốc, tỉnh An Giang",
+      "cuisine": ["Bò nướng", "Ẩm thực miền Tây"],
+      "price_range": "150.000–250.000đ/người (ƯỚC TÍNH)",
+      "hours": "10:00–21:00 hằng ngày",
+      "specialties": ["Bò nhúng giấm", "Bò nướng lá lốt", "Bánh hỏi bò", "Chả lụa bò"],
+      "tips": "Thực đơn bò 7 món là trải nghiệm ẩm thực đặc trưng khu Núi Sam. Nhiều nhà hàng cùng khu vực cạnh tranh nhau, nên so sánh giá và xem menu trước khi vào.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce3-776f-b44c-d5e50738f86d",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Quán Lẩu Mắm Cô Ba",
+      "area": "Trung tâm TP. Châu Đốc",
+      "address": "Đường Trần Hưng Đạo, TP. Châu Đốc, tỉnh An Giang",
+      "cuisine": ["Lẩu mắm", "Ẩm thực miền Tây"],
+      "price_range": "80.000–150.000đ/người (ƯỚC TÍNH)",
+      "hours": "10:00–22:00 hằng ngày",
+      "specialties": ["Lẩu mắm cá linh", "Lẩu mắm ba khía", "Lẩu mắm hải sản"],
+      "tips": "Lẩu mắm là trải nghiệm ẩm thực đặc trưng miền Tây khó tìm ở Hà Nội hay TP.HCM theo đúng hương vị gốc. Mắm ở Châu Đốc ủ đúng cách, lẩu thơm và đậm đà hơn. Gọi thêm bông súng và rau nhút — rau ăn lẩu mắm truyền thống.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "019f10d3-1ce3-7dc6-96c6-14156f1fae04",
+      "city_id": "019f10ce-2dd0-77f0-8593-406f13a8eeb0",
+      "name": "Nhà hàng Hải Sản Sông Hậu",
+      "area": "Ven sông Hậu, TP. Châu Đốc",
+      "address": "Bến Bình Đông, TP. Châu Đốc, tỉnh An Giang",
+      "cuisine": ["Hải sản sông", "Cá đồng", "Ẩm thực miền Tây"],
+      "price_range": "100.000–200.000đ/người (ƯỚC TÍNH)",
+      "hours": "10:00–21:00 hằng ngày",
+      "specialties": ["Cá điêu hồng hấp sả", "Cá tra kho tộ", "Lươn um", "Tôm sông nướng muối ớt"],
+      "tips": "Cá và tôm đều là cá đồng/sông địa phương, tươi và ngon hơn hàng đông lạnh nhiều. Hỏi giá theo kg trước khi gọi. Bàn ven sông có view sông Hậu chiều tà rất đẹp.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    }
+  ]
+}
