@@ -106,13 +106,20 @@ async def guest_stream(
     - Trả về header X-Guest-Remaining để frontend cập nhật UI.
     """
     ip = _get_client_ip(request)
-    allowed, remaining = await _check_and_increment(ip)
 
-    if not allowed:
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=f"Bạn đã dùng hết {GUEST_DAILY_LIMIT} câu hỏi miễn phí hôm nay. Đăng nhập để hỏi không giới hạn!",
-        )
+    # [T-031] Bypass quota cho script eval — CHỈ khi DEBUG=true (dev/local).
+    # Production (DEBUG=false) header này vô hiệu, không có lỗ hổng bỏ qua limit.
+    eval_bypass = settings.DEBUG and request.headers.get("X-Eval-Bypass") == "1"
+
+    if eval_bypass:
+        remaining = GUEST_DAILY_LIMIT
+    else:
+        allowed, remaining = await _check_and_increment(ip)
+        if not allowed:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Bạn đã dùng hết {GUEST_DAILY_LIMIT} câu hỏi miễn phí hôm nay. Đăng nhập để hỏi không giới hạn!",
+            )
 
     question = payload.content.strip()
     rag = _get_rag()
@@ -156,9 +163,12 @@ async def guest_stream(
 
         yield format_sse({
             "type": "done",
-            "sources": rag_meta.get("sources", []),
-            "remaining": remaining,          # frontend dùng để update counter
-            "latency_ms": rag_meta.get("latency_ms"),
+            "sources":             rag_meta.get("sources", []),
+            "remaining":           remaining,
+            "latency_ms":          rag_meta.get("latency_ms"),
+            "intent":              rag_meta.get("intent"),
+            "confidence_score":    rag_meta.get("confidence_score"),
+            "suggested_questions": rag_meta.get("suggested_questions", []),
         })
 
     return StreamingResponse(

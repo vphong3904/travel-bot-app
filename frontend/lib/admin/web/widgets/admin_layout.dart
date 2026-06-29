@@ -35,10 +35,12 @@ class _Content extends StatelessWidget {
   const _Content({required this.child});
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1200),
-      child: child,
-    ),
-  );
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 1200),
+        child: child,
+      ),
+    );
+  }
 }

@@ -32,8 +32,9 @@ class KpiCard extends StatelessWidget {
       ),
       color: isAlert ? Colors.orange.shade50 : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
@@ -43,40 +44,49 @@ class KpiCard extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 11,
                       color: isAlert ? Colors.orange.shade800 : Colors.grey.shade600,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    value,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: isAlert ? Colors.orange.shade900 : null,
+                  const SizedBox(height: 2),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: isAlert ? Colors.orange.shade900 : null,
+                      ),
                     ),
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       subtitle!,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 10,
                         color: isAlert ? Colors.orange.shade700 : Colors.grey.shade500,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ],
               ),
             ),
+            const SizedBox(width: 8),
             Container(
-              width: 44,
-              height: 44,
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: color, size: 20),
+              child: Icon(icon, color: color, size: 18),
             ),
           ],
         ),

@@ -267,16 +267,18 @@ async def update_feedback(
     msg = result.scalar_one_or_none()
     if not msg:
         raise HTTPException(status_code=404, detail="Message not found")
-    msg.feedback = payload.feedback
+    msg.feedback          = payload.feedback
+    msg.feedback_reason   = payload.reason
+    msg.feedback_category = payload.category
     await db.commit()
     await db.refresh(msg)
-    # Ghi behavior log vào MongoDB
     event_type = "feedback_positive" if payload.feedback == 1 else "feedback_negative"
     await log_service.log_behavior(
         user_id=str(current_user.id),
         event_type=event_type,
         entity_type="chat_message",
         entity_id=str(message_id),
+        metadata={"reason": payload.reason, "category": payload.category},
     )
     return msg
 

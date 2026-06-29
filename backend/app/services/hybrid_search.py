@@ -79,8 +79,17 @@ def _get_reranker():
         try:
             from sentence_transformers import CrossEncoder
 
-            _reranker = CrossEncoder("BAAI/bge-reranker-v2-m3", max_length=512)
-            logger.info("[Hybrid Search] Đã load cross-encoder BAAI/bge-reranker-v2-m3")
+            # [OPT-1.3] Dùng GPU nếu có (NVIDIA + torch CUDA), ngược lại CPU.
+            device = "cpu"
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    device = "cuda"
+            except Exception:
+                pass
+
+            _reranker = CrossEncoder("BAAI/bge-reranker-v2-m3", max_length=512, device=device)
+            logger.info(f"[Hybrid Search] Đã load cross-encoder BAAI/bge-reranker-v2-m3 | device={device}")
         except Exception as e:
             logger.warning(
                 f"[Hybrid Search] Không load được cross-encoder, bỏ qua rerank: {e}"

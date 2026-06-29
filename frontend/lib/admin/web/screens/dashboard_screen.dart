@@ -25,13 +25,11 @@ class DashboardScreen extends ConsumerWidget {
     final period = ref.watch(selectedPeriodProvider);
     final overviewAsync = ref.watch(dashboardOverviewProvider(period));
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             // Header row
             Row(
               children: [
@@ -77,8 +75,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Future<void> _exportExcel(WidgetRef ref, String period) async {
@@ -165,29 +162,33 @@ class _DashboardContent extends StatelessWidget {
           if (wide) {
             return Column(
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child: UsersLineChart(data: data.usersOverTime)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: TopDestinationsChart(
-                            data: data.topDestinations)),
-                  ],
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                          child: UsersLineChart(data: data.usersOverTime)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: TopDestinationsChart(
+                              data: data.topDestinations)),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        child:
-                            IntentPieChart(data: data.intentBreakdown)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                        child: MessagesBarChart(
-                            data: data.messagesOverTime)),
-                  ],
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                          child:
+                              IntentPieChart(data: data.intentBreakdown)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                          child: MessagesBarChart(
+                              data: data.messagesOverTime)),
+                    ],
+                  ),
                 ),
               ],
             );

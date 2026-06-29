@@ -14,13 +14,13 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/pdtrip_ai_db"
+    DATABASE_URL: str
     DATABASE_POOL_SIZE: int = 10
     DATABASE_MAX_OVERFLOW: int = 20
 
     # MongoDB (log lưu trữ: search_history, user_behavior, chatbot quality control)
-    MONGODB_URL: str = "mongodb://localhost:27017"
-    MONGODB_DB_NAME: str = "pdtrip_ai_logs"
+    MONGODB_URL: str
+    MONGODB_DB_NAME: str
 
     # JWT
     JWT_SECRET_KEY: str
@@ -32,19 +32,19 @@ class Settings(BaseSettings):
     QDRANT_URL: str
     # Qdrant Cloud: set QDRANT_API_KEY trong .env — để trống khi chạy Docker local
     QDRANT_API_KEY: str
-    QDRANT_COLLECTION: str = "pdtrip_knowledge"
+    QDRANT_COLLECTION: str
     # T-011/T-012: collection riêng cho knowledge-base/ files, tách khỏi collection cũ
-    QDRANT_COLLECTION_KB_FILES: str = "pdtrip_knowledge_kb_files"
+    QDRANT_COLLECTION_KB_FILES: str
     # T-012: nguồn dữ liệu RAG — "db" (cũ, mặc định) | "files" (T-011) | "hybrid" (cả hai)
-    KNOWLEDGE_SOURCE: str = "hybrid"
+    KNOWLEDGE_SOURCE: str
 
     # Gemini
     GEMINI_API_KEY: str
     GEMINI_MODEL: str
 
     # Embedding
-    EMBEDDING_MODEL: str = "BAAI/bge-m3"
-    EMBEDDING_DIM: int = 1024
+    EMBEDDING_MODEL: str
+    EMBEDDING_DIM: int
 
     # RAG
     RAG_TOP_K: int = 5
@@ -56,15 +56,15 @@ class Settings(BaseSettings):
     CHAT_HISTORY_LIMIT: int = 10   # ✅ số tin nhắn nhớ trong context
 
     # Google OAuth
-    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_ID: str
 
     # SMTP (Email OTP)
-    SMTP_HOST:     str = ""
-    SMTP_PORT:     int = 587
-    SMTP_USER:     str = ""
-    SMTP_PASSWORD: str = ""
-    SMTP_FROM:     str = "noreply@pdtrip.ai"
-    SMTP_USE_TLS:  bool = True
+    SMTP_HOST:     str
+    SMTP_PORT:     int
+    SMTP_USER:     str
+    SMTP_PASSWORD: str
+    SMTP_FROM:     str 
+    SMTP_USE_TLS:  bool
 
 
 @lru_cache

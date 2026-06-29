@@ -35,46 +35,49 @@ async def _init_qdrant(retries: int = 5, delay: float = 2.0) -> bool:
     return False
 
 
-async def _run_pending_embedding_jobs() -> None:
+# [OPT-1.1 + OPT-4.1] Tham số throttle worker embedding.
+# - BATCH nhỏ + nghỉ giữa batch ⇒ worker nền KHÔNG nuốt hết CPU, nhường chỗ cho
+#   embedding câu hỏi của user (sửa nghẽn 6-8s khi tải nặng).
+# - Poll liên tục ⇒ entry mới tạo ở Admin (status=pending) được embed vào Qdrant
+#   trong vài giây mà không cần bấm tay (KB realtime).
+_EMBED_BATCH_SIZE: int = 4        # số job xử lý mỗi vòng
+_EMBED_BUSY_SLEEP: float = 1.0    # nghỉ giữa các batch khi còn job (nhường CPU)
+_EMBED_IDLE_SLEEP: float = 5.0    # khi hết job: poll lại sau 5s (phát hiện entry mới)
+
+
+async def _embedding_worker_loop() -> None:
     """
-    ✅ FIX BUG CHÍNH: Tự động xử lý tất cả embedding jobs pending khi startup.
+    [OPT-1.1/OPT-4.1] Worker embedding chạy nền liên tục, có throttle.
 
-    Vấn đề gốc:
-    - SQL seed data INSERT knowledge_entries + tạo embedding_jobs với status='pending'
-    - Nhưng KHÔNG có worker nào tự động chạy → Qdrant luôn trống → search 0 kết quả
-    - Chatbot không có context RAG → trả lời "không có thông tin"
+    Thay cho cách cũ (nuốt 500 job một lần lúc startup → tranh CPU với query của
+    user → phản hồi 6-8s). Mỗi vòng chỉ xử lý _EMBED_BATCH_SIZE job rồi nghỉ
+    ngắn để event loop + thread CPU rảnh cho embedding câu hỏi trực tiếp.
 
-    Fix: Gọi run_pending() ngay khi startup để embed toàn bộ knowledge base vào Qdrant.
-    Chạy trong background task để không block server startup.
+    Đồng thời đây là cơ chế KB realtime: thêm/sửa knowledge ở Admin sinh
+    embedding_jobs(pending) → worker này tự nhặt và đẩy vào Qdrant.
     """
-    logger.info("[Startup] Bắt đầu xử lý pending embedding jobs...")
-    try:
-        from app.db.database import AsyncSessionLocal
-        from app.services.embedding_jobs import EmbeddingJobService
+    from app.db.database import AsyncSessionLocal
+    from app.services.embedding_jobs import EmbeddingJobService
 
-        async with AsyncSessionLocal() as db:
-            service = EmbeddingJobService(db)
-            # Xử lý tất cả pending jobs (limit cao để cover toàn bộ seed data)
-            result = await service.run_pending(limit=500)
-            logger.info(
-                f"[Startup] Embedding jobs hoàn tất — "
-                f"done={result['done']} failed={result['failed']}"
-            )
+    logger.info(
+        f"[EmbedWorker] Bắt đầu vòng lặp throttle — batch={_EMBED_BATCH_SIZE} "
+        f"busy_sleep={_EMBED_BUSY_SLEEP}s idle_sleep={_EMBED_IDLE_SLEEP}s"
+    )
+    while True:
+        try:
+            async with AsyncSessionLocal() as db:
+                service = EmbeddingJobService(db)
+                result = await service.run_pending(limit=_EMBED_BATCH_SIZE)
 
-            # Log trạng thái Qdrant sau khi embed
-            from app.services.rag_pipeline import RAGPipeline
-            rag = RAGPipeline()
-            try:
-                info = await rag.debug_collection()
-                logger.info(
-                    f"[Startup] Qdrant collection '{info['collection']}' — "
-                    f"points={info['points_count']} vectors={info.get('vectors_count', 'N/A')}"
-                )
-            except Exception as e:
-                logger.warning(f"[Startup] Không thể lấy Qdrant info: {e}")
-
-    except Exception as e:
-        logger.error(f"[Startup] Lỗi khi xử lý embedding jobs: {e}", exc_info=True)
+            processed = result["done"] + result["failed"]
+            # Còn job → nghỉ ngắn rồi làm tiếp; hết job → nghỉ dài chờ entry mới.
+            await asyncio.sleep(_EMBED_BUSY_SLEEP if processed else _EMBED_IDLE_SLEEP)
+        except asyncio.CancelledError:
+            logger.info("[EmbedWorker] Dừng vòng lặp (shutdown)")
+            raise
+        except Exception as e:
+            logger.error(f"[EmbedWorker] Lỗi vòng lặp: {e}", exc_info=True)
+            await asyncio.sleep(_EMBED_IDLE_SLEEP)
 
 
 @asynccontextmanager
@@ -84,11 +87,22 @@ async def lifespan(app: FastAPI):
     # 0. Kết nối MongoDB (log: search_history, user_behavior, flagged/unanswered)
     await connect_mongo()
 
+    # 0b. [OPT-3.1] Nạp intent patterns từ DB (admin sửa được) — fallback file nếu DB trống
+    try:
+        from app.db.database import AsyncSessionLocal
+        from app.services.intent_loader import load_intent_patterns_from_db
+        async with AsyncSessionLocal() as db:
+            await load_intent_patterns_from_db(db)
+    except Exception as e:
+        logger.warning(f"[Startup] Không nạp được intent từ DB, dùng bộ từ file: {e}")
+
     # 1. Tạo Qdrant collection với retry
     qdrant_ok = await _init_qdrant(retries=5, delay=2.0)
 
-    # 2. Warm-up embedding model + chạy pending jobs (song song)
-    async def _warmup_and_embed():
+    # 2. Warm-up embedding model rồi khởi động worker embedding throttle (nền)
+    worker_task: asyncio.Task | None = None
+
+    async def _warmup_then_start_worker():
         try:
             # Bước 2a: load embedding model trước (blocking ~10-30s lần đầu)
             from app.services.rag_pipeline import _get_embed_model
@@ -97,21 +111,38 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning(f"[Startup] Warm-up embedding model failed: {e}")
 
-        # Bước 2b: sau khi model loaded, process pending jobs
-        # (chỉ chạy nếu Qdrant sẵn sàng để tránh lỗi kết nối)
+        # Bước 2a': [OPT-2.4] nạp sẵn Q&A phổ biến vào cache (trả lời không cần API)
+        try:
+            from app.services.prewarm import prewarm_common_qa
+            await prewarm_common_qa()
+        except Exception as e:
+            logger.warning(f"[Startup] Prewarm cache failed: {e}")
+
+        # Bước 2b: khởi động worker embedding throttle liên tục (OPT-1.1/OPT-4.1).
+        # Chỉ chạy nếu Qdrant sẵn sàng để tránh lỗi kết nối lặp.
+        nonlocal worker_task
         if qdrant_ok:
-            await _run_pending_embedding_jobs()
+            worker_task = asyncio.create_task(_embedding_worker_loop())
+            logger.info("[Startup] Embedding worker loop đã khởi động")
         else:
             logger.warning(
-                "[Startup] Bỏ qua embedding jobs vì Qdrant chưa sẵn sàng. "
+                "[Startup] Bỏ qua worker embedding vì Qdrant chưa sẵn sàng. "
                 "Gọi POST /debug/qdrant/init rồi POST /admin/embedding-jobs/run để embed thủ công."
             )
 
-    asyncio.create_task(_warmup_and_embed())
+    warmup_task = asyncio.create_task(_warmup_then_start_worker())
     logger.info("PDTrip Chatbot API started")
     yield
 
     # ── Shutdown ──
+    # Dừng worker embedding + warm-up gọn gàng trước khi đóng kết nối DB.
+    for task in (worker_task, warmup_task):
+        if task and not task.done():
+            task.cancel()
+            try:
+                await task
+            except (asyncio.CancelledError, Exception):
+                pass
     await engine.dispose()
     await close_mongo()
     logger.info("PDTrip Chatbot API stopped")
@@ -126,7 +157,14 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:54302",
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "http://localhost:5000",
+        "http://127.0.0.1:54302",
+        "http://127.0.0.1:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

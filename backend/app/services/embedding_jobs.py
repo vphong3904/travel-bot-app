@@ -126,12 +126,14 @@ class EmbeddingJobService:
 
             # Mỗi chunk là một vector riêng trong Qdrant
             # ID = "{entry_id}_{chunk_index}" để có thể xoá theo entry
+            dest_id = str(entry.destination_id) if entry.destination_id else ""
             embed_entries = [
                 {
                     "id": f"{entry.id}_{i}",
                     "text": chunk,
                     "title": entry.title,
                     "category": entry.category or "",
+                    "destination_id": dest_id,
                 }
                 for i, chunk in enumerate(chunks)
             ]

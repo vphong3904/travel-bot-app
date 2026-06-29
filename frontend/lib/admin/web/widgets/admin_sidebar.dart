@@ -128,9 +128,30 @@ class AdminSidebar extends ConsumerWidget {
         ListTile(
           leading: const Icon(Icons.logout),
           title: const Text('Đăng xuất'),
-          onTap: () {
-            ref.read(authProvider.notifier).logout();
-            context.go('/login');
+          onTap: () async {
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('Đăng xuất'),
+                content: const Text('Bạn có chắc muốn đăng xuất không?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text('Huỷ'),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.red),
+                    child: const Text('Đăng xuất'),
+                  ),
+                ],
+              ),
+            );
+            if (confirmed == true && context.mounted) {
+              ref.read(authProvider.notifier).logout();
+              context.go('/login');
+            }
           },
         ),
       ],

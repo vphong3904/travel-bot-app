@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Text, Integer, TIMESTAMP, Boolean, ForeignKey, DECIMAL, UniqueConstraint, SmallInteger
-from sqlalchemy.dialects.postgresql import UUID, ARRAY
+from sqlalchemy.dialects.postgresql import UUID, ARRAY, JSONB
 from sqlalchemy.orm import relationship
 import uuid
 from app.db.database import Base
@@ -8,6 +8,7 @@ class Destination(Base):
     __tablename__ = "destinations"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(200), nullable=False)
+    slug = Column(String(100), unique=True, nullable=True)
     province = Column(String(100))
     region = Column(String(50))
     description = Column(Text)
@@ -191,6 +192,73 @@ class ShoppingPlace(Base):
     address = Column(Text)
     opening_hours = Column(String(200))
     price_range = Column(String(100))
+    created_at = Column(TIMESTAMP(timezone=True))
+
+
+class Itinerary(Base):
+    """Lịch trình mẫu KB — không thuộc user nào (trip_plans dành cho user)."""
+    __tablename__ = "itineraries"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    destination_id = Column(UUID(as_uuid=True), ForeignKey("destinations.id", ondelete="SET NULL"))
+    city_slug = Column(String(80))
+    title = Column(String(300), nullable=False)
+    duration_days = Column(SmallInteger)
+    group_type = Column(String(50))
+    budget_low = Column(Integer)
+    budget_high = Column(Integer)
+    description = Column(Text)
+    tags = Column(ARRAY(Text), default=list)
+    source = Column(String(100))
+    is_active = Column(Boolean, default=True)
+    verified = Column(Boolean, default=False)
+    verified_at = Column(TIMESTAMP(timezone=True))
+    data_source = Column(Text)
+    created_at = Column(TIMESTAMP(timezone=True))
+    updated_at = Column(TIMESTAMP(timezone=True))
+
+    items = relationship("ItineraryItem", back_populates="itinerary", cascade="all, delete-orphan")
+
+
+class ItineraryItem(Base):
+    __tablename__ = "itinerary_items"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    itinerary_id = Column(UUID(as_uuid=True), ForeignKey("itineraries.id", ondelete="CASCADE"), nullable=False)
+    day_no = Column(SmallInteger, nullable=False)
+    order_no = Column(SmallInteger, default=0)
+    time_slot = Column(String(50))
+    title = Column(String(300))
+    description = Column(Text)
+    ref_type = Column(String(20))
+    ref_id = Column(UUID(as_uuid=True))
+    created_at = Column(TIMESTAMP(timezone=True))
+
+    itinerary = relationship("Itinerary", back_populates="items")
+
+
+class IntentPattern(Base):
+    """Keyword nhận diện intent — admin sửa không cần deploy."""
+    __tablename__ = "intent_patterns"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    intent = Column(String(50), nullable=False)
+    keyword = Column(String(200), nullable=False)
+    weight = Column(SmallInteger, default=1)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP(timezone=True))
+    updated_at = Column(TIMESTAMP(timezone=True))
+
+
+class LocationAlias(Base):
+    """Map tên hành chính cũ → slug mới (ward/district/province)."""
+    __tablename__ = "locations_alias"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    old_name = Column(String(200), nullable=False)
+    new_slug = Column(String(80), nullable=False)
+    level = Column(String(20), nullable=False)
+    is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True))
 
 

@@ -85,10 +85,11 @@ class _IntentPieChartState extends State<IntentPieChart> {
             // Legend
             Expanded(
               flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.data.asMap().entries.map((entry) {
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.data.asMap().entries.map((entry) {
                   final isHighlighted = entry.key == _touchedIndex;
                   final pct = total > 0 ? entry.value.count / total * 100 : 0;
                   return GestureDetector(
@@ -134,9 +135,10 @@ class _IntentPieChartState extends State<IntentPieChart> {
                 }).toList(),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+          ],   // end Row.children
+        ),     // end SizedBox
+      ),       // end ChartCard child
     );
   }
 }

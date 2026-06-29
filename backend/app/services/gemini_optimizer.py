@@ -88,14 +88,30 @@ _MAX_TOKENS_BY_INTENT: dict[str, int] = {
 _DEFAULT_MAX_TOKENS = 1024
 
 
+def _thinking_off():
+    """
+    Tắt 'thinking' cho các model Gemini 2.5 (mặc định bật → chậm + tốn token,
+    không cần cho chatbot RAG ngắn gọn). Trả None nếu SDK không hỗ trợ
+    ThinkingConfig (model cũ 2.0) — khi đó bỏ qua, không lỗi.
+    """
+    try:
+        return genai_types.ThinkingConfig(thinking_budget=0)
+    except Exception:
+        return None
+
+
 def gemini_config(intent: Optional[str] = None) -> genai_types.GenerateContentConfig:
     max_tokens = _MAX_TOKENS_BY_INTENT.get(intent or "", _DEFAULT_MAX_TOKENS)
-    return genai_types.GenerateContentConfig(
+    kwargs = dict(
         system_instruction=SYSTEM_INSTRUCTION,
         temperature=0.4,
         top_p=0.9,
         max_output_tokens=max_tokens,
     )
+    tc = _thinking_off()
+    if tc is not None:
+        kwargs["thinking_config"] = tc
+    return genai_types.GenerateContentConfig(**kwargs)
 
 
 # ── Sliding history summary ─────────────────────────────────────────────────
