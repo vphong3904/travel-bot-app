@@ -25,6 +25,7 @@ import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
 import 'web/screens/faq_screen.dart';
 import 'web/screens/experiences_screen.dart';
+import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
 /// Provider cho GoRouter — reactive theo authProvider
@@ -107,6 +108,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/intent-patterns',
             name: 'intent-patterns',
             builder: (_, __) => const IntentPatternsScreen(),
+          ),
+          GoRoute(
+            path: '/media',
+            name: 'media',
+            builder: (_, __) => const MediaScreen(),
           ),
           GoRoute(
             path: '/content/destinations',
