@@ -16,6 +16,16 @@ class ReviewApiService {
         .toList();
   }
 
+  /// [P3] Tổng số review của tôi (cho Profile stats).
+  Future<int> myReviewCount() async {
+    try {
+      final data = await _client.get('/travel/reviews/mine') as Map<String, dynamic>;
+      return (data['count'] as num?)?.toInt() ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
   Future<Review?> getMyReview(String destinationId) async {
     try {
       final data = await _client.get('/travel/destinations/$destinationId/reviews/me') as Map<String, dynamic>;

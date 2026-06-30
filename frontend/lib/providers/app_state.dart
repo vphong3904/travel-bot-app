@@ -6,7 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/app_user.dart';
 import '../services/api_service.dart';
@@ -17,11 +17,44 @@ class AppState extends ChangeNotifier {
   String? _accessToken;
   String? _refreshToken;
 
+  // [P4] Cài đặt người dùng (persist qua SharedPreferences)
+  ThemeMode _themeMode = ThemeMode.light;
+  String _language = 'vi';
+  bool _notifications = true;
+
   AppUser? get user => _user;
   String? get token => _accessToken;      // dùng trong ApiClient
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
   bool get isLoggedIn => _user != null && _accessToken != null;
+
+  // [P4] getters cài đặt
+  ThemeMode get themeMode => _themeMode;
+  bool get isDarkMode => _themeMode == ThemeMode.dark;
+  String get language => _language;
+  bool get notifications => _notifications;
+
+  // [P4] setters cài đặt — lưu ngay + notify để app đổi theme/locale tức thì
+  Future<void> setDarkMode(bool v) async {
+    _themeMode = v ? ThemeMode.dark : ThemeMode.light;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('dark_mode', v);
+    notifyListeners();
+  }
+
+  Future<void> setLanguage(String lang) async {
+    _language = lang;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('language', lang);
+    notifyListeners();
+  }
+
+  Future<void> setNotifications(bool v) async {
+    _notifications = v;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notifications', v);
+    notifyListeners();
+  }
 
   /// ApiClient đã inject token, dùng cho mọi service call
   ApiClient get apiClient => ApiClient(token: _accessToken);
@@ -30,6 +63,13 @@ class AppState extends ChangeNotifier {
 
   Future<void> loadSession() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // [P4] đọc cài đặt đã lưu
+    _themeMode =
+        (prefs.getBool('dark_mode') ?? false) ? ThemeMode.dark : ThemeMode.light;
+    _language = prefs.getString('language') ?? 'vi';
+    _notifications = prefs.getBool('notifications') ?? true;
+
     _accessToken = prefs.getString('access_token');
     _refreshToken = prefs.getString('refresh_token');
     final userJson = prefs.getString('user');

@@ -118,24 +118,58 @@ String kbCategoryLabel(String category) {
 // ─────────────────────────────────────────────
 //  INTENT LABEL & ICON
 // ─────────────────────────────────────────────
+// Nhãn intent — khớp với intent thật của backend (nlp_preprocessor.py).
 String intentLabel(String intent) {
   switch (intent) {
-    case 'faq_info':          return 'Hỏi thông tin';
-    case 'destination_advice': return 'Tư vấn điểm đến';
-    case 'itinerary':          return 'Lập lịch trình';
-    case 'service_search':     return 'Tìm dịch vụ';
-    default:                   return intent;
+    case 'greeting':              return 'Chào hỏi';
+    case 'ask_weather':           return 'Thời tiết & mùa';
+    case 'find_hotel':            return 'Khách sạn';
+    case 'ask_food':              return 'Ẩm thực';
+    case 'ask_transport':         return 'Di chuyển';
+    case 'plan_trip':             return 'Lập lịch trình';
+    case 'ask_activity':          return 'Điểm tham quan';
+    case 'ask_safety':            return 'An toàn & lưu ý';
+    case 'ask_budget':            return 'Chi phí';
+    case 'ask_destination':       return 'Tư vấn điểm đến';
+    case 'find_tour':             return 'Tour';
+    case 'ask_shopping':          return 'Mua sắm';
+    case 'compare_destinations':  return 'So sánh điểm đến';
+    case 'ask_faq':               return 'Hỏi đáp';
+    case 'out_of_scope':          return 'Ngoài phạm vi';
+    case 'quick_reply':           return 'Trả lời nhanh';
+    case 'clarification':         return 'Cần làm rõ';
+    case 'error':                 return 'Lỗi';
+    default:                      return 'Trợ lý AI';
   }
 }
 
 IconData intentIcon(String intent) {
   switch (intent) {
-    case 'faq_info':          return Icons.info_outline;
-    case 'destination_advice': return Icons.explore;
-    case 'itinerary':          return Icons.route;
-    case 'service_search':     return Icons.search;
-    default:                   return Icons.chat;
+    case 'greeting':              return Icons.waving_hand_outlined;
+    case 'ask_weather':           return Icons.wb_sunny_outlined;
+    case 'find_hotel':            return Icons.hotel_outlined;
+    case 'ask_food':              return Icons.restaurant_outlined;
+    case 'ask_transport':         return Icons.directions_bus_outlined;
+    case 'plan_trip':             return Icons.route_outlined;
+    case 'ask_activity':          return Icons.photo_camera_outlined;
+    case 'ask_safety':            return Icons.health_and_safety_outlined;
+    case 'ask_budget':            return Icons.payments_outlined;
+    case 'ask_destination':       return Icons.explore_outlined;
+    case 'find_tour':             return Icons.tour_outlined;
+    case 'ask_shopping':          return Icons.shopping_bag_outlined;
+    case 'compare_destinations':  return Icons.compare_arrows;
+    case 'ask_faq':               return Icons.info_outline;
+    case 'out_of_scope':          return Icons.block_outlined;
+    case 'quick_reply':           return Icons.bolt_outlined;
+    default:                      return Icons.chat_bubble_outline;
   }
+}
+
+// Màu thanh độ tin cậy: xanh ≥0.7, vàng 0.4–0.7, đỏ <0.4.
+Color confidenceColor(double c) {
+  if (c >= 0.7) return const Color(0xFF16A34A); // green-600
+  if (c >= 0.4) return const Color(0xFFCA8A04); // amber-600
+  return const Color(0xFFDC2626);               // red-600
 }
 
 // ─────────────────────────────────────────────

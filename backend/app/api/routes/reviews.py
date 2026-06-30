@@ -37,6 +37,15 @@ async def _get_dest_or_404(db: AsyncSession, destination_id: UUID) -> Destinatio
     return dest
 
 
+# ── [P3] Đếm review của tôi (cho Profile stats) ───────────────────────────────
+@router.get("/reviews/mine")
+async def my_reviews_count(db: DB, current_user: CurrentUser):
+    n = (await db.execute(
+        select(func.count()).select_from(Review).where(Review.user_id == current_user.id)
+    )).scalar() or 0
+    return {"count": n}
+
+
 # ── Tạo review ────────────────────────────────────────────────────────────────
 @router.post(
     "/destinations/{destination_id}/reviews",

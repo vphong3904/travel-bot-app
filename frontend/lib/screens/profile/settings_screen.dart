@@ -8,9 +8,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/app_user.dart';
 import '../../providers/app_state.dart';
+import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/dialog_helpers.dart';
 import '../auth/login_register_screen.dart';
@@ -23,10 +25,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notificationsEnabled = true;
-  bool _darkModeEnabled = false;
-  String _selectedLanguage = 'vi';
   bool _loggingOut = false;
+  bool _clearingFavorites = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +59,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.dark_mode_outlined,
               title: 'Chế độ tối',
               trailing: Switch(
-                value: _darkModeEnabled,
+                value: appState.isDarkMode,
                 activeTrackColor: AppColors.primary,
                 activeThumbColor: Colors.white,
-                onChanged: (v) => setState(() => _darkModeEnabled = v),
+                onChanged: (v) => appState.setDarkMode(v),
               ),
             ),
             _SettingsTile(
               icon: Icons.language_outlined,
               title: 'Ngôn ngữ',
-              subtitle: _selectedLanguage == 'vi' ? 'Tiếng Việt' : 'English',
-              onTap: _showLanguageDialog,
+              subtitle: appState.language == 'vi' ? 'Tiếng Việt' : 'English',
+              onTap: () => _showLanguageDialog(appState),
             ),
             const SizedBox(height: 24),
 
@@ -80,10 +80,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icons.notifications_outlined,
               title: 'Bật thông báo',
               trailing: Switch(
-                value: _notificationsEnabled,
+                value: appState.notifications,
                 activeTrackColor: AppColors.primary,
                 activeThumbColor: Colors.white,
-                onChanged: (v) => setState(() => _notificationsEnabled = v),
+                onChanged: (v) => appState.setNotifications(v),
               ),
             ),
             _SettingsTile(
@@ -103,25 +103,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => _confirmAction(
                 'Xóa lịch sử?',
                 'Hành động này không thể hoàn tác.',
-                () {
+                () async {
                   Navigator.pop(context);
-                  showInfoSnackBar(context, 'Lịch sử đã xóa');
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('recent_searches');
+                  await prefs.remove('search_history');
+                  if (mounted) showInfoSnackBar(context, 'Lịch sử đã xóa');
                 },
               ),
             ),
-            _SettingsTile(
-              icon: Icons.delete_outline,
-              title: 'Xóa tất cả yêu thích',
-              subtitle: 'Loại bỏ các địa điểm đã lưu',
-              onTap: () => _confirmAction(
-                'Xóa tất cả yêu thích?',
-                'Bạn sẽ mất các địa điểm đã lưu.',
-                () {
-                  Navigator.pop(context);
-                  showInfoSnackBar(context, 'Yêu thích đã xóa');
-                },
+            if (appState.isLoggedIn)
+              _SettingsTile(
+                icon: Icons.delete_outline,
+                title: 'Xóa tất cả yêu thích',
+                subtitle: _clearingFavorites
+                    ? 'Đang xóa...'
+                    : 'Loại bỏ các địa điểm đã lưu',
+                onTap: _clearingFavorites
+                    ? null
+                    : () => _confirmAction(
+                          'Xóa tất cả yêu thích?',
+                          'Bạn sẽ mất các địa điểm đã lưu.',
+                          () {
+                            Navigator.pop(context);
+                            _clearAllFavorites(appState);
+                          },
+                        ),
               ),
-            ),
             const SizedBox(height: 24),
 
             // ── Về ứng dụng ───────────────────────────────────────────────
@@ -290,7 +298,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showLanguageDialog() {
+  void _showLanguageDialog(AppState appState) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -301,19 +309,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             RadioListTile<String>(
               value: 'vi',
-              groupValue: _selectedLanguage,
+              groupValue: appState.language,
               title: const Text('🇻🇳  Tiếng Việt'),
               onChanged: (v) {
-                setState(() => _selectedLanguage = v ?? 'vi');
+                appState.setLanguage(v ?? 'vi');
                 Navigator.pop(ctx);
               },
             ),
             RadioListTile<String>(
               value: 'en',
-              groupValue: _selectedLanguage,
+              groupValue: appState.language,
               title: const Text('🇬🇧  English'),
               onChanged: (v) {
-                setState(() => _selectedLanguage = v ?? 'en');
+                appState.setLanguage(v ?? 'en');
                 Navigator.pop(ctx);
               },
             ),
@@ -321,6 +329,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     );
+  }
+
+  // [P4] Xóa tất cả yêu thích — gọi API thật cho từng favorite.
+  Future<void> _clearAllFavorites(AppState s) async {
+    setState(() => _clearingFavorites = true);
+    try {
+      final api = FavoriteApiService(token: s.token ?? '');
+      final favs = await api.listMyFavorites();
+      for (final d in favs) {
+        await api.remove(d.id);
+      }
+      if (mounted) showInfoSnackBar(context, 'Đã xóa ${favs.length} yêu thích');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Lỗi xóa yêu thích: $e'),
+          backgroundColor: AppColors.error,
+        ));
+      }
+    } finally {
+      if (mounted) setState(() => _clearingFavorites = false);
+    }
   }
 }
 
