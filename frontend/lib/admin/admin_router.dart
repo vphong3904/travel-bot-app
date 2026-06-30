@@ -9,6 +9,7 @@ import 'web/screens/reset_password_screen.dart';
 import 'web/screens/dashboard_screen.dart';
 import 'web/screens/users_screen.dart';
 import 'web/screens/chat_screen.dart';
+import 'web/screens/feedback_screen.dart';
 import 'web/screens/knowledge_screen.dart';
 import 'web/screens/kb_health_screen.dart';
 import 'web/screens/rag_monitoring_screen.dart';
@@ -162,6 +163,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/content/experiences',
             name: 'content-experiences',
             builder: (_, __) => const ExperiencesScreen(),
+          ),
+          // [T-035] Quản lý báo cáo/đánh giá từ người dùng
+          GoRoute(
+            path: '/feedback',
+            name: 'feedback',
+            builder: (_, __) => const FeedbackScreen(),
           ),
         ],
       ),
