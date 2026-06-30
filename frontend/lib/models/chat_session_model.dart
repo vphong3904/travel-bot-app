@@ -108,6 +108,8 @@ class ChatMessageModel {
   final String content;
   final List<dynamic> sources;
   final String? intent;
+  final double? confidenceScore;
+  final List<String> suggestedQuestions;
   final int promptTokens;
   final int completionTokens;
   final int? latencyMs;
@@ -121,6 +123,8 @@ class ChatMessageModel {
     required this.content,
     this.sources = const [],
     this.intent,
+    this.confidenceScore,
+    this.suggestedQuestions = const [],
     this.promptTokens = 0,
     this.completionTokens = 0,
     this.latencyMs,
@@ -139,6 +143,10 @@ class ChatMessageModel {
         content: json['content']?.toString() ?? '',
         sources: json['sources'] as List<dynamic>? ?? [],
         intent: json['intent']?.toString(),
+        confidenceScore: (json['confidence_score'] as num?)?.toDouble(),
+        suggestedQuestions: (json['suggested_questions'] as List<dynamic>? ?? [])
+            .map((e) => e.toString())
+            .toList(),
         promptTokens: json['prompt_tokens'] as int? ?? 0,
         completionTokens: json['completion_tokens'] as int? ?? 0,
         latencyMs: json['latency_ms'] as int?,

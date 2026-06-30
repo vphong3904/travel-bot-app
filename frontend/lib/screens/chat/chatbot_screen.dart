@@ -143,7 +143,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                     .toList() ??
                 [],
             intent: m.intent ?? '',
-            confidence: m.promptTokens > 0 ? 0.95 : 0,
+            confidence: m.confidenceScore ?? 0,
+            suggestedQuestions: m.suggestedQuestions,
           ));
         }
       });
@@ -191,6 +192,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       List<SourceRef> sources = [];
       Map<String, dynamic>? itinerary;
       bool hasItinerary = false;
+      String aiIntent = '';
+      double aiConfidence = 0;
+      List<String> suggested = [];
 
       await for (final event in stream) {
         if (!mounted) break;
@@ -236,6 +240,12 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             itinerary = event['itinerary'] as Map<String, dynamic>;
             hasItinerary = true;
           }
+          // [P0] intent + độ tin cậy + câu gợi ý thật từ backend
+          aiIntent = event['intent']?.toString() ?? '';
+          aiConfidence = (event['confidence_score'] as num?)?.toDouble() ?? 0;
+          suggested = (event['suggested_questions'] as List<dynamic>? ?? [])
+              .map((e) => e.toString())
+              .toList();
           if (event['content'] != null) {
             final parsed = _parseChunkContent(event['content'].toString());
             final finalText = parsed['text'] as String;
@@ -256,6 +266,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             sources: sources,
             hasItinerary: hasItinerary,
             itinerary: itinerary,
+            intent: aiIntent,
+            confidence: aiConfidence,
+            suggestedQuestions: suggested,
           );
         });
       }
@@ -338,6 +351,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
       String fullContent = '';
       List<SourceRef> sources = [];
+      String aiIntent = '';
+      double aiConfidence = 0;
+      List<String> suggested = [];
 
       await for (final event in SseClient.parse(response)) {
         if (!mounted) break;
@@ -366,6 +382,12 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
               .toList();
           if (doneSources != null && doneSources.isNotEmpty) sources = doneSources;
 
+          aiIntent = event['intent']?.toString() ?? '';
+          aiConfidence = (event['confidence_score'] as num?)?.toDouble() ?? 0;
+          suggested = (event['suggested_questions'] as List<dynamic>? ?? [])
+              .map((e) => e.toString())
+              .toList();
+
           // Sync local count với server (server là source of truth)
           final serverRemaining = event['remaining'] as int?;
           if (serverRemaining != null) {
@@ -388,6 +410,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             sender: 'ai',
             text: fullContent.isNotEmpty ? fullContent : _messages.last.text,
             sources: sources,
+            intent: aiIntent,
+            confidence: aiConfidence,
+            suggestedQuestions: suggested,
           );
         });
       }
@@ -721,11 +746,35 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                 ),
 
                                 if (!isUser && (msg.confidence) > 0) ...[
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    'Độ tin cậy: ${(msg.confidence * 100).toStringAsFixed(0)}%',
-                                    style: TextStyle(
-                                        fontSize: 11, color: AppColors.muted),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Text('Độ tin cậy',
+                                          style: TextStyle(
+                                              fontSize: 10.5,
+                                              color: AppColors.muted)),
+                                      const SizedBox(width: 6),
+                                      Expanded(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(4),
+                                          child: LinearProgressIndicator(
+                                            value: msg.confidence.clamp(0, 1),
+                                            minHeight: 5,
+                                            backgroundColor: AppColors.border,
+                                            valueColor: AlwaysStoppedAnimation(
+                                                confidenceColor(msg.confidence)),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        '${(msg.confidence * 100).toStringAsFixed(0)}%',
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.w700,
+                                            color: confidenceColor(msg.confidence)),
+                                      ),
+                                    ],
                                   ),
                                 ],
 
@@ -801,6 +850,52 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                           foregroundColor: Colors.white,
                                           padding: const EdgeInsets.symmetric(vertical: 10)),
                                     ),
+                                  ),
+                                ],
+
+                                // [P0] Câu hỏi gợi ý — chip bấm để hỏi nhanh
+                                if (!isUser && msg.suggestedQuestions.isNotEmpty) ...[
+                                  const SizedBox(height: 10),
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 6,
+                                    children: msg.suggestedQuestions.map((q) {
+                                      return GestureDetector(
+                                        onTap: _isSending ? null : () => _sendMessage(q),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.secondary
+                                                .withValues(alpha: 0.08),
+                                            borderRadius: BorderRadius.circular(14),
+                                            border: Border.all(
+                                                color: AppColors.secondary
+                                                    .withValues(alpha: 0.30)),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(Icons.north_east,
+                                                  size: 11,
+                                                  color: AppColors.secondary),
+                                              const SizedBox(width: 4),
+                                              ConstrainedBox(
+                                                constraints: const BoxConstraints(
+                                                    maxWidth: 220),
+                                                child: Text(q,
+                                                    style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: AppColors.secondary,
+                                                        fontWeight: FontWeight.w500),
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
                                 ],
                               ],

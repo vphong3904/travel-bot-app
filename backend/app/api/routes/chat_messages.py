@@ -213,6 +213,7 @@ async def stream_message(
                 content=answer,
                 sources=rag_meta.get("sources", []),
                 intent=rag_meta.get("intent"),
+                suggested_questions=rag_meta.get("suggested_questions", []),
                 prompt_tokens=rag_meta.get("prompt_tokens", 0),
                 completion_tokens=rag_meta.get("completion_tokens", 0),
                 latency_ms=rag_meta.get("latency_ms"),
@@ -233,6 +234,10 @@ async def stream_message(
                 "sources": rag_meta.get("sources", []),
                 "latency_ms": rag_meta.get("latency_ms"),
                 "tokens_per_second": tok_per_sec,
+                # [P0] surface intent + độ tin cậy + câu gợi ý ra mobile
+                "intent": rag_meta.get("intent"),
+                "confidence_score": rag_meta.get("confidence_score"),
+                "suggested_questions": rag_meta.get("suggested_questions", []),
             })
 
     return StreamingResponse(
