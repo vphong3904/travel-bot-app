@@ -127,10 +127,21 @@ class ChatSessionApiService {
     yield* SseClient.parse(response);
   }
 
-  Future<ChatMessageModel> updateFeedback(String messageId, int feedback) async {
+  /// [T-035] Gửi đánh giá (like/unlike) + lý do báo cáo cho 1 tin nhắn AI.
+  /// feedback: 1 = thích, -1 = không thích. reason/category cho báo cáo sai sót.
+  Future<ChatMessageModel> updateFeedback(
+    String messageId,
+    int feedback, {
+    String? reason,
+    String? category,
+  }) async {
     final data = await _client.patch(
       '/chat/messages/$messageId/feedback',
-      {'feedback': feedback},
+      {
+        'feedback': feedback,
+        if (reason != null) 'reason': reason,
+        if (category != null) 'category': category,
+      },
     ) as Map<String, dynamic>;
     return ChatMessageModel.fromJson(data);
   }

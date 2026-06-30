@@ -146,6 +146,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             intent: m.intent ?? '',
             confidence: m.confidenceScore ?? 0,
             suggestedQuestions: m.suggestedQuestions,
+            messageId: m.id,
+            feedback: m.feedback ?? 0,
           ));
         }
       });
@@ -196,6 +198,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       String aiIntent = '';
       double aiConfidence = 0;
       List<String> suggested = [];
+      String? aiMessageId;
 
       await for (final event in stream) {
         if (!mounted) break;
@@ -244,6 +247,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
           // [P0] intent + độ tin cậy + câu gợi ý thật từ backend
           aiIntent = event['intent']?.toString() ?? '';
           aiConfidence = (event['confidence_score'] as num?)?.toDouble() ?? 0;
+          aiMessageId = event['message_id']?.toString();
           suggested = (event['suggested_questions'] as List<dynamic>? ?? [])
               .map((e) => e.toString())
               .toList();
@@ -270,6 +274,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             intent: aiIntent,
             confidence: aiConfidence,
             suggestedQuestions: suggested,
+            messageId: aiMessageId,
           );
         });
       }
@@ -285,6 +290,82 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       if (mounted) setState(() => _isSending = false);
     }
     _scrollToBottom();
+  }
+
+  // ── [T-035] Feedback like/unlike + báo cáo sai sót ────────────────────────
+  Future<void> _sendFeedback(int index, int value,
+      {String? reason, String? category}) async {
+    if (index < 0 || index >= _messages.length) return;
+    final msg = _messages[index];
+    if (msg.messageId == null || _isGuest) return;
+    // cập nhật UI lạc quan
+    setState(() => _messages[index] = ChatMessage(
+          sender: msg.sender, text: msg.text, sources: msg.sources,
+          intent: msg.intent, confidence: msg.confidence,
+          suggestedQuestions: msg.suggestedQuestions,
+          hasItinerary: msg.hasItinerary, itinerary: msg.itinerary,
+          messageId: msg.messageId, feedback: value,
+        ));
+    try {
+      await _api.updateFeedback(msg.messageId!, value,
+          reason: reason, category: category);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.dark,
+          content: Text(value == 1
+              ? 'Cảm ơn phản hồi của bạn!'
+              : 'Đã gửi báo cáo. Cảm ơn bạn đã giúp cải thiện!'),
+        ));
+      }
+    } catch (_) {
+      // lỗi mạng → vẫn giữ trạng thái lạc quan, không chặn UX
+    }
+  }
+
+  // Bottom sheet chọn lý do báo cáo (khi bấm 👎)
+  void _openReportSheet(int index) {
+    const reasons = {
+      'sai_thong_tin': 'Thông tin sai',
+      'khong_lien_quan': 'Không liên quan câu hỏi',
+      'thieu_nguon': 'Thiếu nguồn / không rõ nguồn',
+      'khac': 'Lý do khác',
+    };
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Báo cáo câu trả lời',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              const Text('Vấn đề bạn gặp là gì?',
+                  style: TextStyle(fontSize: 13, color: AppColors.muted)),
+              const SizedBox(height: 12),
+              ...reasons.entries.map((e) => ListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.flag_outlined,
+                        size: 18, color: AppColors.error),
+                    title: Text(e.value, style: const TextStyle(fontSize: 14)),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      _sendFeedback(index, -1, reason: e.key);
+                    },
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Map<String, dynamic> _parseChunkContent(String raw) {
@@ -965,6 +1046,35 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                     }).toList(),
                                   ),
                                 ],
+
+                                // [T-035] Đánh giá like/unlike + báo cáo
+                                if (!isUser && !_isGuest && msg.messageId != null) ...[
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Text('Hữu ích?',
+                                          style: TextStyle(
+                                              fontSize: 11, color: AppColors.muted)),
+                                      const SizedBox(width: 6),
+                                      _FeedbackBtn(
+                                        icon: Icons.thumb_up_alt_outlined,
+                                        iconActive: Icons.thumb_up_alt,
+                                        active: msg.feedback == 1,
+                                        color: AppColors.secondary,
+                                        onTap: () => _sendFeedback(
+                                            index, msg.feedback == 1 ? 0 : 1),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      _FeedbackBtn(
+                                        icon: Icons.thumb_down_alt_outlined,
+                                        iconActive: Icons.thumb_down_alt,
+                                        active: msg.feedback == -1,
+                                        color: AppColors.error,
+                                        onTap: () => _openReportSheet(index),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -1084,6 +1194,36 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// [T-035] Nút đánh giá nhỏ (👍 / 👎)
+class _FeedbackBtn extends StatelessWidget {
+  final IconData icon;
+  final IconData iconActive;
+  final bool active;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _FeedbackBtn({
+    required this.icon,
+    required this.iconActive,
+    required this.active,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Icon(active ? iconActive : icon,
+            size: 16, color: active ? color : AppColors.muted),
       ),
     );
   }
