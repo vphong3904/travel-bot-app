@@ -1068,6 +1068,8 @@ async def list_feedback(
         stmt = stmt.where(ChatMessage.feedback == -1)
     if intent:
         stmt = stmt.where(ChatMessage.intent == intent)
+    if category:
+        stmt = stmt.where(ChatMessage.feedback_category == category)
 
     total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
     rows = await db.execute(
@@ -1082,12 +1084,13 @@ async def list_feedback(
             {
                 "message_id": m.id,
                 "session_id": m.session_id,
-                "content_preview": m.content[:150],
+                "content_preview": (m.content or "")[:150],
                 "feedback_type": "positive" if m.feedback == 1 else "negative",
-                "category": None,
-                "reason": None,
+                # đúng key mà FeedbackItem.fromJson đọc + giá trị THẬT từ DB
+                "feedback_category": m.feedback_category,
+                "feedback_reason": m.feedback_reason,
                 "intent": m.intent,
-                "resolved": False,
+                "feedback_resolved": bool(m.feedback_resolved),
                 "created_at": str(m.created_at),
             }
             for m in messages
