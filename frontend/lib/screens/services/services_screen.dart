@@ -16,13 +16,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 import '../../models/destination.dart';
-import '../../providers/app_state.dart';
 import '../../services/api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/loading_state_widgets.dart';
+import 'saved_trips_screen.dart';
+import 'favorites_screen.dart';
+import '../chat/chat_history_screen.dart';
+import '../chat/intent_setup_screen.dart';
 
 // ─── Model nội bộ ────────────────────────────────────────────────────────────
 
@@ -111,6 +113,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
   bool _loading = true;
   String? _error;
   int _selectedTab = 0;   // 0=Tất cả, 1=Khách sạn, 2=Tour
+
+  // [P2] Bộ lọc nâng cao
+  double _minRating = 0;  // 0 = không lọc
+  double _maxPrice = 0;   // 0 = không lọc (VND)
+  bool get _hasFilter => _minRating > 0 || _maxPrice > 0;
 
   static const _tabs = ['Tất cả', 'Khách sạn', 'Tour'];
 
@@ -227,14 +234,148 @@ class _ServicesScreenState extends State<ServicesScreen> {
   void _applyFilter() {
     final q = _searchCtrl.text.toLowerCase().trim();
     setState(() {
-      _filtered = q.isEmpty
-          ? List.of(_all)
-          : _all.where((s) {
-              return '${s.name} ${s.description} ${s.location}'
-                  .toLowerCase()
-                  .contains(q);
-            }).toList();
+      _filtered = _all.where((s) {
+        if (q.isNotEmpty &&
+            !'${s.name} ${s.description} ${s.location}'.toLowerCase().contains(q)) {
+          return false;
+        }
+        if (_minRating > 0 && s.rating < _minRating) return false;
+        if (_maxPrice > 0 && s.price > 0 && s.price > _maxPrice) return false;
+        return true;
+      }).toList();
     });
+  }
+
+  // [P2] Bottom sheet bộ lọc (rating + giá tối đa)
+  void _openFilterSheet() {
+    double tmpRating = _minRating;
+    double tmpPrice = _maxPrice;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => StatefulBuilder(
+        builder: (ctx, setSheet) => Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Bộ lọc',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              const Text('Đánh giá tối thiểu',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: [0.0, 3.0, 3.5, 4.0, 4.5].map((r) {
+                  final sel = tmpRating == r;
+                  return ChoiceChip(
+                    label: Text(r == 0 ? 'Tất cả' : '${r.toStringAsFixed(1)}★'),
+                    selected: sel,
+                    onSelected: (_) => setSheet(() => tmpRating = r),
+                    selectedColor: AppColors.primary.withValues(alpha: 0.15),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              const Text('Giá tối đa',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: [0.0, 500000.0, 1000000.0, 2000000.0, 5000000.0].map((p) {
+                  final sel = tmpPrice == p;
+                  return ChoiceChip(
+                    label: Text(p == 0
+                        ? 'Tất cả'
+                        : p >= 1000000
+                            ? '${(p / 1000000).toStringAsFixed(0)}M'
+                            : '${(p / 1000).toStringAsFixed(0)}K'),
+                    selected: sel,
+                    onSelected: (_) => setSheet(() => tmpPrice = p),
+                    selectedColor: AppColors.primary.withValues(alpha: 0.15),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
+              Row(children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() { _minRating = 0; _maxPrice = 0; });
+                      _applyFilter();
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text('Xóa lọc'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() { _minRating = tmpRating; _maxPrice = tmpPrice; });
+                      _applyFilter();
+                      Navigator.pop(ctx);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary, foregroundColor: Colors.white),
+                    child: const Text('Áp dụng'),
+                  ),
+                ),
+              ]),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // [P2] Hàng truy cập nhanh 4 khu
+  Widget _buildShortcuts() {
+    final items = [
+      (Icons.favorite_border, 'Yêu thích', const FavoritesScreen()),
+      (Icons.luggage_outlined, 'Chuyến đi', const SavedTripsScreen()),
+      (Icons.history, 'Lịch sử chat', const ChatHistoryScreen()),
+      (Icons.auto_awesome_outlined, 'Thiết kế AI', const IntentSetupScreen()),
+    ];
+    return SizedBox(
+      height: 88,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: items.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        itemBuilder: (_, i) {
+          final (icon, label, screen) = items[i];
+          return GestureDetector(
+            onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => screen)),
+            child: Container(
+              width: 84,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, color: AppColors.primary, size: 24),
+                  const SizedBox(height: 6),
+                  Text(label,
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -250,25 +391,31 @@ class _ServicesScreenState extends State<ServicesScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         actions: [
-          if (!_loading)
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Center(
-                child: Text('${_filtered.length} kết quả',
-                    style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.muted,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ),
+          IconButton(
+            tooltip: 'Bộ lọc',
+            icon: Icon(_hasFilter ? Icons.filter_alt : Icons.filter_alt_outlined,
+                color: _hasFilter ? AppColors.primary : AppColors.dark),
+            onPressed: _openFilterSheet,
+          ),
         ],
       ),
       body: SafeArea(
         child: Column(
           children: [
+            const SizedBox(height: 12),
+            // [P2] Truy cập nhanh 4 khu
+            _buildShortcuts(),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Tìm kiếm dịch vụ',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              ),
+            ),
             // Search
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: AppSearchBar(
                 controller: _searchCtrl,
                 hint: 'Tìm khách sạn, tour, điểm đến...',
