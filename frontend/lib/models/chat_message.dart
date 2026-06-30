@@ -55,7 +55,10 @@ class ChatMessage {
   final List<SourceRef> sources;
   final String intent;
   final double confidence;
+  final List<String> suggestedQuestions;
   final bool isTyping;
+  final String? messageId;   // [T-035] id tin nhắn (để gửi feedback) — null nếu guest
+  final int feedback;        // [T-035] -1 / 0 / 1
 
   const ChatMessage({
     required this.sender,
@@ -67,7 +70,10 @@ class ChatMessage {
     this.sources = const [],
     this.intent = '',
     this.confidence = 0,
+    this.suggestedQuestions = const [],
     this.isTyping = false,
+    this.messageId,
+    this.feedback = 0,
   });
 
   factory ChatMessage.typing() => const ChatMessage(

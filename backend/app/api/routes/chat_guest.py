@@ -169,6 +169,7 @@ async def guest_stream(
             "intent":              rag_meta.get("intent"),
             "confidence_score":    rag_meta.get("confidence_score"),
             "suggested_questions": rag_meta.get("suggested_questions", []),
+            "itinerary":           rag_meta.get("itinerary"),
         })
 
     return StreamingResponse(

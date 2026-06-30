@@ -38,13 +38,52 @@ class TravelChatbotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // [P4] đọc themeMode từ AppState để hỗ trợ dark mode (persist + đổi tức thì).
+    final appState = context.watch<AppState>();
     return MaterialApp(
       title: 'TripMate AI',
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(),
+      darkTheme: _buildDarkTheme(),
+      themeMode: appState.themeMode,
       // SplashScreen là màn hình duy nhất được đặt ở đây.
       // Mọi routing tiếp theo đều do SplashScreen và các screen khác xử lý.
       home: const SplashScreen(),
+    );
+  }
+
+  ThemeData _buildDarkTheme() {
+    const bg = Color(0xFF0F172A);
+    const surface = Color(0xFF1E293B);
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF2563EB),
+        brightness: Brightness.dark,
+        primary: const Color(0xFF60A5FA),
+        secondary: const Color(0xFFFB923C),
+        surface: surface,
+      ),
+      scaffoldBackgroundColor: bg,
+      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: surface,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
+        scrolledUnderElevation: 1,
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      dialogTheme: const DialogThemeData(backgroundColor: surface),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: surface,
+        indicatorColor: const Color(0xFF60A5FA).withValues(alpha: 0.18),
+      ),
     );
   }
 

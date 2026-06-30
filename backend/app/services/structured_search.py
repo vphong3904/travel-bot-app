@@ -402,6 +402,103 @@ async def category_gap_message(
         return None
 
 
+_GROUP_LABEL = {
+    "couple": "Cặp đôi", "family": "Gia đình", "solo": "Một mình", "group": "Nhóm bạn",
+}
+
+
+def _duration_text(days: Optional[int]) -> str:
+    if not days or days < 1:
+        return ""
+    return "1 ngày" if days == 1 else f"{days} ngày {days - 1} đêm"
+
+
+async def build_itinerary(
+    location: Optional[str], city_slug: Optional[str], entities: Optional[dict] = None,
+) -> Optional[dict]:
+    """
+    [P1] Dựng lịch trình CÓ CẤU TRÚC cho intent plan_trip từ bảng itineraries +
+    itinerary_items (dữ liệu thật, không bịa). Trả dict cho ItineraryCard/
+    TripDetailsScreen, hoặc None nếu thành phố chưa có lịch trình mẫu.
+
+    Shape: {destination, destination_id, itinerary_id, duration, duration_days,
+            group, budget_low, budget_high, days:[{day,title,activities[]}], hotels[]}
+    """
+    if not location and not city_slug:
+        return None
+    ent = entities or {}
+    want_days = ent.get("duration_days")
+    try:
+        from app.db.database import AsyncSessionLocal
+        async with AsyncSessionLocal() as db:
+            did, dname = await resolve_destination(db, location, city_slug)
+            if not did:
+                return None
+
+            templates = await _q(db, """
+                SELECT id, title, duration_days, group_type, budget_low, budget_high
+                FROM itineraries WHERE destination_id = :did AND is_active
+                ORDER BY duration_days NULLS LAST
+            """, did)
+            if not templates:
+                return None
+
+            # Chọn template khớp số ngày user muốn nhất (nếu có), else cái đầu
+            chosen = templates[0]
+            if want_days:
+                for t in templates:
+                    if t["duration_days"] == want_days:
+                        chosen = t
+                        break
+
+            items = await _q(db, """
+                SELECT day_no, order_no, time_slot, title, description
+                FROM itinerary_items WHERE itinerary_id = :did
+                ORDER BY day_no, order_no
+            """, chosen["id"])
+
+            # gom theo ngày
+            by_day: dict = {}
+            for it in items:
+                d = it["day_no"] or 1
+                acts = by_day.setdefault(d, [])
+                slot = (it["time_slot"] or "").strip()
+                title = (it["title"] or "").strip()
+                acts.append(f"{slot}: {title}" if slot else title)
+            days = [
+                {"day": d, "title": f"Ngày {d}", "activities": by_day[d]}
+                for d in sorted(by_day)
+            ]
+
+            # vài khách sạn thật (gợi ý kèm)
+            hotel_rows = await _q(db, """
+                SELECT name, stars, price_per_night FROM hotels
+                WHERE destination_id = :did
+                ORDER BY rating DESC NULLS LAST, stars DESC NULLS LAST LIMIT 3
+            """, did)
+            hotels = [
+                {"name": h["name"], "stars": h["stars"],
+                 "price": h["price_per_night"]}
+                for h in hotel_rows
+            ]
+
+            return {
+                "destination": dname,
+                "destination_id": str(did),
+                "itinerary_id": str(chosen["id"]),
+                "duration": _duration_text(chosen["duration_days"]),
+                "duration_days": chosen["duration_days"],
+                "group": _GROUP_LABEL.get(chosen["group_type"] or "", chosen["group_type"] or ""),
+                "budget_low": chosen["budget_low"] or 0,
+                "budget_high": chosen["budget_high"] or 0,
+                "days": days,
+                "hotels": hotels,
+            }
+    except Exception as e:
+        logger.warning(f"[Structured] build_itinerary lỗi: {e}")
+        return None
+
+
 async def fetch_structured_sources(
     intent: Optional[str],
     location: Optional[str],
