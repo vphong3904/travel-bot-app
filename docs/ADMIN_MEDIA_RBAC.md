@@ -1,22 +1,31 @@
-# Admin — Media Manager (CMS) · RBAC seed · Cột ảnh content · Seed T-037
+# Admin — Media Manager (CMS) · RBAC seed · Cột ảnh content · Dọn initdb
 
 > Nhánh: `feat/admin-media-rbac-images`. Tài liệu cho đợt hoàn thiện phần quản lý
-> ảnh (TA-018), phân quyền RBAC và bổ sung cột ảnh cho các bảng content.
+> ảnh (TA-018), phân quyền RBAC, bổ sung cột ảnh cho các bảng content, và **dọn
+> gọn `backend/initdb` từ 40 → 8 file** (gộp migration vào schema, bỏ seed
+> content/demo — content nạp từ knowledge-base).
 
-## 1. Migration & seed (backend/initdb)
+## 1. Database (backend/initdb — đã dọn gọn còn 8 file)
 
-Chạy theo thứ tự số (idempotent — chạy lại an toàn):
+`backend/initdb` chỉ chứa **schema + bootstrap tối thiểu**; **content** (địa điểm,
+khách sạn, món ăn, KB, điểm vui chơi T-037…) nạp riêng từ knowledge-base bằng
+`backend/scripts/seed_kb_to_sql.py`, **không** seed trong initdb.
 
-| File | Nội dung |
+| File | Vai trò |
 |---|---|
-| `39_migration_media_folders_and_images.sql` | Bảng `media_folders` (cây thư mục) + `media_files.folder_id`; thêm `image_url` cho `restaurants`, `foods`, `tickets`, `destination_events`, `shopping_places` |
-| `40_seed_rbac_accounts.sql` | Seed 4 tài khoản RBAC (mật khẩu `12345678`) |
-| `41_seed_t037_entertainment.sql` | Seed 68 điểm vui chơi/giải trí (T-037) từ knowledge-base JSON vào bảng `locations` |
+| `00_extensions_and_functions.sql` | extension + `uuid_generate_v7` + trigger helper |
+| `01_schema_auth.sql` | users (role 5 cấp RBAC), refresh_tokens, otp_codes, email_verifications |
+| `02_schema_travel.sql` | destinations/locations/hotels/tours/tickets/transport/events/shopping/**restaurants**/**foods** + cột `image_url` + provenance + UNIQUE chống trùng + view_logs |
+| `03_schema_ai.sql` | knowledge_entries, embedding_jobs (+ trigger enqueue), chat_sessions/messages, itineraries, intent_patterns, locations_alias, system_configs |
+| `04_schema_media.sql` | `media_folders` (cây thư mục CMS) + `media_files` (folder_id, soft delete) |
+| `10_seed_auth.sql` | tài khoản: 4 cấp RBAC + user mẫu (mật khẩu `12345678`) |
+| `11_seed_system_config.sql` | giá trị `system_configs` mặc định |
+| `12_seed_intent_patterns.sql` | bộ keyword intent cơ bản |
 
-`41` được sinh tự động bởi `backend/scripts/gen_seed_t037_entertainment.py` (đọc
-`knowledge-base/*/destinations.json`, lọc `type` vui chơi). `destination_id` được
-resolve bằng subquery khớp `slug` **hoặc** tên thành phố → không vỡ FK nếu slug
-trong DB không khớp tên thư mục; `ON CONFLICT (id) DO NOTHING` nên chạy lại không trùng.
+> Toàn bộ cột `image_url`/provenance và bảng media trước đây nằm rải rác ở các file
+> migration 27–41 nay đã **gộp thẳng vào schema** (init sạch, không còn vệt migration).
+> Đã validate bằng `pgvector/pgvector:pg17`: init thành công, 34 bảng, 4 role RBAC.
+> T-037 (điểm vui chơi) vào DB qua `seed_kb_to_sql.py` (import `destinations.json`).
 
 ### Tài khoản RBAC (mật khẩu `12345678`)
 
