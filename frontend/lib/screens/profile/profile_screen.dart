@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import '../../models/destination.dart';
 import '../../providers/app_state.dart';
 import '../../services/favorite_api_service.dart';
+import '../../services/review_api_service.dart';
+import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
 import '../admin/admin_dashboard_screen.dart';
@@ -33,11 +35,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<Destination> _favorites = [];
   bool _favLoading = true;
   bool _loggingOut = false;
+  int? _tripCount;     // null = đang tải
+  int? _reviewCount;
 
   @override
   void initState() {
     super.initState();
     _loadFavorites();
+    _loadStats();
+  }
+
+  Future<void> _loadStats() async {
+    final s = context.read<AppState>();
+    if (!s.isLoggedIn) return;
+    try {
+      final trips = await TripApiService(
+        tokenProvider: () => s.token,
+        tokenRefresher: () => s.refreshAccessToken(),
+      ).listTrips();
+      if (mounted) setState(() => _tripCount = trips.length);
+    } catch (_) {
+      if (mounted) setState(() => _tripCount = 0);
+    }
+    try {
+      final n = await ReviewApiService(token: s.token ?? '').myReviewCount();
+      if (mounted) setState(() => _reviewCount = n);
+    } catch (_) {
+      if (mounted) setState(() => _reviewCount = 0);
+    }
   }
 
   Future<void> _loadFavorites() async {
@@ -188,14 +213,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const _StatItem(label: 'Chuyến đi', value: '–'),
+                    _StatItem(
+                      label: 'Chuyến đi',
+                      value: !appState.isLoggedIn
+                          ? '–'
+                          : _tripCount == null ? '…' : '$_tripCount',
+                    ),
                     Container(width: 1, height: 30, color: AppColors.border),
                     _StatItem(
                       label: 'Yêu thích',
                       value: _favLoading ? '…' : '${_favorites.length}',
                     ),
                     Container(width: 1, height: 30, color: AppColors.border),
-                    const _StatItem(label: 'Đánh giá', value: '–'),
+                    _StatItem(
+                      label: 'Đánh giá',
+                      value: !appState.isLoggedIn
+                          ? '–'
+                          : _reviewCount == null ? '…' : '$_reviewCount',
+                    ),
                   ],
                 ),
               ),
