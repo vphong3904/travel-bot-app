@@ -238,6 +238,8 @@ async def stream_message(
                 "intent": rag_meta.get("intent"),
                 "confidence_score": rag_meta.get("confidence_score"),
                 "suggested_questions": rag_meta.get("suggested_questions", []),
+                # [P1] lịch trình có cấu trúc (plan_trip)
+                "itinerary": rag_meta.get("itinerary"),
             })
 
     return StreamingResponse(

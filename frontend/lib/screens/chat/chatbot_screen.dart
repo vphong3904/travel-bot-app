@@ -8,6 +8,7 @@ import '../../widgets/common_widgets.dart';
 import '../../providers/app_state.dart';
 import '../../models/chat_message.dart';
 import '../../services/chat_api_service.dart';
+import '../../services/trip_api_service.dart';
 import '../../services/api_service.dart';
 import '../../widgets/itinerary_card.dart';
 import '../trip_detail/trip_details_screen.dart';
@@ -354,6 +355,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       String aiIntent = '';
       double aiConfidence = 0;
       List<String> suggested = [];
+      Map<String, dynamic>? itinerary;
+      bool hasItinerary = false;
 
       await for (final event in SseClient.parse(response)) {
         if (!mounted) break;
@@ -387,6 +390,10 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
           suggested = (event['suggested_questions'] as List<dynamic>? ?? [])
               .map((e) => e.toString())
               .toList();
+          if (event['itinerary'] != null) {
+            itinerary = Map<String, dynamic>.from(event['itinerary'] as Map);
+            hasItinerary = true;
+          }
 
           // Sync local count với server (server là source of truth)
           final serverRemaining = event['remaining'] as int?;
@@ -413,6 +420,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             intent: aiIntent,
             confidence: aiConfidence,
             suggestedQuestions: suggested,
+            hasItinerary: hasItinerary,
+            itinerary: itinerary,
           );
         });
       }
@@ -513,6 +522,41 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         ),
       ),
     );
+  }
+
+  // [P1] Lưu lịch trình AI thành chuyến đi
+  bool _savingTrip = false;
+  Future<void> _saveTrip(Map<String, dynamic> itinerary) async {
+    if (_savingTrip) return;
+    final appState = context.read<AppState>();
+    if (!appState.isLoggedIn) {
+      _showGuestLimitDialog();
+      return;
+    }
+    setState(() => _savingTrip = true);
+    try {
+      final tripApi = TripApiService(
+        tokenProvider: () => appState.token,
+        tokenRefresher: () => appState.refreshAccessToken(),
+      );
+      await tripApi.saveItinerary(itinerary);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.secondary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          content: const Text('✓ Đã lưu chuyến đi! Xem lại trong mục Chuyến đi.'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi lưu chuyến đi: ${friendlyError(e)}')),
+      );
+    } finally {
+      if (mounted) setState(() => _savingTrip = false);
+    }
   }
 
   void _scrollToBottom() {
@@ -851,6 +895,29 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                                           padding: const EdgeInsets.symmetric(vertical: 10)),
                                     ),
                                   ),
+                                  if (!_isGuest && msg.itinerary != null) ...[
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: OutlinedButton.icon(
+                                        onPressed: _savingTrip
+                                            ? null
+                                            : () => _saveTrip(Map<String, dynamic>.from(
+                                                msg.itinerary!)),
+                                        icon: _savingTrip
+                                            ? const SizedBox(
+                                                width: 14, height: 14,
+                                                child: CircularProgressIndicator(strokeWidth: 2))
+                                            : const Icon(Icons.bookmark_add_outlined, size: 16),
+                                        label: Text(_savingTrip ? 'Đang lưu...' : 'Lưu Chuyến Đi',
+                                            style: const TextStyle(fontSize: 13)),
+                                        style: OutlinedButton.styleFrom(
+                                            foregroundColor: AppColors.primary,
+                                            side: const BorderSide(color: AppColors.primary),
+                                            padding: const EdgeInsets.symmetric(vertical: 10)),
+                                      ),
+                                    ),
+                                  ],
                                 ],
 
                                 // [P0] Câu hỏi gợi ý — chip bấm để hỏi nhanh

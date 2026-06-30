@@ -868,6 +868,15 @@ class RAGPipeline:
                 nlp.MISSING_KNOWLEDGE_RESPONSE, t0, intent=intent
             )
 
+        # [P1] plan_trip → dựng lịch trình có cấu trúc từ DB (đính kèm vào kết quả)
+        itinerary_data = None
+        if intent == "plan_trip":
+            itinerary_data = await structured_search.build_itinerary(
+                nlp_result.entities.get("location"),
+                nlp_result.entities.get("city_slug"),
+                nlp_result.entities,
+            )
+
         # [YÊU CẦU 5] Sliding summary nếu history dài
         client = _get_genai_client()
         recent_history, summary_text = await gopt.build_sliding_history(
@@ -937,6 +946,7 @@ class RAGPipeline:
             "search_ms": search_ms,
             "llm_ms": llm_ms,
             "cache_hit": None,
+            "itinerary": itinerary_data,
         }
 
         # [YÊU CẦU 4] Lưu cache (chỉ cache câu trả lời đáng tin cậy, KB-grounded)
@@ -1096,6 +1106,15 @@ class RAGPipeline:
                 yield ev
             return
 
+        # [P1] plan_trip → lịch trình có cấu trúc từ DB, đính kèm meta
+        itinerary_data = None
+        if intent == "plan_trip":
+            itinerary_data = await structured_search.build_itinerary(
+                nlp_result.entities.get("location"),
+                nlp_result.entities.get("city_slug"),
+                nlp_result.entities,
+            )
+
         client = _get_genai_client()
         recent_history, summary_text = await gopt.build_sliding_history(
             history, client, settings.GEMINI_MODEL
@@ -1194,6 +1213,7 @@ class RAGPipeline:
             "llm_ms": llm_ms,
             "cache_hit": None,
             "chunk_count": chunk_count,
+            "itinerary": itinerary_data,
         }
 
         # [YÊU CẦU 4] Cache câu trả lời nếu đáng tin cậy
