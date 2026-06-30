@@ -52,6 +52,7 @@ class ChatMessageOut(BaseModel):
     content: str
     sources: Optional[list[dict[str, Any]]] = []
     intent: Optional[str]
+    suggested_questions: Optional[list[str]] = []
     prompt_tokens: int
     completion_tokens: int
     latency_ms: Optional[int]

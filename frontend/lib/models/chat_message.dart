@@ -55,6 +55,7 @@ class ChatMessage {
   final List<SourceRef> sources;
   final String intent;
   final double confidence;
+  final List<String> suggestedQuestions;
   final bool isTyping;
 
   const ChatMessage({
@@ -67,6 +68,7 @@ class ChatMessage {
     this.sources = const [],
     this.intent = '',
     this.confidence = 0,
+    this.suggestedQuestions = const [],
     this.isTyping = false,
   });
 
