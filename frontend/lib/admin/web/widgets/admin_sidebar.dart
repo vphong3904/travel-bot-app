@@ -25,6 +25,7 @@ const _contentItems = [
   _MenuItem('Di chuyển',   '/content/transport',    Icons.directions_bus,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('FAQ',         '/content/faq',          Icons.quiz,              [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Trải nghiệm', '/content/experiences',  Icons.explore,           [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
+  _MenuItem('Quản lý ảnh', '/media',                Icons.photo_library,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
 ];
 
 const _topItems = [

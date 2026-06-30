@@ -1,22 +1,18 @@
 -- ============================================================
 -- PDTrip AI – Schema: TRAVEL
--- categories · destinations · locations · hotels · tours ·
--- tickets · transport_options · destination_events ·
--- shopping_places · trip_plans · trip_plan_items
--- ============================================================
--- THỨ TỰ TẠO (phụ thuộc FK):
---   categories → destinations → destination_categories
---   destinations → locations → tickets / trip_plan_items
---   destinations → hotels / tours / transport_options /
---                  destination_events / shopping_places
---   users → trip_plans → trip_plan_items
+-- categories · destinations · locations · hotels · tours · tickets ·
+-- transport_options · destination_events · shopping_places ·
+-- restaurants · foods · user_favorites · reviews · trip_plans ·
+-- trip_plan_items · destination_view_logs
+-- ------------------------------------------------------------
+-- Cột provenance (data_source/source_url/verified/verified_at) và image_url
+-- cho content được khai báo trực tiếp tại đây (trước đây thêm bằng migration
+-- 33/37/39 — nay gộp vào schema cho gọn).
+-- UNIQUE chống trùng (hotels/shopping/events/transport) đặt ở bước hậu-seed
+-- 31_dedupe_and_constraints.sql để không vỡ khi seed có sẵn bản trùng.
 -- ============================================================
 
-
--- ============================================================
--- [TRAVEL] CATEGORIES
--- Phân loại điểm đến: biển, núi, nghỉ dưỡng, khám phá…
--- ============================================================
+-- ── CATEGORIES ──────────────────────────────────────────────
 CREATE TABLE categories (
     id          UUID        PRIMARY KEY DEFAULT uuid_generate_v7(),
     name        VARCHAR(100) NOT NULL UNIQUE,
@@ -30,28 +26,16 @@ CREATE TABLE categories (
 CREATE INDEX idx_categories_active ON categories(is_active) WHERE is_active = TRUE;
 SELECT _attach_updated_at('categories');
 
-
--- ============================================================
--- [TRAVEL] DESTINATIONS
--- Điểm đến du lịch (Đà Lạt, Phú Quốc, Hà Giang…)
--- slug = city_slug từ knowledge-base (vd: lam-dong-da-lat)
--- ============================================================
+-- ── DESTINATIONS (thành phố/điểm đến lớn, slug = city_slug) ─
 CREATE TABLE destinations (
     id          UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     name        VARCHAR(200) NOT NULL,
-    slug        VARCHAR(100) UNIQUE,          -- FIX: thêm slug, nullable cho seed cũ
+    slug        VARCHAR(100) UNIQUE,
     province    VARCHAR(100),
-    region      VARCHAR(50)
-                CHECK (region IN (
-                    'Miền Bắc', 'Miền Trung', 'Miền Nam', 'Tây Nguyên',
-                    -- Mở rộng theo thực tế seed data
-                    'Đồng bằng sông Hồng', 'Đồng bằng sông Cửu Long',
-                    'Duyên hải Nam Trung Bộ và Tây Nguyên',
-                    'Đông Bắc', 'Tây Bắc'
-                )),
+    region      VARCHAR(50),   -- nhãn vùng miền (seed dùng nhiều cách gọi, không ràng buộc CHECK)
     description TEXT,
     best_season VARCHAR(200),
-    best_months SMALLINT[],      -- tháng đẹp nhất, vd: ARRAY[11,12,1,2,3,4]
+    best_months SMALLINT[],
     weather     TEXT,
     cuisine     TEXT,
     budget_low  INT          CHECK (budget_low >= 0),
@@ -59,13 +43,16 @@ CREATE TABLE destinations (
     CHECK (budget_high IS NULL OR budget_high >= budget_low),
     image_url   TEXT,
     special     TEXT,
-
     -- Stats / social
     rating_avg     DECIMAL(2,1) DEFAULT 0,
     review_count   INT          DEFAULT 0,
     favorite_count INT          DEFAULT 0,
     view_count     INT          DEFAULT 0,
-
+    -- Provenance
+    data_source TEXT,
+    source_url  TEXT,
+    verified    BOOLEAN      DEFAULT FALSE,
+    verified_at TIMESTAMPTZ,
     is_active   BOOLEAN      DEFAULT TRUE,
     created_at  TIMESTAMPTZ  DEFAULT NOW(),
     updated_at  TIMESTAMPTZ  DEFAULT NOW()
@@ -80,10 +67,7 @@ CREATE INDEX idx_dest_fts      ON destinations
     ));
 SELECT _attach_updated_at('destinations');
 
-
--- ============================================================
--- [TRAVEL] DESTINATION CATEGORIES (many-to-many)
--- ============================================================
+-- ── DESTINATION CATEGORIES (m2m) ────────────────────────────
 CREATE TABLE destination_categories (
     destination_id UUID NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
     category_id    UUID NOT NULL REFERENCES categories(id)   ON DELETE CASCADE,
@@ -93,19 +77,13 @@ CREATE TABLE destination_categories (
 CREATE INDEX idx_dest_cat_dest ON destination_categories(destination_id);
 CREATE INDEX idx_dest_cat_cat  ON destination_categories(category_id);
 
-
--- ============================================================
--- [TRAVEL] LOCATIONS
--- Điểm tham quan cụ thể bên trong destination
--- (chùa, thác, bãi biển, bảo tàng…)
--- FIX: bảng này PHẢI tạo trước tickets + trip_plan_items
--- vì cả 2 đều có FK location_id → locations(id)
--- ============================================================
+-- ── LOCATIONS (điểm tham quan cụ thể trong destination) ─────
+-- Phải tạo trước tickets + trip_plan_items (cả 2 FK location_id).
 CREATE TABLE locations (
-    id           UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
-    destination_id UUID        REFERENCES destinations(id) ON DELETE CASCADE,
+    id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
+    destination_id UUID         REFERENCES destinations(id) ON DELETE CASCADE,
     name         VARCHAR(200) NOT NULL,
-    type         VARCHAR(50),           -- 'beach','temple','waterfall','museum'…
+    type         VARCHAR(50),
     address      TEXT,
     lat          DECIMAL(10,7),
     lng          DECIMAL(10,7),
@@ -116,6 +94,10 @@ CREATE TABLE locations (
     rating_avg   DECIMAL(3,2) DEFAULT 0,
     review_count INT          DEFAULT 0,
     verified     BOOLEAN      DEFAULT FALSE,
+    -- Provenance
+    data_source  TEXT,
+    source_url   TEXT,
+    verified_at  TIMESTAMPTZ,
     created_at   TIMESTAMPTZ  DEFAULT NOW(),
     updated_at   TIMESTAMPTZ  DEFAULT NOW()
 );
@@ -123,10 +105,7 @@ CREATE INDEX idx_locations_dest ON locations(destination_id);
 CREATE INDEX idx_locations_type ON locations(type);
 SELECT _attach_updated_at('locations');
 
-
--- ============================================================
--- [TRAVEL] HOTELS
--- ============================================================
+-- ── HOTELS ──────────────────────────────────────────────────
 CREATE TABLE hotels (
     id              UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id  UUID         NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -140,6 +119,10 @@ CREATE TABLE hotels (
     description     TEXT,
     image_url       TEXT,
     rating          DECIMAL(3,2) DEFAULT 0,
+    data_source     TEXT,
+    source_url      TEXT,
+    verified        BOOLEAN      DEFAULT FALSE,
+    verified_at     TIMESTAMPTZ,
     created_at      TIMESTAMPTZ  DEFAULT NOW(),
     updated_at      TIMESTAMPTZ  DEFAULT NOW()
 );
@@ -150,10 +133,7 @@ CREATE INDEX idx_hotels_fts   ON hotels
     USING GIN(to_tsvector('simple', name || ' ' || COALESCE(address,'')));
 SELECT _attach_updated_at('hotels');
 
-
--- ============================================================
--- [TRAVEL] TOURS
--- ============================================================
+-- ── TOURS ───────────────────────────────────────────────────
 CREATE TABLE tours (
     id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id UUID         NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -165,6 +145,10 @@ CREATE TABLE tours (
     includes       TEXT[]       DEFAULT '{}',
     excludes       TEXT[]       DEFAULT '{}',
     image_url      TEXT,
+    data_source    TEXT,
+    source_url     TEXT,
+    verified       BOOLEAN      DEFAULT FALSE,
+    verified_at    TIMESTAMPTZ,
     created_at     TIMESTAMPTZ  DEFAULT NOW(),
     updated_at     TIMESTAMPTZ  DEFAULT NOW()
 );
@@ -174,11 +158,7 @@ CREATE INDEX idx_tours_fts   ON tours
     USING GIN(to_tsvector('simple', name || ' ' || COALESCE(description,'')));
 SELECT _attach_updated_at('tours');
 
-
--- ============================================================
--- [TRAVEL] TICKETS
--- Vé tham quan — location_id là optional (SET NULL nếu location bị xoá)
--- ============================================================
+-- ── TICKETS (vé tham quan) ──────────────────────────────────
 CREATE TABLE tickets (
     id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id UUID         NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -188,16 +168,17 @@ CREATE TABLE tickets (
     price_child    INT          CHECK (price_child >= 0),
     description    TEXT,
     hours          VARCHAR(200),
+    image_url      TEXT,
+    data_source    TEXT,
+    source_url     TEXT,
+    verified       BOOLEAN      DEFAULT FALSE,
+    verified_at    TIMESTAMPTZ,
     created_at     TIMESTAMPTZ  DEFAULT NOW()
 );
 CREATE INDEX idx_tickets_dest     ON tickets(destination_id);
 CREATE INDEX idx_tickets_location ON tickets(location_id);
 
-
--- ============================================================
--- [TRAVEL] TRANSPORT OPTIONS
--- Phương tiện di chuyển đến / nội đô
--- ============================================================
+-- ── TRANSPORT OPTIONS ───────────────────────────────────────
 CREATE TABLE transport_options (
     id             UUID        PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id UUID        NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -212,11 +193,7 @@ CREATE TABLE transport_options (
 CREATE INDEX idx_transport_dest  ON transport_options(destination_id);
 CREATE INDEX idx_transport_local ON transport_options(destination_id, is_local);
 
-
--- ============================================================
--- [TRAVEL] DESTINATION EVENTS
--- Lễ hội, sự kiện theo mùa / hàng năm
--- ============================================================
+-- ── DESTINATION EVENTS (lễ hội/sự kiện) ─────────────────────
 CREATE TABLE destination_events (
     id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id UUID         NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -225,14 +202,16 @@ CREATE TABLE destination_events (
     location_text  TEXT,
     cost           VARCHAR(100),
     description    TEXT,
+    image_url      TEXT,
+    data_source    TEXT,
+    source_url     TEXT,
+    verified       BOOLEAN      DEFAULT FALSE,
+    verified_at    TIMESTAMPTZ,
     created_at     TIMESTAMPTZ  DEFAULT NOW()
 );
 CREATE INDEX idx_events_dest ON destination_events(destination_id);
 
-
--- ============================================================
--- [TRAVEL] SHOPPING PLACES
--- ============================================================
+-- ── SHOPPING PLACES ─────────────────────────────────────────
 CREATE TABLE shopping_places (
     id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     destination_id UUID         NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -243,14 +222,65 @@ CREATE TABLE shopping_places (
     address        TEXT,
     opening_hours  VARCHAR(100),
     price_range    VARCHAR(100),
+    image_url      TEXT,
+    data_source    TEXT,
+    source_url     TEXT,
+    verified       BOOLEAN      DEFAULT FALSE,
+    verified_at    TIMESTAMPTZ,
     created_at     TIMESTAMPTZ  DEFAULT NOW()
 );
 CREATE INDEX idx_shopping_dest ON shopping_places(destination_id);
 
+-- ── RESTAURANTS (nhà hàng/quán — cấu trúc, structured fast-path) ─
+-- PK = id gốc trong restaurants.json để foods.where_to_eat trỏ đúng.
+CREATE TABLE restaurants (
+    id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
+    destination_id UUID         REFERENCES destinations(id) ON DELETE CASCADE,
+    name           VARCHAR(200) NOT NULL,
+    type           VARCHAR(50),
+    address        TEXT,
+    hours          VARCHAR(200),
+    price_range    VARCHAR(100),
+    specialties    TEXT[],
+    description    TEXT,
+    tips           TEXT,
+    rating         DECIMAL(3,2),
+    must_try       BOOLEAN     DEFAULT FALSE,
+    image_url      TEXT,
+    data_source    TEXT,
+    source_url     TEXT,
+    verified       BOOLEAN     DEFAULT FALSE,
+    verified_at    TIMESTAMPTZ,
+    created_at     TIMESTAMPTZ DEFAULT NOW(),
+    updated_at     TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_restaurants_dest ON restaurants(destination_id);
+SELECT _attach_updated_at('restaurants');
 
--- ============================================================
--- [TRAVEL] USER FAVORITES
--- ============================================================
+-- ── FOODS (đặc sản/món ăn) ──────────────────────────────────
+-- where_to_eat: mảng UUID trỏ tới restaurants.id (không đặt FK cho ARRAY).
+CREATE TABLE foods (
+    id             UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
+    destination_id UUID         REFERENCES destinations(id) ON DELETE CASCADE,
+    name           VARCHAR(200) NOT NULL,
+    local_name     VARCHAR(200),
+    category       VARCHAR(50),
+    description    TEXT,
+    price_range    VARCHAR(100),
+    must_try       BOOLEAN     DEFAULT FALSE,
+    vegetarian     BOOLEAN     DEFAULT FALSE,
+    tags           TEXT[],
+    where_to_eat   UUID[],
+    image_url      TEXT,
+    data_source    TEXT,
+    created_at     TIMESTAMPTZ DEFAULT NOW(),
+    updated_at     TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (destination_id, name)
+);
+CREATE INDEX idx_foods_dest ON foods(destination_id);
+SELECT _attach_updated_at('foods');
+
+-- ── USER FAVORITES ──────────────────────────────────────────
 CREATE TABLE user_favorites (
     user_id        UUID NOT NULL REFERENCES users(id)        ON DELETE CASCADE,
     destination_id UUID NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
@@ -260,7 +290,6 @@ CREATE TABLE user_favorites (
 CREATE INDEX idx_fav_dest ON user_favorites(destination_id);
 CREATE INDEX idx_fav_user ON user_favorites(user_id);
 
--- Trigger: favorite_count
 CREATE OR REPLACE FUNCTION increase_favorite() RETURNS TRIGGER AS $$
 BEGIN
     UPDATE destinations SET favorite_count = favorite_count + 1
@@ -282,22 +311,17 @@ CREATE TRIGGER trg_favorite_insert AFTER INSERT ON user_favorites
 CREATE TRIGGER trg_favorite_delete AFTER DELETE ON user_favorites
     FOR EACH ROW EXECUTE FUNCTION decrease_favorite();
 
-
--- ============================================================
--- [TRAVEL] REVIEWS
--- ============================================================
+-- ── REVIEWS ─────────────────────────────────────────────────
 CREATE TABLE reviews (
     id             UUID PRIMARY KEY DEFAULT uuid_generate_v7(),
     user_id        UUID NOT NULL REFERENCES users(id)        ON DELETE CASCADE,
     destination_id UUID NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
     rating         INT  CHECK (rating BETWEEN 1 AND 5),
     content        TEXT,
-    created_at     TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (destination_id) REFERENCES destinations(id) ON DELETE CASCADE
+    created_at     TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX idx_review_dest ON reviews(destination_id);
 
--- Trigger: review_count + rating_avg
 CREATE OR REPLACE FUNCTION update_review_stats() RETURNS TRIGGER AS $$
 BEGIN
     UPDATE destinations
@@ -314,11 +338,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_review_insert AFTER INSERT ON reviews
     FOR EACH ROW EXECUTE FUNCTION update_review_stats();
 
-
--- ============================================================
--- [TRAVEL] TRIP PLANS + ITEMS
--- location_id trong trip_plan_items là optional
--- ============================================================
+-- ── TRIP PLANS + ITEMS (lịch trình của user) ────────────────
 CREATE TABLE trip_plans (
     id             UUID        PRIMARY KEY DEFAULT uuid_generate_v7(),
     user_id        UUID        NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -356,3 +376,23 @@ CREATE TABLE trip_plan_items (
     notes        TEXT
 );
 CREATE INDEX idx_trip_items_plan ON trip_plan_items(trip_plan_id, day_number);
+
+-- ── DESTINATION VIEW LOGS (dedup view_count theo user + ngày) ─
+CREATE TABLE destination_view_logs (
+    id             SERIAL PRIMARY KEY,
+    user_id        UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    destination_id UUID NOT NULL REFERENCES destinations(id) ON DELETE CASCADE,
+    view_date      VARCHAR(10) NOT NULL,   -- 'YYYY-MM-DD'
+    created_at     TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT uq_view_per_user_day UNIQUE (user_id, destination_id, view_date)
+);
+CREATE INDEX idx_view_log_dest ON destination_view_logs(destination_id);
+
+-- ── UNIQUE chống trùng (để seed_kb_to_sql ON CONFLICT hoạt động) ─
+-- foods đã có UNIQUE(destination_id,name) inline; các bảng còn lại khai báo ở đây.
+ALTER TABLE hotels             ADD CONSTRAINT uq_hotels_dest_name   UNIQUE (destination_id, name);
+ALTER TABLE shopping_places    ADD CONSTRAINT uq_shopping_dest_name UNIQUE (destination_id, name);
+ALTER TABLE destination_events ADD CONSTRAINT uq_events_dest_name   UNIQUE (destination_id, name);
+-- transport: provider/duration có thể NULL → unique index với COALESCE.
+CREATE UNIQUE INDEX uq_transport_dest_type_provider
+    ON transport_options (destination_id, type, COALESCE(provider,''), COALESCE(duration,''));

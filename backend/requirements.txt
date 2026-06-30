@@ -25,6 +25,9 @@ bcrypt==4.0.1
 python-multipart>=0.0.20
 email-validator>=2.2.0
 
+# Media manager — resize ảnh upload → WebP
+pillow>=10.0.0
+
 # Google OAuth (verify id_token từ Google Sign-In)
 google-auth>=2.29.0
 
