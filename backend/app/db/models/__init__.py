@@ -9,6 +9,7 @@ from .travel import (
 )
 from .trip import TripPlan, TripPlanItem
 from .admin import KnowledgeEntry, EmbeddingJob
+from .media import MediaFolder, MediaFile
 
 __all__ = [
     "User", "RefreshToken", "OtpCode", "EmailVerification",
@@ -18,5 +19,6 @@ __all__ = [
     "Review", "UserFavorite",
     "TripPlan", "TripPlanItem",
     "KnowledgeEntry", "EmbeddingJob",
+    "MediaFolder", "MediaFile",
     # SearchHistory & UserBehavior: đã chuyển sang MongoDB, xem app/services/log_service.py
 ]

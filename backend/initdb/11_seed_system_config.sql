@@ -1,11 +1,7 @@
--- TA-019: System configuration table
-CREATE TABLE IF NOT EXISTS system_configs (
-    key         VARCHAR(100) PRIMARY KEY,
-    value       JSONB        NOT NULL,
-    description TEXT,
-    updated_by  UUID         REFERENCES users(id),
-    updated_at  TIMESTAMPTZ  DEFAULT NOW()
-);
+-- ============================================================
+-- PDTrip AI — Seed: system_configs mặc định (TA-019)
+-- Bảng tạo ở 03_schema_ai.sql; đây chỉ nạp giá trị mặc định.
+-- ============================================================
 
 INSERT INTO system_configs (key, value, description) VALUES
     ('chatbot_enabled',    'true',  'Bật/tắt toàn bộ chatbot endpoint'),

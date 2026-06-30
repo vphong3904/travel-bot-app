@@ -8,6 +8,17 @@ const _kApiBase = String.fromEnvironment(
   defaultValue: 'http://localhost:8000/api',
 );
 
+/// Gốc server (bỏ hậu tố `/api`) — dùng để dựng URL ảnh tĩnh `/uploads/...`
+/// vì StaticFiles được mount ở gốc server, không nằm dưới `/api`.
+final String kMediaOrigin =
+    _kApiBase.endsWith('/api') ? _kApiBase.substring(0, _kApiBase.length - 4) : _kApiBase;
+
+/// Ghép URL tuyệt đối cho ảnh media từ `file_path` ('/uploads/...').
+String mediaUrl(String path) {
+  if (path.startsWith('http')) return path;
+  return '$kMediaOrigin$path';
+}
+
 final BaseOptions _baseOptions = BaseOptions(
   baseUrl: _kApiBase,
   connectTimeout: const Duration(seconds: 10),

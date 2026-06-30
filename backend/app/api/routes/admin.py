@@ -1119,64 +1119,310 @@ async def resolve_feedback(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# MEDIA (placeholder — file storage cần S3/local disk setup)
+# MEDIA — trình quản lý ảnh dạng CMS (thư mục + ảnh, lưu DB + local disk)
 # ══════════════════════════════════════════════════════════════════════════════
+#
+# - media_folders: cây thư mục (root / folder con) — TA-018 + yêu cầu CMS.
+# - media_files:  ảnh, gắn folder_id, soft delete. File lưu static/uploads,
+#                 mount /uploads ở main.py. URL = /uploads/<filename>.
+# - Upload: multi-select nhiều ảnh 1 lần, Pillow resize ≤1920 → WebP (best-effort).
+# Role: đọc = mọi admin role; tạo/sửa/xoá = admin/super_admin/content_manager.
 
-_media_store: list[dict] = []  # in-memory, thay bằng DB/S3 thật
+import os as _os
 
+_UPLOAD_DIR = _os.path.join("static", "uploads")
+_ALLOWED_EXT = {"jpg", "jpeg", "png", "webp"}
+_MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # giới hạn input (sau resize WebP còn nhỏ hơn)
+
+_media_writer = require_role(["admin", "super_admin", "content_manager"])
+
+
+def _process_image(content: bytes, ext: str) -> tuple[bytes, str, Optional[str], Optional[int], Optional[int]]:
+    """Resize ≤1920px + convert WebP nếu có Pillow. Lỗi/không có Pillow → giữ nguyên."""
+    try:
+        import io
+        from PIL import Image
+
+        img = Image.open(io.BytesIO(content))
+        if img.mode not in ("RGB", "RGBA", "L"):
+            img = img.convert("RGBA")
+        w, h = img.size
+        max_side = 1920
+        if max(w, h) > max_side:
+            ratio = max_side / float(max(w, h))
+            img = img.resize((max(1, int(w * ratio)), max(1, int(h * ratio))))
+        buf = io.BytesIO()
+        img.save(buf, format="WEBP", quality=82, method=4)
+        out = buf.getvalue()
+        return out, "webp", "image/webp", img.size[0], img.size[1]
+    except Exception:
+        return content, ext, None, None, None
+
+
+def _folder_uuid(value: Optional[str]) -> Optional[UUID]:
+    if not value or str(value).lower() in ("", "null", "none", "root"):
+        return None
+    try:
+        return UUID(str(value))
+    except (ValueError, TypeError):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "folder_id không hợp lệ")
+
+
+# ── Folders ───────────────────────────────────────────────────────────────────
+
+@router.get("/media/folders")
+async def list_media_folders(db: DB = None, _: User = Depends(require_admin)):
+    """Trả về toàn bộ thư mục (phẳng) kèm số ảnh + thời điểm thêm ảnh gần nhất.
+
+    FE tự dựng cây từ parent_id và sắp xếp thư mục theo last_added để hiển thị
+    thư mục vừa thêm ảnh gần nhất lên trước.
+    """
+    from app.db.models.media import MediaFolder, MediaFile
+
+    folders = (await db.execute(
+        select(MediaFolder).order_by(MediaFolder.created_at.asc())
+    )).scalars().all()
+
+    # Đếm ảnh + last_added theo folder (1 query gom nhóm)
+    stats = (await db.execute(
+        select(
+            MediaFile.folder_id,
+            func.count(MediaFile.id),
+            func.max(MediaFile.created_at),
+        )
+        .where(MediaFile.is_deleted == False)
+        .group_by(MediaFile.folder_id)
+    )).all()
+    by_folder = {str(fid): (cnt, last) for fid, cnt, last in stats if fid is not None}
+
+    return [
+        {
+            "id": str(f.id),
+            "name": f.name,
+            "parent_id": str(f.parent_id) if f.parent_id else None,
+            "image_count": by_folder.get(str(f.id), (0, None))[0],
+            "last_added": (by_folder.get(str(f.id), (0, None))[1].isoformat()
+                           if by_folder.get(str(f.id), (0, None))[1] else None),
+            "created_at": f.created_at.isoformat() if f.created_at else None,
+        }
+        for f in folders
+    ]
+
+
+@router.post("/media/folders", status_code=201)
+async def create_media_folder(
+    body: dict, db: DB = None, actor: User = Depends(_media_writer),
+):
+    from app.db.models.media import MediaFolder
+
+    name = (body.get("name") or "").strip()
+    if not name:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Tên thư mục không được trống")
+    parent_id = _folder_uuid(body.get("parent_id"))
+
+    if parent_id is not None:
+        parent = (await db.execute(
+            select(MediaFolder).where(MediaFolder.id == parent_id)
+        )).scalar_one_or_none()
+        if not parent:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Thư mục cha không tồn tại")
+
+    folder = MediaFolder(name=name, parent_id=parent_id, created_by=actor.id)
+    db.add(folder)
+    try:
+        await db.commit()
+    except Exception:
+        await db.rollback()
+        raise HTTPException(status.HTTP_409_CONFLICT, "Đã có thư mục trùng tên trong thư mục này")
+    await db.refresh(folder)
+    return {
+        "id": str(folder.id),
+        "name": folder.name,
+        "parent_id": str(folder.parent_id) if folder.parent_id else None,
+        "image_count": 0,
+        "last_added": None,
+        "created_at": folder.created_at.isoformat() if folder.created_at else None,
+    }
+
+
+@router.patch("/media/folders/{folder_id}")
+async def rename_media_folder(
+    folder_id: str, body: dict, db: DB = None, _: User = Depends(_media_writer),
+):
+    from app.db.models.media import MediaFolder
+
+    name = (body.get("name") or "").strip()
+    if not name:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Tên thư mục không được trống")
+    folder = (await db.execute(
+        select(MediaFolder).where(MediaFolder.id == _folder_uuid(folder_id))
+    )).scalar_one_or_none()
+    if not folder:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Thư mục không tồn tại")
+    folder.name = name
+    try:
+        await db.commit()
+    except Exception:
+        await db.rollback()
+        raise HTTPException(status.HTTP_409_CONFLICT, "Đã có thư mục trùng tên trong thư mục này")
+    return {"id": folder_id, "name": name}
+
+
+@router.delete("/media/folders/{folder_id}")
+async def delete_media_folder(
+    folder_id: str, db: DB = None, _: User = Depends(_media_writer),
+):
+    """Xoá thư mục (cascade thư mục con); ảnh bên trong gỡ folder_id (giữ ảnh)."""
+    from app.db.models.media import MediaFolder
+
+    fid = _folder_uuid(folder_id)
+    folder = (await db.execute(
+        select(MediaFolder).where(MediaFolder.id == fid)
+    )).scalar_one_or_none()
+    if not folder:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Thư mục không tồn tại")
+    await db.delete(folder)
+    await db.commit()
+    return {"ok": True}
+
+
+# ── Files ─────────────────────────────────────────────────────────────────────
 
 @router.get("/media")
 async def list_media(
+    folder_id: Optional[str] = None,
     tag: Optional[str] = None,
     page: int = Query(1, ge=1),
+    page_size: int = Query(24, ge=1, le=100),
+    db: DB = None,
     _: User = Depends(require_admin),
 ):
-    items = _media_store
+    from app.db.models.media import MediaFile
+
+    stmt = select(MediaFile).where(MediaFile.is_deleted == False)
+    if folder_id is not None:
+        stmt = stmt.where(MediaFile.folder_id == _folder_uuid(folder_id))
     if tag:
-        items = [m for m in items if tag in m.get("tags", [])]
-    start = (page - 1) * 20
+        stmt = stmt.where(MediaFile.tags.any(tag))
+
+    total = (await db.execute(
+        select(func.count()).select_from(stmt.subquery())
+    )).scalar() or 0
+
+    rows = (await db.execute(
+        stmt.order_by(MediaFile.created_at.desc())
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+    )).scalars().all()
+
     return {
-        "total": len(items),
+        "total": total,
         "page": page,
-        "items": items[start: start + 20],
+        "items": [
+            {
+                "id": str(m.id),
+                "filename": m.filename,
+                "original_name": m.original_name,
+                "file_path": m.file_path,
+                "file_size": m.file_size,
+                "mime_type": m.mime_type,
+                "width": m.width,
+                "height": m.height,
+                "tags": list(m.tags or []),
+                "folder_id": str(m.folder_id) if m.folder_id else None,
+                "created_at": m.created_at.isoformat() if m.created_at else None,
+            }
+            for m in rows
+        ],
     }
 
 
 @router.post("/media/upload", status_code=201)
 async def upload_media(
-    file: UploadFile = File(...),
-    _: User = Depends(require_admin),
+    files: list[UploadFile] = File(...),
+    folder_id: Optional[str] = Query(None),
+    db: DB = None,
+    actor: User = Depends(_media_writer),
 ):
-    import os, uuid as _uuid
-    upload_dir = "uploads"
-    os.makedirs(upload_dir, exist_ok=True)
-    ext = os.path.splitext(file.filename or "file")[1]
-    filename = f"{_uuid.uuid4()}{ext}"
-    path = os.path.join(upload_dir, filename)
-    content = await file.read()
-    with open(path, "wb") as f:
-        f.write(content)
+    """Upload nhiều ảnh 1 lần vào thư mục đang mở (folder_id)."""
+    from app.db.models.media import MediaFile, MediaFolder
+    import uuid as _uuid
 
-    record = {
-        "id": str(_uuid.uuid4()),
-        "filename": filename,
-        "original_name": file.filename,
-        "mime_type": file.content_type,
-        "size": len(content),
-        "tags": [],
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    }
-    _media_store.append(record)
-    return record
+    fid = _folder_uuid(folder_id)
+    if fid is not None:
+        exists = (await db.execute(
+            select(MediaFolder.id).where(MediaFolder.id == fid)
+        )).scalar_one_or_none()
+        if not exists:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Thư mục không tồn tại")
+
+    _os.makedirs(_UPLOAD_DIR, exist_ok=True)
+    saved = []
+    for file in files:
+        ext = (_os.path.splitext(file.filename or "")[1].lstrip(".") or "jpg").lower()
+        if ext not in _ALLOWED_EXT:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                                f"Định dạng không hỗ trợ: {file.filename} (chỉ jpg/png/webp)")
+        content = await file.read()
+        if len(content) > _MAX_UPLOAD_BYTES:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                                f"Ảnh quá lớn (>8MB): {file.filename}")
+
+        out, out_ext, mime, width, height = _process_image(content, ext)
+        filename = f"{_uuid.uuid4()}.{out_ext}"
+        with open(_os.path.join(_UPLOAD_DIR, filename), "wb") as f:
+            f.write(out)
+
+        record = MediaFile(
+            filename=filename,
+            original_name=file.filename,
+            file_path=f"/uploads/{filename}",
+            file_size=len(out),
+            mime_type=mime or file.content_type,
+            width=width,
+            height=height,
+            tags=[],
+            folder_id=fid,
+            uploaded_by=actor.id,
+        )
+        db.add(record)
+        saved.append(record)
+
+    await db.commit()
+    for r in saved:
+        await db.refresh(r)
+    return [
+        {
+            "id": str(r.id),
+            "filename": r.filename,
+            "original_name": r.original_name,
+            "file_path": r.file_path,
+            "file_size": r.file_size,
+            "mime_type": r.mime_type,
+            "width": r.width,
+            "height": r.height,
+            "tags": [],
+            "folder_id": str(r.folder_id) if r.folder_id else None,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+        }
+        for r in saved
+    ]
 
 
 @router.delete("/media/{media_id}")
 async def delete_media(
-    media_id: str,
-    _: User = Depends(require_admin),
+    media_id: str, db: DB = None, _: User = Depends(_media_writer),
 ):
-    global _media_store
-    _media_store = [m for m in _media_store if m["id"] != media_id]
+    from app.db.models.media import MediaFile
+
+    try:
+        mid = UUID(media_id)
+    except (ValueError, TypeError):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "media_id không hợp lệ")
+    await db.execute(
+        update(MediaFile).where(MediaFile.id == mid).values(is_deleted=True)
+    )
+    await db.commit()
     return {"ok": True}
 
 

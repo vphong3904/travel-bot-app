@@ -1,8 +1,11 @@
 import asyncio
 from contextlib import asynccontextmanager
 
+import os
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import api_router
 from app.api.deps import require_admin
@@ -171,6 +174,12 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+
+# ── Static: ảnh upload từ Media manager (admin) ────────────────────────────────
+# Lưu ở static/uploads, phục vụ tại /uploads/<filename>. Tạo sẵn để mount không lỗi.
+_UPLOADS_DIR = os.path.join("static", "uploads")
+os.makedirs(_UPLOADS_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=_UPLOADS_DIR), name="uploads")
 
 
 # ── Debug / Admin endpoints (no auth) ──────────────────────────────────────────
