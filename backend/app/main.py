@@ -160,14 +160,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:54302",
-        "http://localhost:3000",
-        "http://localhost:8080",
-        "http://localhost:5000",
-        "http://127.0.0.1:54302",
-        "http://127.0.0.1:3000",
-    ],
+    # Flutter web (`flutter run -d chrome`) dùng cổng ngẫu nhiên mỗi lần chạy →
+    # cho phép mọi cổng localhost/127.0.0.1 bằng regex để preflight không bị 400.
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
