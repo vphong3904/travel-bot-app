@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/destination.dart';
 import '../../providers/app_state.dart';
 import '../../services/destination_service.dart';
+import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
 import '../chat/chatbot_screen.dart';
@@ -48,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Destination> _featuredDests = [];
   bool _featuredLoading = true;
 
+  // [P3] Đề xuất cá nhân hóa theo sở thích (favorites)
+  List<Destination> _forYou = [];
+  bool _forYouLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +67,40 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadBudget(0);
     _loadMonth(_selectedMonth);
     _loadFeatured();
+    _loadForYou();
+  }
+
+  // [P3] Gợi ý dựa trên danh mục phổ biến trong favorites của user.
+  Future<void> _loadForYou() async {
+    final s = context.read<AppState>();
+    if (!s.isLoggedIn) return;
+    setState(() => _forYouLoading = true);
+    try {
+      final favs = await FavoriteApiService(token: s.token ?? '').listMyFavorites();
+      if (favs.isEmpty) {
+        if (mounted) setState(() { _forYou = []; _forYouLoading = false; });
+        return;
+      }
+      final counts = <String, int>{};
+      for (final d in favs) {
+        for (final c in d.categories) {
+          if (c.slug.isNotEmpty) counts[c.slug] = (counts[c.slug] ?? 0) + 1;
+        }
+      }
+      if (counts.isEmpty) {
+        if (mounted) setState(() { _forYou = []; _forYouLoading = false; });
+        return;
+      }
+      final topSlug =
+          counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
+      final favIds = favs.map((d) => d.id).toSet();
+      final recs =
+          await DestinationRepository.fetchDestinations(category: topSlug, limit: 8);
+      final filtered = recs.where((d) => !favIds.contains(d.id)).toList();
+      if (mounted) setState(() { _forYou = filtered; _forYouLoading = false; });
+    } catch (_) {
+      if (mounted) setState(() => _forYouLoading = false);
+    }
   }
 
   Future<void> _loadHot() async {
@@ -201,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             SliverToBoxAdapter(child: _buildHotBanner()),
+            SliverToBoxAdapter(child: _buildForYouSection()),
             SliverToBoxAdapter(child: _buildCategorySection()),
             SliverToBoxAdapter(child: _buildRegionSection()),
             SliverToBoxAdapter(child: _buildBudgetSection()),
@@ -375,6 +415,23 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
             ),
           ),
+      ],
+    );
+  }
+
+  // [P3] Section đề xuất cá nhân hóa — chỉ hiện khi user đăng nhập + có gợi ý.
+  Widget _buildForYouSection() {
+    if (!context.read<AppState>().isLoggedIn) return const SizedBox.shrink();
+    if (!_forYouLoading && _forYou.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 22, 16, 10),
+          child: SectionTitle(title: 'Gợi ý cho bạn'),
+        ),
+        _HorizontalDestList(
+            dests: _forYou, loading: _forYouLoading, onTap: _openDetail),
       ],
     );
   }
