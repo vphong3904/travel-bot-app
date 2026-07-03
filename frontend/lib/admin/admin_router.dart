@@ -25,6 +25,7 @@ import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
 import 'web/screens/content_options_screen.dart';
 import 'web/screens/chatbot_test_screen.dart';
+import 'web/screens/feedback_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
@@ -118,6 +119,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/chatbot-test',
             name: 'chatbot-test',
             builder: (_, __) => const ChatbotTestScreen(),
+          ),
+          GoRoute(
+            path: '/feedback',
+            name: 'feedback',
+            builder: (_, __) => const FeedbackScreen(),
           ),
           GoRoute(
             path: '/media',
