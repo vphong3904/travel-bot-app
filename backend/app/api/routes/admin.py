@@ -20,10 +20,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import DB, CurrentUser, ADMIN_ROLES, require_admin, require_role
 from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
+from app.db.models.media import ContentItem
 from app.db.models.chat import ChatMessage, ChatSession
 from app.db.models.travel import (
     Destination, Location, Tour, Ticket,
-    Itinerary, ItineraryItem, IntentPattern, LocationAlias,
+    Itinerary, ItineraryItem, IntentPattern, LocationAlias, City,
 )
 from app.db.models.user import User
 from app.services.knowledge import KnowledgeService
@@ -927,64 +928,88 @@ def _save_intent_patterns(patterns: dict) -> None:
 # CONTENT MANAGEMENT (generic CRUD)
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Map content_type (URL param) → DB category value (phải khớp CHECK constraint)
-CONTENT_TYPES: dict[str, str] = {
-    "destinations": "destination",
-    "hotels":       "hotel",
-    "tours":        "tour",
-    "foods":        "food",
-    "restaurants":  "food",       # food category
-    "shopping":     "shopping",
-    "itineraries":  "activity",
-    "events":       "event",
-    "transport":    "transport",
-    "faq":          "faq",
-    "experiences":  "tip",        # tip category
+# content_type hợp lệ. faq & experiences KHÔNG ở đây — chúng là knowledge entries
+# (quản lý qua /admin/knowledge). Content lưu ở bảng content_items (JSONB).
+CONTENT_TYPES: set[str] = {
+    "destinations", "hotels", "tours", "foods", "restaurants",
+    "shopping", "itineraries", "events", "transport",
 }
+
+
+def _serialize_content(c: ContentItem) -> dict:
+    """Chuẩn hoá 1 ContentItem cho FE (ContentItem.fromJson)."""
+    data = dict(c.data or {})
+    data.setdefault("name", c.name)
+    if c.image_url:
+        data["image_url"] = c.image_url
+    return {
+        "id": str(c.id),
+        "status": c.status,
+        "is_deleted": c.is_deleted,
+        "image_url": c.image_url,
+        "created_at": str(c.created_at),
+        "updated_at": str(c.updated_at),
+        "data": data,
+    }
+
+
+def _extract_content_fields(body: dict) -> tuple[str, str | None, dict]:
+    """Tách name / image_url ra khỏi phần data động."""
+    data = {k: v for k, v in body.items() if k not in ("city_slug",)}
+    name = (data.get("name") or "Untitled").strip() or "Untitled"
+    image_url = data.get("image_url") or None
+    return name, image_url, data
 
 
 @router.get("/content/{content_type}")
 async def list_content(
     content_type: str,
-    city_slug: Optional[str] = None,
+    city_slug: Optional[str] = None,       # optional — không còn "cổng bắt buộc chọn city"
     status: Optional[str] = None,
+    search: Optional[str] = None,
+    sort: str = Query("newest"),           # newest | oldest | name
+    date_from: Optional[str] = None,       # YYYY-MM-DD
+    date_to: Optional[str] = None,         # YYYY-MM-DD
+    field: Optional[str] = None,           # key trong data để lọc
+    value: Optional[str] = None,           # giá trị khớp (ilike)
     page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
     db: DB = None,
     _: User = Depends(require_admin),
 ):
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, f"Content type '{content_type}' không hợp lệ")
 
-    db_category = CONTENT_TYPES[content_type]
-    # Trả dữ liệu từ knowledge_entries với category = db_category
-    stmt = select(KnowledgeEntry).where(KnowledgeEntry.category == db_category)
+    stmt = select(ContentItem).where(
+        ContentItem.content_type == content_type,
+        ContentItem.is_deleted == False,  # noqa: E712
+    )
     if city_slug:
-        stmt = stmt.where(KnowledgeEntry.tags.any(city_slug))
+        stmt = stmt.where(ContentItem.city_slug == city_slug)
+    if status:
+        stmt = stmt.where(ContentItem.status == status)
+    if search:
+        stmt = stmt.where(ContentItem.name.ilike(f"%{search}%"))
+    if date_from:
+        stmt = stmt.where(cast(ContentItem.created_at, Date) >= date_from)
+    if date_to:
+        stmt = stmt.where(cast(ContentItem.created_at, Date) <= date_to)
+    if field and value:
+        stmt = stmt.where(ContentItem.data[field].astext.ilike(f"%{value}%"))
 
     total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    order = {
+        "oldest": ContentItem.created_at.asc(),
+        "name": ContentItem.name.asc(),
+    }.get(sort, ContentItem.created_at.desc())
     rows = await db.execute(
-        stmt.order_by(KnowledgeEntry.created_at.desc()).offset((page - 1) * 20).limit(20)
+        stmt.order_by(order).offset((page - 1) * page_size).limit(page_size)
     )
-    entries = rows.scalars().all()
-
+    items = rows.scalars().all()
     return {
         "total": total or 0,
         "page": page,
-        "items": [
-            {
-                "id": e.id,
-                "status": "published" if e.is_active else "draft",
-                "created_at": str(e.created_at),
-                "updated_at": str(e.updated_at),
-                "is_deleted": False,
-                "data": {
-                    "name": e.title,
-                    "city_slug": city_slug or "",
-                    "content": e.content[:100],
-                },
-            }
-            for e in entries
-        ],
+        "items": [_serialize_content(c) for c in items],
     }
 
 
@@ -998,15 +1023,19 @@ async def create_content(
 ):
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, "Content type không hợp lệ")
-    db_category = CONTENT_TYPES[content_type]
-    svc = KnowledgeService(db)
-    entry = await svc.create(
-        title=body.get("name", "Untitled"),
-        category=db_category,
-        content=str(body),
-        tags=[city_slug] if city_slug else [],
+    name, image_url, data = _extract_content_fields(body)
+    item = ContentItem(
+        content_type=content_type,
+        city_slug=city_slug or body.get("city_slug"),
+        name=name,
+        data=data,
+        image_url=image_url,
+        status="draft",
     )
-    return {"id": entry.id, "status": "pending"}
+    db.add(item)
+    await db.commit()
+    await db.refresh(item)
+    return _serialize_content(item)
 
 
 @router.patch("/content/{content_type}/{item_id}")
@@ -1017,9 +1046,17 @@ async def update_content(
     db: DB = None,
     _: User = Depends(require_admin),
 ):
-    svc = KnowledgeService(db)
-    entry = await svc.update(entry_id=item_id, title=body.get("name"))
-    return {"id": entry.id}
+    item = await db.get(ContentItem, item_id)
+    if not item or item.is_deleted:
+        raise HTTPException(404, "Không tìm thấy mục")
+    name, image_url, data = _extract_content_fields(body)
+    item.name = name
+    item.data = data
+    item.image_url = image_url
+    item.updated_at = datetime.now(timezone.utc)
+    await db.commit()
+    await db.refresh(item)
+    return _serialize_content(item)
 
 
 @router.delete("/content/{content_type}/{item_id}")
@@ -1029,8 +1066,11 @@ async def delete_content(
     db: DB = None,
     _: User = Depends(require_admin),
 ):
-    svc = KnowledgeService(db)
-    await svc.delete(item_id)
+    item = await db.get(ContentItem, item_id)
+    if item:
+        item.is_deleted = True
+        item.updated_at = datetime.now(timezone.utc)
+        await db.commit()
     return {"ok": True}
 
 
@@ -1042,10 +1082,39 @@ async def publish_content(
     _: User = Depends(require_admin),
 ):
     await db.execute(
-        update(KnowledgeEntry).where(KnowledgeEntry.id == item_id).values(is_active=True)
+        update(ContentItem)
+        .where(ContentItem.id == item_id)
+        .values(status="published", updated_at=datetime.now(timezone.utc))
     )
     await db.commit()
     return {"ok": True}
+
+
+# ── Cities (master list cho dropdown/filter content) ──────────────────────────
+
+@router.get("/cities")
+async def list_cities(
+    q: Optional[str] = None,
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    """
+    Danh sách city (mức điểm đến) cho dropdown filter. Search theo tên mới,
+    tên tỉnh (34), hoặc alias tỉnh cũ (63) — gõ tên tỉnh cũ vẫn ra.
+    """
+    stmt = select(City).where(City.is_active == True)  # noqa: E712
+    if q:
+        stmt = stmt.where(
+            City.name.ilike(f"%{q}%")
+            | City.province.ilike(f"%{q}%")
+            | City.old_aliases.any(q)
+        )
+    rows = await db.execute(stmt.order_by(City.province, City.name))
+    return [
+        {"id": str(c.id), "slug": c.slug, "name": c.name,
+         "province": c.province, "region": c.region}
+        for c in rows.scalars().all()
+    ]
 
 
 # ══════════════════════════════════════════════════════════════════════════════

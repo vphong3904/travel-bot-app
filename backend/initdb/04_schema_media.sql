@@ -38,3 +38,23 @@ CREATE TABLE media_files (
 );
 CREATE INDEX idx_media_files_not_deleted ON media_files(created_at DESC) WHERE NOT is_deleted;
 CREATE INDEX idx_media_files_folder      ON media_files(folder_id, created_at DESC);
+
+-- ── CONTENT ITEMS (CMS content cho Admin; tách khỏi knowledge_entries) ─────────
+-- Mỗi loại (hotel/destination/tour/food...) lưu chung 1 bảng, phân biệt bằng
+-- content_type; dữ liệu động lưu trong `data` (JSONB). `city_slug` khớp cities.slug.
+-- status draft|published (mobile chỉ đọc published qua API public /content/{type}).
+CREATE TABLE content_items (
+    id           UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    content_type VARCHAR(50)  NOT NULL,
+    city_slug    VARCHAR(120),
+    name         VARCHAR(300) NOT NULL,
+    data         JSONB        NOT NULL DEFAULT '{}'::jsonb,
+    image_url    TEXT,
+    status       VARCHAR(20)  NOT NULL DEFAULT 'draft',
+    is_deleted   BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+CREATE INDEX idx_content_items_type    ON content_items(content_type);
+CREATE INDEX idx_content_items_city    ON content_items(city_slug);
+CREATE INDEX idx_content_items_created ON content_items(created_at DESC);
