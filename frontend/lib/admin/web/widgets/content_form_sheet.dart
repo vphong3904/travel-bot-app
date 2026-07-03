@@ -241,10 +241,20 @@ class _ContentFormSheetState
                   const SizedBox(height: 16),
                   ...widget.formFields.map((f) {
                   if (f.options != null) {
+                    // Nếu giá trị data hiện tại không nằm trong options (vd seed
+                    // 'nature' vs options tiếng Việt) → thêm vào để dropdown hợp lệ.
+                    final current = _dropdownValues[f.key];
+                    final opts = <String>[
+                      ...f.options!,
+                      if (current != null &&
+                          current.isNotEmpty &&
+                          !f.options!.contains(current))
+                        current,
+                    ];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: DropdownButtonFormField<String>(
-                        initialValue: _dropdownValues[f.key],
+                        initialValue: current,
                         decoration: InputDecoration(
                           labelText: f.required
                               ? '${f.label} *'
@@ -252,7 +262,7 @@ class _ContentFormSheetState
                           border: const OutlineInputBorder(),
                           isDense: true,
                         ),
-                        items: f.options!
+                        items: opts
                             .map((o) => DropdownMenuItem(
                                   value: o,
                                   child: Text(o,
