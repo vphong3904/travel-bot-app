@@ -26,11 +26,28 @@ CREATE TABLE categories (
 CREATE INDEX idx_categories_active ON categories(is_active) WHERE is_active = TRUE;
 SELECT _attach_updated_at('categories');
 
+-- ── CITIES (master list điểm đến cho dropdown/filter Admin) ─
+-- Mỗi city = 1 slug (khớp destinations.slug / content_items.city_slug), đính kèm
+-- tên tỉnh MỚI (34) + old_aliases (tên tỉnh cũ 63) để search. Enrich bằng
+-- backend/scripts/seed_cities.py (đọc app/data/*.json).
+CREATE TABLE cities (
+    id          UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    slug        VARCHAR(100) UNIQUE NOT NULL,
+    name        VARCHAR(200) NOT NULL,
+    province    VARCHAR(100),                 -- tên tỉnh MỚI (34 đơn vị)
+    old_aliases TEXT[]       NOT NULL DEFAULT '{}',  -- tên tỉnh cũ (63) + không dấu
+    region      VARCHAR(50),
+    is_active   BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+CREATE INDEX idx_cities_province ON cities(province);
+
 -- ── DESTINATIONS (thành phố/điểm đến lớn, slug = city_slug) ─
 CREATE TABLE destinations (
     id          UUID         PRIMARY KEY DEFAULT uuid_generate_v7(),
     name        VARCHAR(200) NOT NULL,
     slug        VARCHAR(100) UNIQUE,
+    city_id     UUID         REFERENCES cities(id),  -- NULLABLE: import JSON→SQL không gãy
     province    VARCHAR(100),
     region      VARCHAR(50),   -- nhãn vùng miền (seed dùng nhiều cách gọi, không ràng buộc CHECK)
     description TEXT,

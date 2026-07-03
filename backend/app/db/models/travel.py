@@ -9,6 +9,7 @@ class Destination(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String(200), nullable=False)
     slug = Column(String(100), unique=True, nullable=True)
+    city_id = Column(UUID(as_uuid=True), ForeignKey("cities.id"))  # NULLABLE — không phá seed cũ
     province = Column(String(100))
     region = Column(String(50))
     description = Column(Text)
@@ -258,6 +259,24 @@ class LocationAlias(Base):
     old_name = Column(String(200), nullable=False)
     new_slug = Column(String(80), nullable=False)
     level = Column(String(20), nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP(timezone=True))
+
+
+class City(Base):
+    """
+    Master list điểm đến (mức slug, ~65) cho dropdown/filter content Admin.
+    Mỗi city = 1 slug (khớp destinations.slug / content_items.city_slug), đính kèm
+    tên tỉnh MỚI (34) + old_aliases (tên tỉnh cũ 63) để search. Xem 02_schema_travel.sql.
+    """
+    __tablename__ = "cities"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    slug = Column(String(100), unique=True, nullable=False)
+    name = Column(String(200), nullable=False)
+    province = Column(String(100))
+    old_aliases = Column(ARRAY(Text), default=list)
+    region = Column(String(50))
     is_active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP(timezone=True))
 
