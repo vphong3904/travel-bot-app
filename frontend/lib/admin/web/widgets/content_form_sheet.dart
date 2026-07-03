@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/data/content_repository.dart';
 import '../../shared/models/content_item.dart';
 import '../../shared/providers/dio_provider.dart';
+import '../../shared/content_labels.dart';
 import 'media_picker_dialog.dart';
 
 class ContentFormField {
@@ -265,7 +266,7 @@ class _ContentFormSheetState
                         items: opts
                             .map((o) => DropdownMenuItem(
                                   value: o,
-                                  child: Text(o,
+                                  child: Text(vnLabel(o),
                                       style: const TextStyle(
                                           fontSize: 13)),
                                 ))

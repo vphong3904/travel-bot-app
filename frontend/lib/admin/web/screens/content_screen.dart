@@ -5,6 +5,7 @@ import '../../shared/models/content_item.dart';
 import '../../shared/providers/content_provider.dart';
 import '../../shared/data/content_repository.dart';
 import '../../shared/providers/dio_provider.dart';
+import '../../shared/content_labels.dart';
 import '../widgets/city_selector.dart';
 import '../widgets/content_form_sheet.dart';
 import '../widgets/content_status_badge.dart';
@@ -291,8 +292,7 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                                                                             c.width,
                                                                         child:
                                                                             Text(
-                                                                          item.getString(c.fieldKey) ??
-                                                                              '—',
+                                                                          vnLabel(item.getString(c.fieldKey)),
                                                                           style: const TextStyle(fontSize: 13),
                                                                           maxLines:
                                                                               1,
