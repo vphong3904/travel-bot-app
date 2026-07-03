@@ -24,6 +24,7 @@ import 'web/screens/itineraries_screen.dart';
 import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
 import 'web/screens/content_options_screen.dart';
+import 'web/screens/chatbot_test_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
@@ -114,6 +115,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const ContentOptionsScreen(),
           ),
           GoRoute(
+            path: '/chatbot-test',
+            name: 'chatbot-test',
+            builder: (_, __) => const ChatbotTestScreen(),
+          ),
+          GoRoute(
             path: '/media',
             name: 'media',
             builder: (_, __) => const MediaScreen(),
@@ -178,7 +184,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => context.go('/login'),
-              child: const Text('Về trang đăng nhập'),
+              child: const Text('Về trang đăng chủ'),
             ),
           ],
         ),
