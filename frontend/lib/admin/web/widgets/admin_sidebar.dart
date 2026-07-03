@@ -30,6 +30,7 @@ const _topItems = [
   _MenuItem('Dashboard',       '/dashboard',       Icons.dashboard,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager, AdminRole.moderator]),
   _MenuItem('Người dùng',      '/users',           Icons.people,        [AdminRole.superAdmin, AdminRole.admin]),
   _MenuItem('Hội thoại',       '/chat',            Icons.chat_bubble,   [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
+  _MenuItem('Chatbot Test',    '/chatbot-test',    Icons.smart_toy,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager, AdminRole.moderator]),
   _MenuItem('Knowledge Base',  '/knowledge',       Icons.library_books, [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Feedback',        '/feedback',        Icons.thumb_up,      [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
   _MenuItem('Media',           '/media',           Icons.perm_media,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
