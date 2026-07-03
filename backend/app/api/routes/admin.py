@@ -9,12 +9,13 @@ Role matrix đơn giản hoá: role IN ('admin', 'super_admin', 'content_manager
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timezone, timedelta
 from typing import Any, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, status
-from sqlalchemy import cast, func, select, update, delete, Date
+from sqlalchemy import cast, func, select, update, delete, Date, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DB, CurrentUser, ADMIN_ROLES, require_admin, require_role
@@ -191,10 +192,10 @@ async def stats_feedback(
         select(
             func.date_trunc("day", ChatMessage.created_at).label("date"),
             func.sum(
-                func.case((ChatMessage.feedback == 1, 1), else_=0)
+                case((ChatMessage.feedback == 1, 1), else_=0)
             ).label("positive"),
             func.sum(
-                func.case((ChatMessage.feedback == -1, 1), else_=0)
+                case((ChatMessage.feedback == -1, 1), else_=0)
             ).label("negative"),
         )
         .where(ChatMessage.created_at >= since)
@@ -1197,6 +1198,15 @@ async def delete_content_option(
 _admin_rag = None
 
 
+def _clean_bot_answer(text: str) -> str:
+    """Bỏ markdown ** và trích dẫn [1] khỏi câu trả lời chatbot cho gọn."""
+    text = text or ""
+    text = re.sub(r"\s*\[\d+\]", "", text)      # bỏ [1], [2]... (kèm space trước)
+    text = text.replace("**", "")               # bỏ in đậm markdown
+    text = re.sub(r"(?m)^\s*\*\s+", "• ", text)  # bullet '*   ' → '• '
+    return text.strip()
+
+
 def _get_admin_rag():
     global _admin_rag
     if _admin_rag is None:
@@ -1225,7 +1235,7 @@ async def chatbot_test(
         session_id="admin-test",
     )
     return {
-        "answer": result.get("answer", ""),
+        "answer": _clean_bot_answer(result.get("answer", "")),
         "intent": result.get("intent"),
         "confidence_score": result.get("confidence_score"),
         "sources": result.get("sources", []),
@@ -1628,30 +1638,44 @@ async def list_unanswered(
         .limit(50)
     )
     messages = rows.scalars().all()
-    return [
-        {
-            "id": m.id,
-            "content": m.content[:300],
-            "confidence_score": m.confidence_score,
-            "intent": m.intent,
-            "created_at": str(m.created_at),
-        }
-        for m in messages
-    ]
+    # FE (unanswered_list) mong {items:[...]} với field `question` + `is_promoted`.
+    return {
+        "total": len(messages),
+        "items": [
+            {
+                "id": m.id,
+                "question": (m.content or "")[:300],
+                "confidence_score": m.confidence_score,
+                "intent": m.intent,
+                "is_promoted": False,
+                "created_at": str(m.created_at),
+            }
+            for m in messages
+        ],
+    }
 
 
 @router.post("/unanswered-questions/{question_id}/promote-to-kb")
 async def promote_to_kb(
     question_id: str,
-    body: dict,
+    body: dict | None = None,
     db: DB = None,
     _: User = Depends(require_admin),
 ):
+    # FE có thể gọi không kèm body → tự lấy title/content từ chính message.
+    body = body or {}
+    title = body.get("title")
+    content = body.get("content")
+    if not title or not content:
+        msg = await db.get(ChatMessage, question_id)
+        text = (msg.content if msg else "") or ""
+        title = title or (text[:80] or "Câu hỏi chưa trả lời")
+        content = content or text
     svc = KnowledgeService(db)
     entry = await svc.create(
-        title=body.get("title", "Promoted Question"),
+        title=title,
         category=body.get("category", "faq"),
-        content=body.get("content", ""),
+        content=content or title,
     )
     return {"id": entry.id, "status": "pending"}
 
