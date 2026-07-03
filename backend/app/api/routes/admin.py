@@ -387,24 +387,40 @@ async def get_session_messages(
     db: DB = None,
     _: User = Depends(require_admin),
 ):
+    # FE (chat_view) cần {session:{...}, messages:[...]} — không phải list thô.
+    session = await db.get(ChatSession, session_id)
+    if not session:
+        raise HTTPException(404, "Session không tồn tại")
     rows = await db.execute(
         select(ChatMessage)
         .where(ChatMessage.session_id == session_id)
         .order_by(ChatMessage.created_at)
     )
     messages = rows.scalars().all()
-    return [
-        {
-            "id": m.id,
-            "role": m.role,
-            "content": m.content,
-            "intent": m.intent,
-            "feedback": m.feedback,
-            "latency_ms": m.latency_ms,
-            "created_at": str(m.created_at),
-        }
-        for m in messages
-    ]
+    return {
+        "session": {
+            "id": session.id,
+            "user_id": session.user_id,
+            "title": session.title,
+            "total_messages": session.total_messages,
+            "is_flagged": session.is_flagged,
+            "tags": getattr(session, "tags", None) or [],
+            "created_at": str(session.created_at),
+            "updated_at": str(session.updated_at),
+        },
+        "messages": [
+            {
+                "id": m.id,
+                "role": m.role,
+                "content": m.content,
+                "intent": m.intent,
+                "feedback": m.feedback,
+                "latency_ms": m.latency_ms,
+                "created_at": str(m.created_at),
+            }
+            for m in messages
+        ],
+    }
 
 
 @router.delete("/chat-sessions/{session_id}")
