@@ -30,7 +30,7 @@ class ShoppingScreen extends StatelessWidget {
         ContentFormField(
           key: 'goods_type',
           label: 'Loại hàng',
-          options: ['Quần áo', 'Thủ công mỹ nghệ', 'Đặc sản', 'Điện tử', 'Tổng hợp'],
+          options: ['market', 'mall', 'specialty_store', 'street', 'other'],
         ),
         ContentFormField(key: 'area', label: 'Khu vực'),
         ContentFormField(

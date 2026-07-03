@@ -58,6 +58,7 @@ const Map<String, String> kContentLabels = {
   'couple': 'Cặp đôi',
   'family': 'Gia đình',
   'solo': 'Một mình',
+  'group': 'Nhóm',
 
   // ── Phương tiện (transport_options.type → 'vehicle') ────────────────────────
   'airplane': 'Máy bay',

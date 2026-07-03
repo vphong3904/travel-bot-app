@@ -26,9 +26,17 @@ class TransportScreen extends StatelessWidget {
       ],
       formFields: [
         ContentFormField(
-            key: 'vehicle',
-            label: 'Phương tiện',
-            required: true),
+          key: 'vehicle',
+          label: 'Phương tiện',
+          required: true,
+          options: [
+            'motorbike', 'motorbike_rental', 'car', 'car_rental', 'private_car',
+            'taxi', 'grab', 'taxi_grab', 'bus', 'bus_combined', 'bus_noi_dao',
+            'train', 'airplane', 'flight', 'bicycle', 'walking', 'boat', 'ferry',
+            'boat_ferry', 'cruise_boat', 'electric_car', 'xe_om', 'xe_dien_golf',
+            'motorbike_or_car', 'other',
+          ],
+        ),
         ContentFormField(key: 'route', label: 'Tuyến đường'),
         ContentFormField(
             key: 'estimated_price', label: 'Giá ước tính'),
