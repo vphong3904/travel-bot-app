@@ -27,7 +27,12 @@ class DestinationsScreen extends StatelessWidget {
         ContentFormField(
           key: 'type',
           label: 'Loại',
-          options: ['Di tích', 'Thiên nhiên', 'Vui chơi', 'Văn hóa'],
+          options: [
+            'attraction', 'nature', 'mountain', 'beach', 'museum', 'temple',
+            'entertainment', 'amusement_park', 'theme_park', 'water_park',
+            'aquarium', 'zoo', 'kids_zone', 'cultural_village', 'culture',
+            'heritage', 'market', 'border_crossing',
+          ],
         ),
         ContentFormField(key: 'address', label: 'Địa chỉ'),
         ContentFormField(

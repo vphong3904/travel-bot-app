@@ -28,7 +28,10 @@ class FoodsScreen extends StatelessWidget {
         ContentFormField(
           key: 'type',
           label: 'Loại',
-          options: ['Đặc sản', 'Street food', 'Nhà hàng', 'Tráng miệng'],
+          options: [
+            'main_dish', 'specialty', 'snack', 'dessert', 'seafood', 'noodle',
+            'soup', 'beef', 'fruit', 'drink', 'beverage', 'condiment', 'market',
+          ],
         ),
         ContentFormField(
             key: 'description', label: 'Mô tả', maxLines: 3),
