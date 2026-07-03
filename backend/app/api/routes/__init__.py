@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from . import auth, chat_sessions, chat_messages, chat_guest, travel, trips, search, admin, reviews, favorites
+from . import auth, chat_sessions, chat_messages, chat_guest, travel, trips, search, admin, reviews, favorites, content_public
 
 api_router = APIRouter(prefix="/api")
 
@@ -33,3 +33,6 @@ api_router.include_router(search.router, prefix="/search", tags=["search"])
 
 # Admin: /admin/*
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
+
+# Public content (mobile đọc content published): /content/*
+api_router.include_router(content_public.router, prefix="/content", tags=["content"])
