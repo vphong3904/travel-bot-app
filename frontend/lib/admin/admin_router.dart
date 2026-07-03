@@ -23,6 +23,7 @@ import 'web/screens/shopping_screen.dart';
 import 'web/screens/itineraries_screen.dart';
 import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
+import 'web/screens/content_options_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
@@ -106,6 +107,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/intent-patterns',
             name: 'intent-patterns',
             builder: (_, __) => const IntentPatternsScreen(),
+          ),
+          GoRoute(
+            path: '/content-options',
+            name: 'content-options',
+            builder: (_, __) => const ContentOptionsScreen(),
           ),
           GoRoute(
             path: '/media',

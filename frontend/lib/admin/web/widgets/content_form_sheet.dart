@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/data/content_repository.dart';
+import '../../shared/data/content_option_repository.dart';
 import '../../shared/models/content_item.dart';
 import '../../shared/providers/dio_provider.dart';
 import '../../shared/content_labels.dart';
@@ -185,6 +186,10 @@ class _ContentFormSheetState
   @override
   Widget build(BuildContext context) {
     final isNew = widget.item == null;
+    // Options động từ DB (taxonomy) theo content_type; lọc field ở dưới.
+    final dbOptions =
+        ref.watch(contentOptionsProvider(widget.contentType)).valueOrNull ??
+            const [];
     return Container(
       width: 520,
       decoration: BoxDecoration(
@@ -242,20 +247,36 @@ class _ContentFormSheetState
                   const SizedBox(height: 16),
                   ...widget.formFields.map((f) {
                   if (f.options != null) {
-                    // Nếu giá trị data hiện tại không nằm trong options (vd seed
-                    // 'nature' vs options tiếng Việt) → thêm vào để dropdown hợp lệ.
                     final current = _dropdownValues[f.key];
-                    final opts = <String>[
-                      ...f.options!,
-                      if (current != null &&
-                          current.isNotEmpty &&
-                          !f.options!.contains(current))
-                        current,
-                    ];
+                    // Ưu tiên options từ DB (taxonomy) theo field; fallback hardcode.
+                    final dbForField = dbOptions
+                        .where((o) => o.field == f.key && o.isActive)
+                        .toList();
+                    final codes = <String>[];
+                    final labels = <String, String>{};
+                    if (dbForField.isNotEmpty) {
+                      for (final o in dbForField) {
+                        codes.add(o.code);
+                        labels[o.code] = o.label;
+                      }
+                    } else {
+                      for (final o in f.options!) {
+                        codes.add(o);
+                        labels[o] = vnLabel(o);
+                      }
+                    }
+                    // Giá trị data hiện tại nếu chưa có trong list → thêm để hợp lệ.
+                    if (current != null &&
+                        current.isNotEmpty &&
+                        !codes.contains(current)) {
+                      codes.add(current);
+                      labels[current] = vnLabel(current);
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: DropdownButtonFormField<String>(
                         initialValue: current,
+                        isExpanded: true,
                         decoration: InputDecoration(
                           labelText: f.required
                               ? '${f.label} *'
@@ -263,10 +284,10 @@ class _ContentFormSheetState
                           border: const OutlineInputBorder(),
                           isDense: true,
                         ),
-                        items: opts
-                            .map((o) => DropdownMenuItem(
-                                  value: o,
-                                  child: Text(vnLabel(o),
+                        items: codes
+                            .map((c) => DropdownMenuItem(
+                                  value: c,
+                                  child: Text(labels[c] ?? c,
                                       style: const TextStyle(
                                           fontSize: 13)),
                                 ))

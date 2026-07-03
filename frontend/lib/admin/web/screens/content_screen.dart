@@ -4,11 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/models/content_item.dart';
 import '../../shared/providers/content_provider.dart';
 import '../../shared/data/content_repository.dart';
+import '../../shared/data/content_option_repository.dart';
 import '../../shared/providers/dio_provider.dart';
 import '../../shared/content_labels.dart';
 import '../widgets/city_selector.dart';
 import '../widgets/content_form_sheet.dart';
 import '../widgets/content_status_badge.dart';
+
+/// Nhãn hiển thị: ưu tiên DB (taxonomy), fallback từ điển tĩnh; rỗng → '—'.
+String labelOf(String? raw, Map<String, String> dbLabels) {
+  if (raw == null || raw.trim().isEmpty) return '—';
+  return dbLabels[raw] ?? vnLabel(raw);
+}
 
 class ContentColumn {
   final String label;
@@ -53,6 +60,13 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
         ref.watch(contentFilterFamily(widget.contentType));
     final listAsync = ref.watch(contentListFamily(
         (contentType: widget.contentType, filter: filter)));
+    final dbLabels = <String, String>{
+      for (final o in ref
+              .watch(contentOptionsProvider(widget.contentType))
+              .valueOrNull ??
+          const [])
+        o.code: o.label
+    };
 
     return Row(
       children: [
@@ -292,7 +306,7 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                                                                             c.width,
                                                                         child:
                                                                             Text(
-                                                                          vnLabel(item.getString(c.fieldKey)),
+                                                                          labelOf(item.getString(c.fieldKey), dbLabels),
                                                                           style: const TextStyle(fontSize: 13),
                                                                           maxLines:
                                                                               1,
