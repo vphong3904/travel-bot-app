@@ -1099,15 +1099,18 @@ async def list_cities(
     _: User = Depends(require_admin),
 ):
     """
-    Danh sách city (mức điểm đến) cho dropdown filter. Search theo tên mới,
-    tên tỉnh (34), hoặc alias tỉnh cũ (63) — gõ tên tỉnh cũ vẫn ra.
+    Danh sách city (mức điểm đến) cho dropdown filter. Search KHÔNG phân biệt dấu
+    (unaccent) theo tên điểm đến, tên tỉnh mới (34), hoặc alias tỉnh cũ (63) —
+    gõ "da lat" ra Đà Lạt, "kien giang" ra Phú Quốc.
     """
     stmt = select(City).where(City.is_active == True)  # noqa: E712
     if q:
+        like = f"%{q}%"
         stmt = stmt.where(
-            City.name.ilike(f"%{q}%")
-            | City.province.ilike(f"%{q}%")
-            | City.old_aliases.any(q)
+            func.unaccent(City.name).ilike(func.unaccent(like))
+            | func.unaccent(func.coalesce(City.province, "")).ilike(func.unaccent(like))
+            | func.unaccent(func.array_to_string(City.old_aliases, " ")).ilike(
+                func.unaccent(like))
         )
     rows = await db.execute(stmt.order_by(City.province, City.name))
     return [
