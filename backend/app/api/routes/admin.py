@@ -1191,6 +1191,50 @@ async def delete_content_option(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# CHATBOT TEST (admin thử chatbot ngay trong panel — không lưu DB, không giới hạn)
+# ══════════════════════════════════════════════════════════════════════════════
+
+_admin_rag = None
+
+
+def _get_admin_rag():
+    global _admin_rag
+    if _admin_rag is None:
+        from app.services.rag_pipeline import RAGPipeline
+        _admin_rag = RAGPipeline()
+    return _admin_rag
+
+
+@router.post("/chatbot/test")
+async def chatbot_test(
+    body: dict,
+    _: User = Depends(require_admin),
+):
+    """
+    Chạy RAG cho 1 câu hỏi để admin test chatbot. KHÔNG lưu session/history vào DB,
+    không giới hạn. `history` (tùy chọn) = [{"role","content"}, ...] cho ngữ cảnh.
+    """
+    question = (body.get("content") or "").strip()
+    if not question:
+        raise HTTPException(422, "content không được trống")
+    history = body.get("history") or []
+    rag = _get_admin_rag()
+    result = await rag.query(
+        question=question,
+        history=history,
+        session_id="admin-test",
+    )
+    return {
+        "answer": result.get("answer", ""),
+        "intent": result.get("intent"),
+        "confidence_score": result.get("confidence_score"),
+        "sources": result.get("sources", []),
+        "latency_ms": result.get("latency_ms"),
+        "search_method": result.get("search_method"),
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # FEEDBACK MANAGEMENT
 # ══════════════════════════════════════════════════════════════════════════════
 
