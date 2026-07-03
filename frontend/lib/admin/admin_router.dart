@@ -9,7 +9,6 @@ import 'web/screens/reset_password_screen.dart';
 import 'web/screens/dashboard_screen.dart';
 import 'web/screens/users_screen.dart';
 import 'web/screens/chat_screen.dart';
-import 'web/screens/feedback_screen.dart';
 import 'web/screens/knowledge_screen.dart';
 import 'web/screens/kb_health_screen.dart';
 import 'web/screens/rag_monitoring_screen.dart';
@@ -24,8 +23,9 @@ import 'web/screens/shopping_screen.dart';
 import 'web/screens/itineraries_screen.dart';
 import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
-import 'web/screens/faq_screen.dart';
-import 'web/screens/experiences_screen.dart';
+import 'web/screens/content_options_screen.dart';
+import 'web/screens/chatbot_test_screen.dart';
+import 'web/screens/feedback_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
@@ -111,6 +111,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const IntentPatternsScreen(),
           ),
           GoRoute(
+            path: '/content-options',
+            name: 'content-options',
+            builder: (_, __) => const ContentOptionsScreen(),
+          ),
+          GoRoute(
+            path: '/chatbot-test',
+            name: 'chatbot-test',
+            builder: (_, __) => const ChatbotTestScreen(),
+          ),
+          GoRoute(
+            path: '/feedback',
+            name: 'feedback',
+            builder: (_, __) => const FeedbackScreen(),
+          ),
+          GoRoute(
             path: '/media',
             name: 'media',
             builder: (_, __) => const MediaScreen(),
@@ -160,22 +175,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: 'content-transport',
             builder: (_, __) => const TransportScreen(),
           ),
-          GoRoute(
-            path: '/content/faq',
-            name: 'content-faq',
-            builder: (_, __) => const FaqScreen(),
-          ),
-          GoRoute(
-            path: '/content/experiences',
-            name: 'content-experiences',
-            builder: (_, __) => const ExperiencesScreen(),
-          ),
-          // [T-035] Quản lý báo cáo/đánh giá từ người dùng
-          GoRoute(
-            path: '/feedback',
-            name: 'feedback',
-            builder: (_, __) => const FeedbackScreen(),
-          ),
         ],
       ),
     ],
@@ -191,7 +190,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => context.go('/login'),
-              child: const Text('Về trang đăng nhập'),
+              child: const Text('Về trang đăng chủ'),
             ),
           ],
         ),

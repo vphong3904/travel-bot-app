@@ -38,3 +38,40 @@ CREATE TABLE media_files (
 );
 CREATE INDEX idx_media_files_not_deleted ON media_files(created_at DESC) WHERE NOT is_deleted;
 CREATE INDEX idx_media_files_folder      ON media_files(folder_id, created_at DESC);
+
+-- ── CONTENT ITEMS (CMS content cho Admin; tách khỏi knowledge_entries) ─────────
+-- Mỗi loại (hotel/destination/tour/food...) lưu chung 1 bảng, phân biệt bằng
+-- content_type; dữ liệu động lưu trong `data` (JSONB). `city_slug` khớp cities.slug.
+-- status draft|published (mobile chỉ đọc published qua API public /content/{type}).
+CREATE TABLE content_items (
+    id           UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+    content_type VARCHAR(50)  NOT NULL,
+    city_slug    VARCHAR(120),
+    name         VARCHAR(300) NOT NULL,
+    data         JSONB        NOT NULL DEFAULT '{}'::jsonb,
+    image_url    TEXT,
+    status       VARCHAR(20)  NOT NULL DEFAULT 'draft',
+    is_deleted   BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+CREATE INDEX idx_content_items_type    ON content_items(content_type);
+CREATE INDEX idx_content_items_city    ON content_items(city_slug);
+CREATE INDEX idx_content_items_created ON content_items(created_at DESC);
+
+-- ── CONTENT OPTIONS (taxonomy: danh sách "loại" theo content_type + field) ─────
+-- Admin quản lý options cho dropdown form + nhãn hiển thị. Form đọc động từ đây,
+-- thay cho hardcode trong Flutter. Seed ở 13_seed_content_options.sql.
+CREATE TABLE content_options (
+    id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    content_type VARCHAR(50)  NOT NULL,   -- destinations/foods/restaurants/...
+    field        VARCHAR(50)  NOT NULL,   -- type / cuisine_type / goods_type / vehicle...
+    code         VARCHAR(100) NOT NULL,   -- giá trị lưu trong data (vd 'nature')
+    label        VARCHAR(200) NOT NULL,   -- nhãn hiển thị tiếng Việt (vd 'Thiên nhiên')
+    sort_order   INT          NOT NULL DEFAULT 0,
+    is_active    BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    UNIQUE (content_type, field, code)
+);
+CREATE INDEX idx_content_options_lookup ON content_options(content_type, field, is_active);

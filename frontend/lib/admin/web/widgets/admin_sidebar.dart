@@ -23,8 +23,6 @@ const _contentItems = [
   _MenuItem('Lịch trình',  '/content/itineraries',  Icons.map,               [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Sự kiện',     '/content/events',       Icons.event,             [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Di chuyển',   '/content/transport',    Icons.directions_bus,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
-  _MenuItem('FAQ',         '/content/faq',          Icons.quiz,              [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
-  _MenuItem('Trải nghiệm', '/content/experiences',  Icons.explore,           [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Quản lý ảnh', '/media',                Icons.photo_library,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
 ];
 
@@ -32,12 +30,14 @@ const _topItems = [
   _MenuItem('Dashboard',       '/dashboard',       Icons.dashboard,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager, AdminRole.moderator]),
   _MenuItem('Người dùng',      '/users',           Icons.people,        [AdminRole.superAdmin, AdminRole.admin]),
   _MenuItem('Hội thoại',       '/chat',            Icons.chat_bubble,   [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
+  _MenuItem('Chatbot Test',    '/chatbot-test',    Icons.smart_toy,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager, AdminRole.moderator]),
   _MenuItem('Knowledge Base',  '/knowledge',       Icons.library_books, [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Feedback',        '/feedback',        Icons.thumb_up,      [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
   _MenuItem('Media',           '/media',           Icons.perm_media,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('RAG Monitor',     '/rag-monitoring',  Icons.monitor_heart, [AdminRole.superAdmin, AdminRole.admin]),
   _MenuItem('City Mapping',    '/city-mapping',    Icons.map_outlined,  [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Intent Patterns', '/intent-patterns', Icons.psychology,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
+  _MenuItem('Quản lý loại',    '/content-options', Icons.sell,          [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Hệ thống',        '/system-config',   Icons.settings,      [AdminRole.superAdmin]),
 ];
 
