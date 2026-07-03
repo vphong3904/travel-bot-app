@@ -6,6 +6,7 @@ class ContentItem {
   final bool isDeleted;
   final String createdAt;
   final String? updatedAt;
+  final String? imageUrl;
   final Map<String, dynamic> data;
 
   const ContentItem({
@@ -14,19 +15,22 @@ class ContentItem {
     required this.isDeleted,
     required this.createdAt,
     this.updatedAt,
+    this.imageUrl,
     required this.data,
   });
 
   factory ContentItem.fromJson(Map<String, dynamic> j) {
+    final data = Map<String, dynamic>.from(j['data'] as Map? ?? {});
     return ContentItem(
       id: j['id'] as String,
       status: j['status'] as String? ?? 'draft',
       isDeleted: j['is_deleted'] as bool? ?? false,
       createdAt: j['created_at'] as String? ?? '',
       updatedAt: j['updated_at'] as String?,
-      data: Map<String, dynamic>.from(j['data'] as Map? ?? {}),
+      imageUrl: (j['image_url'] ?? data['image_url']) as String?,
+      data: data,
     );
   }
 
-  String? getString(String key) => data[key] as String?;
+  String? getString(String key) => data[key]?.toString();
 }

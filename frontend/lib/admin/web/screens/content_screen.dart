@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/models/content_item.dart';
 import '../../shared/providers/content_provider.dart';
 import '../../shared/data/content_repository.dart';
+import '../../shared/providers/dio_provider.dart';
 import '../widgets/city_selector.dart';
 import '../widgets/content_form_sheet.dart';
 import '../widgets/content_status_badge.dart';
@@ -251,6 +252,8 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                                                           .grey
                                                           .shade50),
                                               columns: [
+                                                const DataColumn(
+                                                    label: Text('Ảnh')),
                                                 ...widget.columns
                                                     .map(
                                                         (c) =>
@@ -274,6 +277,9 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                                                   .map((item) =>
                                                       DataRow(
                                                           cells: [
+                                                        DataCell(_Thumb(
+                                                            url:
+                                                                item.imageUrl)),
                                                         ...widget
                                                             .columns
                                                             .map((c) =>
@@ -469,6 +475,38 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
         .read(contentRepositoryProvider)
         .delete(widget.contentType, filter.citySlug, item.id);
     ref.invalidate(contentListFamily);
+  }
+}
+
+class _Thumb extends StatelessWidget {
+  final String? url;
+  const _Thumb({this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    final resolved = mediaUrl(url ?? '');
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: SizedBox(
+        width: 40,
+        height: 40,
+        child: resolved.isEmpty
+            ? Container(
+                color: Colors.grey.shade100,
+                child: const Icon(Icons.image_outlined,
+                    size: 18, color: Colors.grey),
+              )
+            : Image.network(
+                resolved,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: Colors.grey.shade100,
+                  child: const Icon(Icons.broken_image,
+                      size: 18, color: Colors.grey),
+                ),
+              ),
+      ),
+    );
   }
 }
 

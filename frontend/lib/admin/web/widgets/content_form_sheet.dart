@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/data/content_repository.dart';
 import '../../shared/models/content_item.dart';
+import '../../shared/providers/dio_provider.dart';
+import 'media_picker_dialog.dart';
 
 class ContentFormField {
   final String key;
@@ -50,11 +52,14 @@ class _ContentFormSheetState
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> _controllers = {};
   final Map<String, String?> _dropdownValues = {};
+  String? _imageUrl;
   bool _loading = false;
 
   @override
   void initState() {
     super.initState();
+    _imageUrl = widget.item?.imageUrl ??
+        widget.item?.data['image_url'] as String?;
     _initFields();
   }
 
@@ -92,6 +97,7 @@ class _ContentFormSheetState
           data[f.key] = _controllers[f.key]?.text ?? '';
         }
       }
+      data['image_url'] = _imageUrl;
       final repo = ref.read(contentRepositoryProvider);
       if (widget.item == null) {
         await repo.create(
@@ -110,6 +116,69 @@ class _ContentFormSheetState
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  Future<void> _pickImage() async {
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (_) => const MediaPickerDialog(),
+    );
+    if (picked != null && picked.isNotEmpty) {
+      setState(() => _imageUrl = picked);
+    }
+  }
+
+  Widget _buildImagePicker() {
+    final resolved = mediaUrl(_imageUrl ?? '');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Ảnh',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 96,
+                height: 96,
+                color: Colors.grey.shade100,
+                child: resolved.isEmpty
+                    ? const Icon(Icons.image_outlined, color: Colors.grey)
+                    : Image.network(
+                        resolved,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(
+                            Icons.broken_image,
+                            color: Colors.grey),
+                      ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.photo_library_outlined, size: 16),
+                  label: Text(_imageUrl == null
+                      ? 'Chọn ảnh từ Media'
+                      : 'Đổi ảnh'),
+                ),
+                if (_imageUrl != null)
+                  TextButton.icon(
+                    onPressed: () => setState(() => _imageUrl = null),
+                    icon: const Icon(Icons.close, size: 16, color: Colors.red),
+                    label: const Text('Bỏ ảnh',
+                        style: TextStyle(color: Colors.red)),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -167,7 +236,10 @@ class _ContentFormSheetState
               key: _formKey,
               child: ListView(
                 padding: const EdgeInsets.all(20),
-                children: widget.formFields.map((f) {
+                children: [
+                  _buildImagePicker(),
+                  const SizedBox(height: 16),
+                  ...widget.formFields.map((f) {
                   if (f.options != null) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
@@ -216,7 +288,8 @@ class _ContentFormSheetState
                           : null,
                     ),
                   );
-                }).toList(),
+                }),
+                ],
               ),
             ),
           ),
