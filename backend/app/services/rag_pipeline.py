@@ -210,14 +210,14 @@ def _search_qdrant_sync(query_vec: list[float], top_k: int) -> list[dict]:
     client = _get_qdrant()
 
     try:
-        results = client.search(
+        results = client.query_points(
             collection_name=settings.QDRANT_COLLECTION,
-            query_vector=query_vec,
+            query=query_vec,
             limit=top_k,
             with_payload=True,
             score_threshold=settings.RAG_SCORE_THRESHOLD,
             search_params=ropt.get_search_params(),
-        )
+        ).points
     except Exception as e:
         err = str(e)
         if "doesn't exist" in err or "Not found" in err or "404" in err:
@@ -270,14 +270,14 @@ def _search_qdrant_kb_sync(query_vec: list[float], top_k: int) -> list[dict]:
     kb_collection = settings.QDRANT_COLLECTION_KB_FILES
 
     try:
-        results = client.search(
+        results = client.query_points(
             collection_name=kb_collection,
-            query_vector=query_vec,
+            query=query_vec,
             limit=top_k,
             with_payload=True,
             score_threshold=settings.RAG_SCORE_THRESHOLD,
             search_params=ropt.get_search_params(),
-        )
+        ).points
     except Exception as e:
         err_msg = str(e)
         logger.error(f"[Qdrant-KB] Search lỗi: {type(e).__name__}: {err_msg}")
@@ -415,9 +415,9 @@ def _faq_direct_sync(query_vec: list[float], destination_id: str) -> Optional[st
         return None
     client = _get_qdrant()
     try:
-        res = client.search(
+        res = client.query_points(
             collection_name=settings.QDRANT_COLLECTION,
-            query_vector=query_vec,
+            query=query_vec,
             limit=1,
             with_payload=True,
             score_threshold=_FAQ_DIRECT_THRESHOLD,
@@ -425,7 +425,7 @@ def _faq_direct_sync(query_vec: list[float], destination_id: str) -> Optional[st
                 qmodels.FieldCondition(key="category", match=qmodels.MatchValue(value="faq")),
                 qmodels.FieldCondition(key="destination_id", match=qmodels.MatchValue(value=destination_id)),
             ]),
-        )
+        ).points
     except Exception as e:
         logger.warning(f"[FAQ-direct] search lỗi: {e}")
         return None
