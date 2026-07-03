@@ -36,6 +36,7 @@ const _topItems = [
   _MenuItem('RAG Monitor',     '/rag-monitoring',  Icons.monitor_heart, [AdminRole.superAdmin, AdminRole.admin]),
   _MenuItem('City Mapping',    '/city-mapping',    Icons.map_outlined,  [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Intent Patterns', '/intent-patterns', Icons.psychology,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
+  _MenuItem('Quản lý loại',    '/content-options', Icons.sell,          [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Hệ thống',        '/system-config',   Icons.settings,      [AdminRole.superAdmin]),
 ];
 
