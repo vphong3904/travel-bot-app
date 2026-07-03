@@ -29,7 +29,7 @@ class ToursScreen extends StatelessWidget {
         ContentFormField(
           key: 'type',
           label: 'Loại',
-          options: ['Solo', 'Couple', 'Family', 'Group'],
+          options: ['solo', 'couple', 'family', 'group'],
         ),
         ContentFormField(key: 'price', label: 'Giá (VNĐ)'),
         ContentFormField(

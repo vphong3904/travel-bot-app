@@ -2,7 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/data/content_repository.dart';
+import '../../shared/data/content_option_repository.dart';
 import '../../shared/models/content_item.dart';
+import '../../shared/providers/dio_provider.dart';
+import '../../shared/content_labels.dart';
+import 'media_picker_dialog.dart';
 
 class ContentFormField {
   final String key;
@@ -50,11 +54,14 @@ class _ContentFormSheetState
   final _formKey = GlobalKey<FormState>();
   final Map<String, TextEditingController> _controllers = {};
   final Map<String, String?> _dropdownValues = {};
+  String? _imageUrl;
   bool _loading = false;
 
   @override
   void initState() {
     super.initState();
+    _imageUrl = widget.item?.imageUrl ??
+        widget.item?.data['image_url'] as String?;
     _initFields();
   }
 
@@ -92,6 +99,7 @@ class _ContentFormSheetState
           data[f.key] = _controllers[f.key]?.text ?? '';
         }
       }
+      data['image_url'] = _imageUrl;
       final repo = ref.read(contentRepositoryProvider);
       if (widget.item == null) {
         await repo.create(
@@ -112,9 +120,76 @@ class _ContentFormSheetState
     }
   }
 
+  Future<void> _pickImage() async {
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (_) => const MediaPickerDialog(),
+    );
+    if (picked != null && picked.isNotEmpty) {
+      setState(() => _imageUrl = picked);
+    }
+  }
+
+  Widget _buildImagePicker() {
+    final resolved = mediaUrl(_imageUrl ?? '');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Ảnh',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 96,
+                height: 96,
+                color: Colors.grey.shade100,
+                child: resolved.isEmpty
+                    ? const Icon(Icons.image_outlined, color: Colors.grey)
+                    : Image.network(
+                        resolved,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(
+                            Icons.broken_image,
+                            color: Colors.grey),
+                      ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: _pickImage,
+                  icon: const Icon(Icons.photo_library_outlined, size: 16),
+                  label: Text(_imageUrl == null
+                      ? 'Chọn ảnh từ Media'
+                      : 'Đổi ảnh'),
+                ),
+                if (_imageUrl != null)
+                  TextButton.icon(
+                    onPressed: () => setState(() => _imageUrl = null),
+                    icon: const Icon(Icons.close, size: 16, color: Colors.red),
+                    label: const Text('Bỏ ảnh',
+                        style: TextStyle(color: Colors.red)),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isNew = widget.item == null;
+    // Options động từ DB (taxonomy) theo content_type; lọc field ở dưới.
+    final dbOptions =
+        ref.watch(contentOptionsProvider(widget.contentType)).valueOrNull ??
+            const [];
     return Container(
       width: 520,
       decoration: BoxDecoration(
@@ -167,12 +242,41 @@ class _ContentFormSheetState
               key: _formKey,
               child: ListView(
                 padding: const EdgeInsets.all(20),
-                children: widget.formFields.map((f) {
+                children: [
+                  _buildImagePicker(),
+                  const SizedBox(height: 16),
+                  ...widget.formFields.map((f) {
                   if (f.options != null) {
+                    final current = _dropdownValues[f.key];
+                    // Ưu tiên options từ DB (taxonomy) theo field; fallback hardcode.
+                    final dbForField = dbOptions
+                        .where((o) => o.field == f.key && o.isActive)
+                        .toList();
+                    final codes = <String>[];
+                    final labels = <String, String>{};
+                    if (dbForField.isNotEmpty) {
+                      for (final o in dbForField) {
+                        codes.add(o.code);
+                        labels[o.code] = o.label;
+                      }
+                    } else {
+                      for (final o in f.options!) {
+                        codes.add(o);
+                        labels[o] = vnLabel(o);
+                      }
+                    }
+                    // Giá trị data hiện tại nếu chưa có trong list → thêm để hợp lệ.
+                    if (current != null &&
+                        current.isNotEmpty &&
+                        !codes.contains(current)) {
+                      codes.add(current);
+                      labels[current] = vnLabel(current);
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: DropdownButtonFormField<String>(
-                        initialValue: _dropdownValues[f.key],
+                        initialValue: current,
+                        isExpanded: true,
                         decoration: InputDecoration(
                           labelText: f.required
                               ? '${f.label} *'
@@ -180,10 +284,10 @@ class _ContentFormSheetState
                           border: const OutlineInputBorder(),
                           isDense: true,
                         ),
-                        items: f.options!
-                            .map((o) => DropdownMenuItem(
-                                  value: o,
-                                  child: Text(o,
+                        items: codes
+                            .map((c) => DropdownMenuItem(
+                                  value: c,
+                                  child: Text(labels[c] ?? c,
                                       style: const TextStyle(
                                           fontSize: 13)),
                                 ))
@@ -216,7 +320,8 @@ class _ContentFormSheetState
                           : null,
                     ),
                   );
-                }).toList(),
+                }),
+                ],
               ),
             ),
           ),

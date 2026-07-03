@@ -33,7 +33,7 @@ class RestaurantsScreen extends StatelessWidget {
         ContentFormField(
           key: 'cuisine_type',
           label: 'Loại ẩm thực',
-          options: ['Việt Nam', 'Hải sản', 'Âu', 'Châu Á', 'Thuần chay'],
+          options: ['restaurant', 'cafe', 'street_food', 'market_stall'],
         ),
         ContentFormField(
           key: 'price_range',
