@@ -86,12 +86,10 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                     ),
                     const Spacer(),
                     FilledButton.icon(
-                      onPressed: filter.citySlug.isEmpty
-                          ? null
-                          : () => setState(() {
-                                _selectedItem = null;
-                                _formOpen = true;
-                              }),
+                      onPressed: () => setState(() {
+                        _selectedItem = null;
+                        _formOpen = true;
+                      }),
                       icon: const Icon(Icons.add, size: 18),
                       label: const Text('Thêm mới'),
                     ),
@@ -100,72 +98,119 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                 const SizedBox(height: 16),
 
                 // Filters
-                Row(
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     SizedBox(
-                      width: 240,
+                      width: 220,
                       child: CitySelector(
                         value: filter.citySlug,
-                        onChange: (slug) => ref
-                            .read(contentFilterFamily(
-                                    widget.contentType)
-                                .notifier)
-                            .update((s) => s.copyWith(
-                                citySlug: slug, page: 1)),
+                        onChange: (slug) => _update(
+                            (s) => s.copyWith(citySlug: slug, page: 1)),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(
+                      width: 200,
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Tìm theo tên...',
+                          prefixIcon: Icon(Icons.search, size: 18),
+                          isDense: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (v) =>
+                            _update((s) => s.copyWith(search: v, page: 1)),
+                      ),
+                    ),
                     DropdownButtonHideUnderline(
                       child: DropdownButton<String?>(
-                        value: filter.status.isEmpty
-                            ? null
-                            : filter.status,
+                        value: filter.status.isEmpty ? null : filter.status,
                         hint: const Text('Tất cả status'),
                         items: const [
                           DropdownMenuItem(
-                              value: null,
-                              child: Text('Tất cả')),
+                              value: null, child: Text('Tất cả status')),
                           DropdownMenuItem(
-                              value: 'draft',
-                              child: Text('Draft')),
+                              value: 'draft', child: Text('Draft')),
                           DropdownMenuItem(
-                              value: 'published',
-                              child: Text('Published')),
+                              value: 'published', child: Text('Published')),
                         ],
-                        onChanged: (v) => ref
-                            .read(contentFilterFamily(
-                                    widget.contentType)
-                                .notifier)
-                            .update((s) => s.copyWith(
-                                status: v ?? '', page: 1)),
+                        onChanged: (v) => _update(
+                            (s) => s.copyWith(status: v ?? '', page: 1)),
                       ),
                     ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: filter.sort,
+                        items: const [
+                          DropdownMenuItem(
+                              value: 'newest', child: Text('Mới nhất')),
+                          DropdownMenuItem(
+                              value: 'oldest', child: Text('Cũ nhất')),
+                          DropdownMenuItem(
+                              value: 'name', child: Text('Tên A→Z')),
+                        ],
+                        onChanged: (v) => _update(
+                            (s) => s.copyWith(sort: v ?? 'newest', page: 1)),
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      onPressed: _pickDateRange,
+                      icon: const Icon(Icons.date_range, size: 16),
+                      label: Text(filter.dateFrom.isEmpty
+                          ? 'Ngày'
+                          : '${filter.dateFrom} → ${filter.dateTo}'),
+                    ),
+                    SizedBox(
+                      width: 160,
+                      child: DropdownButtonFormField<String>(
+                        initialValue:
+                            filter.field.isEmpty ? null : filter.field,
+                        isExpanded: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Lọc theo field',
+                          isDense: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        items: widget.columns
+                            .map((c) => DropdownMenuItem(
+                                  value: c.fieldKey,
+                                  child: Text(c.label,
+                                      style: const TextStyle(fontSize: 13),
+                                      overflow: TextOverflow.ellipsis),
+                                ))
+                            .toList(),
+                        onChanged: (v) => _update(
+                            (s) => s.copyWith(field: v ?? '', page: 1)),
+                      ),
+                    ),
+                    if (filter.field.isNotEmpty)
+                      SizedBox(
+                        width: 140,
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Giá trị...',
+                            isDense: true,
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (v) =>
+                              _update((s) => s.copyWith(value: v, page: 1)),
+                        ),
+                      ),
+                    if (_hasActiveFilter(filter))
+                      TextButton.icon(
+                        onPressed: _clearFilters,
+                        icon: const Icon(Icons.clear, size: 16),
+                        label: const Text('Xoá lọc'),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 16),
 
                 // Table
                 Expanded(
-                  child: filter.citySlug.isEmpty
-                      ? const Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.location_city_outlined,
-                                size: 48,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Chọn thành phố để xem dữ liệu',
-                                style: TextStyle(
-                                    color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        )
-                      : listAsync.when(
+                  child: listAsync.when(
                           loading: () => const Center(
                               child:
                                   CircularProgressIndicator()),
@@ -186,7 +231,7 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
                                           const SizedBox(
                                               height: 8),
                                           Text(
-                                            'Chưa có ${widget.title} nào cho ${filter.citySlug}',
+                                            'Chưa có ${widget.title} nào',
                                             style: const TextStyle(
                                                 color: Colors
                                                     .grey),
@@ -348,6 +393,36 @@ class _ContentScreenState extends ConsumerState<ContentScreen> {
           ),
       ],
     );
+  }
+
+  void _update(ContentFilter Function(ContentFilter) fn) => ref
+      .read(contentFilterFamily(widget.contentType).notifier)
+      .update(fn);
+
+  bool _hasActiveFilter(ContentFilter f) =>
+      f.citySlug.isNotEmpty ||
+      f.status.isNotEmpty ||
+      f.search.isNotEmpty ||
+      f.dateFrom.isNotEmpty ||
+      f.field.isNotEmpty ||
+      f.sort != 'newest';
+
+  void _clearFilters() => ref
+      .read(contentFilterFamily(widget.contentType).notifier)
+      .state = const ContentFilter();
+
+  Future<void> _pickDateRange() async {
+    final now = DateTime.now();
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(now.year + 1),
+    );
+    if (picked == null) return;
+    String fmt(DateTime d) =>
+        '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+    _update((s) => s.copyWith(
+        dateFrom: fmt(picked.start), dateTo: fmt(picked.end), page: 1));
   }
 
   Future<void> _publishItem(ContentItem item) async {
