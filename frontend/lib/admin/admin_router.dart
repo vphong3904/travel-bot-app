@@ -23,8 +23,6 @@ import 'web/screens/shopping_screen.dart';
 import 'web/screens/itineraries_screen.dart';
 import 'web/screens/events_screen.dart';
 import 'web/screens/transport_screen.dart';
-import 'web/screens/faq_screen.dart';
-import 'web/screens/experiences_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
@@ -158,16 +156,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/content/transport',
             name: 'content-transport',
             builder: (_, __) => const TransportScreen(),
-          ),
-          GoRoute(
-            path: '/content/faq',
-            name: 'content-faq',
-            builder: (_, __) => const FaqScreen(),
-          ),
-          GoRoute(
-            path: '/content/experiences',
-            name: 'content-experiences',
-            builder: (_, __) => const ExperiencesScreen(),
           ),
         ],
       ),
