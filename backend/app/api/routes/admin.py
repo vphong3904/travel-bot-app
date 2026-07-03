@@ -20,7 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import DB, CurrentUser, ADMIN_ROLES, require_admin, require_role
 from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
-from app.db.models.media import ContentItem
+from app.db.models.media import ContentItem, ContentOption
 from app.db.models.chat import ChatMessage, ChatSession
 from app.db.models.travel import (
     Destination, Location, Tour, Ticket,
@@ -1118,6 +1118,76 @@ async def list_cities(
          "province": c.province, "region": c.region}
         for c in rows.scalars().all()
     ]
+
+
+# ── Content options (taxonomy: "loại" theo content_type + field) ──────────────
+
+def _serialize_option(o: ContentOption) -> dict:
+    return {
+        "id": str(o.id), "content_type": o.content_type, "field": o.field,
+        "code": o.code, "label": o.label, "sort_order": o.sort_order,
+        "is_active": o.is_active,
+    }
+
+
+@router.get("/content-options")
+async def list_content_options(
+    content_type: Optional[str] = None,
+    field: Optional[str] = None,
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    """Danh sách options. Form lọc theo content_type+field (và is_active phía FE);
+    màn quản lý lấy tất cả."""
+    stmt = select(ContentOption)
+    if content_type:
+        stmt = stmt.where(ContentOption.content_type == content_type)
+    if field:
+        stmt = stmt.where(ContentOption.field == field)
+    rows = await db.execute(
+        stmt.order_by(ContentOption.content_type, ContentOption.field,
+                      ContentOption.sort_order, ContentOption.label)
+    )
+    return [_serialize_option(o) for o in rows.scalars().all()]
+
+
+@router.post("/content-options", status_code=201)
+async def create_content_option(
+    body: dict, db: DB = None, _: User = Depends(require_admin),
+):
+    for f in ("content_type", "field", "code", "label"):
+        if not body.get(f):
+            raise HTTPException(422, f"Thiếu '{f}'")
+    obj = ContentOption(
+        content_type=body["content_type"], field=body["field"],
+        code=body["code"].strip(), label=body["label"].strip(),
+        sort_order=body.get("sort_order", 0),
+    )
+    db.add(obj)
+    await db.commit()
+    await db.refresh(obj)
+    return _serialize_option(obj)
+
+
+@router.patch("/content-options/{opt_id}")
+async def update_content_option(
+    opt_id: str, body: dict, db: DB = None, _: User = Depends(require_admin),
+):
+    obj = await _get_or_404(db, ContentOption, opt_id)
+    for f in ("content_type", "field", "code", "label", "sort_order", "is_active"):
+        if f in body:
+            setattr(obj, f, body[f])
+    await db.commit()
+    return _serialize_option(obj)
+
+
+@router.delete("/content-options/{opt_id}", status_code=204)
+async def delete_content_option(
+    opt_id: str, db: DB = None, _: User = Depends(require_admin),
+):
+    obj = await _get_or_404(db, ContentOption, opt_id)
+    await db.delete(obj)
+    await db.commit()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
