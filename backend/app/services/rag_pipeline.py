@@ -786,10 +786,13 @@ class RAGPipeline:
         use_reranking = _RERANK_ENABLED
 
         # [P0 anti cross-city] Resolve thành phố từ entities để lọc KB đúng tỉnh.
+        # Ngoại lệ: intent so sánh cần KB của NHIỀU tỉnh → KHÔNG lọc theo 1 tỉnh.
         ent0 = entities or {}
-        destination_id = await self._resolve_destination_id(
-            ent0.get("location"), ent0.get("city_slug")
-        )
+        destination_id = None
+        if intent != "compare_destinations":
+            destination_id = await self._resolve_destination_id(
+                ent0.get("location"), ent0.get("city_slug")
+            )
 
         async def qdrant_branch():
             hits, _ms = await self._search(query_vec, rrf_pool_k, destination_id)
