@@ -195,12 +195,31 @@ def _ensure_collection_sync() -> None:
             pass  # đã tồn tại hoặc không cần
 
 
-def _search_qdrant_sync(query_vec: list[float], top_k: int) -> list[dict]:
+def _city_filter(destination_id: Optional[str]):
+    """
+    [P0 anti cross-city] Lọc KB theo đúng thành phố: chỉ nhận entry của
+    destination_id ĐÓ hoặc entry CHUNG (destination_id rỗng) — loại KB tỉnh khác.
+    Trả None nếu không có destination_id (không lọc).
+    """
+    if not destination_id:
+        return None
+    return qmodels.Filter(should=[
+        qmodels.FieldCondition(key="destination_id", match=qmodels.MatchValue(value=str(destination_id))),
+        qmodels.FieldCondition(key="destination_id", match=qmodels.MatchValue(value="")),
+    ])
+
+
+def _search_qdrant_sync(
+    query_vec: list[float], top_k: int, destination_id: Optional[str] = None
+) -> list[dict]:
     """
     Search Qdrant với auto-create collection nếu chưa tồn tại.
     score_threshold=settings.RAG_SCORE_THRESHOLD là ngưỡng baseline (thấp, để
     tránh "0 results"); dynamic threshold thực sự được áp dụng sau ở
     hallucination_guard.filter_by_dynamic_threshold().
+
+    [P0] destination_id != None → chỉ trả KB của đúng thành phố + KB chung
+    (tránh nhiễm chéo: câu Đà Lạt trả nguồn Cao Bằng/Buôn Ma Thuột).
 
     [YÊU CẦU 6] HNSW search params (ef) được áp dụng để cân bằng tốc độ/recall.
     """
@@ -217,6 +236,7 @@ def _search_qdrant_sync(query_vec: list[float], top_k: int) -> list[dict]:
             with_payload=True,
             score_threshold=settings.RAG_SCORE_THRESHOLD,
             search_params=ropt.get_search_params(),
+            query_filter=_city_filter(destination_id),
         ).points
     except Exception as e:
         err = str(e)
@@ -306,7 +326,9 @@ def _search_qdrant_kb_sync(query_vec: list[float], top_k: int) -> list[dict]:
     return hits
 
 
-def _search_qdrant_hybrid_mode(query_vec: list[float], top_k: int) -> list[dict]:
+def _search_qdrant_hybrid_mode(
+    query_vec: list[float], top_k: int, destination_id: Optional[str] = None
+) -> list[dict]:
     """
     T-012 hybrid mode: query SONG SONG cả 2 collections, dedupe theo title+city,
     ưu tiên nguồn kb_files khi conflict (đã qua validate T-010).
@@ -314,7 +336,7 @@ def _search_qdrant_hybrid_mode(query_vec: list[float], top_k: int) -> list[dict]
     import concurrent.futures
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
-        fut_db = ex.submit(_search_qdrant_sync, query_vec, top_k)
+        fut_db = ex.submit(_search_qdrant_sync, query_vec, top_k, destination_id)
         fut_kb = ex.submit(_search_qdrant_kb_sync, query_vec, top_k)
         db_hits = fut_db.result()
         kb_hits = fut_kb.result()
@@ -344,22 +366,25 @@ def _search_qdrant_hybrid_mode(query_vec: list[float], top_k: int) -> list[dict]
     return merged
 
 
-def _route_qdrant_search(query_vec: list[float], top_k: int) -> list[dict]:
+def _route_qdrant_search(
+    query_vec: list[float], top_k: int, destination_id: Optional[str] = None
+) -> list[dict]:
     """
     T-012: Router — đọc KNOWLEDGE_SOURCE từ settings và dispatch đúng hàm search.
       db     → collection cũ (EmbeddingJob pipeline) — mặc định, an toàn
       files  → collection KB files (T-011)
       hybrid → cả hai, dedupe, kb_files ưu tiên
+    [P0] destination_id được luồn vào nhánh 'db' để lọc KB đúng thành phố.
     """
     source = getattr(settings, "KNOWLEDGE_SOURCE", "db").lower()
     if source == "files":
         return _search_qdrant_kb_sync(query_vec, top_k)
     elif source == "hybrid":
-        return _search_qdrant_hybrid_mode(query_vec, top_k)
+        return _search_qdrant_hybrid_mode(query_vec, top_k, destination_id)
     else:  # "db" hoặc bất kỳ giá trị không hợp lệ → fallback về db
         if source not in ("db", "files", "hybrid"):
             logger.warning(f"[RAG] KNOWLEDGE_SOURCE='{source}' không hợp lệ, dùng 'db'")
-        return _search_qdrant_sync(query_vec, top_k)
+        return _search_qdrant_sync(query_vec, top_k, destination_id)
 
 
 def _upsert_qdrant_sync(entries: list[dict]) -> int:
@@ -595,6 +620,22 @@ class RAGPipeline:
         ms = int((time.monotonic() - t0) * 1000)
         return vec, ms
 
+    async def _resolve_destination_id(
+        self, location: Optional[str], city_slug: Optional[str]
+    ) -> Optional[str]:
+        """[P0] destination_id (str) nếu resolve được thành phố từ entities; None nếu không."""
+        if not location and not city_slug:
+            return None
+        try:
+            from app.db.database import AsyncSessionLocal
+            from app.services.structured_search import resolve_destination
+            async with AsyncSessionLocal() as db:
+                did, _ = await resolve_destination(db, location, city_slug)
+            return str(did) if did else None
+        except Exception as e:
+            logger.warning(f"[RAG] resolve destination_id lỗi: {e}")
+            return None
+
     async def _faq_direct(
         self, query_vec: list[float], location: Optional[str], city_slug: Optional[str]
     ) -> Optional[str]:
@@ -628,18 +669,23 @@ class RAGPipeline:
         await cache_layer.set_cached_embedding(text, vec)
         return vec, embed_ms, False
 
-    async def _search(self, query_vec: list[float], top_k: int) -> tuple[list[dict], int]:
+    async def _search(
+        self, query_vec: list[float], top_k: int, destination_id: Optional[str] = None
+    ) -> tuple[list[dict], int]:
         # T-012: dùng _route_qdrant_search thay vì gọi thẳng _search_qdrant_sync
         # Router đọc KNOWLEDGE_SOURCE=db|files|hybrid từ settings
+        # [P0] destination_id để lọc KB đúng thành phố (tránh nhiễm chéo).
         t0 = time.monotonic()
         hits = await asyncio.to_thread(
-            _route_qdrant_search, query_vec, top_k
+            _route_qdrant_search, query_vec, top_k, destination_id
         )
         ms = int((time.monotonic() - t0) * 1000)
         ropt.search_metrics.record(ms)
         return hits, ms
 
-    async def _search_postgres_fallback(self, question: str, top_k: Optional[int] = None) -> list[dict]:
+    async def _search_postgres_fallback(
+        self, question: str, top_k: Optional[int] = None, destination_id: Optional[str] = None
+    ) -> list[dict]:
         """
         ✅ FIX: PostgreSQL Full-Text Search — dùng cả làm fallback (Qdrant=0)
         VÀ làm 1 nhánh của Hybrid Search (chạy song song với Qdrant — YÊU CẦU 7).
@@ -665,13 +711,21 @@ class RAGPipeline:
             words = [w for w in question.lower().split() if w not in stop_words and len(w) > 1]
             search_query = " | ".join(words[:8]) if words else question
 
+            # [P0 anti cross-city] Lọc đúng thành phố + entry chung (destination_id NULL).
+            params = {"q": question, "limit": limit}
+            city_clause = ""
+            if destination_id:
+                city_clause = "AND (destination_id = CAST(:did AS uuid) OR destination_id IS NULL)"
+                params["did"] = destination_id
+
             async with AsyncSessionLocal() as db:
                 result = await db.execute(
-                    text("""
+                    text(f"""
                         SELECT title, category, content,
                                similarity(title || ' ' || content, :q) AS score
                         FROM knowledge_entries
                         WHERE is_active = TRUE
+                          {city_clause}
                           AND (
                             to_tsvector('simple', title || ' ' || content)
                             @@ plainto_tsquery('simple', :q)
@@ -680,7 +734,7 @@ class RAGPipeline:
                         ORDER BY score DESC
                         LIMIT :limit
                     """),
-                    {"q": question, "limit": limit}
+                    params
                 )
                 rows = result.fetchall()
 
@@ -731,13 +785,19 @@ class RAGPipeline:
         # [OPT-2.3] Rerank tắt mặc định (xem _RERANK_ENABLED) — quá chậm trên GPU 6GB.
         use_reranking = _RERANK_ENABLED
 
+        # [P0 anti cross-city] Resolve thành phố từ entities để lọc KB đúng tỉnh.
+        ent0 = entities or {}
+        destination_id = await self._resolve_destination_id(
+            ent0.get("location"), ent0.get("city_slug")
+        )
+
         async def qdrant_branch():
-            hits, _ms = await self._search(query_vec, rrf_pool_k)
+            hits, _ms = await self._search(query_vec, rrf_pool_k, destination_id)
             filtered, _threshold = guard.filter_by_dynamic_threshold(hits)
             return filtered
 
         async def pg_branch():
-            return await self._search_postgres_fallback(question, rrf_pool_k)
+            return await self._search_postgres_fallback(question, rrf_pool_k, destination_id)
 
         t0 = time.monotonic()
         final_results, meta = await hybrid.hybrid_search(
