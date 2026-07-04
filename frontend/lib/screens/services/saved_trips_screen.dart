@@ -11,7 +11,9 @@ import '../../widgets/loading_state_widgets.dart';
 import '../auth/login_register_screen.dart';
 
 class SavedTripsScreen extends StatefulWidget {
-  const SavedTripsScreen({super.key});
+  /// Khi nhúng làm tab trong Trip hub → chỉ render body, không có Scaffold/AppBar.
+  final bool embedded;
+  const SavedTripsScreen({super.key, this.embedded = false});
 
   @override
   State<SavedTripsScreen> createState() => _SavedTripsScreenState();
@@ -65,6 +67,7 @@ class _SavedTripsScreenState extends State<SavedTripsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.embedded) return _buildBody();
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -72,7 +75,12 @@ class _SavedTripsScreenState extends State<SavedTripsScreen> {
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
       ),
-      body: _loading
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return _loading
           ? const LoadingScreen(message: 'Đang tải...')
           : _error == 'login'
               ? _loginPrompt()
@@ -93,8 +101,7 @@ class _SavedTripsScreenState extends State<SavedTripsScreen> {
                             itemCount: _trips.length,
                             itemBuilder: (_, i) => _tripCard(_trips[i] as Map<String, dynamic>),
                           ),
-                        ),
-    );
+                        );
   }
 
   Widget _loginPrompt() => Center(

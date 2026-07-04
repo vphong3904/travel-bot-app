@@ -423,6 +423,33 @@ async def get_session_messages(
     }
 
 
+@router.patch("/chat-sessions/{session_id}")
+async def update_chat_session(
+    session_id: str,
+    body: dict,
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    """Admin cập nhật cờ đánh dấu (is_flagged) và/hoặc tags của 1 hội thoại."""
+    session = await db.get(ChatSession, session_id)
+    if not session:
+        raise HTTPException(404, "Session không tồn tại")
+
+    if body.get("is_flagged") is not None:
+        session.is_flagged = bool(body["is_flagged"])
+    if body.get("tags") is not None:
+        session.tags = [str(t) for t in body["tags"]]
+    session.updated_at = datetime.now(timezone.utc)
+
+    await db.commit()
+    return {
+        "ok": True,
+        "id": session.id,
+        "is_flagged": session.is_flagged,
+        "tags": session.tags or [],
+    }
+
+
 @router.delete("/chat-sessions/{session_id}")
 async def delete_chat_session(
     session_id: str,

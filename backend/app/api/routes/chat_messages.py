@@ -9,7 +9,7 @@ from typing import AsyncGenerator
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user
@@ -84,6 +84,9 @@ async def send_message(
     db.add(user_msg)
     await db.flush()
 
+    # Đặt tên hội thoại theo câu hỏi đầu tiên (chỉ khi chưa có tiêu đề)
+    await _maybe_set_session_title(db, session_id, payload.content)
+
     # ✅ Dùng CHAT_HISTORY_LIMIT từ config (mặc định 10)
     history = await _get_recent_history(db, session_id, limit=settings.CHAT_HISTORY_LIMIT)
     nlp = preprocess(payload.content, history=history)
@@ -151,6 +154,8 @@ async def stream_message(
         content=payload.content,
     )
     db.add(user_msg)
+    # Đặt tên hội thoại theo câu hỏi đầu tiên (chỉ khi chưa có tiêu đề)
+    await _maybe_set_session_title(db, session_id, payload.content)
     await db.commit()
 
     # ✅ Dùng CHAT_HISTORY_LIMIT từ config
@@ -288,6 +293,28 @@ async def update_feedback(
         metadata={"reason": payload.reason, "category": payload.category},
     )
     return msg
+
+
+def _make_session_title(content: str, max_len: int = 80) -> str:
+    """Tạo tiêu đề hội thoại từ câu hỏi đầu tiên của người dùng."""
+    title = " ".join((content or "").split()).strip()
+    if len(title) > max_len:
+        title = title[:max_len].rstrip() + "…"
+    return title or "Hội thoại mới"
+
+
+async def _maybe_set_session_title(
+    db: AsyncSession, session_id: UUID, content: str
+) -> None:
+    """Đặt tiêu đề = câu hỏi đầu tiên, chỉ khi session chưa có tiêu đề."""
+    await db.execute(
+        update(ChatSession)
+        .where(
+            ChatSession.id == str(session_id),
+            (ChatSession.title.is_(None)) | (ChatSession.title == ""),
+        )
+        .values(title=_make_session_title(content))
+    )
 
 
 async def _assert_session_owner(db: AsyncSession, session_id: UUID, user_id: str) -> None:
