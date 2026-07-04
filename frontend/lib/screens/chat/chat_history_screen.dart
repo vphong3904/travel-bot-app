@@ -7,7 +7,9 @@ import '../../models/chat_session_model.dart';
 import 'chatbot_screen.dart';
 
 class ChatHistoryScreen extends StatefulWidget {
-  const ChatHistoryScreen({super.key});
+  /// Khi nhúng làm tab trong Trip hub → chỉ render body, không có Scaffold/AppBar.
+  final bool embedded;
+  const ChatHistoryScreen({super.key, this.embedded = false});
 
   @override
   State<ChatHistoryScreen> createState() => _ChatHistoryScreenState();
@@ -35,15 +37,21 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.embedded) return _buildBody();
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
         title: const Text('Lịch sử hội thoại', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(icon: const Icon(Icons.refresh, size: 20), onPressed: _refreshHistory),
+          IconButton(icon: const Icon(Icons.refresh, size: 20), onPressed: () => setState(_refreshHistory)),
         ],
       ),
-      body: FutureBuilder<List<ChatSessionModel>>(
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return FutureBuilder<List<ChatSessionModel>>(
         future: _historyFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -116,7 +124,6 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             },
           );
         },
-      ),
     );
   }
 }

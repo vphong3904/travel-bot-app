@@ -1,4 +1,7 @@
 // lib/screens/home/home_screen.dart
+// Explore (Khám phá) — thiết kế lại gọn gàng, giảm lặp:
+//   Header → Search → Hero "Đang hot" → Khám phá nhanh (shortcut) →
+//   Theo sở thích (category interactive) → Gợi ý cho bạn → Điểm đến nổi bật.
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +12,6 @@ import '../../services/destination_service.dart';
 import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
-import '../chat/chatbot_screen.dart';
 import '../explore/destination_list_screen.dart';
 import '../search/search_screen.dart';
 import '../trip_detail/destination_detail_screen.dart';
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _bannerCtrl = PageController();
   Timer? _bannerTimer;
   int _bannerPage = 0;
+
   List<Destination> _hotDests = [];
   bool _hotLoading = true;
 
@@ -33,44 +36,79 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Destination> _categoryDests = [];
   bool _catLoading = false;
 
-  static const _regions = ['Miền Bắc', 'Miền Trung', 'Miền Nam'];
-  String? _selectedRegion;
-  List<Destination> _regionDests = [];
-  bool _regionLoading = false;
-
-  int _budgetTab = 0;
-  List<Destination> _budgetDests = [];
-  bool _budgetLoading = false;
-
-  late int _selectedMonth;
-  List<Destination> _monthDests = [];
-  bool _monthLoading = false;
+  List<Destination> _forYou = [];
+  bool _forYouLoading = false;
 
   List<Destination> _featuredDests = [];
   bool _featuredLoading = true;
 
-  // [P3] Đề xuất cá nhân hóa theo sở thích (favorites)
-  List<Destination> _forYou = [];
-  bool _forYouLoading = false;
-
   @override
   void initState() {
     super.initState();
-    _selectedMonth = DateTime.now().month;
-    _loadAll();
-  }
-
-  void _loadAll() {
     _loadHot();
     _loadCategories();
-    _loadRegion(null);
-    _loadBudget(0);
-    _loadMonth(_selectedMonth);
     _loadFeatured();
     _loadForYou();
   }
 
-  // [P3] Gợi ý dựa trên danh mục phổ biến trong favorites của user.
+  @override
+  void dispose() {
+    _bannerTimer?.cancel();
+    _bannerCtrl.dispose();
+    super.dispose();
+  }
+
+  // ── Loaders ────────────────────────────────────────────────────────────────
+  Future<void> _loadHot() async {
+    setState(() => _hotLoading = true);
+    try {
+      final data = await DestinationRepository.fetchHot(limit: 5);
+      if (!mounted) return;
+      setState(() { _hotDests = data; _hotLoading = false; });
+      if (data.length > 1) _startBannerTimer();
+    } catch (_) {
+      if (mounted) setState(() => _hotLoading = false);
+    }
+  }
+
+  void _startBannerTimer() {
+    _bannerTimer?.cancel();
+    _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted || _hotDests.isEmpty) return;
+      _bannerPage = (_bannerPage + 1) % _hotDests.length;
+      _bannerCtrl.animateToPage(_bannerPage,
+          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    });
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      final cats = await DestinationRepository.fetchCategories();
+      if (mounted) setState(() => _categories = cats);
+      if (cats.isNotEmpty) _loadCategoryDests(cats.first.slug);
+    } catch (_) {}
+  }
+
+  Future<void> _loadCategoryDests(String slug) async {
+    setState(() { _catLoading = true; _selectedCategorySlug = slug; });
+    try {
+      final data = await DestinationRepository.fetchDestinations(category: slug, limit: 8);
+      if (mounted) setState(() { _categoryDests = data; _catLoading = false; });
+    } catch (_) {
+      if (mounted) setState(() => _catLoading = false);
+    }
+  }
+
+  Future<void> _loadFeatured() async {
+    setState(() => _featuredLoading = true);
+    try {
+      final data = await DestinationRepository.fetchDestinations(sortBy: 'rating', limit: 20);
+      if (mounted) setState(() { _featuredDests = data; _featuredLoading = false; });
+    } catch (_) {
+      if (mounted) setState(() => _featuredLoading = false);
+    }
+  }
+
   Future<void> _loadForYou() async {
     final s = context.read<AppState>();
     if (!s.isLoggedIn) return;
@@ -91,11 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if (mounted) setState(() { _forYou = []; _forYouLoading = false; });
         return;
       }
-      final topSlug =
-          counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
+      final topSlug = counts.entries.reduce((a, b) => a.value >= b.value ? a : b).key;
       final favIds = favs.map((d) => d.id).toSet();
-      final recs =
-          await DestinationRepository.fetchDestinations(category: topSlug, limit: 8);
+      final recs = await DestinationRepository.fetchDestinations(category: topSlug, limit: 8);
       final filtered = recs.where((d) => !favIds.contains(d.id)).toList();
       if (mounted) setState(() { _forYou = filtered; _forYouLoading = false; });
     } catch (_) {
@@ -103,117 +139,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _loadHot() async {
-    setState(() => _hotLoading = true);
-    try {
-      final data = await DestinationRepository.fetchHot(limit: 4);
-      if (!mounted) return;
-      setState(() { _hotDests = data; _hotLoading = false; });
-      if (data.length > 1) _startBannerTimer();
-    } catch (_) {
-      if (mounted) setState(() => _hotLoading = false);
-    }
-  }
+  // ── Navigation ─────────────────────────────────────────────────────────────
+  void _openDetail(Destination d) => Navigator.push(
+      context, MaterialPageRoute(builder: (_) => DestinationDetailScreen(destination: d)));
 
-  void _startBannerTimer() {
-    _bannerTimer?.cancel();
-    _bannerTimer = Timer.periodic(const Duration(seconds: 3), (_) {
-      if (!mounted || _hotDests.isEmpty) return;
-      _bannerPage = (_bannerPage + 1) % _hotDests.length;
-      _bannerCtrl.animateToPage(_bannerPage,
-          duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-    });
-  }
+  void _openSearch() => Navigator.push(
+      context, MaterialPageRoute(builder: (_) => const SearchScreen()));
 
-  Future<void> _loadCategories() async {
-    try {
-      final cats = await DestinationRepository.fetchCategories();
-      if (mounted) setState(() => _categories = cats);
-      if (cats.isNotEmpty) _loadCategoryDests(cats.first.slug);
-    } catch (_) {}
-  }
-
-  Future<void> _loadCategoryDests(String slug) async {
-    setState(() { _catLoading = true; _selectedCategorySlug = slug; });
-    try {
-      final data = await DestinationRepository.fetchDestinations(category: slug, limit: 6);
-      if (mounted) setState(() { _categoryDests = data; _catLoading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _catLoading = false);
-    }
-  }
-
-  Future<void> _loadRegion(String? region) async {
-    setState(() { _regionLoading = true; _selectedRegion = region; });
-    try {
-      final data = await DestinationRepository.fetchDestinations(region: region, limit: 6);
-      if (mounted) setState(() { _regionDests = data; _regionLoading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _regionLoading = false);
-    }
-  }
-
-  Future<void> _loadBudget(int tab) async {
-    setState(() { _budgetLoading = true; _budgetTab = tab; });
-    try {
-      final data = tab == 0
-          ? await DestinationRepository.fetchDestinations(budgetMax: 2000000, limit: 6)
-          : await DestinationRepository.fetchDestinations(budgetMin: 2000000, limit: 6);
-      if (mounted) setState(() { _budgetDests = data; _budgetLoading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _budgetLoading = false);
-    }
-  }
-
-  Future<void> _loadMonth(int month) async {
-    setState(() { _monthLoading = true; _selectedMonth = month; });
-    try {
-      final data = await DestinationRepository.fetchDestinations(month: month, limit: 6);
-      if (mounted) setState(() { _monthDests = data; _monthLoading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _monthLoading = false);
-    }
-  }
-
-  Future<void> _loadFeatured() async {
-    setState(() => _featuredLoading = true);
-    try {
-      final data = await DestinationRepository.fetchDestinations(
-        sortBy: 'rating',
-        limit: 20,
-      );
-      if (mounted) setState(() { _featuredDests = data; _featuredLoading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _featuredLoading = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _bannerTimer?.cancel();
-    _bannerCtrl.dispose();
-    super.dispose();
-  }
-
-  void _openDetail(Destination d) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => DestinationDetailScreen(destination: d)));
-  }
-
-  void _openSearch() {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()));
-  }
-
-  void _openListBasic({String? region, int? budgetMax, int? budgetMin, int? month, String? category, String title = 'Địa điểm'}) {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (_) => DestinationListScreen(
-        title: title,
-        region: region, budgetMax: budgetMax, budgetMin: budgetMin,
-        month: month, category: category,
-      ),
-    ));
-  }
-
-  void _openList({String? region, int? budgetMax, int? budgetMin, int? month, String? category, String sortBy = 'rating', required String title}) {
+  void _openList({
+    String? region, int? budgetMax, int? budgetMin, int? month, String? category,
+    String sortBy = 'rating', required String title,
+  }) {
     Navigator.push(context, MaterialPageRoute(
       builder: (_) => DestinationListScreen(
         title: title, region: region, budgetMax: budgetMax,
@@ -222,204 +158,251 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
+  Future<void> _refresh() async {
+    await Future.wait([_loadHot(), _loadFeatured(), _loadForYou()]);
+    if (_selectedCategorySlug != null) await _loadCategoryDests(_selectedCategorySlug!);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AppState>().user;
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: _buildHeader(user?.displayName ?? 'Lữ khách')),
-
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
-                child: _TapSearchBar(onTap: _openSearch),
+        bottom: false,
+        child: RefreshIndicator(
+          color: AppColors.primary,
+          onRefresh: _refresh,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _buildHeader(user?.displayName ?? 'Lữ khách')),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                  child: _TapSearchBar(onTap: _openSearch),
+                ),
               ),
-            ),
-
-            SliverToBoxAdapter(child: _buildHotBanner()),
-            SliverToBoxAdapter(child: _buildForYouSection()),
-            SliverToBoxAdapter(child: _buildCategorySection()),
-            SliverToBoxAdapter(child: _buildRegionSection()),
-            SliverToBoxAdapter(child: _buildBudgetSection()),
-            SliverToBoxAdapter(child: _buildMonthSection()),
-
-            SliverToBoxAdapter(child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 24, 16, 10),
-              child: SectionTitle(
-                title: 'Điểm đến nổi bật',
-                action: 'Xem tất cả',
-                onAction: () => _openListBasic(title: 'Tất cả điểm đến'),
-              ),
-            )),
-            _featuredLoading
-                ? const SliverFillRemaining(child: Center(child: CircularProgressIndicator()))
-                : _featuredDests.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Center(child: Text('Không có điểm đến nào')),
-                        ))
-                    : SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverGrid(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            // FIX: tăng childAspectRatio để card không bị chật theo chiều dọc
-                            childAspectRatio: 0.72,
-                            mainAxisSpacing: 14,
-                            crossAxisSpacing: 14,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (ctx, i) => DestinationCard(
-                              destination: _featuredDests[i],
-                              onTap: () => _openDetail(_featuredDests[i]),
+              SliverToBoxAdapter(child: _buildHotBanner()),
+              SliverToBoxAdapter(child: _buildQuickExplore()),
+              SliverToBoxAdapter(child: _buildCategorySection()),
+              SliverToBoxAdapter(child: _buildForYouSection()),
+              SliverToBoxAdapter(child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 26, 16, 10),
+                child: SectionTitle(
+                  title: 'Điểm đến nổi bật',
+                  action: 'Xem tất cả',
+                  onAction: () => _openList(title: 'Tất cả điểm đến'),
+                ),
+              )),
+              _featuredLoading
+                  ? const SliverToBoxAdapter(
+                      child: Padding(padding: EdgeInsets.all(40),
+                          child: Center(child: CircularProgressIndicator())))
+                  : _featuredDests.isEmpty
+                      ? const SliverToBoxAdapter(
+                          child: Padding(padding: EdgeInsets.all(32),
+                              child: Center(child: Text('Không có điểm đến nào'))))
+                      : SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          sliver: SliverGrid(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, childAspectRatio: 0.72,
+                              mainAxisSpacing: 14, crossAxisSpacing: 14,
                             ),
-                            childCount: _featuredDests.length,
+                            delegate: SliverChildBuilderDelegate(
+                              (ctx, i) => DestinationCard(
+                                destination: _featuredDests[i],
+                                onTap: () => _openDetail(_featuredDests[i]),
+                              ),
+                              childCount: _featuredDests.length,
+                            ),
                           ),
                         ),
-                      ),
-            const SliverToBoxAdapter(child: SizedBox(height: 90)),
-          ],
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  // ── Header ─────────────────────────────────────────────────────────────────
   Widget _buildHeader(String name) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Xin chào, $name 👋',
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.dark),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                    const SizedBox(height: 2),
-                    const Text('Hôm nay bạn muốn khám phá đâu?',
-                        style: TextStyle(fontSize: 13, color: AppColors.muted)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          // FIX: Tách AI card thành 2 phần riêng — info row + input row
-          // để tránh overflow khi màn hình nhỏ
-          GradientCard(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ChatBotScreen())),
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Row 1: Icon + title + subtitle
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(9),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.smart_toy_outlined, color: Colors.white, size: 22),
-                        ),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Trợ lý AI du lịch',
-                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-                              SizedBox(height: 2),
-                              Text('Lên lịch trình, hỏi đáp, gợi ý điểm đến...',
-                                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Row 2: Quick input — full width, không bị overflow
-                    _QuickAiInput(
-                      onSend: (msg) => Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => ChatBotScreen(initialMessage: msg))),
-                    ),
-                  ],
-                ),
-              ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Xin chào, $name 👋',
+                    style: const TextStyle(
+                        fontSize: 21, fontWeight: FontWeight.bold, color: AppColors.dark),
+                    maxLines: 1, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 2),
+                const Text('Hôm nay bạn muốn đi đâu?',
+                    style: TextStyle(fontSize: 13.5, color: AppColors.muted)),
+              ],
             ),
+          ),
+          Container(
+            width: 46, height: 46,
+            decoration: BoxDecoration(
+              gradient: AppColors.primaryGradient,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(initial,
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 19, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
     );
   }
 
+  // ── Hero "Đang hot" ─────────────────────────────────────────────────────────
   Widget _buildHotBanner() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+          padding: const EdgeInsets.fromLTRB(16, 18, 16, 10),
           child: SectionTitle(
             title: '🔥 Đang hot',
             action: 'Xem tất cả',
             onAction: () => _openList(sortBy: 'popular', title: 'Địa điểm hot nhất'),
           ),
         ),
-        _hotLoading
-            ? const SizedBox(height: 200, child: Center(child: CircularProgressIndicator()))
-            : _hotDests.isEmpty
-                ? const SizedBox.shrink()
-                : SizedBox(
-                    // FIX: dùng LayoutBuilder để height tương đối vs screen
-                    height: 200,
-                    child: PageView.builder(
-                      controller: _bannerCtrl,
-                      itemCount: _hotDests.length,
-                      onPageChanged: (i) => setState(() => _bannerPage = i),
-                      itemBuilder: (_, i) => _HotBannerCard(
-                        dest: _hotDests[i],
-                        onTap: () => _openDetail(_hotDests[i]),
-                      ),
-                    ),
-                  ),
-        if (!_hotLoading && _hotDests.length > 1)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_hotDests.length, (i) => AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                width: _bannerPage == i ? 18 : 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: _bannerPage == i ? AppColors.primary : AppColors.border,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              )),
+        if (_hotLoading)
+          const SizedBox(height: 190, child: Center(child: CircularProgressIndicator()))
+        else if (_hotDests.isEmpty)
+          const SizedBox.shrink()
+        else ...[
+          SizedBox(
+            height: 190,
+            child: PageView.builder(
+              controller: _bannerCtrl,
+              itemCount: _hotDests.length,
+              onPageChanged: (i) => setState(() => _bannerPage = i),
+              itemBuilder: (_, i) => _HotBannerCard(
+                dest: _hotDests[i], rank: i + 1, onTap: () => _openDetail(_hotDests[i])),
             ),
           ),
+          if (_hotDests.length > 1)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(_hotDests.length, (i) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: _bannerPage == i ? 18 : 6, height: 6,
+                  decoration: BoxDecoration(
+                    color: _bannerPage == i ? AppColors.primary : AppColors.border,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                )),
+              ),
+            ),
+        ],
       ],
     );
   }
 
-  // [P3] Section đề xuất cá nhân hóa — chỉ hiện khi user đăng nhập + có gợi ý.
+  // ── Khám phá nhanh (gộp khu vực / ngân sách / mùa) ───────────────────────────
+  Widget _buildQuickExplore() {
+    final month = DateTime.now().month;
+    final shortcuts = <_Shortcut>[
+      _Shortcut('🧭', 'Miền Bắc', [Color(0xFF3B82F6), Color(0xFF2563EB)],
+          () => _openList(region: 'Miền Bắc', title: 'Miền Bắc')),
+      _Shortcut('🌊', 'Miền Trung', [Color(0xFF06B6D4), Color(0xFF0891B2)],
+          () => _openList(region: 'Miền Trung', title: 'Miền Trung')),
+      _Shortcut('🌴', 'Miền Nam', [Color(0xFF10B981), Color(0xFF059669)],
+          () => _openList(region: 'Miền Nam', title: 'Miền Nam')),
+      _Shortcut('💸', 'Tiết kiệm', [Color(0xFFF59E0B), Color(0xFFD97706)],
+          () => _openList(budgetMax: 2000000, title: 'Dưới 2 triệu/ngày')),
+      _Shortcut('☀️', 'Mùa này', [Color(0xFF8B5CF6), Color(0xFF7C3AED)],
+          () => _openList(month: month, title: 'Đi tháng $month')),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 24, 16, 12),
+          child: SectionTitle(title: 'Khám phá nhanh'),
+        ),
+        SizedBox(
+          height: 92,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: shortcuts.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            itemBuilder: (_, i) => _ShortcutCard(shortcut: shortcuts[i]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Theo sở thích (category interactive) ─────────────────────────────────────
+  Widget _buildCategorySection() {
+    if (_categories.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 26, 16, 12),
+          child: SectionTitle(
+            title: 'Theo sở thích',
+            action: _selectedCategorySlug != null ? 'Xem tất cả' : null,
+            onAction: _selectedCategorySlug != null
+                ? () => _openList(category: _selectedCategorySlug, title: 'Theo sở thích')
+                : null,
+          ),
+        ),
+        SizedBox(
+          height: 38,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: _categories.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            itemBuilder: (_, i) {
+              final cat = _categories[i];
+              final selected = cat.slug == _selectedCategorySlug;
+              return GestureDetector(
+                onTap: () => _loadCategoryDests(cat.slug),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: selected ? AppColors.primary : Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: selected ? AppColors.primary : AppColors.border),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(cat.name,
+                      style: TextStyle(
+                        color: selected ? Colors.white : AppColors.dark,
+                        fontSize: 13,
+                        fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                      )),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 14),
+        _HorizontalDestList(dests: _categoryDests, loading: _catLoading, onTap: _openDetail),
+      ],
+    );
+  }
+
+  // ── Gợi ý cho bạn (personalized) ─────────────────────────────────────────────
   Widget _buildForYouSection() {
     if (!context.read<AppState>().isLoggedIn) return const SizedBox.shrink();
     if (!_forYouLoading && _forYou.isEmpty) return const SizedBox.shrink();
@@ -427,165 +410,11 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.fromLTRB(16, 22, 16, 10),
+          padding: EdgeInsets.fromLTRB(16, 26, 16, 12),
           child: SectionTitle(title: 'Gợi ý cho bạn'),
         ),
-        _HorizontalDestList(
-            dests: _forYou, loading: _forYouLoading, onTap: _openDetail),
+        _HorizontalDestList(dests: _forYou, loading: _forYouLoading, onTap: _openDetail),
       ],
-    );
-  }
-
-  Widget _buildCategorySection() {
-    return _SectionShell(
-      title: 'Theo sở thích',
-      onSeeAll: _selectedCategorySlug != null
-          ? () => _openListBasic(category: _selectedCategorySlug, title: 'Theo sở thích')
-          : null,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 40,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: _categories.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (_, i) {
-                final cat = _categories[i];
-                final selected = cat.slug == _selectedCategorySlug;
-                return ChoiceChip(
-                  label: Text(cat.name),
-                  selected: selected,
-                  onSelected: (_) => _loadCategoryDests(cat.slug),
-                  selectedColor: AppColors.primary.withValues(alpha: 0.14),
-                  labelStyle: TextStyle(
-                    color: selected ? AppColors.primary : AppColors.dark,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    fontSize: 12.5,
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          _HorizontalDestList(dests: _categoryDests, loading: _catLoading, onTap: _openDetail),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRegionSection() {
-    return _SectionShell(
-      title: 'Theo khu vực',
-      onSeeAll: () => _openListBasic(region: _selectedRegion, title: 'Theo khu vực'),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 38,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                _RegionChip(label: 'Tất cả', selected: _selectedRegion == null,
-                    onTap: () => _loadRegion(null)),
-                ..._regions.map((r) => _RegionChip(
-                  label: r, selected: _selectedRegion == r,
-                  onTap: () => _loadRegion(r),
-                )),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          _HorizontalDestList(dests: _regionDests, loading: _regionLoading, onTap: _openDetail),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBudgetSection() {
-    return _SectionShell(
-      title: 'Theo ngân sách',
-      onSeeAll: () => _openListBasic(
-        budgetMax: _budgetTab == 0 ? 2000000 : null,
-        budgetMin: _budgetTab == 1 ? 2000000 : null,
-        title: _budgetTab == 0 ? 'Dưới 2 triệu/ngày' : 'Trên 2 triệu/ngày',
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              height: 38,
-              decoration: BoxDecoration(
-                color: AppColors.border,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  _BudgetTab(label: '≤ 2 triệu/ngày', selected: _budgetTab == 0, onTap: () => _loadBudget(0)),
-                  _BudgetTab(label: '> 2 triệu/ngày', selected: _budgetTab == 1, onTap: () => _loadBudget(1)),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _HorizontalDestList(dests: _budgetDests, loading: _budgetLoading, onTap: _openDetail),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMonthSection() {
-    const monthNames = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
-    return _SectionShell(
-      title: 'Theo mùa (Tháng $_selectedMonth)',
-      onSeeAll: () => _openListBasic(month: _selectedMonth, title: 'Đi tháng $_selectedMonth'),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 38,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: 12,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
-              itemBuilder: (_, i) {
-                final m = i + 1;
-                final selected = m == _selectedMonth;
-                return GestureDetector(
-                  onTap: () => _loadMonth(m),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    // FIX: T10/T11/T12 cần rộng hơn một chút
-                    width: monthNames[i].length > 2 ? 44 : 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: selected ? AppColors.primary : Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: selected ? AppColors.primary : AppColors.border),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      monthNames[i],
-                      style: TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w700,
-                        color: selected ? Colors.white : AppColors.dark,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          _HorizontalDestList(dests: _monthDests, loading: _monthLoading, onTap: _openDetail),
-        ],
-      ),
     );
   }
 }
@@ -602,18 +431,12 @@ class _TapSearchBar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 48,
+        height: 50,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFF1F5F9)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(color: AppColors.border),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
         ),
         child: Row(
           children: [
@@ -621,22 +444,18 @@ class _TapSearchBar extends StatelessWidget {
             const Icon(Icons.search_rounded, color: AppColors.muted, size: 20),
             const SizedBox(width: 10),
             const Expanded(
-              child: Text(
-                'Tìm địa điểm, tỉnh thành...',
-                style: TextStyle(fontSize: 14, color: AppColors.muted),
-              ),
+              child: Text('Tìm địa điểm, tỉnh thành...',
+                  style: TextStyle(fontSize: 14, color: AppColors.muted)),
             ),
             Container(
               margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
-                'Tìm kiếm',
-                style: TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
-              ),
+              child: const Text('Tìm kiếm',
+                  style: TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
@@ -646,31 +465,59 @@ class _TapSearchBar extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────
-//  Shared sub-widgets
+//  Shortcut card (Khám phá nhanh)
 // ─────────────────────────────────────────────
-class _SectionShell extends StatelessWidget {
-  final String title;
-  final Widget child;
-  final VoidCallback? onSeeAll;
-  const _SectionShell({required this.title, required this.child, this.onSeeAll});
-
-  @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 22, 16, 10),
-        child: SectionTitle(title: title, action: onSeeAll != null ? 'Xem tất cả' : null, onAction: onSeeAll),
-      ),
-      child,
-    ],
-  );
+class _Shortcut {
+  final String emoji;
+  final String label;
+  final List<Color> colors;
+  final VoidCallback onTap;
+  const _Shortcut(this.emoji, this.label, this.colors, this.onTap);
 }
 
+class _ShortcutCard extends StatelessWidget {
+  final _Shortcut shortcut;
+  const _ShortcutCard({required this.shortcut});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: shortcut.onTap,
+      child: Container(
+        width: 92,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: shortcut.colors,
+            begin: Alignment.topLeft, end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(
+            color: shortcut.colors.last.withValues(alpha: 0.28),
+            blurRadius: 10, offset: const Offset(0, 4))],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(shortcut.emoji, style: const TextStyle(fontSize: 26)),
+            const SizedBox(height: 6),
+            Text(shortcut.label,
+                style: const TextStyle(
+                    color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+//  Hero banner card
+// ─────────────────────────────────────────────
 class _HotBannerCard extends StatelessWidget {
   final Destination dest;
+  final int rank;
   final VoidCallback onTap;
-  const _HotBannerCard({required this.dest, required this.onTap});
+  const _HotBannerCard({required this.dest, required this.rank, required this.onTap});
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -694,9 +541,21 @@ class _HotBannerCard extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.72)],
-                  stops: const [0.4, 1.0],
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.75)],
+                  stops: const [0.35, 1.0],
                 ),
+              ),
+            ),
+            Positioned(
+              top: 12, left: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text('#$rank Hot',
+                    style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
             ),
             Positioned(
@@ -705,9 +564,8 @@ class _HotBannerCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(dest.name,
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis),
+                      style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.bold),
+                      maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 4),
                   Row(children: [
                     const Icon(Icons.location_on, color: Colors.white70, size: 13),
@@ -736,7 +594,9 @@ class _HotBannerCard extends StatelessWidget {
   );
 }
 
-// FIX: Tăng chiều cao card list + width để text không bị cắt
+// ─────────────────────────────────────────────
+//  Horizontal destination list
+// ─────────────────────────────────────────────
 class _HorizontalDestList extends StatelessWidget {
   final List<Destination> dests;
   final bool loading;
@@ -745,13 +605,18 @@ class _HorizontalDestList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (loading) return const SizedBox(height: 160, child: Center(child: CircularProgressIndicator(strokeWidth: 2)));
-    if (dests.isEmpty) return const SizedBox(
-      height: 60,
-      child: Center(child: Text('Không có địa điểm phù hợp', style: TextStyle(color: AppColors.muted, fontSize: 13))),
-    );
+    if (loading) {
+      return const SizedBox(height: 180, child: Center(child: CircularProgressIndicator(strokeWidth: 2)));
+    }
+    if (dests.isEmpty) {
+      return const SizedBox(
+        height: 60,
+        child: Center(child: Text('Không có địa điểm phù hợp',
+            style: TextStyle(color: AppColors.muted, fontSize: 13))),
+      );
+    }
     return SizedBox(
-      height: 180, // FIX: tăng từ 170 → 180
+      height: 180,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -762,7 +627,7 @@ class _HorizontalDestList extends StatelessWidget {
           return GestureDetector(
             onTap: () => onTap(d),
             child: Container(
-              width: 150, // FIX: tăng từ 140 → 150
+              width: 150,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -813,172 +678,6 @@ class _HorizontalDestList extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _RegionChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  const _RegionChip({required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-      decoration: BoxDecoration(
-        color: selected ? AppColors.primary : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: selected ? AppColors.primary : AppColors.border),
-      ),
-      child: Text(label, style: TextStyle(
-        color: selected ? Colors.white : AppColors.dark,
-        fontSize: 13, fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-      )),
-    ),
-  );
-}
-
-class _BudgetTab extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  const _BudgetTab({required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) => Expanded(
-    child: GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        alignment: Alignment.center,
-        child: Text(label, style: TextStyle(
-          color: selected ? Colors.white : AppColors.muted,
-          // FIX: giảm fontSize để label vừa trên màn hình nhỏ
-          fontSize: 12,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-        )),
-      ),
-    ),
-  );
-}
-
-// FIX: _QuickAiInput — layout full width thay vì nhét vào Row
-// (giờ được đặt ở Row 2 trong _buildHeader, không còn cạnh tranh chỗ với title)
-class _QuickAiInput extends StatefulWidget {
-  final void Function(String) onSend;
-  const _QuickAiInput({required this.onSend});
-
-  @override
-  State<_QuickAiInput> createState() => _QuickAiInputState();
-}
-
-class _QuickAiInputState extends State<_QuickAiInput> {
-  bool _expanded = false;
-  final _ctrl = TextEditingController();
-
-  @override
-  void dispose() { _ctrl.dispose(); super.dispose(); }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_expanded) {
-      return Row(
-        children: [
-          GestureDetector(
-            onTap: () => setState(() => _expanded = true),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.4)),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.edit_outlined, color: Colors.white, size: 14),
-                  SizedBox(width: 6),
-                  Text('Hỏi ngay',
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const ChatBotScreen()),
-              ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
-                ),
-                child: const Text(
-                  'Mở trợ lý →',
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-    // Expanded: full-width input
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.4)),
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 12),
-          Expanded(
-            child: TextField(
-              controller: _ctrl,
-              autofocus: true,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
-              decoration: const InputDecoration(
-                hintText: 'Hỏi về du lịch...',
-                hintStyle: TextStyle(color: Colors.white60, fontSize: 13),
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 10),
-              ),
-              onSubmitted: (t) {
-                if (t.trim().isNotEmpty) widget.onSend(t.trim());
-                setState(() { _expanded = false; _ctrl.clear(); });
-              },
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.send, color: Colors.white, size: 18),
-            padding: const EdgeInsets.all(8),
-            constraints: const BoxConstraints(),
-            onPressed: () {
-              final t = _ctrl.text.trim();
-              if (t.isNotEmpty) widget.onSend(t);
-              setState(() { _expanded = false; _ctrl.clear(); });
-            },
-          ),
-        ],
       ),
     );
   }

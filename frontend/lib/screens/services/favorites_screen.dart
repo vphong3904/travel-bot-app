@@ -13,7 +13,9 @@ import '../auth/login_register_screen.dart';
 import '../trip_detail/destination_detail_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+  /// Khi nhúng làm tab trong Trip hub → chỉ render body, không có Scaffold/AppBar.
+  final bool embedded;
+  const FavoritesScreen({super.key, this.embedded = false});
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -68,6 +70,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.embedded) return _buildBody();
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -75,7 +78,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
       ),
-      body: _loading
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return _loading
           ? const LoadingScreen(message: 'Đang tải...')
           : _error == 'login'
               ? _loginPrompt()
@@ -103,8 +111,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               ),
                             ),
                           ],
-                        ),
-    );
+                        );
   }
 
   Widget _categoryFilter() {

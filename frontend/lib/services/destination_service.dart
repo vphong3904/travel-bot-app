@@ -77,6 +77,77 @@ class DestinationRepository {
     }
   }
 
+  // ── Tickets (vé vào cổng) ─────────────────────────────────────────────────────
+  // GET /travel/destinations/:id/tickets → List trực tiếp, không cần auth.
+  static Future<List<Map<String, dynamic>>> fetchTickets(String destinationId) async {
+    try {
+      final res = await http
+          .get(Uri.parse('${ApiConfig.baseUrl}/travel/destinations/$destinationId/tickets'))
+          .timeout(ApiConfig.timeout);
+      if (res.statusCode != 200) return [];
+      final decoded = jsonDecode(utf8.decode(res.bodyBytes));
+      if (decoded is! List) return [];
+      return decoded.whereType<Map<String, dynamic>>().toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  // ── Overview (gộp khách sạn/ẩm thực/nhà hàng/tour/mua sắm của điểm đến) ────────
+  // GET /travel/destinations/:id/overview → {hotels:[...], foods:[...], ...}
+  static Future<Map<String, List<Map<String, dynamic>>>> fetchOverview(
+      String destinationId, {int limit = 10}) async {
+    const keys = ['hotels', 'foods', 'restaurants', 'tours', 'shopping'];
+    final out = {for (final k in keys) k: <Map<String, dynamic>>[]};
+    try {
+      final res = await http
+          .get(Uri.parse(
+              '${ApiConfig.baseUrl}/travel/destinations/$destinationId/overview?limit=$limit'))
+          .timeout(ApiConfig.timeout);
+      if (res.statusCode != 200) return out;
+      final decoded = jsonDecode(utf8.decode(res.bodyBytes));
+      if (decoded is! Map) return out;
+      for (final k in keys) {
+        final v = decoded[k];
+        if (v is List) {
+          out[k] = v.whereType<Map<String, dynamic>>().toList();
+        }
+      }
+      return out;
+    } catch (_) {
+      return out;
+    }
+  }
+
+  // ── Itineraries (gợi ý lịch trình + chi phí) ──────────────────────────────────
+  static Future<List<Map<String, dynamic>>> fetchItineraries(String destinationId) async {
+    try {
+      final res = await http
+          .get(Uri.parse('${ApiConfig.baseUrl}/travel/destinations/$destinationId/itineraries'))
+          .timeout(ApiConfig.timeout);
+      if (res.statusCode != 200) return [];
+      final decoded = jsonDecode(utf8.decode(res.bodyBytes));
+      if (decoded is! List) return [];
+      return decoded.whereType<Map<String, dynamic>>().toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static Future<Map<String, dynamic>?> fetchItinerary(String id) async {
+    try {
+      final res = await http
+          .get(Uri.parse('${ApiConfig.baseUrl}/travel/itineraries/$id'))
+          .timeout(ApiConfig.timeout);
+      if (res.statusCode != 200) return null;
+      final decoded = jsonDecode(utf8.decode(res.bodyBytes));
+      if (decoded is! Map) return null;
+      return Map<String, dynamic>.from(decoded);
+    } catch (_) {
+      return null;
+    }
+  }
+
   // ── Categories ─────────────────────────────────────────────────────────────
   // GET /travel/categories → không cần auth, trả List trực tiếp
   static Future<List<Category>> fetchCategories() async {

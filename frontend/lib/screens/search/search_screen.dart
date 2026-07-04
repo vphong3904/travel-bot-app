@@ -1,52 +1,39 @@
 // lib/screens/search/search_screen.dart
+// Tra cứu tổng hợp: điểm đến • khách sạn • tour • nhà hàng • món ăn • mua sắm.
+// Gọi /travel/search (backend tìm không dấu). Lọc theo loại bằng chip.
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../../models/destination.dart';
 import '../../services/destination_service.dart';
+import '../../services/search_service.dart';
 import '../../widgets/common_widgets.dart';
-import '../../widgets/destination_card.dart';
+import '../detail/entity_detail_screen.dart';
 import '../trip_detail/destination_detail_screen.dart';
 
-// ─────────────────────────────────────────────
-//  Bảng chuyển đổi tiếng Việt không dấu → có dấu (normalize)
-// ─────────────────────────────────────────────
-class _VietnameseNormalizer {
-  static const _map = {
-    'a': ['à','á','ả','ã','ạ','ă','ắ','ằ','ẳ','ẵ','ặ','â','ấ','ầ','ẩ','ẫ','ậ'],
-    'e': ['è','é','ẻ','ẽ','ẹ','ê','ế','ề','ể','ễ','ệ'],
-    'i': ['ì','í','ỉ','ĩ','ị'],
-    'o': ['ò','ó','ỏ','õ','ọ','ô','ố','ồ','ổ','ỗ','ộ','ơ','ớ','ờ','ở','ỡ','ợ'],
-    'u': ['ù','ú','ủ','ũ','ụ','ư','ứ','ừ','ử','ữ','ự'],
-    'y': ['ỳ','ý','ỷ','ỹ','ỵ'],
-    'd': ['đ'],
-  };
-
-  /// Chuyển chuỗi có dấu → không dấu, lowercase để so sánh
-  static String strip(String input) {
-    var s = input.toLowerCase();
-    _map.forEach((base, variants) {
-      for (final v in variants) {
-        s = s.replaceAll(v, base);
-      }
-    });
-    return s;
-  }
-
-  /// Kiểm tra query (không dấu) có khớp với text (có hoặc không dấu)
-  static bool matches(String text, String query) {
-    if (query.isEmpty) return true;
-    final normalText = strip(text);
-    final normalQuery = strip(query);
-    return normalText.contains(normalQuery);
-  }
+// Nhãn / icon / màu cho từng loại kết quả.
+class _TypeMeta {
+  final String label;
+  final IconData icon;
+  final Color color;
+  const _TypeMeta(this.label, this.icon, this.color);
 }
 
-// ─────────────────────────────────────────────
-//  Search Screen
-// ─────────────────────────────────────────────
+const Map<String, _TypeMeta> _kTypeMeta = {
+  'destination': _TypeMeta('Điểm đến', Icons.place_rounded, Color(0xFF2563EB)),
+  'hotel': _TypeMeta('Khách sạn', Icons.hotel_rounded, Color(0xFF7C3AED)),
+  'tour': _TypeMeta('Tour', Icons.tour_rounded, Color(0xFFD97706)),
+  'restaurant': _TypeMeta('Nhà hàng', Icons.restaurant_rounded, Color(0xFFDC2626)),
+  'food': _TypeMeta('Món ăn', Icons.ramen_dining_rounded, Color(0xFFEA580C)),
+  'shopping': _TypeMeta('Mua sắm', Icons.shopping_bag_rounded, Color(0xFF059669)),
+};
+const List<String> _kTypeOrder = [
+  'destination', 'hotel', 'tour', 'restaurant', 'food', 'shopping',
+];
+
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  /// Khi nhúng làm tab (không có màn hình phía sau để pop) → ẩn nút back.
+  final bool embedded;
+  const SearchScreen({super.key, this.embedded = false});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -55,79 +42,26 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final _searchCtrl = TextEditingController();
   final _focusNode = FocusNode();
-
-  List<Destination> _allDests = [];
-  List<Destination> _results = [];
-  bool _loading = true;
-  bool _searched = false;
-
   Timer? _debounce;
 
-  // Từ khoá tìm kiếm phổ biến gợi ý
+  SearchResult _result = SearchResult.empty;
+  bool _loading = false;
+  bool _searched = false;
+  bool _opening = false;
+  String _typeFilter = 'all';
+
   static const _suggestions = [
     'Hà Nội', 'Đà Nẵng', 'Hội An', 'Hạ Long',
     'Sapa', 'Phú Quốc', 'Nha Trang', 'Đà Lạt',
-    'Huế', 'Mũi Né', 'Cần Thơ', 'Ninh Bình',
   ];
 
   @override
   void initState() {
     super.initState();
-    _loadAll();
     _searchCtrl.addListener(_onQueryChanged);
-    // Auto focus khi vào màn hình
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-    });
-  }
-
-  Future<void> _loadAll() async {
-    try {
-      // Tải sẵn tất cả điểm đến để filter local (nhanh hơn)
-      final data = await DestinationRepository.fetchDestinations(
-        sortBy: 'rating',
-        limit: 200,
-      );
-      if (mounted) setState(() { _allDests = data; _loading = false; });
-    } catch (_) {
-      if (mounted) setState(() => _loading = false);
+    if (!widget.embedded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
     }
-  }
-
-  void _onQueryChanged() {
-    _debounce?.cancel();
-    final q = _searchCtrl.text.trim();
-    if (q.isEmpty) {
-      setState(() { _results = []; _searched = false; });
-      return;
-    }
-    _debounce = Timer(const Duration(milliseconds: 300), () => _doSearch(q));
-  }
-
-  void _doSearch(String q) {
-    final results = _allDests.where((d) {
-      return _VietnameseNormalizer.matches(d.name, q) ||
-             _VietnameseNormalizer.matches(d.province ?? '', q) ||
-             _VietnameseNormalizer.matches(d.region, q) ||
-             _VietnameseNormalizer.matches(d.description ?? '', q);
-    }).toList();
-
-    setState(() { _results = results; _searched = true; });
-  }
-
-  void _onSuggestionTap(String s) {
-    _searchCtrl.text = s;
-    _searchCtrl.selection = TextSelection.fromPosition(
-      TextPosition(offset: s.length),
-    );
-    _doSearch(s);
-  }
-
-  void _openDetail(Destination d) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => DestinationDetailScreen(destination: d)),
-    );
   }
 
   @override
@@ -138,6 +72,58 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
+  void _onQueryChanged() {
+    _debounce?.cancel();
+    final q = _searchCtrl.text.trim();
+    if (q.isEmpty) {
+      setState(() { _result = SearchResult.empty; _searched = false; _loading = false; });
+      return;
+    }
+    _debounce = Timer(const Duration(milliseconds: 350), () => _doSearch(q));
+  }
+
+  Future<void> _doSearch(String q) async {
+    if (q.isEmpty) return;
+    setState(() { _loading = true; _searched = true; });
+    final res = await SearchRepository.searchAll(q);
+    if (!mounted || _searchCtrl.text.trim() != q) return;
+    setState(() { _result = res; _loading = false; _typeFilter = 'all'; });
+  }
+
+  void _onSuggestionTap(String s) {
+    _searchCtrl.text = s;
+    _searchCtrl.selection = TextSelection.fromPosition(TextPosition(offset: s.length));
+    _doSearch(s);
+  }
+
+  List<SearchItem> get _filtered => _typeFilter == 'all'
+      ? _result.results
+      : _result.results.where((e) => e.type == _typeFilter).toList();
+
+  // Mở chi tiết theo loại: điểm đến → màn destination; loại khác → EntityDetail.
+  Future<void> _openItem(SearchItem item) async {
+    if (_opening) return;
+    if (item.type == 'destination') {
+      if (item.destinationId.isEmpty) return;
+      setState(() => _opening = true);
+      final d = await DestinationRepository.fetchDestination(item.destinationId);
+      if (!mounted) return;
+      setState(() => _opening = false);
+      if (d != null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => DestinationDetailScreen(destination: d)));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Không mở được, thử lại sau')));
+      }
+      return;
+    }
+    // hotel / tour / restaurant / food / shopping
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => EntityDetailScreen(type: item.type, id: item.id),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,14 +132,26 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: AppColors.dark),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
+        leading: widget.embedded
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: AppColors.dark),
+                onPressed: () => Navigator.pop(context),
+              ),
+        titleSpacing: widget.embedded ? 16 : 0,
         title: _buildSearchField(),
-        titleSpacing: 0,
       ),
-      body: _buildBody(),
+      body: Stack(
+        children: [
+          _buildBody(),
+          if (_opening)
+            Container(
+              color: Colors.black.withValues(alpha: 0.15),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+        ],
+      ),
     );
   }
 
@@ -176,7 +174,7 @@ class _SearchScreenState extends State<SearchScreen> {
               focusNode: _focusNode,
               style: const TextStyle(fontSize: 14, color: AppColors.dark),
               decoration: const InputDecoration(
-                hintText: 'Tìm điểm đến, tỉnh thành... (có thể gõ không dấu)',
+                hintText: 'Điểm đến, khách sạn, món ăn... (gõ không dấu)',
                 hintStyle: TextStyle(fontSize: 13, color: AppColors.muted),
                 border: InputBorder.none,
                 isDense: true,
@@ -204,22 +202,60 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildBody() {
-    if (_loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    if (!_searched) return _buildSuggestions();
+    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_result.total == 0) return _buildEmpty();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTypeFilter(),
+        Expanded(
+          child: _filtered.isEmpty
+              ? Center(
+                  child: Text('Không có ${_kTypeMeta[_typeFilter]?.label ?? 'kết quả'} phù hợp',
+                      style: const TextStyle(color: AppColors.muted)),
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
+                  itemCount: _filtered.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (_, i) => _ResultCard(
+                    item: _filtered[i], onTap: () => _openItem(_filtered[i])),
+                ),
+        ),
+      ],
+    );
+  }
 
-    // Chưa search → hiển thị gợi ý
-    if (!_searched) {
-      return _buildSuggestions();
+  // Chip lọc theo loại (chỉ hiện loại có kết quả).
+  Widget _buildTypeFilter() {
+    final chips = <Widget>[
+      _FilterChip(
+        label: 'Tất cả', count: _result.total,
+        selected: _typeFilter == 'all',
+        onTap: () => setState(() => _typeFilter = 'all'),
+      ),
+    ];
+    for (final t in _kTypeOrder) {
+      final c = _result.counts[t] ?? 0;
+      if (c == 0) continue;
+      final meta = _kTypeMeta[t]!;
+      chips.add(_FilterChip(
+        label: meta.label, count: c, color: meta.color, icon: meta.icon,
+        selected: _typeFilter == t,
+        onTap: () => setState(() => _typeFilter = t),
+      ));
     }
-
-    // Đã search nhưng không có kết quả
-    if (_results.isEmpty) {
-      return _buildEmpty();
-    }
-
-    // Có kết quả
-    return _buildResults();
+    return SizedBox(
+      height: 48,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        itemCount: chips.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemBuilder: (_, i) => chips[i],
+      ),
+    );
   }
 
   Widget _buildSuggestions() {
@@ -228,53 +264,41 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Tìm kiếm phổ biến',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.dark),
-          ),
+          const Text('Tra cứu mọi thứ',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.dark)),
           const SizedBox(height: 4),
-          const Text(
-            'Gõ có dấu hoặc không dấu đều được!',
-            style: TextStyle(fontSize: 12, color: AppColors.muted),
+          const Text('Điểm đến, khách sạn, tour, nhà hàng, món ăn, mua sắm — gõ có dấu hoặc không dấu đều được.',
+              style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          const SizedBox(height: 16),
+          // Các loại có thể tra cứu
+          Wrap(
+            spacing: 8, runSpacing: 8,
+            children: _kTypeOrder.map((t) {
+              final m = _kTypeMeta[t]!;
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: m.color.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Icon(m.icon, size: 15, color: m.color),
+                  const SizedBox(width: 6),
+                  Text(m.label,
+                      style: TextStyle(fontSize: 12.5, color: m.color, fontWeight: FontWeight.w600)),
+                ]),
+              );
+            }).toList(),
           ),
+          const SizedBox(height: 26),
+          const Text('Tìm kiếm phổ biến',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.dark)),
           const SizedBox(height: 12),
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            spacing: 8, runSpacing: 8,
             children: _suggestions.map((s) => _SuggestionChip(
-              label: s,
-              onTap: () => _onSuggestionTap(s),
-            )).toList(),
+                label: s, onTap: () => _onSuggestionTap(s))).toList(),
           ),
-          const SizedBox(height: 28),
-          const Text(
-            '💡 Ví dụ tìm không dấu',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.dark),
-          ),
-          const SizedBox(height: 12),
-          _buildTipCard('"ha noi" → Hà Nội', Icons.tips_and_updates_outlined),
-          const SizedBox(height: 8),
-          _buildTipCard('"da nang" → Đà Nẵng', Icons.tips_and_updates_outlined),
-          const SizedBox(height: 8),
-          _buildTipCard('"ha long" → Hạ Long', Icons.tips_and_updates_outlined),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTipCard(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 15, color: AppColors.primary),
-          const SizedBox(width: 8),
-          Text(text, style: const TextStyle(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -290,24 +314,115 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Icon(Icons.search_off_rounded, size: 64, color: AppColors.muted.withValues(alpha: 0.4)),
             const SizedBox(height: 16),
-            Text(
-              'Không tìm thấy kết quả cho\n"$q"',
-              style: const TextStyle(fontSize: 15, color: AppColors.dark, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
+            Text('Không tìm thấy kết quả cho\n"$q"',
+                style: const TextStyle(fontSize: 15, color: AppColors.dark, fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center),
             const SizedBox(height: 8),
-            const Text(
-              'Thử tìm kiếm với từ khác\nhoặc không dấu cũng được nhé!',
-              style: TextStyle(fontSize: 13, color: AppColors.muted),
-              textAlign: TextAlign.center,
-            ),
+            const Text('Thử từ khác hoặc tên tỉnh/thành nhé!',
+                style: TextStyle(fontSize: 13, color: AppColors.muted), textAlign: TextAlign.center),
             const SizedBox(height: 20),
             Wrap(
               spacing: 8,
               children: _suggestions.take(4).map((s) => _SuggestionChip(
-                label: s,
-                onTap: () => _onSuggestionTap(s),
-              )).toList(),
+                  label: s, onTap: () => _onSuggestionTap(s))).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+//  Result card (mọi loại)
+// ─────────────────────────────────────────────
+class _ResultCard extends StatelessWidget {
+  final SearchItem item;
+  final VoidCallback onTap;
+  const _ResultCard({required this.item, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final meta = _kTypeMeta[item.type] ?? _kTypeMeta['destination']!;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.border),
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.horizontal(left: Radius.circular(14)),
+              child: SizedBox(
+                width: 92, height: 92,
+                child: item.imageUrl.isNotEmpty
+                    ? Image.network(item.imageUrl, fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _ph(meta))
+                    : _ph(meta),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Type badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: meta.color.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(meta.icon, size: 11, color: meta.color),
+                        const SizedBox(width: 4),
+                        Text(meta.label,
+                            style: TextStyle(fontSize: 10, color: meta.color, fontWeight: FontWeight.bold)),
+                      ]),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(item.name,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.dark),
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 2),
+                    Row(children: [
+                      const Icon(Icons.location_on_outlined, size: 12, color: AppColors.muted),
+                      const SizedBox(width: 3),
+                      Expanded(
+                        child: Text(item.subtitle,
+                            style: const TextStyle(fontSize: 11.5, color: AppColors.muted),
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
+                      ),
+                    ]),
+                    const SizedBox(height: 6),
+                    Row(children: [
+                      if (item.rating > 0) ...[
+                        const Icon(Icons.star_rounded, size: 13, color: Color(0xFFF59E0B)),
+                        const SizedBox(width: 2),
+                        Text(item.rating.toStringAsFixed(1),
+                            style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w600, color: AppColors.dark)),
+                        const SizedBox(width: 8),
+                      ],
+                      if (item.tag != null && item.tag!.isNotEmpty)
+                        Flexible(
+                          child: Text(item.tag!,
+                              style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                        ),
+                      const Spacer(),
+                      if (item.price != null && item.price!.isNotEmpty)
+                        Text(item.price!,
+                            style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: meta.color)),
+                    ]),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -315,41 +430,66 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildResults() {
-    final q = _searchCtrl.text.trim();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
-          child: Text(
-            'Tìm thấy ${_results.length} kết quả cho "$q"',
-            style: const TextStyle(fontSize: 13, color: AppColors.muted),
-          ),
+  Widget _ph(_TypeMeta meta) => Container(
+        color: meta.color.withValues(alpha: 0.08),
+        child: Icon(meta.icon, color: meta.color.withValues(alpha: 0.5), size: 30),
+      );
+}
+
+// ─────────────────────────────────────────────
+//  Filter chip (theo loại)
+// ─────────────────────────────────────────────
+class _FilterChip extends StatelessWidget {
+  final String label;
+  final int count;
+  final bool selected;
+  final VoidCallback onTap;
+  final Color color;
+  final IconData? icon;
+
+  const _FilterChip({
+    required this.label,
+    required this.count,
+    required this.selected,
+    required this.onTap,
+    this.color = AppColors.primary,
+    this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: selected ? color : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: selected ? color : AppColors.border),
         ),
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 90),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.65,
-              mainAxisSpacing: 14,
-              crossAxisSpacing: 14,
-            ),
-            itemCount: _results.length,
-            itemBuilder: (ctx, i) => DestinationCard(
-              destination: _results[i],
-              onTap: () => _openDetail(_results[i]),
-            ),
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 14, color: selected ? Colors.white : color),
+              const SizedBox(width: 5),
+            ],
+            Text('$label ($count)',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  color: selected ? Colors.white : AppColors.dark,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                )),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
 
 // ─────────────────────────────────────────────
-//  Chip gợi ý
+//  Suggestion chip
 // ─────────────────────────────────────────────
 class _SuggestionChip extends StatelessWidget {
   final String label;
@@ -361,25 +501,18 @@ class _SuggestionChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.search_rounded, size: 13, color: AppColors.muted),
-            const SizedBox(width: 5),
-            Text(label, style: const TextStyle(fontSize: 13, color: AppColors.dark, fontWeight: FontWeight.w500)),
+            const Icon(Icons.search_rounded, size: 14, color: AppColors.muted),
+            const SizedBox(width: 6),
+            Text(label, style: const TextStyle(fontSize: 13, color: AppColors.dark)),
           ],
         ),
       ),
