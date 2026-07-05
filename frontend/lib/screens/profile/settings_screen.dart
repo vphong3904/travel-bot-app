@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/app_user.dart';
 import '../../providers/app_state.dart';
+import '../../services/api_service.dart';
+import '../../services/auth_api_service.dart';
 import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/dialog_helpers.dart';
@@ -51,27 +53,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _UserInfoCard(user: user),
               const SizedBox(height: 24),
             ],
-
-            // ── Hiển thị ──────────────────────────────────────────────────
-            const _SectionHeader(title: 'HIỂN THỊ'),
-            const SizedBox(height: 8),
-            _SettingsTile(
-              icon: Icons.dark_mode_outlined,
-              title: 'Chế độ tối',
-              trailing: Switch(
-                value: appState.isDarkMode,
-                activeTrackColor: AppColors.primary,
-                activeThumbColor: Colors.white,
-                onChanged: (v) => appState.setDarkMode(v),
-              ),
-            ),
-            _SettingsTile(
-              icon: Icons.language_outlined,
-              title: 'Ngôn ngữ',
-              subtitle: appState.language == 'vi' ? 'Tiếng Việt' : 'English',
-              onTap: () => _showLanguageDialog(appState),
-            ),
-            const SizedBox(height: 24),
 
             // ── Thông báo ─────────────────────────────────────────────────
             const _SectionHeader(title: 'THÔNG BÁO'),
@@ -158,6 +139,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             if (appState.isLoggedIn) ...[
               const _SectionHeader(title: 'TÀI KHOẢN'),
               const SizedBox(height: 8),
+              _SettingsTile(
+                icon: Icons.lock_outline,
+                title: 'Đổi mật khẩu',
+                onTap: () => _showChangePasswordDialog(appState),
+              ),
               Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
@@ -298,32 +284,119 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showLanguageDialog(AppState appState) {
+  void _showChangePasswordDialog(AppState appState) {
+    final oldCtrl = TextEditingController();
+    final newCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    bool obscure = true;
+    bool submitting = false;
+    String? error;
+
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Chọn ngôn ngữ'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              value: 'vi',
-              groupValue: appState.language,
-              title: const Text('🇻🇳  Tiếng Việt'),
-              onChanged: (v) {
-                appState.setLanguage(v ?? 'vi');
-                Navigator.pop(ctx);
-              },
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('Đổi mật khẩu'),
+          content: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: oldCtrl,
+                    obscureText: obscure,
+                    decoration: const InputDecoration(
+                        labelText: 'Mật khẩu hiện tại'),
+                    validator: (v) => (v == null || v.isEmpty)
+                        ? 'Vui lòng nhập mật khẩu hiện tại'
+                        : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: newCtrl,
+                    obscureText: obscure,
+                    decoration:
+                        const InputDecoration(labelText: 'Mật khẩu mới'),
+                    validator: AuthValidators.validatePassword,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: confirmCtrl,
+                    obscureText: obscure,
+                    decoration: const InputDecoration(
+                        labelText: 'Xác nhận mật khẩu mới'),
+                    validator: (v) => v != newCtrl.text
+                        ? 'Mật khẩu xác nhận không khớp'
+                        : null,
+                  ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: !obscure,
+                    title: const Text('Hiện mật khẩu',
+                        style: TextStyle(fontSize: 13)),
+                    onChanged: (v) =>
+                        setDialogState(() => obscure = !(v ?? false)),
+                  ),
+                  if (error != null) ...[
+                    const SizedBox(height: 4),
+                    Text(error!,
+                        style: const TextStyle(
+                            color: AppColors.error, fontSize: 13)),
+                  ],
+                ],
+              ),
             ),
-            RadioListTile<String>(
-              value: 'en',
-              groupValue: appState.language,
-              title: const Text('🇬🇧  English'),
-              onChanged: (v) {
-                appState.setLanguage(v ?? 'en');
-                Navigator.pop(ctx);
-              },
+          ),
+          actions: [
+            TextButton(
+              onPressed: submitting ? null : () => Navigator.pop(ctx),
+              child: const Text('Hủy'),
+            ),
+            ElevatedButton(
+              onPressed: submitting
+                  ? null
+                  : () async {
+                      if (!formKey.currentState!.validate()) return;
+                      setDialogState(() {
+                        submitting = true;
+                        error = null;
+                      });
+                      try {
+                        await AuthApiService.changePassword(
+                          appState.token ?? '',
+                          oldPassword: oldCtrl.text,
+                          newPassword: newCtrl.text,
+                        );
+                        if (mounted) {
+                          Navigator.pop(ctx);
+                          showInfoSnackBar(
+                              context, 'Đã đổi mật khẩu thành công');
+                        }
+                      } catch (e) {
+                        setDialogState(() {
+                          submitting = false;
+                          error = friendlyError(e);
+                        });
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+              ),
+              child: submitting
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Text('Xác nhận'),
             ),
           ],
         ),
