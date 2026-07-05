@@ -203,6 +203,12 @@ CREATE TABLE itineraries (
     budget_low     INT          CHECK (budget_low  IS NULL OR budget_low  >= 0),
     budget_high    INT          CHECK (budget_high IS NULL OR budget_high >= 0),
     CHECK (budget_high IS NULL OR budget_low IS NULL OR budget_high >= budget_low),
+    -- Thống kê chi phí trung bình / người (VND) — ước tính theo số ngày × nhóm.
+    cost_transport     INT       CHECK (cost_transport     IS NULL OR cost_transport     >= 0),
+    cost_accommodation INT       CHECK (cost_accommodation IS NULL OR cost_accommodation >= 0),
+    cost_food          INT       CHECK (cost_food          IS NULL OR cost_food          >= 0),
+    cost_activities    INT       CHECK (cost_activities    IS NULL OR cost_activities    >= 0),
+    cost_other         INT       CHECK (cost_other         IS NULL OR cost_other         >= 0),
     description    TEXT,
     tags           TEXT[]       DEFAULT '{}',
     source         VARCHAR(100),

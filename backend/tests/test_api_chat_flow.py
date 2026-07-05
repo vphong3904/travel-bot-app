@@ -105,7 +105,13 @@ class FakeAsyncSession:
         # Phân biệt 2 case dựa trên tên bảng thật trong .froms — đây là
         # thuộc tính ổn định của mọi sqlalchemy.sql.Select, không phụ
         # thuộc cách compile chuỗi SQL hay format nội bộ ở từng phiên bản.
-        table_names = {t.name for t in stmt.froms}
+        #
+        # _maybe_set_session_title phát ra update(ChatSession) — statement này
+        # không có .froms; coi như no-op (không cần assert gì trong test).
+        froms = getattr(stmt, "froms", None)
+        if froms is None:
+            return SimpleNamespace(rowcount=0)
+        table_names = {t.name for t in froms}
 
         if "chat_sessions" in table_names:
             return SimpleNamespace(
