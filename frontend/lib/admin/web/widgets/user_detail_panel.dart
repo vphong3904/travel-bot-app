@@ -44,7 +44,10 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
   @override
   Widget build(BuildContext context) {
     final userAsync = ref.watch(userDetailProvider(widget.userId));
-    final currentUserRole = ref.watch(authProvider).user?.role;
+    final currentUser = ref.watch(authProvider).user;
+    final currentUserRole = currentUser?.role;
+    final canManage = currentUserRole == AdminRole.superAdmin ||
+        currentUserRole == AdminRole.admin;
 
     return Container(
       width: 400,
@@ -148,9 +151,13 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
                       children: [
                         _InfoTab(
                           user: user,
-                          canChangeRole:
-                              currentUserRole == AdminRole.superAdmin,
+                          canChangeRole: canManage,
+                          canDelete: canManage &&
+                              (user.role != 'super_admin' ||
+                                  currentUserRole == AdminRole.superAdmin) &&
+                              user.id != currentUser?.id,
                           onToggleActive: () => _toggleActive(user),
+                          onDelete: () => _deleteUser(user),
                         ),
                         _ChatHistoryTab(sessions: user.recentSessions),
                         UserSessionsTab(userId: user.id),
@@ -210,6 +217,49 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
       );
     }
   }
+
+  Future<void> _deleteUser(UserDetail user) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Xoá tài khoản?'),
+        content: Text(
+          'Tài khoản "${user.fullName ?? user.email}" sẽ bị xoá vĩnh viễn khỏi hệ thống. Hành động này không thể hoàn tác.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Huỷ'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style:
+                FilledButton.styleFrom(backgroundColor: Colors.red.shade600),
+            child: const Text('Xoá'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await ref.read(usersRepositoryProvider).deleteUser(widget.userId);
+      ref.invalidate(usersListProvider);
+      if (mounted) {
+        widget.onClose();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã xoá tài khoản')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Lỗi: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
 }
 
 // ── Info Tab ─────────────────────────────────────────────────────────────────
@@ -217,12 +267,16 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
 class _InfoTab extends StatelessWidget {
   final UserDetail user;
   final bool canChangeRole;
+  final bool canDelete;
   final VoidCallback onToggleActive;
+  final VoidCallback onDelete;
 
   const _InfoTab({
     required this.user,
     required this.canChangeRole,
+    required this.canDelete,
     required this.onToggleActive,
+    required this.onDelete,
   });
 
   @override
@@ -249,7 +303,9 @@ class _InfoTab extends StatelessWidget {
           const SizedBox(height: 20),
           const Divider(),
           const SizedBox(height: 16),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               ElevatedButton(
                 onPressed: onToggleActive,
@@ -263,13 +319,21 @@ class _InfoTab extends StatelessWidget {
                 child: Text(
                     user.isActive ? 'Khoá tài khoản' : 'Mở khoá'),
               ),
-              if (canChangeRole) ...[
-                const SizedBox(width: 8),
+              if (canChangeRole)
                 ChangeRoleDialog(
                   userId: user.id,
                   currentRole: user.role,
                 ),
-              ],
+              if (canDelete)
+                OutlinedButton.icon(
+                  onPressed: onDelete,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red.shade700,
+                    side: BorderSide(color: Colors.red.shade200),
+                  ),
+                  icon: const Icon(Icons.delete_outline, size: 16),
+                  label: const Text('Xoá tài khoản'),
+                ),
             ],
           ),
         ],

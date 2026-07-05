@@ -27,6 +27,7 @@ import 'web/screens/content_options_screen.dart';
 import 'web/screens/chatbot_test_screen.dart';
 import 'web/screens/feedback_screen.dart';
 import 'web/screens/media_screen.dart';
+import 'web/screens/system_config_screen.dart';
 import 'web/widgets/admin_layout.dart';
 
 /// Provider cho GoRouter — reactive theo authProvider
@@ -129,6 +130,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/media',
             name: 'media',
             builder: (_, __) => const MediaScreen(),
+          ),
+          GoRoute(
+            path: '/system-config',
+            name: 'system-config',
+            builder: (_, __) => const SystemConfigScreen(),
           ),
           GoRoute(
             path: '/content/destinations',
