@@ -30,6 +30,7 @@ from app.db.models.travel import (
 from app.db.models.user import User
 from app.services.knowledge import KnowledgeService
 from app.services.embedding_jobs import EmbeddingJobService
+from app.core.security import hash_password
 from app.utils import get_logger
 
 logger = get_logger("admin")
@@ -49,12 +50,7 @@ AdminUser = CurrentUser  # re-use; guard applied per endpoint with Depends
 # DASHBOARD STATS
 # ══════════════════════════════════════════════════════════════════════════════
 
-@router.get("/stats/overview")
-async def stats_overview(
-    period: str = Query("month", pattern="^(day|week|month|year)$"),
-    db: DB = None,
-    _: User = Depends(require_admin),
-):
+async def _overview_data(db: AsyncSession, period: str) -> dict:
     """Dashboard tổng quan — trả về đúng cấu trúc DashboardOverview cho Flutter."""
     now = datetime.now(timezone.utc)
     delta = {"day": 1, "week": 7, "month": 30, "year": 365}[period]
@@ -177,6 +173,15 @@ async def stats_overview(
     }
 
 
+@router.get("/stats/overview")
+async def stats_overview(
+    period: str = Query("month", pattern="^(day|week|month|year)$"),
+    db: DB = None,
+    _: User = Depends(require_admin),
+):
+    return await _overview_data(db, period)
+
+
 @router.get("/stats/feedback")
 async def stats_feedback(
     period: str = Query("month", pattern="^(day|week|month|year)$"),
@@ -217,11 +222,60 @@ async def stats_feedback(
 async def stats_export(
     format: str = Query("excel"),
     report: str = Query("overview"),
-    period: str = Query("month"),
+    period: str = Query("month", pattern="^(day|week|month|year)$"),
+    db: DB = None,
     _: User = Depends(require_admin),
 ):
-    """Export placeholder — trả về JSON. Thay bằng openpyxl nếu cần file thật."""
-    return {"message": "Export feature coming soon", "format": format, "report": report}
+    from io import BytesIO
+    from fastapi.responses import Response
+    from openpyxl import Workbook
+
+    data = await _overview_data(db, period)
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Tổng quan"
+    ws.append(["Chỉ số", "Giá trị"])
+    kpi_labels = {
+        "total_users": "Tổng người dùng",
+        "new_users_this_period": "Người dùng mới",
+        "total_chat_sessions": "Tổng phiên chat",
+        "total_messages": "Tổng tin nhắn",
+        "answered_rate": "Tỉ lệ trả lời",
+        "pending_unanswered": "Chưa trả lời",
+        "pending_flagged": "Bị gắn cờ",
+    }
+    for key, label in kpi_labels.items():
+        ws.append([label, data["kpi"].get(key)])
+
+    ws2 = wb.create_sheet("Người dùng theo ngày")
+    ws2.append(["Ngày", "Số lượng"])
+    for row in data["users_over_time"]:
+        ws2.append([row["date"], row["count"]])
+
+    ws3 = wb.create_sheet("Tin nhắn theo ngày")
+    ws3.append(["Ngày", "Số lượng"])
+    for row in data["messages_over_time"]:
+        ws3.append([row["date"], row["count"]])
+
+    ws4 = wb.create_sheet("Điểm đến nổi bật")
+    ws4.append(["Điểm đến", "Lượt quan tâm"])
+    for row in data["top_destinations"]:
+        ws4.append([row["destination"], row["count"]])
+
+    ws5 = wb.create_sheet("Intent")
+    ws5.append(["Intent", "Số lượng"])
+    for row in data["intent_breakdown"]:
+        ws5.append([row["intent"], row["count"]])
+
+    buf = BytesIO()
+    wb.save(buf)
+    filename = f"pdtrip_{report}_{period}.xlsx"
+    return Response(
+        content=buf.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -241,7 +295,9 @@ async def list_users(
     stmt = select(User).where(User.is_deleted == False)
     if q:
         stmt = stmt.where(
-            User.email.ilike(f"%{q}%") | User.username.ilike(f"%{q}%")
+            User.email.ilike(f"%{q}%")
+            | User.username.ilike(f"%{q}%")
+            | User.full_name.ilike(f"%{q}%")
         )
     if role:
         stmt = stmt.where(User.role == role)
@@ -257,6 +313,48 @@ async def list_users(
         "page": page,
         "items": [_user_dict(u) for u in users],
     }
+
+
+@router.post("/users", status_code=201)
+async def create_user(
+    body: dict,
+    db: DB = None,
+    actor: User = Depends(require_role(["admin", "super_admin"])),
+):
+    username = (body.get("username") or "").strip()
+    email = (body.get("email") or "").strip().lower()
+    password = body.get("password") or ""
+    role = body.get("role", "user")
+    if not username or not email or not password:
+        raise HTTPException(400, "Thiếu username/email/password")
+    if len(password) < 8:
+        raise HTTPException(400, "Mật khẩu tối thiểu 8 ký tự")
+    if role == "super_admin" and actor.role != "super_admin":
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            "Chỉ Super Admin mới được tạo tài khoản Super Admin",
+        )
+
+    existing = await db.execute(
+        select(User).where(
+            (User.email == email) | (User.username == username)
+        ).limit(1)
+    )
+    if existing.scalar_one_or_none():
+        raise HTTPException(409, "Email hoặc username đã tồn tại")
+
+    u = User(
+        username=username,
+        email=email,
+        password_hash=hash_password(password),
+        full_name=body.get("full_name"),
+        role=role,
+        auth_provider="email",
+    )
+    db.add(u)
+    await db.commit()
+    await db.refresh(u)
+    return _user_dict(u)
 
 
 @router.get("/users/{user_id}")
@@ -310,12 +408,24 @@ async def update_user(
     actor: User = Depends(require_admin),
 ):
     u = await _get_or_404(db, User, user_id)
+    if u.role == "super_admin" and actor.role != "super_admin":
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            "Chỉ Super Admin mới được chỉnh sửa tài khoản Super Admin",
+        )
     if "is_active" in body:
         u.is_active = bool(body["is_active"])
     if "role" in body:
         if actor.role not in ("admin", "super_admin"):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Chỉ admin mới đổi được role")
+        if body["role"] == "super_admin" and actor.role != "super_admin":
+            raise HTTPException(
+                status.HTTP_403_FORBIDDEN,
+                "Chỉ Super Admin mới được thay đổi vai trò liên quan đến Super Admin",
+            )
         u.role = body["role"]
+    if "full_name" in body:
+        u.full_name = body["full_name"]
     u.updated_at = datetime.now(timezone.utc)
     await db.commit()
     return _user_dict(u)
@@ -329,10 +439,37 @@ async def change_role(
     actor: User = Depends(require_role(["admin", "super_admin"])),
 ):
     u = await _get_or_404(db, User, user_id)
-    u.role = body.get("role", u.role)
+    new_role = body.get("role", u.role)
+    if actor.role != "super_admin" and (new_role == "super_admin" or u.role == "super_admin"):
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            "Chỉ Super Admin mới được thay đổi vai trò liên quan đến Super Admin",
+        )
+    u.role = new_role
     u.updated_at = datetime.now(timezone.utc)
     await db.commit()
     return _user_dict(u)
+
+
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    db: DB = None,
+    actor: User = Depends(require_role(["admin", "super_admin"])),
+):
+    if user_id == actor.id:
+        raise HTTPException(400, "Không thể tự xoá chính mình")
+    u = await _get_or_404(db, User, user_id)
+    if u.role == "super_admin" and actor.role != "super_admin":
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            "Chỉ Super Admin mới được xoá tài khoản Super Admin",
+        )
+    u.is_deleted = True
+    u.is_active = False
+    u.updated_at = datetime.now(timezone.utc)
+    await db.commit()
+    return {"ok": True, "id": user_id}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1756,7 +1893,7 @@ async def update_system_config(
     key: str,
     body: dict,
     db: DB = None,
-    actor: User = Depends(require_role(["admin", "super_admin"])),
+    actor: User = Depends(require_role(["super_admin"])),
 ):
     from sqlalchemy import text
     value = body.get("value")
@@ -1769,6 +1906,53 @@ async def update_system_config(
     )
     await db.commit()
     return {"ok": True, "key": key, "value": value}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DATABASE BACKUP
+# ══════════════════════════════════════════════════════════════════════════════
+
+@router.post("/system/backup")
+async def trigger_backup(
+    _: User = Depends(require_role(["super_admin"])),
+):
+    """Backup thủ công — pg_dump toàn bộ DB ra backups/. Dump chứa password_hash
+    nên chỉ Super Admin được phép chạy/tải."""
+    from app.services import backup_service
+    try:
+        filepath = await backup_service.create_backup()
+    except Exception as e:
+        raise HTTPException(500, f"Backup thất bại: {e}")
+    stat = filepath.stat()
+    return {
+        "filename": filepath.name,
+        "size_bytes": stat.st_size,
+        "created_at": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
+    }
+
+
+@router.get("/system/backups")
+async def list_backups(
+    _: User = Depends(require_role(["super_admin"])),
+):
+    from app.services import backup_service
+    return {"items": backup_service.list_backups()}
+
+
+@router.get("/system/backups/{filename}/download")
+async def download_backup(
+    filename: str,
+    _: User = Depends(require_role(["super_admin"])),
+):
+    from fastapi.responses import FileResponse
+    from app.services import backup_service
+
+    if "/" in filename or "\\" in filename or not filename.endswith(".sql"):
+        raise HTTPException(400, "Tên file không hợp lệ")
+    filepath = backup_service.BACKUP_DIR / filename
+    if not filepath.is_file():
+        raise HTTPException(404, "Không tìm thấy file backup")
+    return FileResponse(filepath, media_type="application/sql", filename=filename)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
