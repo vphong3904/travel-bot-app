@@ -34,7 +34,7 @@ class ChatSessionApiService {
       'limit': '$limit',
       if (pinnedOnly) 'pinned_only': 'true',
     };
-    final data = await _client.get('/chat/sessions', params) as List<dynamic>;
+    final data = await _client.get('/chat/sessions/', params) as List<dynamic>;
     return data
         .map((e) => ChatSessionModel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -45,12 +45,12 @@ class ChatSessionApiService {
       if (title != null && title.isNotEmpty) 'title': title,
       if (modelName != null && modelName.isNotEmpty) 'model_name': modelName,
     };
-    final data = await _client.post('/chat/sessions', body) as Map<String, dynamic>;
+    final data = await _client.post('/chat/sessions/', body) as Map<String, dynamic>;
     return ChatSessionModel.fromJson(data);
   }
 
   Future<ChatSessionModel> getSession(String sessionId) async {
-    final data = await _client.get('/chat/sessions/$sessionId') as Map<String, dynamic>;
+    final data = await _client.get('/chat/sessions/$sessionId/') as Map<String, dynamic>;
     return ChatSessionModel.fromJson(data);
   }
 
@@ -64,7 +64,7 @@ class ChatSessionApiService {
       if (pinned != null) 'pinned': pinned,
     };
     final data =
-        await _client.patch('/chat/sessions/$sessionId', body) as Map<String, dynamic>;
+        await _client.patch('/chat/sessions/$sessionId/', body) as Map<String, dynamic>;
     return ChatSessionModel.fromJson(data);
   }
 
