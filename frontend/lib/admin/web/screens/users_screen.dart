@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../shared/models/auth_user.dart';
 import '../../shared/models/user_model.dart';
+import '../../shared/providers/auth_provider.dart';
 import '../../shared/providers/users_provider.dart';
+import '../widgets/create_user_dialog.dart';
 import '../widgets/role_badge.dart';
 import '../widgets/user_detail_panel.dart';
 
@@ -40,6 +43,9 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
   Widget build(BuildContext context) {
     final filter = ref.watch(usersFilterProvider);
     final usersAsync = ref.watch(usersListProvider(filter));
+    final currentRole = ref.watch(authProvider).user?.role;
+    final canManageUsers = currentRole == AdminRole.superAdmin ||
+        currentRole == AdminRole.admin;
 
     return Row(
       children: [
@@ -72,6 +78,16 @@ class _UsersScreenState extends ConsumerState<UsersScreen> {
                         ),
                       ],
                     ),
+                    const Spacer(),
+                    if (canManageUsers)
+                      FilledButton.icon(
+                        onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (_) => const CreateUserDialog(),
+                        ),
+                        icon: const Icon(Icons.person_add_alt_1, size: 18),
+                        label: const Text('Thêm tài khoản'),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 16),

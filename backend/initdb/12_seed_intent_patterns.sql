@@ -36,3 +36,28 @@ VALUES
     ('ask_shopping', 'outlet',               1, TRUE),
     ('ask_shopping', 'mua quà',              1, TRUE)
 ON CONFLICT (intent, keyword) DO NOTHING;
+
+-- [P1] Bổ sung keyword cho câu "mềm" (an toàn / FAQ chuẩn bị) — tránh rơi ask_destination.
+INSERT INTO intent_patterns (intent, keyword, weight, is_active) VALUES
+    ('ask_safety', 'chặt chém',         2, TRUE),
+    ('ask_safety', 'trộm cắp',          2, TRUE),
+    ('ask_safety', 'móc túi',           2, TRUE),
+    ('ask_safety', 'đi một mình',       2, TRUE),
+    ('ask_safety', 'một mình có ổn',    2, TRUE),
+    ('ask_safety', 'một mình có buồn',  2, TRUE),
+    ('ask_safety', 'thân thiện',        2, TRUE),
+    ('ask_safety', 'an ninh',           2, TRUE),
+    ('ask_safety', 'có bị lừa',         2, TRUE),
+    ('ask_faq',    'mang gì',           2, TRUE),
+    ('ask_faq',    'mang theo gì',      2, TRUE),
+    ('ask_faq',    'cần mang',          2, TRUE),
+    ('ask_faq',    'chuẩn bị gì',       2, TRUE),
+    ('ask_faq',    'đặt trước',         2, TRUE),
+    ('ask_faq',    'đặt phòng trước',   2, TRUE),
+    ('ask_faq',    'bằng lái',          2, TRUE),
+    ('ask_faq',    'check-in',          2, TRUE),
+    ('ask_faq',    'check in',          2, TRUE),
+    ('ask_faq',    'chuyển khoản',      2, TRUE),
+    ('ask_faq',    'thanh toán',        2, TRUE),
+    ('ask_faq',    'có cần đặt',        2, TRUE)
+ON CONFLICT (intent, keyword) DO NOTHING;

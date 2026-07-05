@@ -51,3 +51,10 @@ README_FULL.md
 scripts/test.py
 test.py
 scripts/
+
+# Database backups (chứa password_hash — không commit)
+backups/
+backend/pdtrip_ai_db.sql
+
+# Báo cáo đồ án tốt nghiệp (tài liệu, không phải code)
+BaoCaoDATN/

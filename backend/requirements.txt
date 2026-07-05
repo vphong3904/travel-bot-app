@@ -28,6 +28,12 @@ email-validator>=2.2.0
 # Media manager — resize ảnh upload → WebP
 pillow>=10.0.0
 
+# ─────────────────────────────────────────────────────────────
+# Reports & scheduled jobs
+# ─────────────────────────────────────────────────────────────
+openpyxl>=3.1.0
+apscheduler>=3.10.0
+
 # Google OAuth (verify id_token từ Google Sign-In)
 google-auth>=2.29.0
 

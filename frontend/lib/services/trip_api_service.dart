@@ -13,7 +13,7 @@ class TripApiService {
 
   /// Danh sách chuyến đi của tôi.
   Future<List<dynamic>> listTrips() async {
-    final data = await _client.get('/trips') as List<dynamic>;
+    final data = await _client.get('/trips/') as List<dynamic>;
     return data;
   }
 

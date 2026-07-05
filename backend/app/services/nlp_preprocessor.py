@@ -154,6 +154,43 @@ LOCATION_MAP: dict[str, str] = {
     "bai dinh": "Bái Đính", "baidinh": "Bái Đính",
     "tam coc": "Tam Cốc", "tamcoc": "Tam Cốc",
     "chau doc": "Châu Đốc", "chaudoc": "Châu Đốc",
+    # Bổ sung 2026-07-05: 39/63 thành phố trong bảng `cities` (DB) bị thiếu ở đây.
+    # Hậu quả: rewrite_query() không nhận ra tên riêng nên xóa mất nó khỏi câu hỏi
+    # → RAG bỏ qua lọc theo tỉnh (destination_id=None) → trả lời chéo tỉnh
+    # (vd "Mỹ Tho" bị nhận nhầm thành "Phường Chũ"). Xem [[chatbot-optimization-plan]].
+    "bac giang": "Bắc Giang", "bacgiang": "Bắc Giang",
+    "bac lieu": "Bạc Liêu", "baclieu": "Bạc Liêu",
+    "binh duong": "Bình Dương", "binhduong": "Bình Dương",
+    "binh phuoc": "Bình Phước", "binhphuoc": "Bình Phước",
+    "dak nong": "Đắk Nông", "daknong": "Đắk Nông",
+    "dong thap": "Đồng Tháp", "dongthap": "Đồng Tháp",
+    "hai duong": "Hải Dương", "haiduong": "Hải Dương",
+    "hai phong": "Hải Phòng", "haiphong": "Hải Phòng",
+    "ha nam": "Hà Nam", "hanam": "Hà Nam",
+    "hoa binh": "Hòa Bình", "hoabinh": "Hòa Bình",
+    "hung yen": "Hưng Yên", "hungyen": "Hưng Yên",
+    "kon tum": "Kon Tum", "kontum": "Kon Tum",
+    "lang son": "Lạng Sơn", "langson": "Lạng Sơn",
+    "long an": "Long An", "longan": "Long An",
+    "my tho": "Mỹ Tho", "mytho": "Mỹ Tho",
+    "nam dinh": "Nam Định", "namdinh": "Nam Định",
+    "phu tho": "Phú Thọ", "phutho": "Phú Thọ",
+    "pleiku": "Pleiku",
+    "quang ngai": "Quảng Ngãi", "quangngai": "Quảng Ngãi",
+    "quang tri": "Quảng Trị", "quangtri": "Quảng Trị",
+    "soc trang": "Sóc Trăng", "soctrang": "Sóc Trăng",
+    "son la": "Sơn La", "sonla": "Sơn La",
+    "thai binh": "Thái Bình", "thaibinh": "Thái Bình",
+    "thai nguyen": "Thái Nguyên", "thainguyen": "Thái Nguyên",
+    "tra vinh": "Trà Vinh", "travinh": "Trà Vinh",
+    "tuyen quang": "Tuyên Quang", "tuyenquang": "Tuyên Quang",
+    "tuy hoa": "Tuy Hòa", "tuyhoa": "Tuy Hòa",
+    "vinh long": "Vĩnh Long", "vinhlong": "Vĩnh Long",
+    "vinh phuc": "Vĩnh Phúc", "vinhphuc": "Vĩnh Phúc",
+    "vi thanh": "Vị Thanh", "vithanh": "Vị Thanh",
+    "yen bai": "Yên Bái", "yenbai": "Yên Bái",
+    "ba be": "Ba Bể", "babe": "Ba Bể",
+    "nui ba den": "Núi Bà Đen", "nuibaden": "Núi Bà Đen",
 }
 
 # ── Spell correction cho lỗi gõ phổ biến ────────────────────────────────────

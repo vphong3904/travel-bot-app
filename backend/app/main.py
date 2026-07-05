@@ -3,6 +3,8 @@ from contextlib import asynccontextmanager
 
 import os
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -134,10 +136,23 @@ async def lifespan(app: FastAPI):
             )
 
     warmup_task = asyncio.create_task(_warmup_then_start_worker())
+
+    # 3. Auto backup database — chạy pg_dump lúc 00:00 hằng ngày.
+    from app.services.backup_service import run_scheduled_backup
+    scheduler = AsyncIOScheduler(timezone="Asia/Ho_Chi_Minh")
+    scheduler.add_job(
+        run_scheduled_backup,
+        CronTrigger(hour=0, minute=0),
+        id="daily_db_backup",
+    )
+    scheduler.start()
+    logger.info("[Startup] Scheduler backup DB 00:00 hằng ngày đã khởi động")
+
     logger.info("PDTrip Chatbot API started")
     yield
 
     # ── Shutdown ──
+    scheduler.shutdown(wait=False)
     # Dừng worker embedding + warm-up gọn gàng trước khi đóng kết nối DB.
     for task in (worker_task, warmup_task):
         if task and not task.done():

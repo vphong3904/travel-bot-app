@@ -1,11 +1,15 @@
 // lib/admin/web/screens/system_config_screen.dart
+import 'dart:js_interop';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:web/web.dart' as web;
 import '../../shared/models/auth_user.dart';
 import '../../shared/models/system_config.dart';
 import '../../shared/providers/auth_provider.dart';
 import '../../shared/providers/system_config_provider.dart';
 import '../../shared/data/system_config_repository.dart';
+import '../../shared/data/system_backup_repository.dart';
 
 class SystemConfigScreen extends ConsumerWidget {
   const SystemConfigScreen({super.key});
@@ -188,6 +192,10 @@ class SystemConfigScreen extends ConsumerWidget {
                             ),
                         ],
                       ),
+                      if (isSuperAdmin) ...[
+                        const SizedBox(height: 16),
+                        const _BackupSection(),
+                      ],
                     ],
                   ),
                 );
@@ -502,6 +510,150 @@ class _NumberConfigTileState
           },
         ),
       ),
+    );
+  }
+}
+
+// ── Backup database ────────────────────────────────────────────────────────────
+
+class _BackupSection extends ConsumerStatefulWidget {
+  const _BackupSection();
+
+  @override
+  ConsumerState<_BackupSection> createState() => _BackupSectionState();
+}
+
+class _BackupSectionState extends ConsumerState<_BackupSection> {
+  bool _isBackingUp = false;
+
+  Future<void> _backupNow() async {
+    setState(() => _isBackingUp = true);
+    try {
+      await ref.read(systemBackupRepositoryProvider).triggerBackup();
+      ref.invalidate(backupsListProvider);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã tạo bản backup mới')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Backup thất bại: $e'),
+              backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isBackingUp = false);
+    }
+  }
+
+  Future<void> _download(String filename) async {
+    try {
+      final bytes = await ref
+          .read(systemBackupRepositoryProvider)
+          .downloadBackup(filename);
+      final jsArray = bytes.map((b) => b.toJS).toList().toJS;
+      final blob = web.Blob(
+        jsArray,
+        web.BlobPropertyBag(type: 'application/sql'),
+      );
+      final url = web.URL.createObjectURL(blob);
+      (web.document.createElement('a') as web.HTMLAnchorElement)
+        ..href = url
+        ..setAttribute('download', filename)
+        ..click();
+      web.URL.revokeObjectURL(url);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Tải file thất bại: $e'),
+              backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  String _formatSize(int bytes) {
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(0)} KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final backupsAsync = ref.watch(backupsListProvider);
+
+    return _ConfigSection(
+      title: 'Sao lưu dữ liệu',
+      icon: Icons.backup_outlined,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+          child: Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'Backup tự động chạy mỗi ngày lúc 00:00. '
+                  'Bạn cũng có thể backup thủ công bất cứ lúc nào.',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ),
+              const SizedBox(width: 12),
+              FilledButton.icon(
+                onPressed: _isBackingUp ? null : _backupNow,
+                icon: _isBackingUp
+                    ? const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child:
+                            CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.backup, size: 16),
+                label: Text(_isBackingUp ? 'Đang backup...' : 'Backup ngay'),
+              ),
+            ],
+          ),
+        ),
+        const Divider(height: 1),
+        backupsAsync.when(
+          loading: () => const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          error: (e, _) => Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text('Lỗi: $e'),
+          ),
+          data: (backups) {
+            if (backups.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('Chưa có bản backup nào',
+                    style: TextStyle(color: Colors.grey)),
+              );
+            }
+            return Column(
+              children: backups
+                  .map((b) => ListTile(
+                        leading: const Icon(Icons.description_outlined,
+                            size: 20),
+                        title: Text(b.filename,
+                            style: const TextStyle(fontSize: 13)),
+                        subtitle: Text(
+                          '${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(b.createdAt))} · ${_formatSize(b.sizeBytes)}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.download, size: 18),
+                          tooltip: 'Tải xuống',
+                          onPressed: () => _download(b.filename),
+                        ),
+                      ))
+                  .toList(),
+            );
+          },
+        ),
+      ],
     );
   }
 }
