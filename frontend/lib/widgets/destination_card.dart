@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/destination.dart';
 import '../providers/app_state.dart';
+import '../providers/favorites_provider.dart';
 import '../services/favorite_api_service.dart';
 import 'common_widgets.dart';
 
@@ -46,7 +47,10 @@ class _DestinationCardState extends State<DestinationCard> {
     setState(() => _favLoading = true);
     try {
       final s = await FavoriteApiService(token: token).toggle(widget.destination.id);
-      if (mounted) setState(() { _isFav = s; _favLoading = false; });
+      if (mounted) {
+        setState(() { _isFav = s; _favLoading = false; });
+        context.read<FavoritesProvider>().notifyChanged();
+      }
     } catch (_) {
       if (mounted) setState(() => _favLoading = false);
     }

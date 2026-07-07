@@ -38,7 +38,10 @@ class AppState extends ChangeNotifier {
   }
 
   /// ApiClient đã inject token, dùng cho mọi service call
-  ApiClient get apiClient => ApiClient(token: _accessToken);
+  ApiClient get apiClient => ApiClient(
+    tokenProvider: () => _accessToken,
+    tokenRefresher: refreshAccessToken,
+  );
 
   // ── Load session từ storage ────────────────────────────────────────────────
 

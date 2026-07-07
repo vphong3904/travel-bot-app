@@ -405,7 +405,7 @@ async def refresh(body: RefreshRequest, db: DB):
             RefreshToken.expires_at > datetime.now(timezone.utc),
         )
     )
-    rt = result.scalar_one_or_none()
+    rt = result.scalar_one_or_none()    
     if not rt:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Refresh token không hợp lệ hoặc đã hết hạn")
 

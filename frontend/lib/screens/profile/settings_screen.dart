@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/app_user.dart';
 import '../../providers/app_state.dart';
+import '../../providers/favorites_provider.dart';
 import '../../services/api_service.dart';
 import '../../services/auth_api_service.dart';
 import '../../services/favorite_api_service.dart';
@@ -413,7 +414,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       for (final d in favs) {
         await api.remove(d.id);
       }
-      if (mounted) showInfoSnackBar(context, 'Đã xóa ${favs.length} yêu thích');
+      if (mounted) {
+        context.read<FavoritesProvider>().notifyChanged();
+        showInfoSnackBar(context, 'Đã xóa ${favs.length} yêu thích');
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -30,7 +30,7 @@ _RULES: list[tuple[list[str], str]] = [
     (
         ["ban la ai", "ban ten gi", "ban la chatbot", "gioi thieu ban than",
          "ban la gi", "may la ai"],
-        "Mình là **PDTrip AI** 🌏 — trợ lý du lịch Việt Nam. Mình giúp bạn tìm điểm "
+        "Mình là **PDTrip AI** — trợ lý du lịch Việt Nam. Mình giúp bạn tìm điểm "
         "tham quan, khách sạn, ẩm thực, mua sắm, tour, cách di chuyển và gợi ý lịch "
         "trình cho 63 tỉnh/thành. Bạn muốn khám phá nơi nào?",
     ),
@@ -39,23 +39,29 @@ _RULES: list[tuple[list[str], str]] = [
          "ban biet gi", "dung the nao", "dung nhu the nao", "huong dan su dung",
          "co the lam gi"],
         "Mình có thể giúp bạn:\n"
-        "- 📍 Điểm tham quan & trải nghiệm\n"
-        "- 🏨 Khách sạn / lưu trú\n"
-        "- 🍜 Ẩm thực & nhà hàng\n"
-        "- 🛍 Mua sắm, chợ, đặc sản\n"
-        "- 🧳 Tour & 🚗 cách di chuyển\n"
-        "- 🗺 Gợi ý lịch trình theo sở thích\n\n"
+        "- Điểm tham quan & trải nghiệm\n"
+        "- Khách sạn / lưu trú\n"
+        "- Ẩm thực & nhà hàng\n"
+        "- Mua sắm, chợ, đặc sản\n"
+        "- Tour & cách di chuyển\n"
+        "- Gợi ý lịch trình theo sở thích\n\n"
         "Cứ hỏi kiểu “Đà Lạt có gì chơi?”, “khách sạn cặp đôi ở Đà Lạt”, "
         "“ăn gì ở Huế?” nhé!",
     ),
     (
-        ["cam on", "cam ban", "thanks", "thank you", "tks", "cam o n"],
-        "Không có gì, chúc bạn có chuyến đi thật vui! 🧡 Cần gì cứ hỏi mình nhé.",
+        ["cam on", "cam ban", "thanks", "thank you", "tks", "cam o n", "thén kiu", "thank u", "ok thanks", "ok thank you", "ok ban"],
+        "Không có gì, chúc bạn có chuyến đi thật vui! Cần gì cứ hỏi mình nhé.",
     ),
     (
         ["ban co that khong", "ban co phai nguoi that", "ban la nguoi hay may"],
-        "Mình là trợ lý AI của PDTrip 🤖 — không phải người thật, nhưng luôn sẵn sàng "
+        "Mình là trợ lý AI của PDTrip — không phải người thật, nhưng luôn sẵn sàng "
         "tư vấn du lịch cho bạn!",
+    ),
+    (
+        ["alo","lo","chao xin","xin chao", "hello", "hi", "chao ban", "chao", "xin chao ban", "xin chao pdtrip", "chao pdtrip", "chao pdtrip ai", "chao pdtrip assistant", "chao pdtrip bot", "chao pdtrip chatbot"],
+        "Xin chào bạn. Mình là trợ lý AI của PDTrip — Mình có thể giúp bạn tìm điểm "
+        "tham quan, khách sạn, ẩm thực, mua sắm, tour, cách di chuyển và lên kế hoạch gợi ý lịch "
+        "trình cho 63 tỉnh/thành. Bạn muốn đi đâu hay khám phá nơi nào nói cho mình biết nhé?",
     ),
 ]
 

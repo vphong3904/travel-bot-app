@@ -32,7 +32,9 @@ class ChatBotScreen extends StatefulWidget {
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
   late ChatSessionApiService _api;
-  late String _sessionId;
+  // Lazy: null cho tới khi thật sự gửi tin nhắn đầu tiên — tránh tạo session
+  // rỗng mỗi lần mở màn (bug cũ: mở màn là tạo, thoát/vào lại tạo thêm cái mới).
+  String? _sessionId;
   final List<ChatMessage> _messages = [];
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollCtrl = ScrollController();
@@ -107,10 +109,10 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       if (widget.sessionId != null && widget.sessionId!.isNotEmpty) {
         _sessionId = widget.sessionId!;
         await _loadMessages();
-      } else {
-        final session = await _api.createSession();
-        _sessionId = session.id;
       }
+      // Không truyền sessionId (mở màn chat mới) → KHÔNG tạo session ở đây.
+      // Session chỉ được tạo lazy trong _sendMessage() khi người dùng thật sự
+      // gửi tin nhắn đầu tiên, để tránh sinh session rỗng không tên.
 
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -131,7 +133,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
   Future<void> _loadMessages() async {
     try {
-      final msgs = await _api.listMessages(_sessionId);
+      final msgs = await _api.listMessages(_sessionId!);
       if (!mounted) return;
       setState(() {
         _messages.clear();
@@ -190,7 +192,9 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     }
 
     try {
-      final stream = _api.sendMessageStream(_sessionId, trimmed);
+      // Tạo session lazy đúng lúc gửi tin nhắn đầu tiên (nếu chưa có).
+      _sessionId ??= (await _api.createSession()).id;
+      final stream = _api.sendMessageStream(_sessionId!, trimmed);
       String fullContent = '';
       List<SourceRef> sources = [];
       Map<String, dynamic>? itinerary;

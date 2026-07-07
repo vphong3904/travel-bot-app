@@ -45,8 +45,11 @@ class _ChangeRoleDialogState extends ConsumerState<ChangeRoleDialog> {
       ref.invalidate(userDetailProvider(widget.userId));
       ref.invalidate(usersListProvider);
 
+      // Không gọi Navigator.pop(context) ở đây — dialog chọn role đã tự đóng
+      // ngay khi bấm (Navigator.pop(ctx) trong onTap), pop thêm lần nữa ở đây
+      // sẽ đóng nhầm route của trang Users phía sau, gây "loading rồi trắng
+      // trang" (bug đã gặp).
       if (mounted) {
-        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Đã cập nhật role thành công')),
         );

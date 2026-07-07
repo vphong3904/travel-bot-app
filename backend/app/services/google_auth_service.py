@@ -11,14 +11,17 @@ Cấu hình: GOOGLE_CLIENT_ID trong .env
 """
 from __future__ import annotations
 
-import os
 from typing import Optional
 
+from app.core.config import settings
 from app.utils import get_logger
 
 logger = get_logger("google_auth")
 
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+# Không dùng os.getenv() — file .env chỉ được pydantic-settings đọc vào
+# `settings`, không có load_dotenv() nào nạp vào os.environ nên os.getenv()
+# luôn trả rỗng bất kể .env ghi gì.
+GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 
 
 class GoogleTokenError(Exception):

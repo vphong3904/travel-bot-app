@@ -194,12 +194,355 @@ LOCATION_MAP: dict[str, str] = {
 }
 
 # ── Spell correction cho lỗi gõ phổ biến ────────────────────────────────────
-SPELL_FIX: dict[str, str] = {
-    "đa lạc": "Đà Lạt", "đà lạc": "Đà Lạt", "da lạt": "Đà Lạt",
-    "phú quốt": "Phú Quốc", "phú kuoc": "Phú Quốc",
-    "hội ahn": "Hội An", "hội anh": "Hội An",
-    "nha trand": "Nha Trang", "nha trag": "Nha Trang",
-    "hạ lòng": "Hạ Long", "vịnh halong": "Vịnh Hạ Long",
+SPELL_FIX = {
+    # Đà Lạt
+    "đa lạc": "Đà Lạt",
+    "đà lạc": "Đà Lạt",
+    "da lạt": "Đà Lạt",
+    "đa lat": "Đà Lạt",
+    "dalas": "Đà Lạt",
+    "da las": "Đà Lạt",
+    "dalat": "Đà Lạt",
+    "dalac": "Đà Lạt",
+
+    # Phú Quốc
+    "phú quốt": "Phú Quốc",
+    "phú kuoc": "Phú Quốc",
+    "phu qoc": "Phú Quốc",
+    "phu quat": "Phú Quốc",
+
+    # Hội An
+    "hội ahn": "Hội An",
+    "hội anh": "Hội An",
+    "hôi an": "Hội An",
+    "hooji an": "Hội An",
+    "hoioj an": "Hội An",
+
+    # Hà Nội
+    "hà lội": "Hà Nội",
+    "ha lội": "Hà Nội",
+    "haloi": "Hà Nội",
+    "hanoi": "Hà Nội",
+    "haf nooji": "Hà Nội",
+
+    # TP.HCM
+    "hồ chí mihn": "TP.HCM",
+    "hồ chí minhh": "TP.HCM",
+    "hồ chi minh": "TP.HCM",
+    "tp hcm": "TP.HCM",
+    "tp hồ chí minh": "TP.HCM",
+    "tphcm": "TP.HCM",
+    "tphochiminh": "TP.HCM",
+    "hochiminh": "TP.HCM",
+    "hochiminh city": "TP.HCM",
+    "ho chi minh city": "TP.HCM",
+
+    # Sài Gòn
+    "sài gònn": "Sài Gòn",
+    "sai gonn": "Sài Gòn",
+    "sai ron": "Sài Gòn",
+    "sairon": "Sài Gòn",
+    "saigon": "Sài Gòn",
+    "saif gonf": "Sài Gòn",
+    "safi gonf": "Sài Gòn",
+    "safi gofn": "Sài Gòn",
+
+    # Đà Nẵng
+    "đà nẳng": "Đà Nẵng",
+    "đa nẵng": "Đà Nẵng",
+    "da nẵng": "Đà Nẵng",
+    "danang": "Đà Nẵng",
+    "da nan": "Đà Nẵng",
+    "ddaf nangưr": "Đà Nẵng",
+    "dda nang": "Đà Nẵng",
+
+    # Huế
+    "huê": "Huế",
+    "hué": "Huế",
+    "heu": "Huế",
+
+    # Nha Trang
+    "nha trand": "Nha Trang",
+    "nha trag": "Nha Trang",
+    "nha trnag": "Nha Trang",
+    "nhatrag": "Nha Trang",
+    "nhatrang": "Nha Trang",
+
+    # Sa Pa
+    "sa paa": "Sa Pa",
+    "sapaa": "Sa Pa",
+    "sapa": "Sa Pa",
+
+    # Hạ Long
+    "hạ lòng": "Hạ Long",
+    "ha lnog": "Hạ Long",
+    "haj long": "Hạ Long",
+    "vịnh halong": "Vịnh Hạ Long",
+    "halong bay": "Vịnh Hạ Long",
+    "halongbay": "Vịnh Hạ Long",
+    "halongvinh": "Vịnh Hạ Long",
+    "ha long vinh": "Vịnh Hạ Long",
+    "vinh ha long": "Vịnh Hạ Long",
+    "vinhj haj long": "Vịnh Hạ Long",
+    "vijnh haj long": "Vịnh Hạ Long",
+
+    # Hà Giang
+    "hà gian": "Hà Giang",
+    "ha giang": "Hà Giang",
+    "hagiang": "Hà Giang",
+    "haf giang": "Hà Giang",
+
+    # Ninh Bình
+    "ninh bihn": "Ninh Bình",
+    "ninhbinh": "Ninh Bình",
+    "ninh bifnh": "Ninh Bình",
+
+    # Mũi Né
+    "mủi né": "Mũi Né",
+    "mui nè": "Mũi Né",
+    "muine": "Mũi Né",
+    "mui nee": "Mũi Né",
+    "muri nes": "Mũi Né",
+    "muix nes": "Mũi Né",
+    "muxi nes": "Mũi Né",
+
+    # Cần Thơ
+    "cần thơo": "Cần Thơ",
+    "cân thơ": "Cần Thơ",
+    "can tho": "Cần Thơ",
+    "cantho": "Cần Thơ",
+    "can thoo": "Cần Thơ",
+
+    # Vũng Tàu
+    "vung tau": "Vũng Tàu",
+    "vungtau": "Vũng Tàu",
+    "vủng tàu": "Vũng Tàu",
+
+    # Quy Nhơn
+    "qui nhơn": "Quy Nhơn",
+    "quy nhơnn": "Quy Nhơn",
+    "quynhon": "Quy Nhơn",
+    "quinhon": "Quy Nhơn",
+    "qui nhơnn": "Quy Nhơn",
+
+    # Côn Đảo
+    "côn đảoo": "Côn Đảo",
+    "condao": "Côn Đảo",
+    "con doa": "Côn Đảo",
+    "condoa": "Côn Đảo",
+
+    # Phan Thiết
+    "phan thiết": "Phan Thiết",
+    "phan thiec": "Phan Thiết",
+    "phanthiec": "Phan Thiết",
+    "phanthiet": "Phan Thiết",
+
+    # Lai Châu
+    "lai châuu": "Lai Châu",
+    "laichau": "Lai Châu",
+    "laichua": "Lai Châu",
+    "lia chau": "Lai Châu",
+    "lai chua": "Lai Châu",
+
+    # Điện Biên
+    "điện biêng": "Điện Biên",
+    "điện biên phủ": "Điện Biên Phủ",
+    "dbp": "Điện Biên Phủ",
+
+    # Mộc Châu
+    "mộc châuu": "Mộc Châu",
+    "moc chua": "Mộc Châu",
+    "mocchau": "Mộc Châu",
+    "mocchua": "Mộc Châu",
+    "mco chau": "Mộc Châu",
+
+    # Cát Bà
+    "cát bàa": "Cát Bà",
+    "catba": "Cát Bà",
+
+    # Phú Yên
+    "phú yênn": "Phú Yên",
+    "phuyenn": "Phú Yên",
+    "phuyen": "Phú Yên",
+
+    # Bình Định
+    "bình địnhh": "Bình Định",
+    "binhdinh": "Bình Định",
+
+    # Tây Ninh
+    "tây ninhh": "Tây Ninh",
+    "tayninh": "Tây Ninh",
+    "taay ninh": "Tây Ninh",
+
+    # An Giang
+    "an gian": "An Giang",
+    "angiang": "An Giang",
+    "na giang": "An Giang",
+    "na giagn": "An Giang",
+
+    # Cà Mau
+    "cà mauu": "Cà Mau",
+    "camau": "Cà Mau",
+    "caf mau": "Cà Mau",
+
+    # Kiên Giang
+    "kiên gian": "Kiên Giang",
+    "kein giang": "Kiên Giang",
+    "kiên giagn": "Kiên Giang",
+    "kieen giang": "Kiên Giang",
+
+    # Lâm Đồng
+    "lâm đồn": "Lâm Đồng",
+    "lamdong": "Lâm Đồng",
+    "lamdon": "Lâm Đồng",
+    "lma dong": "Lâm Đồng",
+    "laam dong": "Lâm Đồng",
+
+    # Thanh Hóa
+    "thanhhoá": "Thanh Hóa",
+    "thanh hỏa": "Thanh Hóa",
+    "thanh háo": "Thanh Hóa",
+    "thanh hoas": "Thanh Hóa",
+    "thanh hosa": "Thanh Hóa",
+
+    # Nghệ An
+    "ngệ an": "Nghệ An",
+    "ngệan": "Nghệ An",
+    "nghean": "Nghệ An",
+    "ngheej an": "Nghệ An",
+
+    # Hà Tĩnh
+    "hà tỉnh": "Hà Tĩnh",
+    "hà tịnh": "Hà Tĩnh",
+    "hatinh": "Hà Tĩnh",
+    "haf tirnh": "Hà Tĩnh",
+    "haf tixnh": "Hà Tĩnh",
+
+    # Quảng Nam
+    "quảng nma": "Quảng Nam",
+    "quảng nôm": "Quảng Nam",
+    "quảngnôm": "Quảng Nam",
+    "quảngnam": "Quảng Nam",
+    "quarng nam": "Quảng Nam",
+    "quangr nam": "Quảng Nam",
+    "quarng noom": "Quảng Nam",
+    "quangr noom": "Quảng Nam",
+    "quangr nomo": "Quảng Nam",
+    "quarng nomo": "Quảng Nam",
+
+    # Quảng Bình
+    "quảng bìnhh": "Quảng Bình",
+    "quảngbình": "Quảng Bình",
+    "quarng bifnh": "Quảng Bình",
+    "quangr binhf": "Quảng Bình",
+
+    "bacninh": "Bắc Ninh",
+
+    # Cao Bằng
+    "cao bằn": "Cao Bằng",
+    "caobang": "Cao Bằng",
+    "cao baưfng": "Cao Bằng",
+    "cao baừng": "Cao Bằng",
+    "cao bangwf": "Cao Bằng",
+    "cao bawfng": "Cao Bằng",
+
+    # Buôn Ma Thuột
+    "buôn mê thuột": "Buôn Ma Thuột",
+    "buôn ma thuọc": "Buôn Ma Thuột",
+    "buoon ma thuoojc": "Buôn Ma Thuột",
+    "buoon ma thuoojt": "Buôn Ma Thuột",
+
+    # Đồng Nai
+    "đồng naii": "Đồng Nai",
+    "ddoofng nai": "Đồng Nai",
+    "ddongfo nai": "Đồng Nai",
+    "dongnai": "Đồng Nai",
+
+    # Biên Hòa
+    "biên hào": "Biên Hòa",
+    "bieen hofa": "Biên Hòa",
+    "bieen hoaf": "Biên Hòa",
+
+    # Fansipan
+    "fanxipan": "Fansipan",
+    "phanxipan": "Fansipan",
+    "phanxipang": "Fansipan",
+    "phanxibang": "Fansipan",
+    "phan xi pan": "Fansipan",
+    "phan xi pang": "Fansipan",
+    "phan xi bang": "Fansipan",
+    "phan xi ban": "Fansipan",
+    "phan si pan": "Fansipan",
+    "phan si pang": "Fansipan",
+    "phan si bang": "Fansipan",
+    "phan si ban": "Fansipan",
+    "phansibang": "Fansipan",
+    "phansipang": "Fansipan",
+    "phansipan": "Fansipan",
+
+    # Mã Pí Lèng
+    "mã pí lèn": "Mã Pí Lèng",
+    "ma pi len": "Mã Pí Lèng",
+    "mapileng": "Mã Pí Lèng",
+    "mapilen": "Mã Pí Lèng",
+    "mabilen": "Mã Pí Lèng",
+    "mabileng": "Mã Pí Lèng",
+    "max pis lenf": "Mã Pí Lèng",
+    "max pis lengf": "Mã Pí Lèng",
+    "max pis lefng": "Mã Pí Lèng",
+    "max pis lefn": "Mã Pí Lèng",
+    "max bis lengf": "Mã Pí Lèng",
+    "max bis lefng": "Mã Pí Lèng",
+    "max bis lefn": "Mã Pí Lèng",
+
+    # Tràng An
+    "tràng ang": "Tràng An",
+    "trafng an": "Tràng An",
+    "trafng ang": "Tràng An",
+    "trangf an": "Tràng An",
+    "trangf ang": "Tràng An",
+
+    # Bái Đính
+    "bái đinh": "Bái Đính",
+
+    # Tam Cốc
+    "tam cóc": "Tam Cốc",
+
+    # Châu Đốc
+    "châu đốc": "Châu Đốc",
+    "chaau dog": "Châu Đốc",
+    "chaau doosc": "Châu Đốc",
+    "chaau docos": "Châu Đốc",
+    "chau dot": "Châu Đốc",
+    "chaau doost": "Châu Đốc",
+    "chaau dotos": "Châu Đốc",
+
+    # Mỹ Tho
+    "mỹ thoo": "Mỹ Tho",
+
+    # Pleiku
+    "playku": "Pleiku",
+    "pleyku": "Pleiku",
+    "pleycu": "Pleiku",
+    "playcu": "Pleiku",
+    "lay cu": "Pleiku",
+    "lay ku": "Pleiku",
+    "leku": "Pleiku",
+    "layku": "Pleiku",
+    "laycu": "Pleiku",
+    "pleku": "Pleiku",
+    "pleikuu": "Pleiku",
+
+    # Tuy Hòa
+    "tuy hào": "Tuy Hòa",
+    "tuy hoaf": "Tuy Hòa",
+    "tuy hofa": "Tuy Hòa",
+
+    # Núi Bà Đen
+    "núi bà đèn": "Núi Bà Đen",
+    "nusi baf dden": "Núi Bà Đen",
+    "nuis baf dden": "Núi Bà Đen",
+    "nuibaden": "Núi Bà Đen",
 }
 
 # ── Tháng mapping ─────────────────────────────────────────────────────────────
@@ -307,12 +650,12 @@ INTENT_PATTERNS: dict[str, list[str]] = {
 # ── Từ khóa khi câu hỏi quá ngắn/mơ hồ → hỏi lại ───────────────────────────
 CLARIFICATION_OPTIONS: dict[str, list[str]] = {
     "destination_generic": [
-        "🌤 Thời tiết & mùa du lịch",
-        "🗺 Địa điểm tham quan",
-        "🏨 Khách sạn & lưu trú",
-        "🍜 Ẩm thực đặc sản",
-        "🚗 Di chuyển & vận tải",
-        "📅 Gợi ý lịch trình",
+        "Thời tiết & mùa du lịch",
+        "Địa điểm tham quan",
+        "Khách sạn & lưu trú",
+        "Ẩm thực đặc sản",
+        "Di chuyển & vận tải",
+        "Gợi ý lịch trình",
     ],
 }
 
@@ -343,7 +686,7 @@ def _remove_accents(text: str) -> str:
     """
     Bỏ dấu tiếng Việt.
 
-    Lưu ý quan trọng: chữ "đ"/"Đ" (U+0111 / U+0110) KHÔNG phải là "d" + dấu
+    Lưu ý quan trọng: chữ "đ"/"Đ" KHÔNG phải là "d" + dấu
     kết hợp (combining mark) trong Unicode — nó là một ký tự độc lập, nên
     NFKD decomposition không tách được nó thành "d". Nếu không xử lý riêng,
     mọi từ chứa "đ" (đi, đến, đẹp, địa điểm, đổi tiền, Đà Nẵng...) sẽ KHÔNG
@@ -447,34 +790,31 @@ except Exception:
 INTENT_PATTERNS_NO_ACCENT: dict[str, list[str]] = _build_no_accent(INTENT_PATTERNS)
 
 
-def normalize_vietnamese(text: str) -> str:
-    """
-    Normalize tiếng Việt:
-    - Không dấu → có dấu cho địa danh
-    - Lowercase + strip
-    - Map spell corrections
-    """
-    # Spell fix trước (uppercase-sensitive)
-    lower = text.strip().lower()
+def normalize_vietnamese(text: str):
+
+    text = text.strip().lower()
+
+    no_accent = _remove_accents(text)
+
+    # spell fix
     for wrong, correct in SPELL_FIX.items():
-        lower = lower.replace(wrong.lower(), correct)
+        no_accent = re.sub(
+            rf"\b{re.escape(_remove_accents(wrong.lower()))}\b",
+            correct,
+            no_accent,
+            flags=re.IGNORECASE,
+        )
 
-    # Map địa danh không dấu → có dấu
-    no_accent_lower = _remove_accents(lower)
-    for no_accent_key, correct_name in LOCATION_MAP.items():
-        # Thay trong cả phiên bản không dấu
-        if no_accent_key in no_accent_lower:
-            # Tìm vị trí trong text gốc và thay thế
-            pattern = re.compile(re.escape(no_accent_key), re.IGNORECASE)
-            # Chỉ thay nếu đó là từ nguyên bản không dấu (tránh false positive)
-            no_acc_text = _remove_accents(lower)
-            if pattern.search(no_acc_text):
-                # Rebuild: đưa correct_name vào
-                lower = pattern.sub(correct_name, _remove_accents(lower))
-                # Cũng cần update no_accent_lower
-                no_accent_lower = _remove_accents(lower)
+    # location map
+    for alias, official in LOCATION_MAP.items():
+        no_accent = re.sub(
+            rf"\b{re.escape(alias)}\b",
+            official,
+            no_accent,
+            flags=re.IGNORECASE,
+        )
 
-    return lower.strip()
+    return no_accent
 
 
 def resolve_ward_slug(text: str) -> Optional[dict]:

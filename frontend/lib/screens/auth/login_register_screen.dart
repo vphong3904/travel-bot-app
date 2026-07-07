@@ -7,18 +7,21 @@
 //   4. Forgot Password (email → OTP → mật khẩu mới)
 // ---------------------------------------------------------------------------
 
+import 'dart:async';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../main_navigation.dart';
 import '../../providers/app_state.dart';
 import '../../services/auth_api_service.dart';
 import '../../services/api_service.dart';
+import '../../services/google_sign_in_service.dart';
 import '../../widgets/common_widgets.dart';
-
-// Import google_sign_in nếu đã thêm vào pubspec.yaml
-// import 'package:google_sign_in/google_sign_in.dart';
+import '../../widgets/google_web_button.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Enum quản lý state màn hình
@@ -63,8 +66,32 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   // Cached email (dùng để hiển thị ở bước OTP sau khi chuyển mode)
   String _cachedEmail = '';
 
+  // Google Sign-In — trên Web, kết quả sign-in đến qua stream (nút native
+  // Google render sẵn), không qua Future trả về như Android/iOS.
+  StreamSubscription<GoogleSignInAuthenticationEvent>? _googleAuthSub;
+
+  @override
+  void initState() {
+    super.initState();
+    GoogleSignInService.ensureInitialized().then((_) {
+      if (!kIsWeb || !mounted) return;
+      _googleAuthSub = GoogleSignIn.instance.authenticationEvents.listen(
+        (event) {
+          if (event is GoogleSignInAuthenticationEventSignIn) {
+            _handleGoogleIdToken(event.user.authentication.idToken);
+          }
+        },
+        onError: (_) {},
+      );
+    }).catchError((_) {
+      // Google Sign-In chưa cấu hình đúng (client_id sai/thiếu) — bỏ qua,
+      // người dùng vẫn đăng nhập được bằng email/password.
+    });
+  }
+
   @override
   void dispose() {
+    _googleAuthSub?.cancel();
     _usernameCtrl.dispose();
     _fullNameCtrl.dispose();
     _emailCtrl.dispose();
@@ -206,26 +233,38 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
   // FLOW 3: Google Sign-In
   // ─────────────────────────────────────────────────────────────────────────
 
+  /// Android/iOS: mở UI chọn tài khoản Google trực tiếp.
+  /// Trên Web, nút Google native tự xử lý — xem `_googleAuthSub` ở initState.
   Future<void> _doGoogleLogin() async {
     setState(() => _loading = true);
     try {
-      // Uncomment khi đã thêm google_sign_in vào pubspec.yaml:
-      //
-      // final googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
-      // final account = await googleSignIn.signIn();
-      // if (account == null) return; // user bấm cancel
-      // final auth = await account.authentication;
-      // final idToken = auth.idToken;
-      // if (idToken == null) throw Exception('Không lấy được Google token');
-      //
-      // final result = await AuthApiService.loginWithGoogle(idToken);
-      // ...
+      final idToken = await GoogleSignInService.signInNative();
+      if (idToken == null) return; // người dùng bấm huỷ
+      await _handleGoogleIdToken(idToken);
+    } catch (e) {
+      _showError(_extractError(e));
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
 
-      // PLACEHOLDER — hiển thị thông báo chờ tích hợp
-      _showError(
-        'Google Sign-In chưa được cấu hình.\n'
-        'Thêm google_sign_in vào pubspec.yaml và GOOGLE_CLIENT_ID vào .env.',
-      );
+  /// Dùng chung cho cả luồng mobile (`_doGoogleLogin`) lẫn luồng Web (stream
+  /// `authenticationEvents` khi người dùng bấm nút Google native).
+  Future<void> _handleGoogleIdToken(String? idToken) async {
+    if (idToken == null) {
+      _showError('Không lấy được Google token. Vui lòng thử lại.');
+      return;
+    }
+    setState(() => _loading = true);
+    try {
+      final result = await AuthApiService.loginWithGoogle(idToken);
+      if (!mounted) return;
+      await context.read<AppState>().setSession(
+            accessToken: result.tokens.accessToken,
+            refreshToken: result.tokens.refreshToken,
+            user: result.user,
+          );
+      _goHome();
     } catch (e) {
       _showError(_extractError(e));
     } finally {
@@ -741,18 +780,22 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
       );
 
-  Widget _googleButton() => OutlinedButton.icon(
-        onPressed: _loading ? null : _doGoogleLogin,
-        style: OutlinedButton.styleFrom(
-          minimumSize: const Size.fromHeight(52),
-          side: const BorderSide(color: Color(0xFFE5E7EB)),
-        ),
-        icon: const Icon(Icons.g_mobiledata_rounded, size: 26, color: Color(0xFFEA4335)),
-        label: const Text(
-          'Tiếp tục với Google',
-          style: TextStyle(color: AppColors.dark, fontWeight: FontWeight.w600),
-        ),
-      );
+  // Trên Web, Google bắt buộc dùng nút native (renderButton) — không thể tự vẽ
+  // nút custom rồi tự gọi authenticate() như Android/iOS.
+  Widget _googleButton() => kIsWeb
+      ? SizedBox(width: double.infinity, child: buildGoogleWebButton())
+      : OutlinedButton.icon(
+          onPressed: _loading ? null : _doGoogleLogin,
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(52),
+            side: const BorderSide(color: Color(0xFFE5E7EB)),
+          ),
+          icon: const Icon(Icons.g_mobiledata_rounded, size: 26, color: Color(0xFFEA4335)),
+          label: const Text(
+            'Tiếp tục với Google',
+            style: TextStyle(color: AppColors.dark, fontWeight: FontWeight.w600),
+          ),
+        );
 
   Widget _skipButton() => OutlinedButton(
         onPressed: _skipLogin,

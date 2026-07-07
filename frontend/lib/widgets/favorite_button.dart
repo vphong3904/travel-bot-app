@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../providers/favorites_provider.dart';
 import '../services/favorite_api_service.dart';
 import 'common_widgets.dart';
 
@@ -77,6 +78,7 @@ class _FavoriteButtonState extends State<FavoriteButton> with SingleTickerProvid
           _count = newState ? _count + 1 : (_count - 1).clamp(0, 999999);
         });
         _animCtrl.forward(from: 0);
+        context.read<FavoritesProvider>().notifyChanged();
       }
     } catch (_) {}
   }

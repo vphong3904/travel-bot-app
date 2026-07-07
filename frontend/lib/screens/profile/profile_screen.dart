@@ -12,12 +12,12 @@ import 'package:provider/provider.dart';
 
 import '../../models/destination.dart';
 import '../../providers/app_state.dart';
+import '../../providers/favorites_provider.dart';
 import '../../services/favorite_api_service.dart';
 import '../../services/review_api_service.dart';
 import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
-import '../admin/admin_dashboard_screen.dart';
 import '../auth/login_register_screen.dart';
 import '../chat/chatbot_screen.dart';
 import '../chat/chat_history_screen.dart';
@@ -37,10 +37,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _loggingOut = false;
   int? _tripCount;     // null = đang tải
   int? _reviewCount;
+  // Theo dõi version của FavoritesProvider để tải lại đúng lúc dữ liệu thực
+  // sự thay đổi ở nơi khác (thêm/xoá yêu thích), không gọi API thừa.
+  int _lastSeenFavVersion = -1;
 
   @override
   void initState() {
     super.initState();
+    _lastSeenFavVersion = context.read<FavoritesProvider>().version;
     _loadFavorites();
     _loadStats();
   }
@@ -137,6 +141,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final user = appState.user;
+
+    final favVersion = context.watch<FavoritesProvider>().version;
+    if (!_favLoading && favVersion != _lastSeenFavVersion) {
+      _lastSeenFavVersion = favVersion;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadFavorites();
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -305,13 +317,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 16),
               ],
               const _SectionHeader(title: 'Hệ thống'),
-              if (user?.isAdmin == true)
-                _MenuTile(
-                    icon: Icons.admin_panel_settings,
-                    title: 'Quản trị hệ thống',
-                    subtitle: 'KB, Users, Stats',
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()))),
               _MenuTile(
                   icon: Icons.settings_outlined,
                   title: 'Cài đặt',

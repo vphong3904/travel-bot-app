@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/destination.dart';
 import '../../providers/app_state.dart';
+import '../../providers/favorites_provider.dart';
 import '../../services/api_service.dart';
 import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
@@ -26,11 +27,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   String? _error;
   List<Destination> _favorites = [];
   String _selectedCat = 'Tất cả';
+  // Theo dõi version của FavoritesProvider để chỉ tải lại đúng lúc dữ liệu
+  // thực sự thay đổi ở nơi khác (thêm/xoá yêu thích), không gọi API thừa.
+  int _lastSeenVersion = -1;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_loading) _load();
+    if (_loading) {
+      _lastSeenVersion = context.read<FavoritesProvider>().version;
+      _load();
+    }
   }
 
   Future<void> _load() async {
@@ -70,6 +77,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favVersion = context.watch<FavoritesProvider>().version;
+    if (!_loading && favVersion != _lastSeenVersion) {
+      _lastSeenVersion = favVersion;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _load();
+      });
+    }
+
     if (widget.embedded) return _buildBody();
     return Scaffold(
       backgroundColor: AppColors.bg,

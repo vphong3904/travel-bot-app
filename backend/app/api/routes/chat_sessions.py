@@ -5,7 +5,7 @@ CRUD cho chat sessions + pin/unpin + soft delete
 from uuid import UUID
 from app.utils.uuid_v7 import uuid_v7
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import exists, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user
@@ -29,11 +29,15 @@ async def list_sessions(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # Ẩn session rỗng (0 tin nhắn) — chỉ do bug/tạo eager cũ để lại, chưa từng
+    # được người dùng thật sự chat, không nên hiện trong lịch sử.
+    has_message = exists().where(ChatMessage.session_id == ChatSession.id)
     stmt = (
         select(ChatSession)
         .where(
             ChatSession.user_id == str(current_user.id),
             ChatSession.is_deleted.is_(False),
+            has_message,
         )
     )
     if pinned_only:

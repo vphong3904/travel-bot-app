@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/app_state.dart';
 import 'providers/chat_provider.dart';
+import 'providers/favorites_provider.dart';
 import 'screens/splash/splash_screen.dart';
 
 void main() {
@@ -27,6 +28,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => AppState()),
         // ChatProvider: UI state của màn hình chat
         ChangeNotifierProvider(create: (_) => ChatProvider()),
+        // FavoritesProvider: thông báo toàn cục khi yêu thích thay đổi
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
       ],
       child: const TravelChatbotApp(),
     ),
