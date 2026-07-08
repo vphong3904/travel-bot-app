@@ -48,6 +48,9 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
     final currentUserRole = currentUser?.role;
     final canManage = currentUserRole == AdminRole.superAdmin ||
         currentUserRole == AdminRole.admin;
+    // Đổi role chỉ Super Admin — Admin kế thừa quyền khoá/xoá tài khoản
+    // nhưng không được cấp vai trò cho người khác.
+    final canChangeRole = currentUserRole == AdminRole.superAdmin;
 
     return Container(
       width: 400,
@@ -151,7 +154,7 @@ class _UserDetailPanelState extends ConsumerState<UserDetailPanel>
                       children: [
                         _InfoTab(
                           user: user,
-                          canChangeRole: canManage,
+                          canChangeRole: canChangeRole,
                           canDelete: canManage &&
                               (user.role != 'super_admin' ||
                                   currentUserRole == AdminRole.superAdmin) &&

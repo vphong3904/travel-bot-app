@@ -27,7 +27,7 @@ class SystemBackupRepository {
 
   Future<BackupInfo> triggerBackup() async {
     final res =
-        await _dio.post<Map<String, dynamic>>('/admin/system/backups');
+        await _dio.post<Map<String, dynamic>>('/admin/system/backup');
     return BackupInfo.fromJson(res.data!);
   }
 

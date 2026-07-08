@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/providers/chat_management_provider.dart';
 import '../../shared/data/chat_management_repository.dart';
+import '../../shared/models/auth_user.dart';
+import '../../shared/providers/auth_provider.dart';
 import 'chat_bubble.dart';
 import 'tag_editor.dart';
 
@@ -17,6 +19,9 @@ class ChatView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dataAsync =
         ref.watch(chatSessionMessagesProvider(sessionId));
+    final role = ref.watch(authProvider).user?.role;
+    final canModerate =
+        role == AdminRole.admin || role == AdminRole.superAdmin;
 
     return dataAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -66,29 +71,32 @@ class ChatView extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  TagEditor(
-                    tags: tags,
-                    onChanged: (newTags) => ref
-                        .read(chatRepositoryProvider)
-                        .updateSession(sessionId, tags: newTags)
-                        .then((_) => ref.invalidate(
-                            chatSessionMessagesProvider(sessionId))),
-                  ),
-                  const SizedBox(width: 8),
-                  OutlinedButton.icon(
-                    onPressed: () => ref
-                        .read(chatRepositoryProvider)
-                        .updateSession(sessionId,
-                            isFlagged: !isFlagged)
-                        .then((_) => ref.invalidate(
-                            chatSessionMessagesProvider(sessionId))),
-                    icon: const Text('🚩'),
-                    label: Text(isFlagged ? 'Bỏ đánh dấu' : 'Đánh dấu'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor:
-                          isFlagged ? Colors.red : null,
+                  if (canModerate) ...[
+                    TagEditor(
+                      tags: tags,
+                      onChanged: (newTags) => ref
+                          .read(chatRepositoryProvider)
+                          .updateSession(sessionId, tags: newTags)
+                          .then((_) => ref.invalidate(
+                              chatSessionMessagesProvider(sessionId))),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: () => ref
+                          .read(chatRepositoryProvider)
+                          .updateSession(sessionId,
+                              isFlagged: !isFlagged)
+                          .then((_) => ref.invalidate(
+                              chatSessionMessagesProvider(sessionId))),
+                      icon: const Text('🚩'),
+                      label:
+                          Text(isFlagged ? 'Bỏ đánh dấu' : 'Đánh dấu'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor:
+                            isFlagged ? Colors.red : null,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

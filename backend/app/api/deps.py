@@ -16,6 +16,16 @@ _bearer_optional = HTTPBearer(auto_error=False)
 # ── Role constants ─────────────────────────────────────────────────────────────
 ADMIN_ROLES = {"admin", "super_admin", "content_manager", "moderator"}
 
+# Nhóm quyền theo nghiệp vụ (khớp allowedRoles trong admin_sidebar.dart):
+# - MONITOR_ROLES: giám sát người dùng/hội thoại/feedback — chỉ đọc, không sửa.
+# - CONTENT_ROLES: nhập liệu nội dung (KB, Content, Media, City Mapping, Intent
+#   Patterns, Locations/Tours/Itineraries) — không đụng User/Chat/System.
+# - STAFF_ROLES: nghiệp vụ vận hành nội bộ (quản lý user, RAG monitor, session) —
+#   admin trở lên; KHÔNG gồm backup/system-config/đổi role (super_admin riêng).
+MONITOR_ROLES = ["moderator", "admin", "super_admin"]
+CONTENT_ROLES = ["content_manager", "admin", "super_admin"]
+STAFF_ROLES = ["admin", "super_admin"]
+
 
 # ── Core dependency: resolve token → User ─────────────────────────────────────
 

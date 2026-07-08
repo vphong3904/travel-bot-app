@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/providers/chat_management_provider.dart';
 import '../../shared/data/chat_management_repository.dart';
+import '../../shared/models/auth_user.dart';
+import '../../shared/providers/auth_provider.dart';
 
 class UnansweredList extends ConsumerWidget {
   final ValueChanged<String>? onSelect;
@@ -11,6 +13,9 @@ class UnansweredList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final questionsAsync = ref.watch(unansweredQuestionsProvider);
+    final role = ref.watch(authProvider).user?.role;
+    final canPromote =
+        role == AdminRole.admin || role == AdminRole.superAdmin;
 
     return questionsAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -46,32 +51,33 @@ class UnansweredList extends ConsumerWidget {
                     style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      OutlinedButton.icon(
-                        onPressed: isPromoted
-                            ? null
-                            : () => _promoteToKb(
-                                context, ref, q['id'] as String),
-                        icon: Icon(
-                          isPromoted ? Icons.check : Icons.add,
-                          size: 14,
+                  if (isPromoted || canPromote)
+                    Row(
+                      children: [
+                        const Spacer(),
+                        OutlinedButton.icon(
+                          onPressed: isPromoted
+                              ? null
+                              : () => _promoteToKb(
+                                  context, ref, q['id'] as String),
+                          icon: Icon(
+                            isPromoted ? Icons.check : Icons.add,
+                            size: 14,
+                          ),
+                          label: Text(
+                            isPromoted
+                                ? 'Đã thêm vào KB'
+                                : '+ Thêm vào KB',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(0, 30),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                          ),
                         ),
-                        label: Text(
-                          isPromoted
-                              ? 'Đã thêm vào KB'
-                              : '+ Thêm vào KB',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size(0, 30),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                 ],
               ),
             );

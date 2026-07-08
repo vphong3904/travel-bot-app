@@ -2,8 +2,16 @@
 """
 Admin routes — /api/admin/*
 
-Tất cả endpoints yêu cầu role admin.
-Role matrix đơn giản hoá: role IN ('admin', 'super_admin', 'content_manager', 'moderator').
+Tất cả endpoints yêu cầu role admin. Ma trận quyền theo nghiệp vụ:
+- moderator       : chỉ giám sát (đọc) Users/Chat/Feedback — MONITOR_ROLES.
+- content_manager : chỉ nhập liệu Content/KB/Media/City Mapping/Intent Patterns
+                     /Locations/Tours/Itineraries — CONTENT_ROLES.
+- admin           : kế thừa moderator + content_manager, thêm quyền quản lý user
+                     (khoá tài khoản, tạo/xoá) + vận hành nội bộ (RAG monitor,
+                     session) — STAFF_ROLES. KHÔNG backup, KHÔNG system-config,
+                     KHÔNG đổi role người khác.
+- super_admin     : toàn quyền, gồm backup, system-config, đổi role.
+Xem app/api/deps.py (MONITOR_ROLES / CONTENT_ROLES / STAFF_ROLES).
 """
 
 from __future__ import annotations
@@ -18,7 +26,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFil
 from sqlalchemy import cast, func, select, update, delete, Date, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import DB, CurrentUser, ADMIN_ROLES, require_admin, require_role
+from app.api.deps import (
+    DB, CurrentUser, ADMIN_ROLES, MONITOR_ROLES, CONTENT_ROLES, STAFF_ROLES,
+    require_admin, require_role,
+)
 from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
 from app.db.models.media import ContentItem, ContentOption
@@ -186,7 +197,7 @@ async def stats_overview(
 async def stats_feedback(
     period: str = Query("month", pattern="^(day|week|month|year)$"),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     """Thống kê feedback theo ngày trong period."""
     now = datetime.now(timezone.utc)
@@ -290,7 +301,7 @@ async def list_users(
     page: int = Query(1, ge=1),
     limit: int = Query(20, le=100),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     stmt = select(User).where(User.is_deleted == False)
     if q:
@@ -361,7 +372,7 @@ async def create_user(
 async def get_user(
     user_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     u = await _get_or_404(db, User, user_id)
 
@@ -405,7 +416,7 @@ async def update_user(
     user_id: str,
     body: dict,
     db: DB = None,
-    actor: User = Depends(require_admin),
+    actor: User = Depends(require_role(STAFF_ROLES)),
 ):
     u = await _get_or_404(db, User, user_id)
     if u.role == "super_admin" and actor.role != "super_admin":
@@ -436,15 +447,11 @@ async def change_role(
     user_id: str,
     body: dict,
     db: DB = None,
-    actor: User = Depends(require_role(["admin", "super_admin"])),
+    actor: User = Depends(require_role(["super_admin"])),
 ):
+    """Chỉ Super Admin được cấp/đổi vai trò — Admin không được quyền này."""
     u = await _get_or_404(db, User, user_id)
     new_role = body.get("role", u.role)
-    if actor.role != "super_admin" and (new_role == "super_admin" or u.role == "super_admin"):
-        raise HTTPException(
-            status.HTTP_403_FORBIDDEN,
-            "Chỉ Super Admin mới được thay đổi vai trò liên quan đến Super Admin",
-        )
     u.role = new_role
     u.updated_at = datetime.now(timezone.utc)
     await db.commit()
@@ -484,7 +491,7 @@ async def list_chat_sessions(
     page: int = Query(1, ge=1),
     limit: int = Query(20, le=100),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     stmt = select(ChatSession).where(ChatSession.is_deleted == False)
     if user_id:
@@ -522,7 +529,7 @@ async def list_chat_sessions(
 async def get_session_messages(
     session_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     # FE (chat_view) cần {session:{...}, messages:[...]} — không phải list thô.
     session = await db.get(ChatSession, session_id)
@@ -565,7 +572,7 @@ async def update_chat_session(
     session_id: str,
     body: dict,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     """Admin cập nhật cờ đánh dấu (is_flagged) và/hoặc tags của 1 hội thoại."""
     session = await db.get(ChatSession, session_id)
@@ -591,7 +598,7 @@ async def update_chat_session(
 async def delete_chat_session(
     session_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     await db.execute(
         update(ChatSession)
@@ -614,7 +621,7 @@ async def list_knowledge(
     page: int = Query(1, ge=1),
     limit: int = Query(20, le=100),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(KnowledgeEntry)
     if q:
@@ -658,7 +665,7 @@ async def list_knowledge(
 async def create_knowledge(
     body: dict,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     svc = KnowledgeService(db)
     entry = await svc.create(
@@ -676,7 +683,7 @@ async def update_knowledge(
     entry_id: str,
     body: dict,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     svc = KnowledgeService(db)
     entry = await svc.update(
@@ -693,7 +700,7 @@ async def update_knowledge(
 async def delete_knowledge(
     entry_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     svc = KnowledgeService(db)
     await svc.delete(entry_id)
@@ -708,7 +715,7 @@ async def delete_knowledge(
 async def get_embedding_job(
     job_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     result = await db.execute(
         select(EmbeddingJob).where(EmbeddingJob.id == job_id)
@@ -731,7 +738,7 @@ async def get_embedding_job(
 async def run_embedding_jobs(
     limit: int = Query(50, le=500),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     svc = EmbeddingJobService(db)
     result = await svc.run_pending(limit=limit)
@@ -745,7 +752,7 @@ async def run_embedding_jobs(
 @router.get("/kb-health")
 async def kb_health(
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     total_entries = await db.scalar(select(func.count(KnowledgeEntry.id)).where(KnowledgeEntry.is_active == True))
     pending_jobs = await db.scalar(
@@ -783,7 +790,7 @@ async def kb_health(
 async def rag_overview(
     period: str = Query("week"),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
     since = datetime.now(timezone.utc) - timedelta(days=delta)
@@ -890,7 +897,7 @@ async def rag_overview(
 async def rag_latency(
     period: str = Query("week"),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
     since = datetime.now(timezone.utc) - timedelta(days=delta)
@@ -921,7 +928,7 @@ async def rag_latency(
 async def rag_errors(
     period: str = Query("week"),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
     since = datetime.now(timezone.utc) - timedelta(days=delta)
@@ -961,7 +968,7 @@ _city_overrides: dict[str, str] = {}
 
 @router.get("/city-mappings/validate")
 async def validate_city_mappings(
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     """Trả danh sách province names và mapping hiện tại."""
     from app.services.nlp_preprocessor import INTENT_PATTERNS
@@ -990,7 +997,7 @@ async def validate_city_mappings(
 @router.get("/city-mappings/valid-slugs")
 async def valid_slugs(
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     """Trả danh sách city slug từ bảng destinations."""
     from app.db.models.travel import Destination
@@ -1007,7 +1014,7 @@ async def valid_slugs(
 async def update_city_mapping(
     old_province: str,
     body: dict,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     _city_overrides[old_province] = body["new_slug"]
     return {"ok": True, "old_province": old_province, "new_slug": body["new_slug"]}
@@ -1019,7 +1026,7 @@ async def update_city_mapping(
 
 @router.get("/intent-patterns")
 async def list_intent_patterns(
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     from app.services.nlp_preprocessor import INTENT_PATTERNS
     result: dict = {}
@@ -1039,7 +1046,7 @@ async def list_intent_patterns(
 async def add_keyword(
     intent: str,
     body: dict,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     from app.services.nlp_preprocessor import INTENT_PATTERNS, reload_intent_patterns
     kw = body.get("keyword", "").strip().lower()
@@ -1058,7 +1065,7 @@ async def add_keyword(
 async def delete_keyword(
     intent: str,
     keyword: str,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     from app.services.nlp_preprocessor import INTENT_PATTERNS, reload_intent_patterns
     if intent not in INTENT_PATTERNS:
@@ -1071,7 +1078,7 @@ async def delete_keyword(
 
 
 @router.post("/intent-patterns/test")
-async def test_intent(body: dict):
+async def test_intent(body: dict, _: User = Depends(require_role(CONTENT_ROLES))):
     from app.services.nlp_preprocessor import detect_intent, extract_entities
     text = body.get("text", "")
     entities = extract_entities(text)
@@ -1082,7 +1089,7 @@ async def test_intent(body: dict):
 @router.post("/intent-patterns/reload")
 async def reload_intent_patterns_db(
     db: DB,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     """
     [OPT-3.1/3.3] Nạp lại intent patterns từ bảng DB `intent_patterns` vào runtime
@@ -1156,7 +1163,7 @@ async def list_content(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, f"Content type '{content_type}' không hợp lệ")
@@ -1200,7 +1207,7 @@ async def create_content(
     body: dict,
     city_slug: Optional[str] = None,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     if content_type not in CONTENT_TYPES:
         raise HTTPException(400, "Content type không hợp lệ")
@@ -1225,7 +1232,7 @@ async def update_content(
     item_id: str,
     body: dict,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     item = await db.get(ContentItem, item_id)
     if not item or item.is_deleted:
@@ -1245,7 +1252,7 @@ async def delete_content(
     content_type: str,
     item_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     item = await db.get(ContentItem, item_id)
     if item:
@@ -1260,7 +1267,7 @@ async def publish_content(
     content_type: str,
     item_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     await db.execute(
         update(ContentItem)
@@ -1277,7 +1284,7 @@ async def publish_content(
 async def list_cities(
     q: Optional[str] = None,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     """
     Danh sách city (mức điểm đến) cho dropdown filter. Search KHÔNG phân biệt dấu
@@ -1316,7 +1323,7 @@ async def list_content_options(
     content_type: Optional[str] = None,
     field: Optional[str] = None,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     """Danh sách options. Form lọc theo content_type+field (và is_active phía FE);
     màn quản lý lấy tất cả."""
@@ -1334,7 +1341,7 @@ async def list_content_options(
 
 @router.post("/content-options", status_code=201)
 async def create_content_option(
-    body: dict, db: DB = None, _: User = Depends(require_admin),
+    body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     for f in ("content_type", "field", "code", "label"):
         if not body.get(f):
@@ -1352,7 +1359,7 @@ async def create_content_option(
 
 @router.patch("/content-options/{opt_id}")
 async def update_content_option(
-    opt_id: str, body: dict, db: DB = None, _: User = Depends(require_admin),
+    opt_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     obj = await _get_or_404(db, ContentOption, opt_id)
     for f in ("content_type", "field", "code", "label", "sort_order", "is_active"):
@@ -1364,7 +1371,7 @@ async def update_content_option(
 
 @router.delete("/content-options/{opt_id}", status_code=204)
 async def delete_content_option(
-    opt_id: str, db: DB = None, _: User = Depends(require_admin),
+    opt_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     obj = await _get_or_404(db, ContentOption, opt_id)
     await db.delete(obj)
@@ -1435,7 +1442,7 @@ async def list_feedback(
     intent: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     stmt = select(ChatMessage).where(ChatMessage.feedback.isnot(None))
     if type == "positive":
@@ -1478,7 +1485,7 @@ async def list_feedback(
 async def resolve_feedback(
     message_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     # feedback_resolved column được thêm ở migration 28
     try:
@@ -1502,7 +1509,8 @@ async def resolve_feedback(
 # - media_files:  ảnh, gắn folder_id, soft delete. File lưu static/uploads,
 #                 mount /uploads ở main.py. URL = /uploads/<filename>.
 # - Upload: multi-select nhiều ảnh 1 lần, Pillow resize ≤1920 → WebP (best-effort).
-# Role: đọc = mọi admin role; tạo/sửa/xoá = admin/super_admin/content_manager.
+# Role: đọc + tạo/sửa/xoá = admin/super_admin/content_manager (CONTENT_ROLES).
+# Moderator không thuộc nhóm nội dung nên không xem được media.
 
 import os as _os
 
@@ -1510,7 +1518,7 @@ _UPLOAD_DIR = _os.path.join("static", "uploads")
 _ALLOWED_EXT = {"jpg", "jpeg", "png", "webp"}
 _MAX_UPLOAD_BYTES = 8 * 1024 * 1024  # giới hạn input (sau resize WebP còn nhỏ hơn)
 
-_media_writer = require_role(["admin", "super_admin", "content_manager"])
+_media_writer = require_role(CONTENT_ROLES)
 
 
 def _process_image(content: bytes, ext: str) -> tuple[bytes, str, Optional[str], Optional[int], Optional[int]]:
@@ -1547,7 +1555,7 @@ def _folder_uuid(value: Optional[str]) -> Optional[UUID]:
 # ── Folders ───────────────────────────────────────────────────────────────────
 
 @router.get("/media/folders")
-async def list_media_folders(db: DB = None, _: User = Depends(require_admin)):
+async def list_media_folders(db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     """Trả về toàn bộ thư mục (phẳng) kèm số ảnh + thời điểm thêm ảnh gần nhất.
 
     FE tự dựng cây từ parent_id và sắp xếp thư mục theo last_added để hiển thị
@@ -1671,7 +1679,7 @@ async def list_media(
     page: int = Query(1, ge=1),
     page_size: int = Query(24, ge=1, le=100),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     from app.db.models.media import MediaFile
 
@@ -1809,7 +1817,7 @@ async def delete_media(
 @router.get("/unanswered-questions")
 async def list_unanswered(
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     rows = await db.execute(
         select(ChatMessage)
@@ -1843,7 +1851,7 @@ async def promote_to_kb(
     question_id: str,
     body: dict | None = None,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     # FE có thể gọi không kèm body → tự lấy title/content từ chính message.
     body = body or {}
@@ -1870,7 +1878,7 @@ async def promote_to_kb(
 @router.get("/system-config")
 async def get_system_config(
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(["super_admin"])),
 ):
     try:
         from sqlalchemy import text
@@ -1963,7 +1971,7 @@ async def download_backup(
 async def list_sessions(
     user_id: Optional[str] = None,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     from app.db.models.user import RefreshToken
     stmt = select(RefreshToken).where(
@@ -1991,7 +1999,7 @@ async def list_sessions(
 async def revoke_session(
     session_id: str,
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(STAFF_ROLES)),
 ):
     from app.db.models.user import RefreshToken
     await db.execute(
@@ -2040,7 +2048,7 @@ async def list_locations(
     destination_id: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(Location)
     if destination_id:
@@ -2056,7 +2064,7 @@ async def list_locations(
 
 
 @router.post("/locations", status_code=201)
-async def create_location(body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def create_location(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     import uuid as _uuid
     obj = Location(
         id=_uuid.uuid4(),
@@ -2077,7 +2085,7 @@ async def create_location(body: dict, db: DB = None, _: User = Depends(require_a
 
 
 @router.patch("/locations/{loc_id}")
-async def update_location(loc_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def update_location(loc_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Location, loc_id)
     for field in ("name", "type", "address", "hours", "description", "tips", "image_url", "data_source", "verified"):
         if field in body:
@@ -2087,7 +2095,7 @@ async def update_location(loc_id: str, body: dict, db: DB = None, _: User = Depe
 
 
 @router.delete("/locations/{loc_id}", status_code=204)
-async def delete_location(loc_id: str, db: DB = None, _: User = Depends(require_admin)):
+async def delete_location(loc_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Location, loc_id)
     await db.delete(obj)
     await db.commit()
@@ -2100,7 +2108,7 @@ async def list_tours(
     destination_id: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(Tour)
     if destination_id:
@@ -2116,7 +2124,7 @@ async def list_tours(
 
 
 @router.post("/tours", status_code=201)
-async def create_tour(body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def create_tour(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     import uuid as _uuid
     obj = Tour(
         id=_uuid.uuid4(),
@@ -2137,7 +2145,7 @@ async def create_tour(body: dict, db: DB = None, _: User = Depends(require_admin
 
 
 @router.patch("/tours/{tour_id}")
-async def update_tour(tour_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def update_tour(tour_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Tour, tour_id)
     for field in ("name", "duration", "price", "group_size", "description", "includes", "excludes", "data_source", "verified"):
         if field in body:
@@ -2147,7 +2155,7 @@ async def update_tour(tour_id: str, body: dict, db: DB = None, _: User = Depends
 
 
 @router.delete("/tours/{tour_id}", status_code=204)
-async def delete_tour(tour_id: str, db: DB = None, _: User = Depends(require_admin)):
+async def delete_tour(tour_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Tour, tour_id)
     await db.delete(obj)
     await db.commit()
@@ -2160,7 +2168,7 @@ async def list_itineraries(
     city_slug: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(Itinerary)
     if city_slug:
@@ -2176,7 +2184,7 @@ async def list_itineraries(
 
 
 @router.get("/itineraries/{itin_id}")
-async def get_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_admin)):
+async def get_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Itinerary, itin_id)
     result = await db.execute(
         select(ItineraryItem).where(ItineraryItem.itinerary_id == itin_id).order_by(
@@ -2194,7 +2202,7 @@ async def get_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_a
 
 
 @router.patch("/itineraries/{itin_id}")
-async def update_itinerary(itin_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def update_itinerary(itin_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Itinerary, itin_id)
     for field in ("title", "duration_days", "group_type", "budget_low", "budget_high", "is_active", "data_source", "verified"):
         if field in body:
@@ -2204,7 +2212,7 @@ async def update_itinerary(itin_id: str, body: dict, db: DB = None, _: User = De
 
 
 @router.delete("/itineraries/{itin_id}", status_code=204)
-async def delete_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_admin)):
+async def delete_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, Itinerary, itin_id)
     await db.delete(obj)
     await db.commit()
@@ -2217,7 +2225,7 @@ async def list_intent_patterns_db(
     intent: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(IntentPattern).where(IntentPattern.is_active == True)  # noqa: E712
     if intent:
@@ -2233,7 +2241,7 @@ async def list_intent_patterns_db(
 
 
 @router.post("/intent-patterns-db", status_code=201)
-async def create_intent_pattern_db(body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def create_intent_pattern_db(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     import uuid as _uuid
     obj = IntentPattern(id=_uuid.uuid4(), intent=body["intent"], keyword=body["keyword"].strip().lower(), weight=body.get("weight", 1))
     db.add(obj)
@@ -2242,7 +2250,7 @@ async def create_intent_pattern_db(body: dict, db: DB = None, _: User = Depends(
 
 
 @router.patch("/intent-patterns-db/{pat_id}")
-async def update_intent_pattern_db(pat_id: str, body: dict, db: DB = None, _: User = Depends(require_admin)):
+async def update_intent_pattern_db(pat_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, IntentPattern, pat_id)
     for field in ("keyword", "weight", "is_active"):
         if field in body:
@@ -2252,7 +2260,7 @@ async def update_intent_pattern_db(pat_id: str, body: dict, db: DB = None, _: Us
 
 
 @router.delete("/intent-patterns-db/{pat_id}", status_code=204)
-async def delete_intent_pattern_db(pat_id: str, db: DB = None, _: User = Depends(require_admin)):
+async def delete_intent_pattern_db(pat_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
     obj = await _get_or_404(db, IntentPattern, pat_id)
     await db.delete(obj)
     await db.commit()
@@ -2265,7 +2273,7 @@ async def list_locations_alias(
     level: Optional[str] = None,
     page: int = Query(1, ge=1),
     db: DB = None,
-    _: User = Depends(require_admin),
+    _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     stmt = select(LocationAlias).where(LocationAlias.is_active == True)  # noqa: E712
     if level:

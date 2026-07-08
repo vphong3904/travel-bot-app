@@ -2,7 +2,7 @@
   "greeting": ["xin chào", "hello", "hi ", "chào bạn", "hey", "chào buổi", "good morning", "good evening", "alo", "ơi chatbot", "chào", "hi", "cảm ơn", "cám ơn", "thanks", "tạm biệt", "bye"],
   "ask_weather": ["thời tiết", "nhiệt độ", "nắng", "mưa", "lạnh", "nóng", "khí hậu", "mùa mưa", "mùa khô", "mùa du lịch", "mùa nào", "thời điểm", "tháng mấy", "mùa nào đẹp", "nên đi tháng", "có tuyết", "bão", "khi nào đi", "thời điểm nào", "đi lúc nào"],
   "find_hotel": ["khách sạn", "homestay", "resort", "hostel", "nhà nghỉ", "ks", "ngủ đâu", "ngủ ở đâu", "lưu trú", "đặt phòng", "booking", "giá phòng", "phòng", "villa", "bungalow"],
-  "ask_food": ["ăn gì", "đặc sản", "ẩm thực", "món ngon", "nhà hàng", "quán ăn", "hải sản", "ăn uống", "bún", "phở", "bánh", "đồ ăn"],
+  "ask_food": ["ăn gì", "đặc sản", "ẩm thực", "món ngon", "nhà hàng", "quán ăn", "hải sản", "ăn uống", "bún", "phở", "bánh", "đồ ăn","lẩu", "cơm", "món ăn", "món gì", "món đặc trưng", "món nổi tiếng", "quán ăn ngon", "quán ăn nổi tiếng", "quán ăn đặc sản"],
   "ask_transport": ["di chuyển", "đi lại", "máy bay", "tàu hỏa", "xe khách", "vé xe", "vé tàu", "grab", "taxi", "xe máy", "thuê xe", "bus", "cách đi", "đường đi", "km", "giờ đi", "bằng gì"],
   "plan_trip": ["lịch trình", "kế hoạch", "lên lịch", "hành trình", "đi mấy ngày", "lập kế hoạch", "tự túc mấy ngày"],
   "ask_activity": ["có gì chơi", "có gì hay", "nên đi đâu", "địa điểm nào", "gợi ý chơi gì", "tham quan", "check in", "trải nghiệm", "có gì đặc biệt", "có gì nổi tiếng", "nổi tiếng", "điểm tham quan", "danh lam", "thắng cảnh", "bãi biển", "khám phá gì", "nên ghé", "chơi gì", "vui chơi", "chơi ở", "tham quan gì", "đi chơi"],

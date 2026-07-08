@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../shared/data/feedback_repository.dart';
+import '../../shared/models/auth_user.dart';
 import '../../shared/models/feedback_item.dart';
+import '../../shared/providers/auth_provider.dart';
 import '../../shared/providers/feedback_provider.dart';
 
 const _tabs = [
@@ -60,6 +62,9 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen>
     final filter = ref.watch(feedbackFilterProvider);
     final listAsync = ref.watch(feedbackListProvider(filter));
     final statsAsync = ref.watch(feedbackStatsProvider);
+    final role = ref.watch(authProvider).user?.role;
+    final canResolve =
+        role == AdminRole.admin || role == AdminRole.superAdmin;
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -180,7 +185,8 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen>
                                     label: Text('Action')),
                               ],
                               rows: data.items
-                                  .map(_buildRow)
+                                  .map((item) =>
+                                      _buildRow(item, canResolve))
                                   .toList(),
                             ),
                           ),
@@ -204,7 +210,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen>
     );
   }
 
-  DataRow _buildRow(FeedbackItem item) {
+  DataRow _buildRow(FeedbackItem item, bool canResolve) {
     return DataRow(
       cells: [
         DataCell(SizedBox(
@@ -258,15 +264,19 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen>
                           color: Colors.green)),
                 ],
               )
-            : TextButton(
-                onPressed: () => _resolve(item),
-                style: TextButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8),
-                ),
-                child: const Text('Đã xử lý'),
-              )),
+            : (canResolve
+                ? TextButton(
+                    onPressed: () => _resolve(item),
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8),
+                    ),
+                    child: const Text('Đã xử lý'),
+                  )
+                : const Text('Chờ xử lý',
+                    style: TextStyle(
+                        fontSize: 12, color: Colors.grey)))),
       ],
     );
   }
