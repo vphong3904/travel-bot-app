@@ -1871,6 +1871,83 @@ async def promote_to_kb(
     return {"id": entry.id, "status": "pending"}
 
 
+@router.post("/unanswered-questions/{question_id}/ai-suggest")
+async def ai_suggest_kb(
+    question_id: str,
+    db: DB = None,
+    _: User = Depends(require_role(STAFF_ROLES)),
+):
+    """
+    TP-005: AI (Gemini) soạn draft KB từ câu hỏi chưa trả lời được.
+    Chỉ trả draft — admin sửa rồi bấm promote-to-kb (endpoint cũ) để lưu.
+    """
+    msg = await db.get(ChatMessage, question_id)
+    if not msg:
+        raise HTTPException(404, "Không tìm thấy câu hỏi")
+    question = (msg.content or "").strip()
+    if not question:
+        raise HTTPException(400, "Câu hỏi rỗng")
+
+    from app.services.kb_suggestion_service import suggest_kb_draft
+    try:
+        draft = await suggest_kb_draft(question)
+    except RuntimeError as e:
+        raise HTTPException(502, str(e))
+    return {"question": question[:300], "draft": draft}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS — TOP QUESTIONS (TP-004)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Câu smalltalk phổ biến — loại khỏi thống kê "câu hỏi hay hỏi"
+_SMALLTALK_QUESTIONS = (
+    "xin chào", "chào", "chào bạn", "hello", "hi", "alo", "test", "ok", "oke",
+    "cảm ơn", "cám ơn", "cảm ơn bạn", "thanks", "thank you", "tạm biệt", "bye",
+)
+
+
+@router.get("/analytics/top-questions")
+async def top_questions(
+    period: str = Query("week"),
+    limit: int = Query(20, ge=1, le=100),
+    db: DB = None,
+    _: User = Depends(require_role(MONITOR_ROLES)),
+):
+    """Câu hỏi user hay hỏi nhất — normalize lower + trim + cắt 120 ký tự."""
+    delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
+    since = datetime.now(timezone.utc) - timedelta(days=delta)
+
+    normalized = func.lower(func.left(func.trim(ChatMessage.content), 120))
+    rows = await db.execute(
+        select(
+            normalized.label("question"),
+            func.count(ChatMessage.id).label("count"),
+            func.max(ChatMessage.created_at).label("last_asked"),
+        )
+        .where(
+            ChatMessage.role == "user",
+            ChatMessage.created_at >= since,
+            func.length(func.trim(ChatMessage.content)) >= 8,
+            normalized.notin_(_SMALLTALK_QUESTIONS),
+        )
+        .group_by(normalized)
+        .order_by(func.count(ChatMessage.id).desc(), func.max(ChatMessage.created_at).desc())
+        .limit(limit)
+    )
+    return {
+        "period": period,
+        "items": [
+            {
+                "question": r.question,
+                "count": int(r.count),
+                "last_asked": str(r.last_asked),
+            }
+            for r in rows
+        ],
+    }
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # SYSTEM CONFIG
 # ══════════════════════════════════════════════════════════════════════════════

@@ -18,7 +18,7 @@ from app.db.models.user import User
 from app.db.models.chat import ChatSession, ChatMessage
 from app.db.schemas.chat import ChatMessageOut, ChatMessageCreate, FeedbackUpdate
 from app.core.sse import format_sse
-from app.services import log_service
+from app.services import log_service, trip_chat_planner
 from app.core.config import settings
 from app.utils import get_logger
 from app.utils.uuid_v7 import uuid_v7
@@ -89,6 +89,32 @@ async def send_message(
 
     # ✅ Dùng CHAT_HISTORY_LIMIT từ config (mặc định 10)
     history = await _get_recent_history(db, session_id, limit=settings.CHAT_HISTORY_LIMIT)
+
+    # ── Req 2: luồng lên lịch trình từng bước ngay trong chat ─────────────────
+    planner = await trip_chat_planner.handle_planning_turn(
+        db, str(current_user.id), history[:-1], payload.content
+    )
+    if planner is not None:
+        assistant_msg = ChatMessage(
+            id=str(uuid_v7()),
+            session_id=str(session_id),
+            role="assistant",
+            content=planner["reply"],
+            intent="plan_trip",
+        )
+        db.add(assistant_msg)
+        if planner.get("itinerary"):
+            await _save_last_itinerary(db, session_id, planner["itinerary"])
+        await db.commit()
+        await db.refresh(assistant_msg)
+        await log_service.log_behavior(
+            user_id=str(current_user.id),
+            event_type="ask_chatbot",
+            entity_type="chat_session",
+            entity_id=str(session_id),
+        )
+        return assistant_msg
+
     nlp = preprocess(payload.content, history=history)
 
     t0 = time.monotonic()
@@ -164,11 +190,15 @@ async def stream_message(
         session_id,
         limit=settings.CHAT_HISTORY_LIMIT
     )
-    nlp = preprocess(payload.content, history=history)
     session_id_str = str(session_id)
     question = payload.content
     user_id_str = str(current_user.id)
     rag = get_rag()
+
+    # ── Req 2: phát hiện luồng lên lịch trình trước khi gọi RAG ───────────────
+    planner = await trip_chat_planner.handle_planning_turn(
+        db, user_id_str, history[:-1], question
+    )
 
     async def event_generator() -> AsyncGenerator[str, None]:
         full_content: list[str] = []
@@ -177,6 +207,36 @@ async def stream_message(
 
         # ✅ Gửi event "start" ngay lập tức để frontend biết stream đã sẵn sàng
         yield format_sse({"type": "start"})
+
+        # Luồng lên lịch: stream text trợ lý + đính kèm itinerary, KHÔNG gọi RAG.
+        if planner is not None:
+            reply = planner["reply"]
+            for piece in _chunk_text(reply):
+                if await request.is_disconnected():
+                    return
+                yield format_sse({"type": "chunk", "content": piece})
+            async with AsyncSessionLocal() as db_new:
+                assistant_msg = ChatMessage(
+                    id=str(uuid_v7()),
+                    session_id=session_id_str,
+                    role="assistant",
+                    content=reply,
+                    intent="plan_trip",
+                )
+                db_new.add(assistant_msg)
+                if planner.get("itinerary"):
+                    await _save_last_itinerary(db_new, session_id, planner["itinerary"])
+                await db_new.commit()
+                await db_new.refresh(assistant_msg)
+            yield format_sse({
+                "type": "done",
+                "message_id": assistant_msg.id,
+                "intent": "plan_trip",
+                "sources": [],
+                "suggested_questions": [],
+                "itinerary": planner.get("itinerary"),
+            })
+            return
 
         try:
             async for chunk in rag.stream_query(
@@ -327,6 +387,29 @@ async def _assert_session_owner(db: AsyncSession, session_id: UUID, user_id: str
     )
     if not result.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Session not found")
+
+
+def _chunk_text(text: str, size: int = 24):
+    """Cắt text thành mẩu nhỏ để stream cho có cảm giác gõ dần (planner reply)."""
+    words = text.split(" ")
+    buf = ""
+    for w in words:
+        buf += (" " if buf else "") + w
+        if len(buf) >= size:
+            yield buf
+            buf = ""
+    if buf:
+        yield buf
+
+
+async def _save_last_itinerary(db: AsyncSession, session_id: UUID, itinerary: dict) -> None:
+    """Lưu lịch trình mới nhất vào chat_sessions.last_itinerary để không mất khi
+    user quay lại xem/lưu sau (Req 2)."""
+    await db.execute(
+        update(ChatSession)
+        .where(ChatSession.id == str(session_id))
+        .values(last_itinerary=itinerary)
+    )
 
 
 async def _get_recent_history(

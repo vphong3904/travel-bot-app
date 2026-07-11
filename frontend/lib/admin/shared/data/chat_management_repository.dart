@@ -67,10 +67,23 @@ class ChatManagementRepository {
     return (res.data!['items'] as List).cast<Map<String, dynamic>>();
   }
 
-  Future<void> promoteToKb(String questionId) async {
+  /// Promote câu hỏi thành KB entry. `draft` (title/category/content) là
+  /// nội dung admin đã duyệt từ AI — bỏ trống thì backend copy nguyên câu hỏi.
+  Future<void> promoteToKb(String questionId,
+      {Map<String, dynamic>? draft}) async {
     await _dio.post<void>(
       '/admin/unanswered-questions/$questionId/promote-to-kb',
+      data: draft,
     );
+  }
+
+  /// TP-005: AI (Gemini) soạn draft KB từ câu hỏi chưa trả lời được.
+  /// Trả về {question, draft: {title, category, content, confidence}}.
+  Future<Map<String, dynamic>> aiSuggestKb(String questionId) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/admin/unanswered-questions/$questionId/ai-suggest',
+    );
+    return res.data!;
   }
 }
 

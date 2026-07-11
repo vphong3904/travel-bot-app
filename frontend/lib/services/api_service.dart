@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 
 class ApiConfig {
   // Android Emulator → backend chạy trên máy host
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  //static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   // iOS Simulator / Web
-  // static const String baseUrl = 'http://localhost:8000/api';
+   static const String baseUrl = 'http://localhost:8000/api';
 
   // Thiết bị thật (thay bằng IP LAN của máy backend)
   // static const String baseUrl = 'http://192.168.1.100:8000/api';

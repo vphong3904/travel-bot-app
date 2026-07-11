@@ -23,8 +23,16 @@ const _kGuestDateKey  = 'guest_ai_question_date';
 class ChatBotScreen extends StatefulWidget {
   final String? sessionId;
   final String? initialMessage;
+  /// Khi là tab trong bottom navigation → không có nút back, chừa chỗ cho
+  /// thanh nav dưới (Req 3). Khi push fullscreen (mở 1 session cụ thể) = false.
+  final bool embedded;
 
-  const ChatBotScreen({super.key, this.sessionId, this.initialMessage});
+  const ChatBotScreen({
+    super.key,
+    this.sessionId,
+    this.initialMessage,
+    this.embedded = false,
+  });
 
   @override
   State<ChatBotScreen> createState() => _ChatBotScreenState();
@@ -624,7 +632,14 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         tokenProvider: () => appState.token,
         tokenRefresher: () => appState.refreshAccessToken(),
       );
-      await tripApi.saveItinerary(itinerary);
+      // Req 2: lịch trình do AI Trip Planner dựng có sẵn `ai_plan` (đầy đủ item
+      // theo giờ/chi phí) → lưu qua /trips/ai/confirm; ngược lại dùng cách cũ.
+      final aiPlan = itinerary['ai_plan'];
+      if (aiPlan is Map) {
+        await tripApi.aiConfirm(Map<String, dynamic>.from(aiPlan));
+      } else {
+        await tripApi.saveItinerary(itinerary);
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -661,7 +676,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     if (_isLoading) {
       return Scaffold(
         backgroundColor: AppColors.bg,
-        appBar: AppBar(title: const Text('Trợ Lý AI Du Lịch')),
+        appBar: _buildAppBar(),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -712,7 +727,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     if (_error != null) {
       return Scaffold(
         backgroundColor: AppColors.bg,
-        appBar: AppBar(title: const Text('Trợ Lý AI Du Lịch')),
+        appBar: _buildAppBar(),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -745,10 +760,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
-      appBar: AppBar(
-        title: const Text('Trợ Lý AI Du Lịch',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-      ),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
           if (guestBanner != null) guestBanner,
@@ -1095,6 +1107,31 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      // Req 3: là tab → không hiện nút back (chuyển tab bằng bottom nav)
+      automaticallyImplyLeading: !widget.embedded,
+      title: const Text('Trợ Lý AI Du Lịch',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+      actions: [
+        if (_messages.isNotEmpty)
+          IconButton(
+            tooltip: 'Trò chuyện mới',
+            icon: const Icon(Icons.add_comment_outlined, size: 20),
+            onPressed: _isSending ? null : _startNewChat,
+          ),
+      ],
+    );
+  }
+
+  void _startNewChat() {
+    setState(() {
+      _messages.clear();
+      _sessionId = null;
+      _error = null;
+    });
+  }
+
   Widget _buildQuickPrompts() {
     return Container(
       width: double.infinity,
@@ -1134,8 +1171,12 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   }
 
   Widget _buildInputBar() {
+    // Req 3: khi là tab, thanh bottom-nav (cao ~68 + safe-area) nằm đè lên body
+    // (parent dùng extendBody). Chừa khoảng trống để ô nhập không bị che.
+    final navClearance =
+        widget.embedded ? 68.0 + MediaQuery.of(context).padding.bottom : 0.0;
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      padding: EdgeInsets.fromLTRB(12, 8, 12, 8 + navClearance),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -1147,6 +1188,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       ),
       child: SafeArea(
         top: false,
+        bottom: !widget.embedded,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [

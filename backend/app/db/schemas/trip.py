@@ -98,6 +98,52 @@ class TripPlanListOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+# ── AI Trip Planner (TP-001/002 — contract .agent/trip-ai/TRIP_AI_ROADMAP.md §2)
+class AiPlanRequest(BaseModel):
+    destination: Optional[str] = None
+    days: Optional[int] = Field(None, ge=1, le=14)
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    budget: Optional[int] = Field(None, ge=0)
+    travelers: Optional[int] = Field(None, ge=1, le=50)
+    travel_type: Optional[str] = None      # solo|couple|family|friends
+    preferences: list[str] = []
+    skip_optional: bool = False
+
+
+class AiPlanItemIn(BaseModel):
+    time_slot: Optional[str] = None
+    start_time: Optional[str] = None       # "HH:MM"
+    end_time: Optional[str] = None
+    order_in_day: int = 0
+    type: str = "free"                     # location|restaurant|hotel_checkin|free
+    ref_id: Optional[UUID] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    estimated_cost: Optional[int] = None
+    notes: Optional[str] = None
+
+
+class AiPlanDayIn(BaseModel):
+    day_number: int = Field(..., ge=1)
+    items: list[AiPlanItemIn] = []
+
+
+class AiPlanConfirmRequest(BaseModel):
+    """Body = object `plan` từ /trips/ai/plan (user có thể đã đổi lựa chọn)."""
+    title: str
+    destination_id: Optional[UUID] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    days_count: int = Field(..., ge=1, le=14)
+    travelers: int = Field(1, ge=1, le=50)
+    travel_type: Optional[str] = None
+    budget: Optional[int] = None
+    estimated_cost: Optional[int] = None
+    summary: Optional[str] = None
+    days: list[AiPlanDayIn]
+
+
 # Aliases tương thích ngược
 TripCreate = TripPlanCreate
 TripUpdate = TripPlanUpdate

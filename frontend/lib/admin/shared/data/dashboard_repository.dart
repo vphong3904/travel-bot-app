@@ -16,6 +16,17 @@ class DashboardRepository {
     return DashboardOverview.fromJson(res.data!);
   }
 
+  /// TP-004: Câu hỏi user hay hỏi nhất (đã lọc smalltalk).
+  /// Backend nhận period day|week|month — period khác sẽ dùng week.
+  Future<List<Map<String, dynamic>>> topQuestions(String period,
+      {int limit = 10}) async {
+    final res = await _dio.get<Map<String, dynamic>>(
+      '/admin/analytics/top-questions',
+      queryParameters: {'period': period, 'limit': limit},
+    );
+    return (res.data!['items'] as List).cast<Map<String, dynamic>>();
+  }
+
   /// Trả về raw bytes của file .xlsx để trigger download trên web
   Future<List<int>> exportExcel(String period) async {
     final res = await _dio.get<List<int>>(

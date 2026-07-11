@@ -15,3 +15,12 @@ final dashboardOverviewProvider =
     return repo.getOverview(period);
   },
 );
+
+/// TP-004: Câu hỏi user hay hỏi nhất theo period
+final topQuestionsProvider =
+    FutureProvider.autoDispose.family<List<Map<String, dynamic>>, String>(
+  (ref, period) async {
+    final repo = ref.watch(dashboardRepositoryProvider);
+    return repo.topQuestions(period);
+  },
+);

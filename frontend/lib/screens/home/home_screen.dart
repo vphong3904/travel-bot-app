@@ -10,11 +10,13 @@ import '../../models/destination.dart';
 import '../../providers/app_state.dart';
 import '../../services/destination_service.dart';
 import '../../services/favorite_api_service.dart';
+import '../../services/travel_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
 import '../explore/destination_list_screen.dart';
 import '../search/search_screen.dart';
 import '../trip_detail/destination_detail_screen.dart';
+import '../trip/ai_planner_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Destination> _forYou = [];
   bool _forYouLoading = false;
+  String? _forYouReason; // TP-007: lời giải thích gợi ý theo sở thích
 
   List<Destination> _featuredDests = [];
   bool _featuredLoading = true;
@@ -113,6 +116,23 @@ class _HomeScreenState extends State<HomeScreen> {
     final s = context.read<AppState>();
     if (!s.isLoggedIn) return;
     setState(() => _forYouLoading = true);
+
+    // TP-007: ưu tiên gợi ý theo hành vi (câu hỏi chatbot, tìm kiếm, yêu thích)
+    // từ /travel/suggestions/for-you; lỗi thì rơi về heuristic favorites cũ.
+    try {
+      final res = await TravelApiService(tokenProvider: () => s.token)
+          .getForYouSuggestions(limit: 10);
+      if (!mounted) return;
+      if (res.items.isNotEmpty) {
+        setState(() {
+          _forYou = res.items;
+          _forYouReason = res.personalized ? res.reason : null;
+          _forYouLoading = false;
+        });
+        return;
+      }
+    } catch (_) {/* fallback bên dưới */}
+
     try {
       final favs = await FavoriteApiService(token: s.token ?? '').listMyFavorites();
       if (favs.isEmpty) {
@@ -182,6 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: _TapSearchBar(onTap: _openSearch),
                 ),
               ),
+              SliverToBoxAdapter(child: _buildPlannerBanner()),
               SliverToBoxAdapter(child: _buildHotBanner()),
               SliverToBoxAdapter(child: _buildQuickExplore()),
               SliverToBoxAdapter(child: _buildCategorySection()),
@@ -259,6 +280,65 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.white, fontSize: 19, fontWeight: FontWeight.bold)),
           ),
         ],
+      ),
+    );
+  }
+
+  // ── Gợi ý lên lịch trình nhanh (Req 1) ───────────────────────────────────────
+  Widget _buildPlannerBanner() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: GestureDetector(
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const AiPlannerScreen())),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.gradStart, AppColors.gradEnd],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.28),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4)),
+            ],
+          ),
+          child: Row(children: [
+            const Icon(Icons.auto_awesome, color: Colors.white, size: 24),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Chưa biết đi đâu? Để AI lên lịch trình',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(height: 2),
+                  Text('Chọn khách sạn, quán ăn, địa điểm & sắp lịch trong 1 phút',
+                      style: TextStyle(color: Colors.white70, fontSize: 11.5)),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.22),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text('Bắt đầu',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold)),
+            ),
+          ]),
+        ),
       ),
     );
   }
@@ -409,10 +489,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 26, 16, 12),
-          child: SectionTitle(title: 'Gợi ý cho bạn'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 26, 16, 4),
+          child: Row(children: [
+            const Icon(Icons.auto_awesome, size: 16, color: AppColors.secondary),
+            const SizedBox(width: 6),
+            const Expanded(child: SectionTitle(title: 'Dành cho bạn')),
+          ]),
         ),
+        if (_forYouReason != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: Text(_forYouReason!,
+                style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          )
+        else
+          const SizedBox(height: 12),
         _HorizontalDestList(dests: _forYou, loading: _forYouLoading, onTap: _openDetail),
       ],
     );

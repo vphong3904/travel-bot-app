@@ -9,6 +9,7 @@ import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/loading_state_widgets.dart';
 import '../auth/login_register_screen.dart';
+import '../trip/ai_planner_screen.dart';
 
 class SavedTripsScreen extends StatefulWidget {
   /// Khi nhúng làm tab trong Trip hub → chỉ render body, không có Scaffold/AppBar.
@@ -80,28 +81,93 @@ class _SavedTripsScreenState extends State<SavedTripsScreen> {
   }
 
   Widget _buildBody() {
-    return _loading
-          ? const LoadingScreen(message: 'Đang tải...')
-          : _error == 'login'
-              ? _loginPrompt()
-              : _error != null
-                  ? ErrorScreen(message: _error!, onRetry: _load)
-                  : _trips.isEmpty
-                      ? EmptyScreen(
-                          title: 'Chưa có chuyến đi',
-                          message: 'Lưu lịch trình từ trợ lý AI để xem lại ở đây.',
-                          icon: Icons.luggage_outlined,
-                          onRetry: _load,
-                        )
-                      : RefreshIndicator(
-                          color: AppColors.primary,
-                          onRefresh: _load,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.all(16),
-                            itemCount: _trips.length,
-                            itemBuilder: (_, i) => _tripCard(_trips[i] as Map<String, dynamic>),
-                          ),
-                        );
+    if (_loading) return const LoadingScreen(message: 'Đang tải...');
+    if (_error == 'login') return _loginPrompt();
+    if (_error != null) return ErrorScreen(message: _error!, onRetry: _load);
+
+    // Nút CTA nằm cao ở đầu danh sách (không bị bottom-nav che), thay cho FAB cũ.
+    return RefreshIndicator(
+      color: AppColors.primary,
+      onRefresh: _load,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _aiPlannerCta(),
+          const SizedBox(height: 16),
+          if (_trips.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Column(
+                children: [
+                  Icon(Icons.luggage_outlined, size: 48, color: AppColors.muted),
+                  const SizedBox(height: 12),
+                  const Text('Chưa có chuyến đi nào',
+                      style: TextStyle(fontSize: 15, color: AppColors.dark)),
+                  const SizedBox(height: 4),
+                  const Text('Nhấn nút trên để AI lên lịch trình cho bạn.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 13, color: AppColors.muted)),
+                ],
+              ),
+            )
+          else
+            ..._trips.map((t) => _tripCard(t as Map<String, dynamic>)),
+        ],
+      ),
+    );
+  }
+
+  Widget _aiPlannerCta() {
+    return GestureDetector(
+      onTap: () async {
+        final saved = await Navigator.push<bool>(context,
+            MaterialPageRoute(builder: (_) => const AiPlannerScreen()));
+        if (saved == true) _load();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppColors.gradStart, AppColors.gradEnd],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.28),
+                blurRadius: 12,
+                offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Row(children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12)),
+            child: const Icon(Icons.auto_awesome, color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 14),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Tạo chuyến đi mới với AI',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold)),
+                SizedBox(height: 2),
+                Text('AI chọn khách sạn, quán ăn, địa điểm & sắp lịch giúp bạn',
+                    style: TextStyle(color: Colors.white70, fontSize: 12)),
+              ],
+            ),
+          ),
+          const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 14),
+        ]),
+      ),
+    );
   }
 
   Widget _loginPrompt() => Center(

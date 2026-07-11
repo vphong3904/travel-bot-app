@@ -25,6 +25,17 @@ class TripApiService {
     await _client.delete('/trips/$tripId');
   }
 
+  /// TP-001: AI lên lịch trình. Trả về {status: need_info|draft, ...}
+  /// (contract .agent/trip-ai/TRIP_AI_ROADMAP.md §2.1).
+  Future<Map<String, dynamic>> aiPlan(Map<String, dynamic> payload) async {
+    return await _client.post('/trips/ai/plan', payload) as Map<String, dynamic>;
+  }
+
+  /// TP-002: Lưu plan user đã chốt vào lịch sử chuyến đi. Trả về TripPlanOut.
+  Future<Map<String, dynamic>> aiConfirm(Map<String, dynamic> plan) async {
+    return await _client.post('/trips/ai/confirm', plan) as Map<String, dynamic>;
+  }
+
   /// Lưu một itinerary (từ chatbot) thành TripPlan kèm các item theo ngày.
   /// Trả về tripId đã tạo.
   Future<String> saveItinerary(Map<String, dynamic> itinerary) async {

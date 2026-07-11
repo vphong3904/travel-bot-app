@@ -1,5 +1,7 @@
 """
 Routes: /trips  &  /trips/:id/items
+POST   /trips/ai/plan       → AI lên lịch trình (need_info | draft) — TP-001
+POST   /trips/ai/confirm    → Lưu plan user đã chốt vào lịch sử — TP-002
 POST   /trips               → Tạo lịch trình
 GET    /trips               → Danh sách của tôi
 GET    /trips/:id           → Chi tiết + items
@@ -10,6 +12,7 @@ POST   /trips/:id/items         → Thêm item
 PATCH  /trips/:id/items/:item_id → Sửa item
 DEL    /trips/:id/items/:item_id → Xoá item
 """
+from datetime import time as time_type
 from uuid import UUID
 from typing import Optional
 
@@ -21,8 +24,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_current_user
 from app.db.models.user import User
 from app.db.models.trip import TripPlan, TripPlanItem
-from app.services import log_service
+from app.services import log_service, trip_planner_service
 from app.db.schemas.trip import (
+    AiPlanConfirmRequest,
+    AiPlanRequest,
     TripPlanCreate,
     TripPlanUpdate,
     TripPlanOut,
@@ -33,6 +38,88 @@ from app.db.schemas.trip import (
 )
 
 router = APIRouter(tags=["trips"])
+
+
+# ── AI Trip Planner (TR-06: khai báo TRƯỚC các route /{trip_id}) ──────────────
+@router.post("/ai/plan")
+async def ai_plan_trip(
+    payload: AiPlanRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Slot-filling + lên lịch trình draft (contract TRIP_AI_ROADMAP §2.1).
+    Thiếu slot → {status:"need_info"}; đủ → {status:"draft", plan:{...}}.
+    KHÔNG lưu gì vào DB (TR-04) — lưu qua /trips/ai/confirm.
+    """
+    return await trip_planner_service.plan_trip(
+        db, str(current_user.id), payload.model_dump()
+    )
+
+
+def _parse_time(value: Optional[str]) -> Optional[time_type]:
+    if not value:
+        return None
+    try:
+        return time_type.fromisoformat(value)
+    except ValueError:
+        return None
+
+
+@router.post("/ai/confirm", response_model=TripPlanOut, status_code=status.HTTP_201_CREATED)
+async def ai_confirm_trip(
+    payload: AiPlanConfirmRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """User chốt plan (có thể đã đổi lựa chọn) → lưu vào lịch sử chuyến đi."""
+    trip = TripPlan(
+        user_id=current_user.id,
+        destination_id=payload.destination_id,
+        title=payload.title,
+        budget=payload.budget,
+        start_date=payload.start_date,
+        end_date=payload.end_date,
+        travelers=payload.travelers,
+        travel_type=payload.travel_type,
+        status="planned",
+        ai_generated=True,
+    )
+    db.add(trip)
+    await db.flush()
+
+    for day in payload.days:
+        for item in day.items:
+            db.add(
+                TripPlanItem(
+                    trip_plan_id=trip.id,
+                    day_number=day.day_number,
+                    order_in_day=item.order_in_day,
+                    title=item.title,
+                    description=item.description,
+                    location_id=item.ref_id if item.type == "location" else None,
+                    start_time=_parse_time(item.start_time),
+                    end_time=_parse_time(item.end_time),
+                    estimated_cost=item.estimated_cost,
+                    notes=item.notes,
+                )
+            )
+    await db.commit()
+
+    result = await db.execute(
+        select(TripPlan)
+        .options(selectinload(TripPlan.items))
+        .where(TripPlan.id == trip.id)
+    )
+    trip = result.scalar_one()
+
+    await log_service.log_behavior(
+        user_id=str(current_user.id),
+        event_type="save_trip",
+        entity_type="trip",
+        entity_id=str(trip.id),
+    )
+    return trip
 
 
 # ── List trips ────────────────────────────────────────────────────────────────

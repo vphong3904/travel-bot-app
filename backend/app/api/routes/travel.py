@@ -741,6 +741,109 @@ async def itinerary_detail(
     return out
 
 
+# ── Gợi ý cá nhân hoá "Dành cho bạn" (TP-003 — TRIP_AI_ROADMAP §2.3) ──────────
+@router.get("/suggestions/for-you")
+async def suggestions_for_you(
+    limit: int = Query(10, ge=1, le=30),
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user_optional),
+):
+    """
+    Gợi ý điểm đến theo hồ sơ sở thích suy từ hành vi (chat/tìm kiếm/yêu thích).
+    User mới hoặc guest → fallback điểm đến nổi bật, tags=[] (không lỗi).
+    """
+    from app.services import user_preference_service as prefs
+
+    profile: list[dict] = []
+    if current_user is not None:
+        try:
+            profile = await prefs.get_profile(db, str(current_user.id))
+        except Exception as e:
+            logger.warning(f"[for-you] Lỗi lấy profile, dùng fallback: {e}")
+
+    items: list[dict] = []
+    seen: set[str] = set()
+
+    def _dest_dict(r, matched: list[str]) -> dict:
+        return {
+            "id": r.id,
+            "name": r.name,
+            "province": r.province,
+            "region": r.region,
+            "image_url": r.image_url,
+            "rating_avg": float(r.rating_avg) if r.rating_avg is not None else 0.0,
+            "favorite_count": r.favorite_count or 0,
+            "matched_tags": matched,
+        }
+
+    for p in profile:
+        kws = prefs.keywords_for_tags([p["tag"]], max_per_tag=6)
+        if not kws:
+            continue
+        like_ors = " OR ".join(f"unaccent(blob) ILIKE :kw{i}" for i in range(len(kws)))
+        params: dict = {f"kw{i}": f"%{kw.strip()}%" for i, kw in enumerate(kws)}
+        params["lim"] = limit
+        rows = await db.execute(
+            text(
+                f"""
+                SELECT id, name, province, region, image_url, rating_avg, favorite_count
+                FROM (
+                    SELECT id::text, name, province, region, image_url, rating_avg,
+                           favorite_count,
+                           name || ' ' || COALESCE(description,'') || ' ' ||
+                           COALESCE(special,'') || ' ' || COALESCE(region,'') AS blob
+                    FROM destinations WHERE is_active IS NOT FALSE
+                ) d
+                WHERE {like_ors}
+                ORDER BY rating_avg DESC NULLS LAST, favorite_count DESC NULLS LAST
+                LIMIT :lim
+                """
+            ),
+            params,
+        )
+        for r in rows:
+            if r.id in seen:
+                for it in items:
+                    if it["id"] == r.id and p["tag"] not in it["matched_tags"]:
+                        it["matched_tags"].append(p["tag"])
+                continue
+            seen.add(r.id)
+            items.append(_dest_dict(r, [p["tag"]]))
+
+    # Fallback / bù cho đủ limit: điểm đến nổi bật
+    if len(items) < limit:
+        rows = await db.execute(
+            text(
+                """
+                SELECT id::text AS id, name, province, region, image_url,
+                       rating_avg, favorite_count
+                FROM destinations
+                WHERE is_active IS NOT FALSE
+                ORDER BY favorite_count DESC NULLS LAST, rating_avg DESC NULLS LAST
+                LIMIT :lim
+                """
+            ),
+            {"lim": limit},
+        )
+        for r in rows:
+            if len(items) >= limit:
+                break
+            if r.id not in seen:
+                seen.add(r.id)
+                items.append(_dest_dict(r, []))
+
+    reason = None
+    if profile:
+        labels = ", ".join(p["label"] for p in profile)
+        reason = f"Dựa trên các câu hỏi và tìm kiếm gần đây của bạn về: {labels}"
+
+    return {
+        "tags": [{"tag": p["tag"], "label": p["label"], "score": p["score"]} for p in profile],
+        "items": items[:limit],
+        "reason": reason,
+    }
+
+
 # ── Helper ────────────────────────────────────────────────────────────────────
 async def _get_dest_or_404(db: AsyncSession, destination_id: UUID) -> Destination:
     result = await db.execute(

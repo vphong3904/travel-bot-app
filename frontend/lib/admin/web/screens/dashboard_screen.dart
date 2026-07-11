@@ -16,6 +16,7 @@ import '../widgets/users_line_chart.dart';
 import '../widgets/messages_bar_chart.dart';
 import '../widgets/top_destinations_chart.dart';
 import '../widgets/intent_pie_chart.dart';
+import '../widgets/top_questions_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -73,6 +74,9 @@ class DashboardScreen extends ConsumerWidget {
               error: (e, _) => _ErrorView(message: e.toString()),
               data: (data) => _DashboardContent(data: data),
             ),
+            const SizedBox(height: 12),
+            // TP-004: câu hỏi user hay hỏi nhất trong kỳ
+            TopQuestionsCard(period: period),
           ],
         ),
       );
