@@ -31,12 +31,18 @@ MEAL_COST_ESTIMATE = 150_000
 # Ngân sách khách sạn tối đa ≈ 35% tổng ngân sách chia theo đêm
 HOTEL_BUDGET_RATIO = 0.35
 
-TRAVEL_TYPES = {"solo", "couple", "family", "friends"}
+# Bug đã sửa: trước đây dùng "friends" — bảng trip_plans có CHECK constraint
+# `travel_type IN ('solo','couple','family','group')`, KHÔNG có "friends".
+# Mọi lần /trips/ai/confirm với nhóm bạn đều crash IntegrityError (browser
+# thấy "Failed to fetch" vì response 500 không hoàn tất). Đổi sang "group"
+# cho khớp DB (và khớp quy ước đã dùng ở admin web), chỉ đổi KEY nội bộ —
+# nhãn hiển thị "nhóm bạn" giữ nguyên.
+TRAVEL_TYPES = {"solo", "couple", "family", "group"}
 _TRAVEL_TYPE_LABEL = {
     "solo": "một mình",
     "couple": "cặp đôi",
     "family": "gia đình",
-    "friends": "nhóm bạn",
+    "group": "nhóm bạn",
 }
 
 SLOT_QUESTIONS = {

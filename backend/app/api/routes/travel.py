@@ -32,9 +32,6 @@ from app.db.models.travel import (
     Hotel,
     Tour,
     Ticket,
-    DestinationEvent,
-    TransportOption,
-    ShoppingPlace,
     Location,
     Category,
 )
@@ -45,9 +42,6 @@ from app.db.schemas.travel import (
     HotelOut,
     TourOut,
     TicketOut,
-    DestinationEventOut,
-    TransportOptionOut,
-    ShoppingPlaceOut,
 )
 
 router = APIRouter(tags=["travel"])
@@ -470,52 +464,6 @@ async def list_tickets(
         select(Ticket)
         .where(Ticket.destination_id == destination_id)
         .order_by(Ticket.name)
-    )
-    return result.scalars().all()
-
-
-# ── Events ────────────────────────────────────────────────────────────────────
-@router.get("/destinations/{destination_id}/events", response_model=list[DestinationEventOut])
-async def list_events(
-    destination_id: UUID,
-    db: AsyncSession = Depends(get_db),
-):
-    await _get_dest_or_404(db, destination_id)
-    result = await db.execute(
-        select(DestinationEvent)
-        .where(DestinationEvent.destination_id == destination_id)
-        .order_by(DestinationEvent.name)
-    )
-    return result.scalars().all()
-
-
-# ── Transport ─────────────────────────────────────────────────────────────────
-@router.get("/destinations/{destination_id}/transport", response_model=list[TransportOptionOut])
-async def list_transport(
-    destination_id: UUID,
-    is_local: Optional[bool] = Query(None, description="True=nội đô, False=đến địa điểm"),
-    db: AsyncSession = Depends(get_db),
-):
-    await _get_dest_or_404(db, destination_id)
-
-    stmt = select(TransportOption).where(TransportOption.destination_id == destination_id)
-    if is_local is not None:
-        stmt = stmt.where(TransportOption.is_local == is_local)
-    result = await db.execute(stmt.order_by(TransportOption.type))
-    return result.scalars().all()
-
-
-# ── Shopping ──────────────────────────────────────────────────────────────────
-@router.get("/destinations/{destination_id}/shopping", response_model=list[ShoppingPlaceOut])
-async def list_shopping(
-    destination_id: UUID,
-    db: AsyncSession = Depends(get_db),
-):
-    await _get_dest_or_404(db, destination_id)
-    result = await db.execute(
-        select(ShoppingPlace)
-        .where(ShoppingPlace.destination_id == destination_id)
-        .order_by(ShoppingPlace.name)
     )
     return result.scalars().all()
 

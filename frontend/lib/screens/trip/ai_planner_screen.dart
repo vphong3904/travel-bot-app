@@ -26,11 +26,14 @@ const _prefOptions = <String, String>{
   'giải_trí': 'Giải trí',
 };
 
+// 'group' khớp CHECK constraint trip_plans.travel_type ở backend
+// ('solo','couple','family','group') — trước đây dùng 'friends' khiến lưu
+// chuyến đi bị lỗi (IntegrityError) khi chọn "Nhóm bạn".
 const _travelTypes = <String, String>{
   'solo': 'Một mình',
   'couple': 'Cặp đôi',
   'family': 'Gia đình',
-  'friends': 'Nhóm bạn',
+  'group': 'Nhóm bạn',
 };
 
 const _slotLabels = <String, String>{
@@ -52,7 +55,13 @@ String _fmtVnd(num? v) {
 }
 
 class AiPlannerScreen extends StatefulWidget {
-  const AiPlannerScreen({super.key});
+  /// Khi được truyền sẵn (vd từ nút "Gợi ý lịch trình" ở màn chi tiết thành
+  /// phố), màn tự điền + gọi /trips/ai/plan NGAY khi mở — hiện thẳng 1 lịch
+  /// trình mẫu, không bắt user điền form hay chat từng bước.
+  final String? initialDestination;
+  final int? initialDays;
+
+  const AiPlannerScreen({super.key, this.initialDestination, this.initialDays});
 
   @override
   State<AiPlannerScreen> createState() => _AiPlannerScreenState();
@@ -77,6 +86,20 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
         tokenProvider: () => s.token,
         tokenRefresher: () => s.refreshAccessToken(),
       );
+
+  @override
+  void initState() {
+    super.initState();
+    // Mở từ nút "Gợi ý lịch trình" (destination_detail_screen) → có sẵn
+    // destination → điền form + gọi /trips/ai/plan luôn (skip_optional),
+    // hiện thẳng lịch trình mẫu, không bắt user điền lại hay chat từng bước.
+    final dest = widget.initialDestination;
+    if (dest != null && dest.isNotEmpty) {
+      _destCtrl.text = dest;
+      _daysCtrl.text = '${widget.initialDays ?? 3}';
+      WidgetsBinding.instance.addPostFrameCallback((_) => _submit(skipOptional: true));
+    }
+  }
 
   @override
   void dispose() {

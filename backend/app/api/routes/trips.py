@@ -73,6 +73,11 @@ async def ai_confirm_trip(
     current_user: User = Depends(get_current_user),
 ):
     """User chốt plan (có thể đã đổi lựa chọn) → lưu vào lịch sử chuyến đi."""
+    # Bug đã sửa: status="planned" KHÔNG nằm trong CHECK constraint của bảng
+    # trip_plans (chỉ cho phép 'draft'/'saved'/'completed') → mọi lần confirm
+    # đều crash với IntegrityError, trình duyệt hiển thị "Failed to fetch"
+    # (mất kết nối SSE/HTTP khi backend lỗi 500 giữa chừng). "saved" là giá
+    # trị đúng ngữ nghĩa: user đã chốt và lưu lịch trình AI vào lịch sử.
     trip = TripPlan(
         user_id=current_user.id,
         destination_id=payload.destination_id,
@@ -82,7 +87,7 @@ async def ai_confirm_trip(
         end_date=payload.end_date,
         travelers=payload.travelers,
         travel_type=payload.travel_type,
-        status="planned",
+        status="saved",
         ai_generated=True,
     )
     db.add(trip)

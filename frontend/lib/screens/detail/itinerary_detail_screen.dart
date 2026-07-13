@@ -1,10 +1,16 @@
 // lib/screens/detail/itinerary_detail_screen.dart
 // Chi tiết 1 lịch trình gợi ý: thống kê chi phí (theo người) + lịch theo từng ngày.
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/app_state.dart';
+import '../../services/api_service.dart';
 import '../../services/destination_service.dart';
+import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
+import '../auth/login_register_screen.dart';
 import '../chat/chatbot_screen.dart';
+import '../services/saved_trips_screen.dart';
 
 // Các khoản chi phí hiển thị (key khớp cost.* từ backend).
 const _kCostRows = [
@@ -32,6 +38,7 @@ class ItineraryDetailScreen extends StatefulWidget {
 class _ItineraryDetailScreenState extends State<ItineraryDetailScreen> {
   Map<String, dynamic>? _data;
   bool _loading = true;
+  bool _saving = false;
 
   @override
   void initState() {
@@ -42,6 +49,49 @@ class _ItineraryDetailScreenState extends State<ItineraryDetailScreen> {
   Future<void> _load() async {
     final d = await DestinationRepository.fetchItinerary(widget.id);
     if (mounted) setState(() { _data = d; _loading = false; });
+  }
+
+  // [P2] Lưu lịch trình mẫu (tĩnh) thành chuyến đi — tái dùng
+  // TripApiService.saveItinerary() + màn "Chuyến đi" (SavedTripsScreen) có
+  // sẵn, không tạo luồng lưu/màn hình mới.
+  Future<void> _saveItinerary() async {
+    if (_saving || _data == null) return;
+    final appState = context.read<AppState>();
+    if (!appState.isLoggedIn) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const LoginRegisterScreen()));
+      return;
+    }
+    setState(() => _saving = true);
+    try {
+      final tripApi = TripApiService(
+        tokenProvider: () => appState.token,
+        tokenRefresher: () => appState.refreshAccessToken(),
+      );
+      await tripApi.saveItinerary(_data!);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: AppColors.secondary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          content: const Text('✓ Đã lưu chuyến đi! Xem lại trong mục Chuyến đi.'),
+          action: SnackBarAction(
+            label: 'Xem ngay',
+            textColor: Colors.white,
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const SavedTripsScreen())),
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi lưu chuyến đi: ${friendlyError(e)}')),
+      );
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
   }
 
   String _s(String k) => _data?[k]?.toString() ?? '';
@@ -125,6 +175,26 @@ class _ItineraryDetailScreenState extends State<ItineraryDetailScreen> {
           else
             ...days.whereType<Map>().map((d) => _buildDay(Map<String, dynamic>.from(d))),
 
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _saving ? null : _saveItinerary,
+              icon: _saving
+                  ? const SizedBox(
+                      width: 16, height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Icon(Icons.bookmark_add_outlined, size: 18),
+              label: Text(_saving ? 'Đang lưu...' : 'Lưu lịch trình'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size.fromHeight(50),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              ),
+            ),
+          ),
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,

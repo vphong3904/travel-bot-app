@@ -19,7 +19,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _emailCtrl = TextEditingController();
 
   bool _isLoading = false;
-  bool _submitted = false;
   String? _error;
 
   @override
@@ -35,13 +34,16 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       _error = null;
     });
     try {
-      await ref.read(authRepositoryProvider).forgotPassword(_emailCtrl.text.trim());
-      if (mounted) setState(() { _isLoading = false; _submitted = true; });
+      final email = _emailCtrl.text.trim();
+      await ref.read(authRepositoryProvider).forgotPassword(email);
+      if (mounted) {
+        context.go('/reset-password?email=${Uri.encodeComponent(email)}');
+      }
     } on DioException catch (e) {
       final detail = (e.response?.data as Map<String, dynamic>?)?['detail'];
       setState(() {
         _isLoading = false;
-        _error = detail?.toString() ?? 'Gửi email thất bại. Vui lòng thử lại.';
+        _error = detail?.toString() ?? 'Gửi mã OTP thất bại. Vui lòng thử lại.';
       });
     } catch (_) {
       setState(() {
@@ -61,16 +63,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
             child: AuthCard(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: _submitted ? _SuccessView(email: _emailCtrl.text) : _FormView(
-                  formKey: _formKey,
-                  emailCtrl: _emailCtrl,
-                  isLoading: _isLoading,
-                  error: _error,
-                  onSubmit: _submit,
-                  onClearError: () => setState(() => _error = null),
-                ),
+              child: _FormView(
+                formKey: _formKey,
+                emailCtrl: _emailCtrl,
+                isLoading: _isLoading,
+                error: _error,
+                onSubmit: _submit,
+                onClearError: () => setState(() => _error = null),
               ),
             ),
           ),
@@ -115,7 +114,7 @@ class _FormView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Nhập email tài khoản và chúng tôi sẽ gửi link đặt lại mật khẩu.',
+            'Nhập email tài khoản và chúng tôi sẽ gửi mã OTP để đặt lại mật khẩu.',
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
           ),
@@ -155,7 +154,7 @@ class _FormView extends StatelessWidget {
                     width: 20, height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                   )
-                : const Text('Gửi link đặt lại'),
+                : const Text('Gửi mã OTP'),
           ),
           const SizedBox(height: 8),
           TextButton(
@@ -164,42 +163,6 @@ class _FormView extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SuccessView extends StatelessWidget {
-  final String email;
-  const _SuccessView({required this.email});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      key: const ValueKey('success'),
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(Icons.mark_email_read_outlined, size: 56, color: Colors.green),
-        const SizedBox(height: 16),
-        const Text(
-          'Kiểm tra email của bạn',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Link đặt lại mật khẩu đã được gửi đến $email.\nKiểm tra cả thư mục spam nếu không thấy.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.grey.shade600, fontSize: 14, height: 1.5),
-        ),
-        const SizedBox(height: 28),
-        OutlinedButton(
-          onPressed: () => context.go('/login'),
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size.fromHeight(44),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-          child: const Text('← Quay lại đăng nhập'),
-        ),
-      ],
     );
   }
 }

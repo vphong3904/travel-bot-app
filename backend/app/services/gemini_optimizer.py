@@ -77,6 +77,9 @@ _MAX_TOKENS_BY_INTENT: dict[str, int] = {
     "ask_food": 640,
     "ask_safety": 640,
     "ask_activity": 640,
+    # Bug đã sửa: "ask_shopping" có trong INTENT_PATTERNS nhưng thiếu ở đây
+    # → luôn dùng _DEFAULT_MAX_TOKENS thay vì mức tuning riêng.
+    "ask_shopping": 640,
     "ask_budget": 768,
     "ask_destination": 768,
     "find_hotel": 768,

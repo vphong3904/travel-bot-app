@@ -2,6 +2,7 @@
 Routes: /chat/sessions/:id/messages  &  /chat/messages/:id/feedback
 """
 import json
+import re
 import time
 import asyncio
 from uuid import UUID
@@ -390,11 +391,25 @@ async def _assert_session_owner(db: AsyncSession, session_id: UUID, user_id: str
 
 
 def _chunk_text(text: str, size: int = 24):
-    """Cắt text thành mẩu nhỏ để stream cho có cảm giác gõ dần (planner reply)."""
-    words = text.split(" ")
+    """
+    Cắt text thành mẩu nhỏ để stream cho có cảm giác gõ dần (planner reply).
+
+    Bug đã sửa: bản cũ dùng `text.split(" ")` rồi nối lại bằng `" " + w` —
+    khoảng trắng ở RANH GIỚI GIỮA 2 CHUNK bị mất (chunk trước không có khoảng
+    trắng cuối, chunk sau không có khoảng trắng đầu), nên khi frontend nối
+    các chunk SSE lại bằng cách ghép chuỗi thô, 2 từ ở đúng ranh giới đó bị
+    dính liền (vd "Ăn trưa" + "tự do" → "Ăn trưatự do"). Cùng lỗi khiến
+    "**Ngày 2:**" dính vào chữ trước nếu "\n" rơi đúng ranh giới chunk.
+
+    Dùng `re.split(r"(\s+)", text)` (giữ khoảng trắng — kể cả "\n" — làm token
+    riêng nhờ capturing group) rồi gộp token vào buffer thay vì tách theo từ:
+    nối lại toàn bộ token luôn tái tạo ĐÚNG NGUYÊN VĂN gốc, bất kể điểm cắt
+    rơi ở đâu.
+    """
+    tokens = re.split(r"(\s+)", text)
     buf = ""
-    for w in words:
-        buf += (" " if buf else "") + w
+    for tok in tokens:
+        buf += tok
         if len(buf) >= size:
             yield buf
             buf = ""

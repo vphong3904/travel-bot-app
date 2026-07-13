@@ -183,26 +183,3 @@ async def guest_stream(
             "X-Guest-Remaining": str(remaining),
         },
     )
-
-
-@router.get("/chat/guest/status")
-async def guest_status(request: Request):
-    """
-    Trả về số câu hỏi còn lại cho IP hiện tại.
-    Frontend gọi khi mở app để sync lại counter với server.
-    """
-    ip = _get_client_ip(request)
-    today = date.today().isoformat()
-    async with _lock:
-        usage = _guest_usage[ip]
-        if usage["date"] != today:
-            count = 0
-        else:
-            count = usage["count"]
-    remaining = max(0, GUEST_DAILY_LIMIT - count)
-    return {
-        "used": count,
-        "limit": GUEST_DAILY_LIMIT,
-        "remaining": remaining,
-        "reset_at": "00:00 ngày hôm sau",
-    }

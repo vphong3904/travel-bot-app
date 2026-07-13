@@ -852,7 +852,7 @@ class RAGPipeline:
         # trả mẫu tức thì, KHÔNG embedding, KHÔNG Gemini.
         quick = quick_replies.match(question)
         if quick:
-            return self._short_circuit_response(quick, t0, intent="quick_reply")
+            return self._short_circuit_response(quick, t0, intent="quick_reply", gate="quick_reply")
 
         # [YÊU CẦU 2] NLP preprocessing: normalize, intent, entities, rewriting,
         # clarification flow, out-of-scope / greeting short-circuit.
@@ -860,18 +860,18 @@ class RAGPipeline:
 
         if nlp_result.is_greeting:
             return self._short_circuit_response(
-                nlp.get_greeting_response(hash(session_id) % 3), t0, intent="greeting"
+                nlp.get_greeting_response(hash(session_id) % 3), t0, intent="greeting", gate="greeting"
             )
 
         if nlp_result.is_out_of_scope:
             return self._short_circuit_response(
-                nlp.OUT_OF_SCOPE_RESPONSE, t0, intent="out_of_scope"
+                nlp.OUT_OF_SCOPE_RESPONSE, t0, intent="out_of_scope", gate="out_of_scope"
             )
 
         if nlp_result.needs_clarification:
             options_text = "\n".join(f"- {opt}" for opt in nlp_result.clarification_options)
             answer = f"{nlp_result.clarification_message}\n\n{options_text}"
-            return self._short_circuit_response(answer, t0, intent="clarification")
+            return self._short_circuit_response(answer, t0, intent="clarification", gate="clarification")
 
         effective_question = nlp_result.rewritten_query
         intent = nlp_result.intent
@@ -879,17 +879,20 @@ class RAGPipeline:
         # [Anti-hallucination theo nhóm] Nếu user hỏi đúng 1 nhóm (khách sạn/tour/
         # mua sắm/di chuyển/ẩm thực) cho 1 thành phố mà thành phố đó KHÔNG có dữ
         # liệu nhóm đó → trả câu "chưa có dữ liệu" + gợi ý nhóm có data, KHÔNG gọi
-        # LLM (tránh bịa từ vài entry faq lạc).
+        # LLM (tránh bịa từ vài entry faq lạc). Truyền confidence để gap-check
+        # không chặn oan dựa trên 1 intent-guess yếu (xem category_gap_message).
         gap_msg = await structured_search.category_gap_message(
-            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
+            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug"),
+            confidence=nlp_result.confidence,
         )
         if gap_msg:
-            return self._short_circuit_response(gap_msg, t0, intent=intent)
+            return self._short_circuit_response(gap_msg, t0, intent=intent, gate="category_gap")
 
         # [YÊU CẦU 4] Cache: thử exact-match trước, rồi semantic cache
         cached_response = await cache_layer.get_cached_response(effective_question)
         if cached_response:
             evalmon.performance_monitor.record_cache_lookup(hit=True)
+            evalmon.performance_monitor.record_turn("cache_exact")
             cached_response = dict(cached_response)
             cached_response["latency_ms"] = int((time.monotonic() - t0) * 1000)
             cached_response["cache_hit"] = "exact"
@@ -901,6 +904,7 @@ class RAGPipeline:
             semantic_hit = await cache_layer.find_semantic_cache_match(query_vec)
             if semantic_hit:
                 evalmon.performance_monitor.record_cache_lookup(hit=True)
+                evalmon.performance_monitor.record_turn("cache_semantic")
                 semantic_hit = dict(semantic_hit)
                 semantic_hit["latency_ms"] = int((time.monotonic() - t0) * 1000)
                 semantic_hit["cache_hit"] = "semantic"
@@ -914,7 +918,7 @@ class RAGPipeline:
             query_vec, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
         )
         if faq_ans:
-            return self._short_circuit_response(faq_ans, t0, intent=intent)
+            return self._short_circuit_response(faq_ans, t0, intent=intent, gate="faq_direct")
 
         sources, search_ms, search_method = await self._get_sources(
             effective_question, query_vec, intent, entities=nlp_result.entities
@@ -928,7 +932,8 @@ class RAGPipeline:
                 f"NO sources ({search_method}) → missing-knowledge guard (bỏ qua LLM)"
             )
             return self._short_circuit_response(
-                nlp.MISSING_KNOWLEDGE_RESPONSE, t0, intent=intent
+                nlp.missing_knowledge_response(nlp_result.entities.get("location")),
+                t0, intent=intent, gate="no_sources",
             )
 
         # [P1] plan_trip → dựng lịch trình có cấu trúc từ DB (đính kèm vào kết quả)
@@ -963,7 +968,7 @@ class RAGPipeline:
             logger.error(f"[RAG] Gemini call thất bại sau retry: {e}")
             fallback_answer = _build_rag_fallback_answer(sources, effective_question)
             return self._short_circuit_response(
-                fallback_answer, t0, intent=intent, is_error=True
+                fallback_answer, t0, intent=intent, is_error=True, gate="llm_error"
             )
 
         llm_ms = int((time.monotonic() - t_llm) * 1000)
@@ -981,6 +986,7 @@ class RAGPipeline:
         tok_per_sec = round(completion_tokens / (llm_ms / 1000), 1) if llm_ms > 0 else 0
 
         evalmon.performance_monitor.record_latency(latency_ms)
+        evalmon.performance_monitor.record_turn("llm")
 
         logger.info(
             f"[RAG] session={session_id} | intent={intent} | sources={len(sources)} ({search_method}) | "
@@ -1022,11 +1028,20 @@ class RAGPipeline:
         return result
 
     def _short_circuit_response(
-        self, answer: str, t0: float, intent: str, is_error: bool = False
+        self, answer: str, t0: float, intent: str, is_error: bool = False, gate: str | None = None
     ) -> dict:
         """Trả lời nhanh cho greeting/out-of-scope/clarification/lỗi — không cần RAG đầy đủ."""
         latency_ms = int((time.monotonic() - t0) * 1000)
         evalmon.performance_monitor.record_latency(latency_ms)
+        # [Observability] Ghi nhận CỬA nào chặn lượt này trước LLM — đo tỉ lệ
+        # over-blocking (task P1 "chuỗi gác quá gắt"). `gate` mặc định = intent
+        # khi caller không truyền riêng (một số cửa dùng chung tên, vd
+        # "greeting"/"out_of_scope"), nhưng với category_gap/no_sources/faq
+        # `intent` là intent DU LỊCH thật (find_hotel...) nên cần `gate` riêng
+        # để phân biệt "cửa nào chặn" khỏi "intent gì".
+        gate_name = gate or intent
+        evalmon.performance_monitor.record_turn(gate_name)
+        logger.info(f"[RAG:gate] short-circuit gate={gate_name} intent={intent} latency={latency_ms}ms")
         return {
             "answer": answer,
             "sources": [],
@@ -1084,7 +1099,7 @@ class RAGPipeline:
         # [Quick reply] (bản stream) — câu quen thuộc/meta → trả mẫu tức thì.
         quick = quick_replies.match(question)
         if quick:
-            async for ev in self._short_circuit_stream(quick, t0, "quick_reply"):
+            async for ev in self._short_circuit_stream(quick, t0, "quick_reply", gate="quick_reply"):
                 yield ev
             return
 
@@ -1093,14 +1108,14 @@ class RAGPipeline:
 
         if nlp_result.is_greeting:
             async for ev in self._short_circuit_stream(
-                nlp.get_greeting_response(hash(session_id) % 3), t0, "greeting"
+                nlp.get_greeting_response(hash(session_id) % 3), t0, "greeting", gate="greeting"
             ):
                 yield ev
             return
 
         if nlp_result.is_out_of_scope:
             async for ev in self._short_circuit_stream(
-                nlp.OUT_OF_SCOPE_RESPONSE, t0, "out_of_scope"
+                nlp.OUT_OF_SCOPE_RESPONSE, t0, "out_of_scope", gate="out_of_scope"
             ):
                 yield ev
             return
@@ -1108,7 +1123,7 @@ class RAGPipeline:
         if nlp_result.needs_clarification:
             options_text = "\n".join(f"- {opt}" for opt in nlp_result.clarification_options)
             answer = f"{nlp_result.clarification_message}\n\n{options_text}"
-            async for ev in self._short_circuit_stream(answer, t0, "clarification"):
+            async for ev in self._short_circuit_stream(answer, t0, "clarification", gate="clarification"):
                 yield ev
             return
 
@@ -1117,10 +1132,11 @@ class RAGPipeline:
 
         # [Anti-hallucination theo nhóm] (bản stream) — xem chú thích ở query().
         gap_msg = await structured_search.category_gap_message(
-            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
+            intent, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug"),
+            confidence=nlp_result.confidence,
         )
         if gap_msg:
-            async for ev in self._short_circuit_stream(gap_msg, t0, intent):
+            async for ev in self._short_circuit_stream(gap_msg, t0, intent, gate="category_gap"):
                 yield ev
             return
 
@@ -1128,6 +1144,7 @@ class RAGPipeline:
         cached_response = await cache_layer.get_cached_response(effective_question)
         if cached_response:
             evalmon.performance_monitor.record_cache_lookup(hit=True)
+            evalmon.performance_monitor.record_turn("cache_exact")
             async for ev in self._stream_from_cache(cached_response, t0):
                 yield ev
             return
@@ -1138,6 +1155,7 @@ class RAGPipeline:
             semantic_hit = await cache_layer.find_semantic_cache_match(query_vec)
             if semantic_hit:
                 evalmon.performance_monitor.record_cache_lookup(hit=True)
+                evalmon.performance_monitor.record_turn("cache_semantic")
                 async for ev in self._stream_from_cache(semantic_hit, t0):
                     yield ev
                 return
@@ -1149,7 +1167,7 @@ class RAGPipeline:
             query_vec, nlp_result.entities.get("location"), nlp_result.entities.get("city_slug")
         )
         if faq_ans:
-            async for ev in self._short_circuit_stream(faq_ans, t0, intent):
+            async for ev in self._short_circuit_stream(faq_ans, t0, intent, gate="faq_direct"):
                 yield ev
             return
 
@@ -1164,7 +1182,8 @@ class RAGPipeline:
                 f"NO sources ({search_method}) → missing-knowledge guard (bỏ qua LLM)"
             )
             async for ev in self._short_circuit_stream(
-                nlp.MISSING_KNOWLEDGE_RESPONSE, t0, intent
+                nlp.missing_knowledge_response(nlp_result.entities.get("location")),
+                t0, intent, gate="no_sources",
             ):
                 yield ev
             return
@@ -1216,6 +1235,7 @@ class RAGPipeline:
                     completion_tokens = usage.candidates_token_count or 0
         except Exception as e:
             logger.error(f"[RAG:stream] Gemini stream lỗi: {e}")
+            evalmon.performance_monitor.record_turn("llm_error")
             fallback_answer = _build_rag_fallback_answer(sources, effective_question)
             yield {"type": "chunk", "content": fallback_answer}
             yield {
@@ -1243,6 +1263,7 @@ class RAGPipeline:
         hallu_report = guard.run_hallucination_checks(answer, sources)
 
         evalmon.performance_monitor.record_latency(latency_ms)
+        evalmon.performance_monitor.record_turn("llm")
         if timing.ttft_ms is not None:
             evalmon.performance_monitor.record_ttft(timing.ttft_ms)
 
@@ -1298,12 +1319,16 @@ class RAGPipeline:
         yield meta_payload
 
     async def _short_circuit_stream(
-        self, answer: str, t0: float, intent: str
+        self, answer: str, t0: float, intent: str, gate: str | None = None
     ) -> AsyncGenerator[dict, None]:
         """Stream giả lập (1 chunk duy nhất) cho greeting/out-of-scope/clarification."""
         yield {"type": "chunk", "content": answer}
         latency_ms = int((time.monotonic() - t0) * 1000)
         evalmon.performance_monitor.record_latency(latency_ms)
+        # [Observability] xem chú thích ở _short_circuit_response.
+        gate_name = gate or intent
+        evalmon.performance_monitor.record_turn(gate_name)
+        logger.info(f"[RAG:gate] short-circuit gate={gate_name} intent={intent} latency={latency_ms}ms")
         yield {
             "type": "meta",
             "sources": [],

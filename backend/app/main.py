@@ -132,7 +132,7 @@ async def lifespan(app: FastAPI):
         else:
             logger.warning(
                 "[Startup] Bỏ qua worker embedding vì Qdrant chưa sẵn sàng. "
-                "Gọi POST /debug/qdrant/init rồi POST /admin/embedding-jobs/run để embed thủ công."
+                "Gọi POST /debug/qdrant/init rồi POST /debug/qdrant/reindex để embed thủ công."
             )
 
     warmup_task = asyncio.create_task(_warmup_then_start_worker())

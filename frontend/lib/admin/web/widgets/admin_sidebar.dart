@@ -33,6 +33,7 @@ const _topItems = [
   _MenuItem('Chatbot Test',    '/chatbot-test',    Icons.smart_toy,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager, AdminRole.moderator]),
   _MenuItem('Knowledge Base',  '/knowledge',       Icons.library_books, [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Feedback',        '/feedback',        Icons.thumb_up,      [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
+  _MenuItem('Đánh giá',        '/reviews',         Icons.rate_review,   [AdminRole.superAdmin, AdminRole.admin, AdminRole.moderator]),
   _MenuItem('Media',           '/media',           Icons.perm_media,    [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('RAG Monitor',     '/rag-monitoring',  Icons.monitor_heart, [AdminRole.superAdmin, AdminRole.admin]),
   _MenuItem('City Mapping',    '/city-mapping',    Icons.map_outlined,  [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),

@@ -18,6 +18,18 @@ class ApiConfig {
 
   // SSE/stream timeout dài hơn vì RAG cần thời gian xử lý
   static const Duration streamTimeout = Duration(seconds: 120);
+
+  /// Gốc server (bỏ hậu tố `/api`) — dùng để dựng URL tuyệt đối cho ảnh tĩnh
+  /// `/uploads/...` vì StaticFiles được mount ở gốc server, không nằm dưới `/api`.
+  static String get mediaOrigin =>
+      baseUrl.endsWith('/api') ? baseUrl.substring(0, baseUrl.length - 4) : baseUrl;
+}
+
+/// Ghép URL tuyệt đối cho ảnh lưu local (`/uploads/...`). Giữ nguyên nếu đã
+/// là URL tuyệt đối (http/https).
+String mediaUrl(String path) {
+  if (path.startsWith('http')) return path;
+  return '${ApiConfig.mediaOrigin}$path';
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -203,6 +215,41 @@ class ApiClient {
             .put(_uri(path), headers: headers, body: body != null ? jsonEncode(body) : null)
             .timeout(ApiConfig.timeout),
       );
+    } on SocketException {
+      throw const ApiException(0, 'Không kết nối được server. Kiểm tra backend và mạng.');
+    } on TimeoutException {
+      throw const ApiException(0, 'Yêu cầu hết thời gian chờ. Vui lòng thử lại.');
+    }
+  }
+
+  /// Upload file dạng multipart/form-data (vd: avatar). Truyền `bytes` khi
+  /// chạy trên web (không có File path), hoặc `filePath` trên mobile/desktop.
+  Future<dynamic> postMultipart(
+    String path, {
+    required String fieldName,
+    String? filePath,
+    List<int>? bytes,
+    String? filename,
+  }) async {
+    try {
+      final request = http.MultipartRequest('POST', _uri(path));
+      final t = _currentToken;
+      if (t != null && t.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $t';
+      }
+      if (filePath != null) {
+        request.files.add(await http.MultipartFile.fromPath(fieldName, filePath));
+      } else if (bytes != null) {
+        request.files.add(http.MultipartFile.fromBytes(
+          fieldName, bytes, filename: filename ?? 'upload',
+        ));
+      } else {
+        throw ArgumentError('Cần truyền filePath hoặc bytes');
+      }
+
+      final streamed = await request.send().timeout(ApiConfig.timeout);
+      final res = await http.Response.fromStream(streamed);
+      return _parse(res);
     } on SocketException {
       throw const ApiException(0, 'Không kết nối được server. Kiểm tra backend và mạng.');
     } on TimeoutException {

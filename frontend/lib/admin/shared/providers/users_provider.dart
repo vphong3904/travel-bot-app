@@ -27,8 +27,14 @@ class UsersFilter {
   int get hashCode => Object.hash(search, role, page);
 }
 
+// autoDispose: bug đã sửa — provider cũ (không autoDispose) giữ nguyên
+// search/role/page ngay cả sau khi rời màn Users, nên quay lại màn hình vẫn
+// bị lọc theo từ khoá cũ dù ô tìm kiếm trông như đã trống (TextEditingController
+// là state cục bộ của widget nên có reset, nhưng filter thật sự dùng để gọi
+// API thì không). autoDispose khiến Riverpod tự reset về mặc định ngay khi
+// không còn màn hình nào theo dõi provider này (tức là lúc rời màn Users).
 final usersFilterProvider =
-    StateProvider<UsersFilter>((ref) => const UsersFilter());
+    StateProvider.autoDispose<UsersFilter>((ref) => const UsersFilter());
 
 final usersListProvider = FutureProvider.autoDispose
     .family<({List<UserModel> items, int total}), UsersFilter>(

@@ -47,10 +47,18 @@ class AuthRepository {
     );
   }
 
-  Future<void> resetPassword(String token, String newPassword) async {
+  Future<void> resetPassword({
+    required String email,
+    required String otpCode,
+    required String newPassword,
+  }) async {
     await _dio.post<void>(
       '/auth/reset-password',
-      data: {'token': token, 'new_password': newPassword},
+      data: {
+        'email': email,
+        'otp_code': otpCode,
+        'new_password': newPassword,
+      },
     );
   }
 

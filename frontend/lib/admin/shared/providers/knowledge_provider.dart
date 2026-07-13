@@ -20,8 +20,10 @@ class KnowledgeFilter {
       );
 }
 
+// autoDispose: reset filter khi rời màn hình — xem giải thích ở
+// users_provider.dart (usersFilterProvider), cùng bug.
 final knowledgeFilterProvider =
-    StateProvider<KnowledgeFilter>((ref) => const KnowledgeFilter());
+    StateProvider.autoDispose<KnowledgeFilter>((ref) => const KnowledgeFilter());
 
 final knowledgeListProvider = FutureProvider.autoDispose.family<
     ({List<KnowledgeEntry> items, int total}),

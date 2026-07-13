@@ -14,7 +14,7 @@ from __future__ import annotations
 import statistics
 import threading
 import time
-from collections import deque
+from collections import Counter, deque
 
 
 class _PerformanceMonitor:
@@ -24,6 +24,8 @@ class _PerformanceMonitor:
         self._ttfts: deque[int] = deque(maxlen=maxlen)
         self._cache_hits = 0
         self._cache_misses = 0
+        self._gate_counts: Counter[str] = Counter()
+        self._total_turns = 0
         self._started_at = time.time()
 
     def record_latency(self, ms: int) -> None:
@@ -41,6 +43,18 @@ class _PerformanceMonitor:
             else:
                 self._cache_misses += 1
 
+    def record_turn(self, gate: str) -> None:
+        """
+        Ghi nhận CỬA short-circuit nào chặn lượt chat này trước khi tới LLM
+        (vd "quick_reply", "out_of_scope", "category_gap", "no_sources"...),
+        hoặc "llm" nếu lượt đó thực sự tới Gemini. Dùng để đo tỉ lệ
+        over-blocking — nếu 1 cửa nào đó chiếm tỉ trọng bất thường cao trong
+        `summary()["gate_counts"]`, đó là dấu hiệu chuỗi gác đang quá gắt.
+        """
+        with self._lock:
+            self._gate_counts[gate] += 1
+            self._total_turns += 1
+
     def _percentile(self, data: list[int], pct: float) -> int:
         if not data:
             return 0
@@ -56,6 +70,8 @@ class _PerformanceMonitor:
             cache_hit_rate = (
                 round(self._cache_hits / total_lookups, 4) if total_lookups else 0.0
             )
+            gate_counts = dict(self._gate_counts)
+            total_turns = self._total_turns
             return {
                 "uptime_seconds": int(time.time() - self._started_at),
                 "request_count": len(latencies),
@@ -67,6 +83,13 @@ class _PerformanceMonitor:
                 "cache_hit_rate": cache_hit_rate,
                 "cache_hits": self._cache_hits,
                 "cache_misses": self._cache_misses,
+                # Tỉ lệ mỗi cửa short-circuit chặn lượt chat trước khi tới LLM —
+                # đo over-blocking (task P1 "chuỗi gác quá gắt").
+                "gate_counts": gate_counts,
+                "gate_ratio": (
+                    {k: round(v / total_turns, 4) for k, v in gate_counts.items()}
+                    if total_turns else {}
+                ),
             }
 
 

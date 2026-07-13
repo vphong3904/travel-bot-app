@@ -50,8 +50,10 @@ class ContentFilter {
       );
 }
 
+// autoDispose: reset filter khi rời màn hình (destinations/hotels/foods/...)
+// — xem giải thích ở users_provider.dart (usersFilterProvider), cùng bug.
 final contentFilterFamily =
-    StateProvider.family<ContentFilter, String>(
+    StateProvider.autoDispose.family<ContentFilter, String>(
   (ref, contentType) => const ContentFilter(),
 );
 

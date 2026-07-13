@@ -18,6 +18,7 @@ import json
 import re
 import unicodedata
 from dataclasses import dataclass, field
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
@@ -817,6 +818,18 @@ def normalize_vietnamese(text: str):
     return no_accent
 
 
+# Tiền tố hành chính (đã bỏ dấu, bỏ khoảng trắng) — BẮT BUỘC đứng ngay trước
+# tên phường/xã để tính là 1 tham chiếu ward thật sự.
+_WARD_PREFIXES_NO_ACCENT: tuple[str, ...] = ("phuong", "xa", "thitran", "dackhu")
+
+
+def _ward_prefix_precedes(no_accent_with_spaces: str, ward_key: str) -> bool:
+    """Kiểm tra `ward_key` có xuất hiện NGAY SAU 1 tiền tố hành chính
+    (phường/xã/thị trấn/đặc khu) trong văn bản hay không."""
+    compact = no_accent_with_spaces.replace(" ", "")
+    return any(prefix + ward_key in compact for prefix in _WARD_PREFIXES_NO_ACCENT)
+
+
 def resolve_ward_slug(text: str) -> Optional[dict]:
     """
     Tìm xem trong `text` có chứa tên PHƯỜNG/XÃ cũ (trước sáp nhập 01/07/2025)
@@ -826,6 +839,19 @@ def resolve_ward_slug(text: str) -> Optional[dict]:
     match nhiều ứng viên thì cố gắng disambiguate bằng tên quận/huyện cũ
     (old_district) cũng xuất hiện trong text; nếu vẫn không phân biệt được
     thì bỏ qua (trả None) để tránh route sai.
+
+    [Fix over-match] Tên phường/xã sau khi bỏ dấu/bỏ tiền tố ("Vôi"→"voi",
+    "Chờ"→"cho", "Gọi"→"goi", "Thắng"→"thang"...) trùng với các từ cực phổ
+    biến trong tiếng Việt — "với"→"voi", "cho"(cho/để), "tháng"(month)→"thang"
+    (12 dài y hệt "Thắng"), "thắng trận"→"thang tran"... Match substring thô
+    trên TOÀN câu khiến câu bất kỳ chứa các từ này bị gán nhầm thành tên
+    phường/xã (vd "đi VỚI người yêu" → "Thị trấn VÔI", "tháng 12" → "Thị trấn
+    Thắng"), phá slot điểm đến đang lưu trong luồng lên lịch trình chat. Vì
+    hàm này chỉ nhằm nhận diện khi user gõ RÕ tên phường/xã cũ (docstring gốc
+    ví dụ "phường Trúc Bạch", "xã Vĩnh Thịnh" — luôn kèm tiền tố), giờ BẮT
+    BUỘC tiền tố hành chính (phường/xã/thị trấn/đặc khu) đứng ngay trước tên
+    trong văn bản mới tính là match — loại bỏ toàn bộ nhóm false-positive này
+    mà không mất khả năng nhận diện ward khi user gõ đúng dạng.
 
     Trả về dict {"slug", "old_ward", "old_district", "old_province",
     "new_ward", "new_province"} hoặc None nếu không match được rõ ràng.
@@ -838,6 +864,8 @@ def resolve_ward_slug(text: str) -> Optional[dict]:
     best_len = 0
     for ward_key, candidates in WARD_ALIAS_INDEX.items():
         if not ward_key or ward_key not in no_accent.replace(" ", ""):
+            continue
+        if not _ward_prefix_precedes(no_accent, ward_key):
             continue
         if len(candidates) == 1:
             chosen = candidates[0]
@@ -939,22 +967,66 @@ def extract_entities(text: str) -> dict:
             entities["city_slug"] = city_slug
             entities["is_legacy_location_name"] = is_legacy_name
 
-    # Extract month
-    for month_str, month_num in MONTH_MAP.items():
-        if month_str in lower:
-            entities["month"] = month_num
-            break
-    # Pattern: "tháng X" với số
+    # Extract month — ƯU TIÊN pattern số ("tháng X") trước MONTH_MAP: bug đã
+    # sửa, "tháng 1" là substring của "tháng 12"/"tháng 10"/"tháng 11" nên nếu
+    # dò MONTH_MAP (key "tháng 1" khai báo trước trong dict) trước, "tháng 12"
+    # bị nhận nhầm thành tháng 1. Regex số khớp CHÍNH XÁC số nên chạy trước.
     month_match = re.search(r"tháng\s+(\d{1,2})", lower)
-    if month_match and "month" not in entities:
+    if month_match:
         m = int(month_match.group(1))
         if 1 <= m <= 12:
             entities["month"] = m
+    # Tên tháng bằng chữ ("tháng một", "tháng giêng", "tháng chạp"...) — sort
+    # theo độ dài giảm dần để tránh cùng lỗi collision giữa các key bằng chữ
+    # (vd "tháng mười một" chứa "tháng mười" làm tiền tố, phải khớp bản dài
+    # hơn/đặc trưng hơn trước).
+    if "month" not in entities:
+        for month_str in sorted(MONTH_MAP, key=len, reverse=True):
+            if month_str in lower:
+                entities["month"] = MONTH_MAP[month_str]
+                break
 
-    # Extract duration (X ngày)
-    duration_match = re.search(r"(\d+)\s*ngày", lower)
+    # Extract duration (X ngày). Bug đã sửa: trước đây chỉ khớp "ngày" CÓ DẤU
+    # (`r"(\d+)\s*ngày"` trên `lower` — chưa bỏ dấu), nên "2 ngay" (gõ thiếu
+    # dấu, rất phổ biến) không parse được → planner hỏi lại vô tận dù user đã
+    # trả lời. Dùng `no_acc` (đã bỏ dấu ở cả 2 phía) để 1 pattern chấp nhận cả
+    # "ngày"/"ngay". Còn hỗ trợ thêm: viết tắt "3n2d"/"3n2đ", và "tuần"/"cuối
+    # tuần" (tuần → x7 ngày, cuối tuần → 2 ngày mặc định).
+    duration_match = re.search(r"(\d+)\s*ngay\b", no_acc)
     if duration_match:
         entities["duration_days"] = int(duration_match.group(1))
+    else:
+        compact_match = re.search(r"(\d+)\s*n\s*(\d+)\s*d\b", no_acc)
+        if compact_match:
+            entities["duration_days"] = int(compact_match.group(1))
+        else:
+            week_match = re.search(r"(\d+)\s*tuan\b", no_acc)
+            if week_match:
+                entities["duration_days"] = int(week_match.group(1)) * 7
+            elif re.search(r"cuoi\s*tuan\b", no_acc):
+                entities["duration_days"] = 2
+            else:
+                # Ngày đi – ngày về dạng "từ 12/7 đến 14/7", "12/7 - 14/7"
+                # (dd/mm, năm tuỳ chọn) → suy ra số ngày (+1 vì tính cả ngày
+                # đi). Bỏ qua nếu ngày tháng không hợp lệ hoặc ngày về < ngày đi.
+                range_match = re.search(
+                    r"(\d{1,2})[/-](\d{1,2})(?:[/-](\d{2,4}))?\s*"
+                    r"(?:den|toi|-)\s*"
+                    r"(\d{1,2})[/-](\d{1,2})(?:[/-](\d{2,4}))?",
+                    no_acc,
+                )
+                if range_match:
+                    d1, m1, y1, d2, m2, y2 = range_match.groups()
+                    try:
+                        year = int(y1 or y2 or date.today().year)
+                        if year < 100:
+                            year += 2000
+                        start = date(year, int(m1), int(d1))
+                        end = date(year, int(m2), int(d2))
+                        if end >= start:
+                            entities["duration_days"] = (end - start).days + 1
+                    except ValueError:
+                        pass
 
     return entities
 
@@ -979,14 +1051,10 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
                 lower = lower.replace(token, " ")
                 no_acc = no_acc.replace(_remove_accents(token), " ")
 
-    # Check out_of_scope trước
-    oos_score = sum(1 for kw in INTENT_PATTERNS_NO_ACCENT["out_of_scope"] if _keyword_in_text(kw, no_acc))
-    if oos_score >= 1:
-        return "out_of_scope", 0.9
-
-    # Check greeting (accent-fold cả 2 phía, cùng cách làm với out_of_scope ở trên —
-    # bug gốc: check này chỉ so trên `lower`, nên "xin chao" không dấu sẽ không khớp
-    # "xin chào" có dấu trong INTENT_PATTERNS, rơi xuống "unknown" dù rõ ràng là chào hỏi)
+    # Check greeting trước (accent-fold cả 2 phía, cùng cách làm với out_of_scope ở
+    # dưới — bug gốc: check này chỉ so trên `lower`, nên "xin chao" không dấu sẽ
+    # không khớp "xin chào" có dấu trong INTENT_PATTERNS, rơi xuống "unknown" dù rõ
+    # ràng là chào hỏi)
     greeting_score = sum(
         1 for kw, kw_na in zip(INTENT_PATTERNS["greeting"], INTENT_PATTERNS_NO_ACCENT["greeting"])
         if _keyword_in_text(kw, lower) or _keyword_in_text(kw_na, no_acc)
@@ -1011,7 +1079,7 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
     # rule-based của hệ thống, chỉ thêm 1 lớp trọng số tối thiểu.
     scores: dict[str, float] = {}
     for intent, keywords in INTENT_PATTERNS.items():
-        if intent in ("out_of_scope", "greeting"):
+        if intent == "greeting":
             continue
         kw_no_acc_list = INTENT_PATTERNS_NO_ACCENT[intent]
         # So khớp CẢ bản có dấu (trên lower) LẪN bản không dấu (trên no_acc),
@@ -1032,6 +1100,29 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
         if score > 0:
             scores[intent] = score
 
+    # [Fix over-block] out_of_scope trước đây thắng NGAY khi có >=1 keyword
+    # ngoài phạm vi khớp (return sớm ở trên, trước khi tính các intent khác),
+    # kể cả những từ mơ hồ vẫn xuất hiện trong câu hỏi du lịch thật: "công thức"
+    # (món ăn), "chiến tranh" (di tích lịch sử), "thể thao" (tour mạo hiểm),
+    # "game" (khu vui chơi)... Giờ out_of_scope phải CẠNH TRANH với các intent
+    # du lịch khác thay vì thắng tự động:
+    #   - Có địa danh cụ thể trong câu → hầu như chắc chắn vẫn là hỏi du lịch,
+    #     bỏ qua out_of_scope hoàn toàn.
+    #   - Có intent du lịch khác khớp mạnh hơn/bằng → nhường cho intent đó.
+    #   - Chỉ 1 tín hiệu ngoài phạm vi (oos_score==1) và không có intent du
+    #     lịch nào khác khớp → vẫn chặn nhưng với confidence thấp hơn (0.65)
+    #     vì bằng chứng còn mỏng; oos_score>=2 (2 tín hiệu trở lên) mới chặn
+    #     với confidence cao (0.9) như cũ.
+    oos_score = scores.pop("out_of_scope", 0)
+    travel_score = max(scores.values()) if scores else 0
+    # So sánh CHẶT (>) chứ không phải (>=): khi điểm hoà (vd "chiến tranh"=2 hoà
+    # "tham quan"=2 trong "di tích chiến tranh ... có gì tham quan"), ưu tiên
+    # intent du lịch — tie không đủ bằng chứng để kết luận ngoài phạm vi.
+    if oos_score > 0 and not entities.get("location") and oos_score > travel_score:
+        if oos_score >= 2:
+            return "out_of_scope", 0.9
+        return "out_of_scope", 0.65
+
     if not scores:
         # Có location entity nhưng không rõ intent
         if "location" in entities:
@@ -1048,6 +1139,58 @@ def detect_intent(text: str, entities: dict) -> tuple[str, float]:
     return best_intent, confidence
 
 
+# Đại từ chỉ định "đó"/"kia" bỏ dấu, khớp theo ranh giới từ. KHÔNG gồm "này" —
+# "này" đụng chuỗi con "nay" trong "hôm nay"/"ngày nay" (rất phổ biến trong câu
+# hỏi thời tiết/thời điểm), dùng nó sẽ tạo false-positive coreference.
+_REFERENT_DEMONSTRATIVES = re.compile(r"(?<![a-zA-Z])(do|kia)(?![a-zA-Z])")
+
+# Tên bôi đậm không tính là "thực thể vừa nhắc" (thương hiệu chatbot tự nhắc
+# tới chính nó, không phải khách sạn/địa điểm).
+_REFERENT_BOLD_STOPWORDS = {"pdtrip ai", "pdtrip"}
+
+
+def _extract_last_bold_entity(history: list[dict]) -> Optional[str]:
+    """
+    Lấy tên thực thể (khách sạn/quán ăn/địa điểm) được nhắc gần nhất trong câu
+    trả lời TRƯỚC của trợ lý — nhận diện qua chữ IN ĐẬM (**...**), vì RAG/
+    quick-reply luôn bôi đậm tên riêng khi giới thiệu (vd "**Jang & Min's
+    house**"). Dùng để giải quyết câu hỏi tiếp theo kiểu "khách sạn ĐÓ giá bao
+    nhiêu" mà không cần model coreference resolution phức tạp.
+    """
+    for msg in reversed(history[-6:]):
+        if msg.get("role") != "assistant":
+            continue
+        content = msg.get("content") or ""
+        for m in re.finditer(r"\*\*([^*]{2,60})\*\*", content):
+            candidate = m.group(1).strip()
+            if candidate and _remove_accents(candidate.lower()) not in _REFERENT_BOLD_STOPWORDS:
+                return candidate
+    return None
+
+
+def _resolve_coreference(original: str, entities: dict, history: list[dict]) -> Optional[str]:
+    """
+    Câu hỏi tiếp theo kiểu "khách sạn ĐÓ giá bao nhiêu", "quán KIA có xa
+    không" tham chiếu tới thực thể vừa nhắc ở câu trả lời trước, KHÔNG phải
+    địa danh mới — nên `extract_entities` không thấy location nào và retrieval
+    tìm chung chung, dễ rơi vào no-context guard dù câu hỏi hoàn toàn hợp lệ.
+
+    Nếu câu hiện tại KHÔNG có location riêng nhưng có đại từ chỉ định "đó"/
+    "kia", chêm tên thực thể gần nhất (in đậm trong câu trả lời trước) vào
+    query để embedding/retrieval có thực thể cụ thể để tìm. Trả None nếu
+    không áp dụng được (để rewrite_query xử lý theo nhánh khác).
+    """
+    if entities.get("location") or not history:
+        return None
+    no_acc = _remove_accents(original.lower())
+    if not _REFERENT_DEMONSTRATIVES.search(no_acc):
+        return None
+    referent = _extract_last_bold_entity(history)
+    if not referent:
+        return None
+    return f"{original.rstrip('?. ')} (đang hỏi về {referent})"
+
+
 def rewrite_query(original: str, entities: dict, intent: str, history: list[dict]) -> str:
     """
     Query Rewriting: mở rộng câu hỏi ngắn thành đầy đủ.
@@ -1056,6 +1199,11 @@ def rewrite_query(original: str, entities: dict, intent: str, history: list[dict
     location = entities.get("location", "")
     month = entities.get("month")
     lower = original.lower().strip()
+
+    # Coreference: "khách sạn đó/kia..." → chêm tên thực thể vừa nhắc.
+    coref = _resolve_coreference(original, entities, history)
+    if coref:
+        return coref
 
     # Lấy location từ history nếu câu hiện tại không có
     if not location and history:
@@ -1187,10 +1335,17 @@ def preprocess(
         )
 
     # 6. Query rewriting (chỉ khi không cần clarification)
+    # [Fix] Truyền `original` (còn dấu) chứ không phải `normalized` — bug đã
+    # sửa: normalize_vietnamese() bỏ dấu (trả "co lanh khong?" cho "có lạnh
+    # không?"), nhưng toàn bộ regex pattern trong rewrite_query() được viết
+    # cho tiếng Việt CÓ DẤU ("có", "lạnh", "ổn", "được"...). Truyền bản bỏ
+    # dấu khiến MỌI pattern không bao giờ khớp — rewrite_query() luôn rơi
+    # xuống nhánh fallback cuối, không bao giờ chêm được tháng/thời tiết từ
+    # lịch sử như thiết kế.
     if needs_clarification:
         rewritten = normalized  # Không rewrite nếu cần hỏi lại
     else:
-        rewritten = rewrite_query(normalized, entities, intent, history)
+        rewritten = rewrite_query(original, entities, intent, history)
 
     # 7. [Sáp nhập 01/07/2025] Nếu người dùng dùng tên tỉnh/thành CŨ
     # (vd "Vũng Tàu", "Bình Dương", "Hà Giang"...), chêm thêm tên tỉnh/thành
@@ -1251,10 +1406,30 @@ OUT_OF_SCOPE_RESPONSE = (
     "- 📅 Lịch trình tham quan"
 )
 
-MISSING_KNOWLEDGE_RESPONSE = (
-    "Hiện tôi chưa có dữ liệu đáng tin cậy về nội dung này trong knowledge base. "
-    "Bạn có thể liên hệ tư vấn viên PDTrip để được hỗ trợ chi tiết hơn 📞"
-)
+def missing_knowledge_response(location: Optional[str] = None) -> str:
+    """
+    Câu trả lời khi KB không có dữ liệu liên quan (no-context guard).
+
+    [Fix] Bản cũ ("liên hệ tư vấn viên PDTrip 📞") hứa hẹn một kênh hỗ trợ
+    KHÔNG THẬT SỰ TỒN TẠI (không có hotline/ticket support nào trong hệ
+    thống) — người dùng bấm vào ngõ cụt. Giờ thừa nhận thẳng việc thiếu dữ
+    liệu và gợi ý hướng khác NGAY TRONG chatbot (hỏi lại theo cách khác, hỏi
+    điểm đến khác), giống cách category_gap_message đã làm cho tra cứu dịch
+    vụ theo nhóm.
+    """
+    base = (
+        "Hiện mình chưa tìm thấy dữ liệu đáng tin cậy về nội dung này trong hệ "
+        "thống, nên mình không muốn đưa thông tin chưa kiểm chứng 🙏"
+    )
+    if location:
+        base += f" Bạn thử hỏi mình về điều khác ở **{location}**, hoặc hỏi về một điểm đến khác nhé?"
+    else:
+        base += " Bạn thử hỏi theo cách khác, hoặc hỏi về một điểm đến cụ thể (Đà Lạt, Phú Quốc, Hà Giang...) nhé?"
+    return base
+
+
+# Giữ hằng số cho tương thích ngược (dùng khi không có location cụ thể).
+MISSING_KNOWLEDGE_RESPONSE = missing_knowledge_response()
 
 
 def get_greeting_response(index: int = 0) -> str:

@@ -34,8 +34,10 @@ class FeedbackFilter {
       );
 }
 
+// autoDispose: reset filter khi rời màn hình — xem giải thích ở
+// users_provider.dart (usersFilterProvider), cùng bug.
 final feedbackFilterProvider =
-    StateProvider<FeedbackFilter>((ref) => const FeedbackFilter());
+    StateProvider.autoDispose<FeedbackFilter>((ref) => const FeedbackFilter());
 
 final feedbackListProvider = FutureProvider.autoDispose
     .family<({List<FeedbackItem> items, int total}), FeedbackFilter>(

@@ -18,6 +18,7 @@ import '../../services/review_api_service.dart';
 import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/destination_card.dart';
+import '../../widgets/user_profile_card.dart';
 import '../auth/login_register_screen.dart';
 import '../chat/chatbot_screen.dart';
 import '../chat/chat_history_screen.dart';
@@ -159,59 +160,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               const SizedBox(height: 16),
 
-              // Avatar
-              CircleAvatar(
-                radius: 46,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.14),
-                child: user?.avatarUrl != null && user!.avatarUrl!.isNotEmpty
-                    ? ClipOval(
-                        child: Image.network(user.avatarUrl!,
-                            width: 92, height: 92, fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => _avatarInitial(user.displayName)),
-                      )
-                    : _avatarInitial(user?.displayName ?? 'K'),
-              ),
-              const SizedBox(height: 10),
-
-              // Name
-              Text(
-                user?.displayName ?? 'Khách',
-                style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.dark),
-              ),
-              const SizedBox(height: 2),
-
-              // Email
-              Text(
-                user?.email ?? 'Chưa đăng nhập',
-                style: const TextStyle(color: AppColors.muted, fontSize: 13),
-              ),
-
-              // Role badge
-              if (user != null) ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: user.isAdmin
-                        ? AppColors.secondary.withValues(alpha: 0.15)
-                        : AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    user.isAdmin
-                        ? '⚡ Admin'
-                        : user.isModerator
-                            ? '🛡 Moderator'
-                            : '✈ Thành viên',
-                    style: TextStyle(
-                      color: user.isAdmin ? AppColors.secondary : AppColors.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+              // Thẻ thông tin user — dùng chung với SettingsScreen (UserProfileCard)
+              if (user != null)
+                UserProfileCard(user: user)
+              else
+                Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 46,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.14),
+                      child: _avatarInitial('K'),
                     ),
-                  ),
+                    const SizedBox(height: 10),
+                    const Text('Khách',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.dark)),
+                    const SizedBox(height: 2),
+                    const Text('Chưa đăng nhập',
+                        style: TextStyle(color: AppColors.muted, fontSize: 13)),
+                  ],
                 ),
-              ],
               const SizedBox(height: 20),
 
               // Stats row

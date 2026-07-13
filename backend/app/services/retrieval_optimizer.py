@@ -44,6 +44,9 @@ _TOPK_OVERRIDES: dict[str, int] = {
     "ask_food": 4,
     "ask_safety": 4,
     "ask_activity": 4,
+    # Bug đã sửa: "ask_shopping" có trong INTENT_PATTERNS nhưng thiếu ở đây
+    # → luôn rơi về default_top_k (no-op), không được tuning riêng.
+    "ask_shopping": 4,
     "find_hotel": 5,
     "find_tour": 5,
     "find_ticket": 4,

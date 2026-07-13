@@ -14,6 +14,7 @@ import '../auth/login_register_screen.dart';
 import '../chat/chatbot_screen.dart';
 import '../detail/entity_detail_screen.dart';
 import '../detail/itinerary_detail_screen.dart';
+import '../trip/ai_planner_screen.dart';
 
 class DestinationDetailScreen extends StatefulWidget {
   final Destination destination;
@@ -394,18 +395,42 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                       const SizedBox(height: 18),
                     ],
 
-                    // AI button — hành động chính, đưa lên trên
+                    // 2 hành động chính, tách biệt rõ ràng:
+                    // - "Hỏi AI" → chat tự do, hỏi-đáp thông tin bình thường
+                    //   (KHÔNG còn kèm "gợi ý lịch trình" trong tin nhắn mở đầu
+                    //   — tránh kéo chat vào luồng lên lịch, đúng yêu cầu "màn
+                    //   chatbot chỉ để nói chuyện bình thường").
+                    // - "Gợi ý lịch trình" → gọi thẳng /trips/ai/plan (tái
+                    //   dùng AiPlannerScreen có sẵn), ra ngay 1 lịch trình mẫu
+                    //   kèm nút "Lưu chuyến đi", không hỏi từng bước trong chat.
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () => Navigator.push(context, MaterialPageRoute(
-                          builder: (_) => ChatBotScreen(initialMessage: 'Cho tôi biết thêm về ${d.name} và gợi ý lịch trình'),
+                          builder: (_) => AiPlannerScreen(initialDestination: d.name),
                         )),
-                        icon: const Icon(Icons.smart_toy_outlined, size: 18),
-                        label: const Text('Hỏi AI về địa điểm này'),
+                        icon: const Icon(Icons.map_outlined, size: 18),
+                        label: const Text('Gợi ý lịch trình'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => ChatBotScreen(initialMessage: 'Cho tôi biết thêm về ${d.name}'),
+                        )),
+                        icon: const Icon(Icons.smart_toy_outlined, size: 18),
+                        label: const Text('Hỏi AI về địa điểm này'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          side: const BorderSide(color: AppColors.primary),
                           minimumSize: const Size.fromHeight(50),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         ),

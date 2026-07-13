@@ -26,10 +26,11 @@ Security notes:
 
 from datetime import datetime, timezone, timedelta
 from typing import Optional
-from uuid import UUID
+from uuid import UUID, uuid4
+import os
 import re
 
-from fastapi import APIRouter, HTTPException, status, Request
+from fastapi import APIRouter, HTTPException, status, Request, UploadFile, File
 from sqlalchemy import select, update
 
 from app.api.deps import CurrentUser, DB
@@ -49,6 +50,7 @@ from app.db.schemas.auth import (
 from app.services.otp_service import create_otp, verify_otp, check_otp_rate_limit
 from app.services.email_service import send_otp_email
 from app.utils import get_logger
+from app.utils.image_processing import process_image
 
 logger = get_logger("auth")
 router = APIRouter(tags=["auth"])
@@ -459,6 +461,38 @@ async def update_me(body: UpdateProfileRequest, current_user: CurrentUser, db: D
         current_user.full_name = body.full_name
     if body.avatar_url is not None:
         current_user.avatar_url = body.avatar_url
+    current_user.updated_at = datetime.now(timezone.utc)
+    await db.commit()
+    await db.refresh(current_user)
+    return current_user
+
+
+# ── 11b. UPLOAD AVATAR ───────────────────────────────────────────────────────
+
+_AVATAR_DIR = os.path.join("static", "uploads", "avatars")
+_AVATAR_ALLOWED_EXT = {"jpg", "jpeg", "png", "webp"}
+_AVATAR_MAX_BYTES = 5 * 1024 * 1024  # 5MB
+
+
+@router.post("/me/avatar", response_model=UserResponse)
+async def upload_avatar(current_user: CurrentUser, db: DB, file: UploadFile = File(...)):
+    """Upload ảnh đại diện từ thiết bị, resize ≤512px + convert WebP, lưu avatar_url."""
+    ext = (os.path.splitext(file.filename or "")[1].lstrip(".") or "jpg").lower()
+    if ext not in _AVATAR_ALLOWED_EXT:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST,
+                             "Định dạng không hỗ trợ (chỉ jpg/png/webp)")
+    content = await file.read()
+    if len(content) > _AVATAR_MAX_BYTES:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Ảnh quá lớn (>5MB)")
+
+    out, out_ext, _mime, _w, _h = process_image(content, ext, max_side=512)
+
+    os.makedirs(_AVATAR_DIR, exist_ok=True)
+    filename = f"{uuid4()}.{out_ext}"
+    with open(os.path.join(_AVATAR_DIR, filename), "wb") as f:
+        f.write(out)
+
+    current_user.avatar_url = f"/uploads/avatars/{filename}"
     current_user.updated_at = datetime.now(timezone.utc)
     await db.commit()
     await db.refresh(current_user)

@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../models/app_user.dart';
 import '../../providers/app_state.dart';
 import '../../providers/favorites_provider.dart';
 import '../../services/api_service.dart';
@@ -18,6 +17,7 @@ import '../../services/auth_api_service.dart';
 import '../../services/favorite_api_service.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/dialog_helpers.dart';
+import '../../widgets/user_profile_card.dart';
 import '../auth/login_register_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -49,9 +49,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // ── User info card ─────────────────────────────────────────────
+            // ── User info card — dùng chung với ProfileScreen (UserProfileCard) ──
             if (appState.isLoggedIn && user != null) ...[
-              _UserInfoCard(user: user),
+              UserProfileCard(user: user),
               const SizedBox(height: 24),
             ],
 
@@ -428,124 +428,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } finally {
       if (mounted) setState(() => _clearingFavorites = false);
     }
-  }
-}
-
-// ─── User Info Card ───────────────────────────────────────────────────────────
-
-class _UserInfoCard extends StatelessWidget {
-  final AppUser user;
-  const _UserInfoCard({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.75)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4)),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Avatar
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.25),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-            child: user.avatarUrl != null && user.avatarUrl!.isNotEmpty
-                ? ClipOval(
-                    child: Image.network(user.avatarUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => _Initial(name: user.displayName)),
-                  )
-                : _Initial(name: user.displayName),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.displayName,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 3),
-                Text(user.email,
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.85), fontSize: 13),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 6),
-                _RoleBadge(role: user.role),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Initial extends StatelessWidget {
-  final String name;
-  const _Initial({required this.name});
-
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Text(
-          name.isNotEmpty ? name[0].toUpperCase() : '?',
-          style: const TextStyle(
-              color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-      );
-}
-
-class _RoleBadge extends StatelessWidget {
-  final String role;
-  const _RoleBadge({required this.role});
-
-  @override
-  Widget build(BuildContext context) {
-    String label;
-    switch (role) {
-      case 'admin':
-        label = '⚡ Admin';
-        break;
-      case 'moderator':
-        label = '🛡 Moderator';
-        break;
-      default:
-        label = '✈ Thành viên';
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(label,
-          style: const TextStyle(
-              color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
-    );
   }
 }
 

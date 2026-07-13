@@ -228,6 +228,27 @@ class AuthApiService {
     return AppUser.fromJson(data);
   }
 
+  // ── UPLOAD AVATAR ──────────────────────────────────────────────────────────
+
+  /// Upload ảnh đại diện từ thiết bị (mobile/desktop dùng [filePath],
+  /// web dùng [bytes]). Trả về user đã cập nhật avatar_url.
+  static Future<AppUser> uploadAvatar(
+    String accessToken, {
+    String? filePath,
+    List<int>? bytes,
+    String? filename,
+  }) async {
+    final client = ApiClient(token: accessToken);
+    final data = await client.postMultipart(
+      '/auth/me/avatar',
+      fieldName: 'file',
+      filePath: filePath,
+      bytes: bytes,
+      filename: filename,
+    ) as Map<String, dynamic>;
+    return AppUser.fromJson(data);
+  }
+
   // ── ĐỔI MẬT KHẨU (đã đăng nhập) ─────────────────────────────────────────
 
   static Future<void> changePassword(

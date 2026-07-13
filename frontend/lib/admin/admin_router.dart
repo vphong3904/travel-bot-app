@@ -26,6 +26,7 @@ import 'web/screens/transport_screen.dart';
 import 'web/screens/content_options_screen.dart';
 import 'web/screens/chatbot_test_screen.dart';
 import 'web/screens/feedback_screen.dart';
+import 'web/screens/reviews_screen.dart';
 import 'web/screens/media_screen.dart';
 import 'web/screens/system_config_screen.dart';
 import 'web/widgets/admin_layout.dart';
@@ -63,7 +64,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password',
         name: 'reset-password',
         builder: (context, state) => ResetPasswordScreen(
-          token: state.uri.queryParameters['token'] ?? '',
+          email: state.uri.queryParameters['email'] ?? '',
         ),
       ),
 
@@ -125,6 +126,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/feedback',
             name: 'feedback',
             builder: (_, __) => const FeedbackScreen(),
+          ),
+          GoRoute(
+            path: '/reviews',
+            name: 'reviews',
+            builder: (_, __) => const ReviewsScreen(),
           ),
           GoRoute(
             path: '/media',

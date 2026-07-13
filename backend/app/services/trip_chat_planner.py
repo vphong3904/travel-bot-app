@@ -19,7 +19,7 @@ from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services import trip_planner_service
-from app.services.nlp_preprocessor import extract_entities
+from app.services.nlp_preprocessor import _keyword_in_text, extract_entities
 from app.services.user_preference_service import PREFERENCE_TAXONOMY, score_text, strip_accents
 from app.utils import get_logger
 
@@ -51,13 +51,47 @@ def _last_assistant(history: list[dict]) -> Optional[str]:
     return None
 
 
+# Từ/cụm để hỏi (đã bỏ dấu, khớp ranh giới từ) — dấu hiệu câu hiện tại là một
+# CÂU HỎI THẬT (thông tin/tư vấn) chứ không phải trả lời ngắn gọn cho slot
+# đang chờ. "gi" (gì), "sao", "dau" (đâu) rất đặc trưng cho câu hỏi tiếng Việt.
+_QUESTION_HINTS = ("gi", "sao", "dau", "the nao", "bao nhieu", "khi nao", "co khong")
+
+
+def _looks_like_new_question(message: str) -> bool:
+    """
+    Bug đã sửa: trước đây, một khi câu trợ lý gần nhất là câu hỏi slot-filling
+    (bắt đầu bằng PLANNER_MARKER), MỌI tin nhắn sau đó của user đều bị coi là
+    "đang lên lịch" — kể cả khi user chuyển sang hỏi chuyện hoàn toàn khác
+    ("Đà Lạt có món gì ngon", "thời tiết Huế tháng 12"...). Vì mọi câu hỏi
+    slot-filling đều bắt đầu bằng cùng 1 marker, planner tự khoá chat vào
+    luồng lên lịch vĩnh viễn, RAG không bao giờ chạy lại được nữa.
+
+    Heuristic thoát: câu trả lời slot thường NGẮN và không có dấu hỏi/từ để
+    hỏi (vd "Đà Lạt", "3 ngày", "2 người", "bỏ qua"). Câu hỏi thật thường có
+    "?" hoặc từ để hỏi ("gì", "sao", "đâu"...) VÀ đủ dài (>3 từ) — ngưỡng độ
+    dài để không exit nhầm khi câu trả lời slot tình cờ có dấu hỏi tu từ
+    ("Đà Lạt nhé?"). KHÔNG dùng riêng tín hiệu "có địa danh/số liệu" để giữ
+    chân trong luồng lên lịch, vì địa danh/số liệu vẫn có thể xuất hiện TRONG
+    một câu hỏi khác (vd "Đà Lạt có món gì ngon" chứa "Đà Lạt" nhưng rõ ràng
+    đang hỏi ẩm thực, không phải trả lời "bạn muốn đi đâu").
+    """
+    low = strip_accents(message.lower())
+    has_hint = "?" in message or any(_keyword_in_text(h, low) for h in _QUESTION_HINTS)
+    if not has_hint:
+        return False
+    return len(message.split()) > 3
+
+
 def is_planning_turn(history: list[dict], message: str) -> bool:
     """Đang trong luồng lên lịch nếu: câu hiện tại kích hoạt, HOẶC câu trợ lý
-    gần nhất là câu hỏi slot-filling (bắt đầu bằng PLANNER_MARKER)."""
+    gần nhất là câu hỏi slot-filling (bắt đầu bằng PLANNER_MARKER) VÀ câu hiện
+    tại không phải một câu hỏi khác hẳn (xem `_looks_like_new_question`)."""
     if has_trigger(message):
         return True
     last = _last_assistant(history)
-    return bool(last and last.lstrip().startswith(PLANNER_MARKER))
+    if not (last and last.lstrip().startswith(PLANNER_MARKER)):
+        return False
+    return not _looks_like_new_question(message)
 
 
 def _asked_optional(history: list[dict]) -> bool:
@@ -107,10 +141,13 @@ def _extract_travelers(text: str) -> Optional[int]:
     return None
 
 
+# Key "group" khớp CHECK constraint trip_plans.travel_type ở DB
+# ('solo','couple','family','group') — trước đây dùng "friends" khiến
+# /trips/ai/confirm crash IntegrityError khi user chọn đi nhóm bạn.
 _TRAVEL_TYPE_KEYWORDS = {
     "couple": ("cap doi", "couple", "nguoi yeu", "vo chong", "honeymoon", "tuan trang mat"),
     "family": ("gia dinh", "family", "ca nha", "bo me", "con nho", "tre em"),
-    "friends": ("nhom ban", "ban be", "hoi ban", "friends", "dong nghiep", "team"),
+    "group": ("nhom ban", "ban be", "hoi ban", "friends", "dong nghiep", "team"),
     "solo": ("mot minh", "solo", "di bui", "phuot mot minh"),
 }
 
@@ -216,7 +253,14 @@ def _fmt_vnd(v: Optional[int]) -> str:
 
 
 def _plan_reply_text(plan: dict) -> str:
-    lines = [f"Mình đã lên **{plan['title']}** dựa trên dữ liệu thật trong hệ thống 🎉\n"]
+    """
+    Bug đã sửa: các dòng trước đây nối bằng "\n" ĐƠN (`"\n".join(lines)`) —
+    Markdown coi 1 newline đơn là soft-break, nhiều renderer (kể cả widget
+    chat của app) GỘP LUÔN vào cùng 1 đoạn, nên "Ngày 1: ..." và "**Ngày 2:**
+    ..." bị dính liền thành 1 dòng dài. Nối bằng "\n\n" (dòng trắng — đúng
+    ngữ nghĩa "đoạn mới" của Markdown) để mỗi mục xuống dòng thật.
+    """
+    lines = [f"Mình đã lên **{plan['title']}** dựa trên dữ liệu thật trong hệ thống 🎉"]
     if plan.get("hotel"):
         h = plan["hotel"]
         lines.append(f"🏨 Khách sạn gợi ý: **{h['name']}**"
@@ -225,13 +269,13 @@ def _plan_reply_text(plan: dict) -> str:
         titles = " → ".join(it["title"] for it in d["items"][:4])
         lines.append(f"**Ngày {d['day_number']}:** {titles}")
     if plan.get("estimated_cost"):
-        lines.append(f"\n💰 Chi phí ước tính: **{_fmt_vnd(plan['estimated_cost'])}** "
+        lines.append(f"💰 Chi phí ước tính: **{_fmt_vnd(plan['estimated_cost'])}** "
                      f"cho {plan.get('travelers', 1)} người.")
     if plan.get("budget_warning"):
-        lines.append(f"\n⚠️ {plan['budget_warning']}")
-    lines.append("\nBạn xem thử nhé — hợp ý thì bấm **Lưu Chuyến Đi**, không lưu cũng "
+        lines.append(f"⚠️ {plan['budget_warning']}")
+    lines.append("Bạn xem thử nhé — hợp ý thì bấm **Lưu Chuyến Đi**, không lưu cũng "
                  "được vì lịch trình vẫn nằm trong lịch sử chat này.")
-    return "\n".join(lines)
+    return "\n\n".join(lines)
 
 
 # ── Entry point ──────────────────────────────────────────────────────────────

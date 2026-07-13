@@ -345,25 +345,52 @@ _COVERAGE_TABLES = [
 ]
 
 
-async def _count(db, table: str, did) -> int:
-    # table chỉ lấy từ hằng số nội bộ (không phải input user) → an toàn.
-    return (await db.execute(
-        text(f"SELECT count(*) FROM {table} WHERE destination_id = :d"), {"d": str(did)}
-    )).scalar() or 0
+# Tất cả bảng cần đếm để quyết định gap-message (bảng chính của intent +
+# các bảng coverage gợi ý). table chỉ lấy từ hằng số nội bộ → an toàn để
+# nội suy thẳng vào SQL (không phải input user).
+_ALL_COUNT_TABLES: list[str] = [
+    "locations", "hotels", "foods", "restaurants", "shopping_places",
+    "transport_options", "tours", "destination_events", "itineraries",
+]
+
+
+async def _count_all(db, did) -> dict[str, int]:
+    """
+    Đếm số dòng của TẤT CẢ bảng liên quan cho 1 destination trong DUY NHẤT
+    một round-trip DB (UNION ALL), thay vì tối đa 9 lượt `await` tuần tự như
+    trước (1 cho bảng chính + tới 8 cho coverage) — giảm độ trễ mỗi lượt
+    category_gap_message chạy (nó chạy trên MỌI câu hỏi có intent + địa danh,
+    kể cả khi kết quả cuối cùng là "có dữ liệu, bỏ qua").
+    """
+    union_sql = " UNION ALL ".join(
+        f"SELECT '{tbl}' AS tbl, count(*) AS c FROM {tbl} WHERE destination_id = :d"
+        for tbl in _ALL_COUNT_TABLES
+    )
+    rows = (await db.execute(text(union_sql), {"d": str(did)})).all()
+    return {r[0]: r[1] for r in rows}
 
 
 async def category_gap_message(
-    intent: Optional[str], location: Optional[str], city_slug: Optional[str]
+    intent: Optional[str],
+    location: Optional[str],
+    city_slug: Optional[str],
+    confidence: float = 1.0,
 ) -> Optional[str]:
     """
     Trả câu "chưa có dữ liệu [nhóm] cho [thành phố]" (kèm gợi ý nhóm CÓ data) khi:
       - intent thuộc nhóm có bảng cấu trúc riêng, VÀ
+      - CONFIDENCE của intent đủ cao (mặc định >= 0.6) — nếu intent chỉ là
+        phỏng đoán yếu (câu mơ hồ khớp nhầm 1 keyword), tuyên bố "chưa có dữ
+        liệu" dựa trên intent sai sẽ chặn oan câu hỏi mà RAG/LLM đáng lẽ trả
+        lời được bình thường, VÀ
       - resolve được destination (user nêu địa danh cụ thể), VÀ
       - bảng tương ứng KHÔNG có dòng nào cho destination đó.
     Trả None nếu có data (để pipeline trả lời bình thường) hoặc không xác định
     được địa danh (để luồng RAG thường xử lý). KHÔNG raise.
     """
     if not intent or intent not in _INTENT_PRIMARY_TABLE:
+        return None
+    if confidence < 0.6:
         return None
     if not location and not city_slug:
         return None
@@ -374,19 +401,17 @@ async def category_gap_message(
             if not did:
                 return None
 
+            counts = await _count_all(db, did)
             if intent == "ask_food":
-                cnt = await _count(db, "foods", did) + await _count(db, "restaurants", did)
+                cnt = counts.get("foods", 0) + counts.get("restaurants", 0)
             else:
                 table, _ = _INTENT_PRIMARY_TABLE[intent]
-                cnt = await _count(db, table, did)
+                cnt = counts.get(table, 0)
             if cnt > 0:
                 return None  # có dữ liệu → trả lời bình thường
 
             _, label = _INTENT_PRIMARY_TABLE[intent]
-            avail = []
-            for lbl, tbl in _COVERAGE_TABLES:
-                if await _count(db, tbl, did) > 0:
-                    avail.append(lbl)
+            avail = [lbl for lbl, tbl in _COVERAGE_TABLES if counts.get(tbl, 0) > 0]
 
             msg = (
                 f"Hiện PDTrip chưa có dữ liệu {label} cho **{name}**, nên mình "
@@ -488,7 +513,13 @@ async def build_itinerary(
                 "itinerary_id": str(chosen["id"]),
                 "duration": _duration_text(chosen["duration_days"]),
                 "duration_days": chosen["duration_days"],
+                # "group" = nhãn hiển thị (vd "Nhóm bạn"); "group_type" = key
+                # THẬT khớp CHECK constraint trip_plans.travel_type ở DB
+                # ('solo'/'couple'/'family'/'group'). Bug đã sửa: trước đây
+                # chỉ có "group" (label) — nếu FE lỡ gửi thẳng label này làm
+                # travel_type khi lưu chuyến đi sẽ crash IntegrityError.
                 "group": _GROUP_LABEL.get(chosen["group_type"] or "", chosen["group_type"] or ""),
+                "group_type": chosen["group_type"],
                 "budget_low": chosen["budget_low"] or 0,
                 "budget_high": chosen["budget_high"] or 0,
                 "days": days,

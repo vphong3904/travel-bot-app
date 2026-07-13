@@ -19,9 +19,15 @@ import re
 import unicodedata
 from dataclasses import dataclass, field
 
-# Ngưỡng động: ưu tiên cao hơn nếu có kết quả tốt, fallback thấp hơn nếu KB mỏng
+# Ngưỡng động: ưu tiên cao hơn nếu có kết quả tốt, fallback thấp hơn nếu KB mỏng.
+# FALLBACK hạ từ 0.30 → 0.25 (task P1 "chuỗi gác quá gắt"): với embedding
+# bge-m3, nhiều câu đúng ngữ nghĩa chỉ đạt cosine ~0.25-0.30 (đặc biệt câu
+# ngắn/từ khoá ít) — ngưỡng 0.30 lọc sạch cả kết quả liên quan, đẩy thẳng
+# xuống "không có dữ liệu" dù KB có câu trả lời. Kết quả lọt qua fallback vẫn
+# bị đánh dấu is_approximate (dưới APPROXIMATE_SCORE_CEILING) nên Gemini/FE
+# vẫn thận trọng khi dùng — hạ ngưỡng không đồng nghĩa tắt cảnh báo.
 PRIMARY_THRESHOLD = 0.45
-FALLBACK_THRESHOLD = 0.30
+FALLBACK_THRESHOLD = 0.25
 
 # Dưới ngưỡng này, dù có trả về cũng luôn đánh dấu approximate
 APPROXIMATE_SCORE_CEILING = 0.40
@@ -96,10 +102,14 @@ class HallucinationReport:
 
 def _check_grounding(answer: str, sources: list[dict]) -> GroundingResult:
     if not sources:
-        # Không có context mà vẫn trả lời dài/cụ thể → rủi ro cao, nhưng đây
-        # là pipeline tạo từ câu hỏi out-of-context, không có cách verify thêm
-        # ngoài cảnh báo confidence thấp.
-        return GroundingResult(is_grounded=True, confidence=0.6, ungrounded_terms=[])
+        # Không có context nào để đối chiếu mà vẫn có câu trả lời → rủi ro
+        # hallucination CAO, phải coi là KHÔNG grounded và flag cho admin
+        # review (bug đã sửa: bản cũ trả is_grounded=True/confidence=0.6 —
+        # "rủi ro cao" nhưng lại không hành động tương xứng, mâu thuẫn với
+        # chính comment của nó). Trong pipeline thật, rag_pipeline.py đã chặn
+        # trường hợp này SỚM HƠN (no-context guard trả lời mẫu, không gọi
+        # Gemini) nên nhánh này chỉ còn là lưới an toàn cho caller khác.
+        return GroundingResult(is_grounded=False, confidence=0.3, ungrounded_terms=[])
 
     context_tokens: set[str] = set()
     for s in sources:

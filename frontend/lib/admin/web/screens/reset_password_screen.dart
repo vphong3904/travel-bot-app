@@ -1,16 +1,17 @@
 // lib/features/auth/screens/reset_password_screen.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../shared/data/auth_repository.dart';
 import '../widgets/auth_card.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
-  /// Token từ query params ?token=xxx (đọc bởi GoRouter)
-  final String token;
+  /// Email từ query params ?email=xxx (đọc bởi GoRouter)
+  final String email;
 
-  const ResetPasswordScreen({super.key, required this.token});
+  const ResetPasswordScreen({super.key, required this.email});
 
   @override
   ConsumerState<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -18,15 +19,18 @@ class ResetPasswordScreen extends ConsumerStatefulWidget {
 
 class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _otpCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
   bool _obscurePass = true;
   bool _obscureConfirm = true;
   bool _isLoading = false;
+  bool _isResending = false;
   String? _error;
 
   @override
   void dispose() {
+    _otpCtrl.dispose();
     _passCtrl.dispose();
     _confirmCtrl.dispose();
     super.dispose();
@@ -35,11 +39,29 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   @override
   void initState() {
     super.initState();
-    // Guard: nếu token rỗng thì redirect về forgot-password
-    if (widget.token.isEmpty) {
+    // Guard: nếu email rỗng thì redirect về forgot-password
+    if (widget.email.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) context.go('/forgot-password');
       });
+    }
+  }
+
+  Future<void> _resendOtp() async {
+    setState(() { _isResending = true; _error = null; });
+    try {
+      await ref.read(authRepositoryProvider).forgotPassword(widget.email);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã gửi lại mã OTP.')),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() => _error = 'Không thể gửi lại mã OTP. Vui lòng thử lại.');
+      }
+    } finally {
+      if (mounted) setState(() => _isResending = false);
     }
   }
 
@@ -48,8 +70,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     setState(() { _isLoading = true; _error = null; });
     try {
       await ref.read(authRepositoryProvider).resetPassword(
-        widget.token,
-        _passCtrl.text,
+        email: widget.email,
+        otpCode: _otpCtrl.text.trim(),
+        newPassword: _passCtrl.text,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -65,7 +88,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       setState(() {
         _isLoading = false;
         _error = detail?.toString() ??
-            'Link đã hết hạn hoặc không hợp lệ. Vui lòng yêu cầu link mới.';
+            'Mã OTP không đúng hoặc đã hết hạn. Vui lòng thử lại.';
       });
     } catch (_) {
       setState(() {
@@ -101,11 +124,39 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Chọn mật khẩu mới cho tài khoản của bạn.',
+                      'Nhập mã OTP đã gửi đến ${widget.email} và mật khẩu mới.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
                     ),
                     const SizedBox(height: 28),
+
+                    // Mã OTP
+                    TextFormField(
+                      controller: _otpCtrl,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(6),
+                      ],
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                        labelText: 'Mã OTP',
+                        prefixIcon: Icon(Icons.pin_outlined),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.isEmpty) return 'Vui lòng nhập mã OTP';
+                        if (v.length != 6) return 'Mã OTP gồm 6 chữ số';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: _isResending ? null : _resendOtp,
+                        child: Text(_isResending ? 'Đang gửi...' : 'Gửi lại mã OTP'),
+                      ),
+                    ),
 
                     // Mật khẩu mới
                     TextFormField(
@@ -187,19 +238,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                           ],
                         ),
                       ),
-                      // Link yêu cầu lại nếu token expired
-                      if (_error!.contains('hết hạn') || _error!.contains('hợp lệ'))
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: TextButton(
-                            onPressed: () => context.go('/forgot-password'),
-                            style: TextButton.styleFrom(
-                              foregroundColor: const Color(0xFF2563EB),
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: const Text('Yêu cầu link mới →'),
-                          ),
-                        ),
                     ],
 
                     const SizedBox(height: 20),
@@ -220,6 +258,11 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                             )
                           : const Text('Xác nhận đặt lại mật khẩu',
                               style: TextStyle(fontSize: 15)),
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () => context.go('/forgot-password'),
+                      child: const Text('← Nhập email khác'),
                     ),
                   ],
                 ),

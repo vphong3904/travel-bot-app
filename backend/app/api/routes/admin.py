@@ -19,11 +19,12 @@ from __future__ import annotations
 import json
 import re
 from datetime import datetime, timezone, timedelta
+from pathlib import Path
 from typing import Any, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, status
-from sqlalchemy import cast, func, select, update, delete, Date, case
+from sqlalchemy import cast, func, or_, select, update, delete, Date, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
@@ -34,15 +35,12 @@ from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
 from app.db.models.media import ContentItem, ContentOption
 from app.db.models.chat import ChatMessage, ChatSession
-from app.db.models.travel import (
-    Destination, Location, Tour, Ticket,
-    Itinerary, ItineraryItem, IntentPattern, LocationAlias, City,
-)
+from app.db.models.travel import Destination, Ticket, Review, City
 from app.db.models.user import User
 from app.services.knowledge import KnowledgeService
-from app.services.embedding_jobs import EmbeddingJobService
 from app.core.security import hash_password
 from app.utils import get_logger
+from app.utils.image_processing import process_image
 
 logger = get_logger("admin")
 router = APIRouter(tags=["admin"])
@@ -480,6 +478,86 @@ async def delete_user(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# REVIEWS (moderation) — admin thấy tất cả review, chỉ admin/super_admin được
+# xoá. Xem MONITOR_ROLES (moderator giám sát), xoá STAFF_ROLES (admin trở lên) —
+# khớp quy ước RBAC ở đầu file: moderator chỉ đọc, không sửa.
+# ══════════════════════════════════════════════════════════════════════════════
+
+@router.get("/reviews")
+async def list_reviews_admin(
+    search: Optional[str] = None,
+    destination_id: Optional[UUID] = None,
+    rating: Optional[int] = Query(None, ge=1, le=5),
+    skip: int = 0,
+    limit: int = Query(20, le=100),
+    db: DB = None,
+    _: User = Depends(require_role(MONITOR_ROLES)),
+):
+    """Danh sách review toàn hệ thống để admin duyệt/kiểm soát nội dung phá hoại."""
+    stmt = (
+        select(Review, User.username, User.email, User.full_name,
+               Destination.name.label("destination_name"))
+        .join(User, Review.user_id == User.id)
+        .join(Destination, Review.destination_id == Destination.id)
+    )
+    if search:
+        like = f"%{search}%"
+        stmt = stmt.where(or_(
+            Review.content.ilike(like),
+            User.username.ilike(like),
+            User.email.ilike(like),
+        ))
+    if destination_id:
+        stmt = stmt.where(Review.destination_id == destination_id)
+    if rating:
+        stmt = stmt.where(Review.rating == rating)
+
+    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
+    rows = (await db.execute(
+        stmt.order_by(Review.created_at.desc()).offset(skip).limit(limit)
+    )).all()
+
+    items = [
+        {
+            "id": str(review.id),
+            "user_id": str(review.user_id),
+            "username": username,
+            "user_email": email,
+            "user_full_name": full_name,
+            "destination_id": str(review.destination_id),
+            "destination_name": destination_name,
+            "rating": review.rating,
+            "content": review.content,
+            "created_at": review.created_at.isoformat() if review.created_at else None,
+        }
+        for review, username, email, full_name, destination_name in rows
+    ]
+    return {"items": items, "total": total or 0}
+
+
+@router.delete("/reviews/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_review_admin(
+    review_id: UUID,
+    db: DB = None,
+    _: User = Depends(require_role(STAFF_ROLES)),
+):
+    """Xoá review bất kỳ (moderation) — chỉ admin/super_admin, tái tính rating
+    ngay sau khi xoá (trigger DB chỉ xử lý INSERT)."""
+    review = (await db.execute(
+        select(Review).where(Review.id == review_id)
+    )).scalar_one_or_none()
+    if not review:
+        raise HTTPException(status_code=404, detail="Review không tồn tại")
+
+    destination_id = review.destination_id
+    await db.delete(review)
+    await db.commit()
+
+    from app.api.routes.reviews import _recalculate_review_stats
+    await _recalculate_review_stats(db, destination_id)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # CHAT SESSIONS (admin view)
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -592,21 +670,6 @@ async def update_chat_session(
         "is_flagged": session.is_flagged,
         "tags": session.tags or [],
     }
-
-
-@router.delete("/chat-sessions/{session_id}")
-async def delete_chat_session(
-    session_id: str,
-    db: DB = None,
-    _: User = Depends(require_role(STAFF_ROLES)),
-):
-    await db.execute(
-        update(ChatSession)
-        .where(ChatSession.id == session_id)
-        .values(is_deleted=True)
-    )
-    await db.commit()
-    return {"ok": True}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -734,51 +797,113 @@ async def get_embedding_job(
     }
 
 
-@router.post("/embedding-jobs/run")
-async def run_embedding_jobs(
-    limit: int = Query(50, le=500),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    svc = EmbeddingJobService(db)
-    result = await svc.run_pending(limit=limit)
-    return result
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # KB HEALTH CHECK
 # ══════════════════════════════════════════════════════════════════════════════
 
+# knowledge-base/{city_slug}/{file} — loại nội dung -> tên file trên đĩa.
+# Khớp đúng _ctLabels ở frontend (kb_health_screen.dart).
+_KB_CONTENT_TYPES: list[tuple[str, str]] = [
+    ("destinations", "destinations.json"),
+    ("hotels", "hotels.json"),
+    ("restaurants", "restaurants.json"),
+    ("foods", "foods.json"),
+    ("transport", "transport.json"),
+    ("tours", "tours.json"),
+    ("events", "events.json"),
+    ("shopping", "shopping.json"),
+    ("itineraries", "itineraries.json"),
+    ("experiences", "experiences.md"),
+    ("faq", "faq.md"),
+]
+
+# backend/app/api/routes/admin.py -> backend/knowledge-base
+_KB_ROOT = Path(__file__).resolve().parent.parent.parent.parent / "knowledge-base"
+
+# File nhỏ hơn ngưỡng này coi như "rỗng" (chỉ có khung sẵn, chưa nhập liệu thật).
+_KB_EMPTY_SIZE_THRESHOLD = 200
+
+
+def _kb_file_has_data(path: Path, size: int) -> bool:
+    if size < _KB_EMPTY_SIZE_THRESHOLD:
+        return False
+    if path.suffix == ".json":
+        try:
+            content = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return False
+        if isinstance(content, (list, dict)):
+            return len(content) > 0
+        return bool(content)
+    return True  # .md — đã qua ngưỡng kích thước, coi là có nội dung
+
+
 @router.get("/kb-health")
 async def kb_health(
-    db: DB = None,
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
-    total_entries = await db.scalar(select(func.count(KnowledgeEntry.id)).where(KnowledgeEntry.is_active == True))
-    pending_jobs = await db.scalar(
-        select(func.count(EmbeddingJob.id)).where(EmbeddingJob.status == "pending")
-    )
-    failed_jobs = await db.scalar(
-        select(func.count(EmbeddingJob.id)).where(EmbeddingJob.status == "failed")
-    )
-    done_jobs = await db.scalar(
-        select(func.count(EmbeddingJob.id)).where(EmbeddingJob.status == "done")
-    )
+    """
+    Quét knowledge-base/ trên đĩa: mỗi thành phố (folder) x mỗi loại nội dung
+    (destinations/hotels/.../faq) → có file chưa, file có dữ liệu thật không.
+    Dùng để admin biết nhanh thành phố nào còn thiếu nội dung cần nhập liệu.
 
-    try:
-        from app.services.rag_pipeline import RAGPipeline
-        qdrant_info = await RAGPipeline().debug_collection()
-    except Exception as e:
-        qdrant_info = {"error": str(e)}
+    [Fix] Bản cũ trả về thống kê Postgres (KnowledgeEntry/EmbeddingJob) + debug
+    Qdrant — hoàn toàn KHÔNG khớp với contract mà frontend
+    (kb_health_repository.dart -> KbHealthResponse.fromJson) đã thiết kế sẵn
+    (summary/content_types/cities theo shape quét file này), nên FE luôn crash
+    lúc parse response ("Lỗi: type 'Null' is not a subtype of type
+    'Map<String, dynamic>'"). Không có consumer nào khác dùng shape cũ.
+    """
+    cities: list[dict] = []
+    if _KB_ROOT.is_dir():
+        for city_dir in sorted(_KB_ROOT.iterdir()):
+            if not city_dir.is_dir():
+                continue
+            files: dict[str, dict] = {}
+            filled = 0
+            for ct, filename in _KB_CONTENT_TYPES:
+                fpath = city_dir / filename
+                exists = fpath.is_file()
+                size = fpath.stat().st_size if exists else 0
+                has_data = exists and _kb_file_has_data(fpath, size)
+                if has_data:
+                    filled += 1
+                files[ct] = {
+                    "exists": exists,
+                    "has_data": has_data,
+                    "size_bytes": size if exists else None,
+                    "last_modified": (
+                        datetime.fromtimestamp(fpath.stat().st_mtime, tz=timezone.utc).isoformat()
+                        if exists else None
+                    ),
+                }
+            total = len(_KB_CONTENT_TYPES)
+            cities.append({
+                "city_slug": city_dir.name,
+                "filled_count": filled,
+                "total_count": total,
+                "completeness_pct": round(filled / total * 100) if total else 0,
+                "has_any_data": filled > 0,
+                "files": files,
+            })
+
+    total_cities = len(cities)
+    complete_cities = sum(1 for c in cities if c["completeness_pct"] == 100)
+    empty_cities = sum(1 for c in cities if not c["has_any_data"])
+    avg_completeness = (
+        round(sum(c["completeness_pct"] for c in cities) / total_cities)
+        if total_cities else 0
+    )
 
     return {
-        "postgres": {
-            "total_active_entries": total_entries or 0,
-            "pending_embedding_jobs": pending_jobs or 0,
-            "failed_embedding_jobs": failed_jobs or 0,
-            "done_embedding_jobs": done_jobs or 0,
+        "summary": {
+            "total_cities": total_cities,
+            "complete_cities": complete_cities,
+            "empty_cities": empty_cities,
+            "avg_completeness_pct": avg_completeness,
         },
-        "qdrant": qdrant_info,
+        "content_types": [ct for ct, _ in _KB_CONTENT_TYPES],
+        "cities": cities,
     }
 
 
@@ -789,30 +914,48 @@ async def kb_health(
 @router.get("/rag-monitoring/overview")
 async def rag_overview(
     period: str = Query("week"),
+    date_from: Optional[str] = Query(None, alias="from"),
+    date_to: Optional[str] = Query(None, alias="to"),
     db: DB = None,
     _: User = Depends(require_role(STAFF_ROLES)),
 ):
-    delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
-    since = datetime.now(timezone.utc) - timedelta(days=delta)
+    def _parse_utc(s: str) -> datetime:
+        dt = datetime.fromisoformat(s)
+        return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+
+    # Ưu tiên khoảng thời gian tuỳ chọn (from/to) nếu FE gửi lên; ngược lại
+    # dùng bucket cố định theo `period` (day/week/month).
+    until = datetime.now(timezone.utc)
+    if date_from:
+        since = _parse_utc(date_from)
+        if date_to:
+            until = _parse_utc(date_to)
+    else:
+        delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
+        since = until - timedelta(days=delta)
 
     avg_confidence = await db.scalar(
         select(func.avg(ChatMessage.confidence_score)).where(
-            ChatMessage.created_at >= since, ChatMessage.confidence_score.isnot(None)
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.confidence_score.isnot(None)
         )
     )
     avg_search_ms = await db.scalar(
         select(func.avg(ChatMessage.search_ms)).where(
-            ChatMessage.created_at >= since, ChatMessage.search_ms.isnot(None)
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.search_ms.isnot(None)
         )
     )
     avg_llm_ms = await db.scalar(
         select(func.avg(ChatMessage.llm_ms)).where(
-            ChatMessage.created_at >= since, ChatMessage.llm_ms.isnot(None)
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.llm_ms.isnot(None)
         )
     )
     avg_chunk_count = await db.scalar(
         select(func.avg(ChatMessage.chunk_count)).where(
-            ChatMessage.created_at >= since, ChatMessage.chunk_count.isnot(None)
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.chunk_count.isnot(None)
         )
     )
 
@@ -821,6 +964,7 @@ async def rag_overview(
         select(func.count(ChatMessage.id)).where(
             ChatMessage.role == "assistant",
             ChatMessage.created_at >= since,
+            ChatMessage.created_at <= until,
             ChatMessage.confidence_score.isnot(None),
         )
     ) or 0
@@ -828,6 +972,7 @@ async def rag_overview(
         select(func.count(ChatMessage.id)).where(
             ChatMessage.role == "assistant",
             ChatMessage.created_at >= since,
+            ChatMessage.created_at <= until,
             ChatMessage.confidence_score < 0.3,
         )
     ) or 0
@@ -836,7 +981,10 @@ async def rag_overview(
     # cache_hit_rate breakdown
     cache_rows = await db.execute(
         select(ChatMessage.cache_hit, func.count(ChatMessage.id).label("cnt"))
-        .where(ChatMessage.created_at >= since, ChatMessage.cache_hit.isnot(None))
+        .where(
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.cache_hit.isnot(None),
+        )
         .group_by(ChatMessage.cache_hit)
     )
     total_cache = 0
@@ -852,7 +1000,10 @@ async def rag_overview(
     # search_method breakdown
     method_rows = await db.execute(
         select(ChatMessage.search_method, func.count(ChatMessage.id).label("cnt"))
-        .where(ChatMessage.created_at >= since, ChatMessage.search_method.isnot(None))
+        .where(
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.search_method.isnot(None),
+        )
         .group_by(ChatMessage.search_method)
     )
     total_methods = 0
@@ -871,7 +1022,10 @@ async def rag_overview(
             cast(func.date_trunc("day", ChatMessage.created_at), Date).label("date"),
             func.avg(ChatMessage.confidence_score).label("avg_score"),
         )
-        .where(ChatMessage.created_at >= since, ChatMessage.confidence_score.isnot(None))
+        .where(
+            ChatMessage.created_at >= since, ChatMessage.created_at <= until,
+            ChatMessage.confidence_score.isnot(None),
+        )
         .group_by("date")
         .order_by("date")
     )
@@ -1084,20 +1238,6 @@ async def test_intent(body: dict, _: User = Depends(require_role(CONTENT_ROLES))
     entities = extract_entities(text)
     intent, confidence = detect_intent(text, entities)
     return {"intent": intent, "confidence": confidence, "matched_keywords": []}
-
-
-@router.post("/intent-patterns/reload")
-async def reload_intent_patterns_db(
-    db: DB,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    """
-    [OPT-3.1/3.3] Nạp lại intent patterns từ bảng DB `intent_patterns` vào runtime
-    chatbot — không cần restart server. Gọi sau khi sửa pattern qua Admin.
-    """
-    from app.services.intent_loader import load_intent_patterns_from_db
-    total = await load_intent_patterns_from_db(db)
-    return {"ok": True, "applied_keywords": total}
 
 
 def _save_intent_patterns(patterns: dict) -> None:
@@ -1522,25 +1662,7 @@ _media_writer = require_role(CONTENT_ROLES)
 
 
 def _process_image(content: bytes, ext: str) -> tuple[bytes, str, Optional[str], Optional[int], Optional[int]]:
-    """Resize ≤1920px + convert WebP nếu có Pillow. Lỗi/không có Pillow → giữ nguyên."""
-    try:
-        import io
-        from PIL import Image
-
-        img = Image.open(io.BytesIO(content))
-        if img.mode not in ("RGB", "RGBA", "L"):
-            img = img.convert("RGBA")
-        w, h = img.size
-        max_side = 1920
-        if max(w, h) > max_side:
-            ratio = max_side / float(max(w, h))
-            img = img.resize((max(1, int(w * ratio)), max(1, int(h * ratio))))
-        buf = io.BytesIO()
-        img.save(buf, format="WEBP", quality=82, method=4)
-        out = buf.getvalue()
-        return out, "webp", "image/webp", img.size[0], img.size[1]
-    except Exception:
-        return content, ext, None, None, None
+    return process_image(content, ext, max_side=1920)
 
 
 def _folder_uuid(value: Optional[str]) -> Optional[UUID]:
@@ -2112,254 +2234,3 @@ def _user_dict(u: User) -> dict:
         "updated_at": str(u.updated_at),
     }
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# STRUCTURED CONTENT CRUD (T-028)
-# CRUD cho các bảng: locations, tours, itineraries, intent_patterns, locations_alias
-# ══════════════════════════════════════════════════════════════════════════════
-
-# ── Locations (attractions) ───────────────────────────────────────────────
-
-@router.get("/locations")
-async def list_locations(
-    destination_id: Optional[str] = None,
-    page: int = Query(1, ge=1),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    stmt = select(Location)
-    if destination_id:
-        stmt = stmt.where(Location.destination_id == destination_id)
-    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
-    rows  = await db.execute(stmt.order_by(Location.created_at.desc()).offset((page - 1) * 20).limit(20))
-    items = rows.scalars().all()
-    return {
-        "total": total or 0, "page": page,
-        "items": [{"id": str(i.id), "name": i.name, "type": i.type,
-                   "verified": i.verified, "data_source": i.data_source} for i in items],
-    }
-
-
-@router.post("/locations", status_code=201)
-async def create_location(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    import uuid as _uuid
-    obj = Location(
-        id=_uuid.uuid4(),
-        destination_id=body.get("destination_id"),
-        name=body["name"],
-        type=body.get("type"),
-        address=body.get("address"),
-        hours=body.get("hours"),
-        description=body.get("description"),
-        tips=body.get("tips"),
-        image_url=body.get("image_url"),
-        data_source=body.get("data_source"),
-    )
-    db.add(obj)
-    await db.commit()
-    await db.refresh(obj)
-    return {"id": str(obj.id)}
-
-
-@router.patch("/locations/{loc_id}")
-async def update_location(loc_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Location, loc_id)
-    for field in ("name", "type", "address", "hours", "description", "tips", "image_url", "data_source", "verified"):
-        if field in body:
-            setattr(obj, field, body[field])
-    await db.commit()
-    return {"id": str(obj.id)}
-
-
-@router.delete("/locations/{loc_id}", status_code=204)
-async def delete_location(loc_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Location, loc_id)
-    await db.delete(obj)
-    await db.commit()
-
-
-# ── Tours ─────────────────────────────────────────────────────────────────
-
-@router.get("/tours")
-async def list_tours(
-    destination_id: Optional[str] = None,
-    page: int = Query(1, ge=1),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    stmt = select(Tour)
-    if destination_id:
-        stmt = stmt.where(Tour.destination_id == destination_id)
-    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
-    rows  = await db.execute(stmt.order_by(Tour.created_at.desc()).offset((page - 1) * 20).limit(20))
-    items = rows.scalars().all()
-    return {
-        "total": total or 0, "page": page,
-        "items": [{"id": str(i.id), "name": i.name, "duration": i.duration,
-                   "price": i.price, "verified": i.verified} for i in items],
-    }
-
-
-@router.post("/tours", status_code=201)
-async def create_tour(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    import uuid as _uuid
-    obj = Tour(
-        id=_uuid.uuid4(),
-        destination_id=body["destination_id"],
-        name=body["name"],
-        duration=body.get("duration"),
-        price=body.get("price"),
-        group_size=body.get("group_size"),
-        description=body.get("description"),
-        includes=body.get("includes", []),
-        excludes=body.get("excludes", []),
-        data_source=body.get("data_source"),
-    )
-    db.add(obj)
-    await db.commit()
-    await db.refresh(obj)
-    return {"id": str(obj.id)}
-
-
-@router.patch("/tours/{tour_id}")
-async def update_tour(tour_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Tour, tour_id)
-    for field in ("name", "duration", "price", "group_size", "description", "includes", "excludes", "data_source", "verified"):
-        if field in body:
-            setattr(obj, field, body[field])
-    await db.commit()
-    return {"id": str(obj.id)}
-
-
-@router.delete("/tours/{tour_id}", status_code=204)
-async def delete_tour(tour_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Tour, tour_id)
-    await db.delete(obj)
-    await db.commit()
-
-
-# ── Itineraries ────────────────────────────────────────────────────────────
-
-@router.get("/itineraries")
-async def list_itineraries(
-    city_slug: Optional[str] = None,
-    page: int = Query(1, ge=1),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    stmt = select(Itinerary)
-    if city_slug:
-        stmt = stmt.where(Itinerary.city_slug == city_slug)
-    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
-    rows  = await db.execute(stmt.order_by(Itinerary.created_at.desc()).offset((page - 1) * 20).limit(20))
-    items = rows.scalars().all()
-    return {
-        "total": total or 0, "page": page,
-        "items": [{"id": str(i.id), "title": i.title, "city_slug": i.city_slug,
-                   "duration_days": i.duration_days, "is_active": i.is_active} for i in items],
-    }
-
-
-@router.get("/itineraries/{itin_id}")
-async def get_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Itinerary, itin_id)
-    result = await db.execute(
-        select(ItineraryItem).where(ItineraryItem.itinerary_id == itin_id).order_by(
-            ItineraryItem.day_no, ItineraryItem.order_no
-        )
-    )
-    sub_items = result.scalars().all()
-    return {
-        "id": str(obj.id), "title": obj.title, "city_slug": obj.city_slug,
-        "duration_days": obj.duration_days, "group_type": obj.group_type,
-        "is_active": obj.is_active, "data_source": obj.data_source,
-        "days": [{"day_no": i.day_no, "order_no": i.order_no, "time_slot": i.time_slot,
-                  "title": i.title, "ref_type": i.ref_type} for i in sub_items],
-    }
-
-
-@router.patch("/itineraries/{itin_id}")
-async def update_itinerary(itin_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Itinerary, itin_id)
-    for field in ("title", "duration_days", "group_type", "budget_low", "budget_high", "is_active", "data_source", "verified"):
-        if field in body:
-            setattr(obj, field, body[field])
-    await db.commit()
-    return {"id": str(obj.id)}
-
-
-@router.delete("/itineraries/{itin_id}", status_code=204)
-async def delete_itinerary(itin_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, Itinerary, itin_id)
-    await db.delete(obj)
-    await db.commit()
-
-
-# ── Intent patterns (DB) ─────────────────────────────────────────────────
-
-@router.get("/intent-patterns-db")
-async def list_intent_patterns_db(
-    intent: Optional[str] = None,
-    page: int = Query(1, ge=1),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    stmt = select(IntentPattern).where(IntentPattern.is_active == True)  # noqa: E712
-    if intent:
-        stmt = stmt.where(IntentPattern.intent == intent)
-    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
-    rows  = await db.execute(stmt.order_by(IntentPattern.intent, IntentPattern.keyword).offset((page - 1) * 50).limit(50))
-    items = rows.scalars().all()
-    return {
-        "total": total or 0, "page": page,
-        "items": [{"id": str(i.id), "intent": i.intent, "keyword": i.keyword,
-                   "weight": i.weight, "is_active": i.is_active} for i in items],
-    }
-
-
-@router.post("/intent-patterns-db", status_code=201)
-async def create_intent_pattern_db(body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    import uuid as _uuid
-    obj = IntentPattern(id=_uuid.uuid4(), intent=body["intent"], keyword=body["keyword"].strip().lower(), weight=body.get("weight", 1))
-    db.add(obj)
-    await db.commit()
-    return {"id": str(obj.id)}
-
-
-@router.patch("/intent-patterns-db/{pat_id}")
-async def update_intent_pattern_db(pat_id: str, body: dict, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, IntentPattern, pat_id)
-    for field in ("keyword", "weight", "is_active"):
-        if field in body:
-            setattr(obj, field, body[field])
-    await db.commit()
-    return {"id": str(obj.id)}
-
-
-@router.delete("/intent-patterns-db/{pat_id}", status_code=204)
-async def delete_intent_pattern_db(pat_id: str, db: DB = None, _: User = Depends(require_role(CONTENT_ROLES))):
-    obj = await _get_or_404(db, IntentPattern, pat_id)
-    await db.delete(obj)
-    await db.commit()
-
-
-# ── Locations alias ───────────────────────────────────────────────────────
-
-@router.get("/locations-alias")
-async def list_locations_alias(
-    level: Optional[str] = None,
-    page: int = Query(1, ge=1),
-    db: DB = None,
-    _: User = Depends(require_role(CONTENT_ROLES)),
-):
-    stmt = select(LocationAlias).where(LocationAlias.is_active == True)  # noqa: E712
-    if level:
-        stmt = stmt.where(LocationAlias.level == level)
-    total = await db.scalar(select(func.count()).select_from(stmt.subquery()))
-    rows  = await db.execute(stmt.order_by(LocationAlias.new_slug).offset((page - 1) * 50).limit(50))
-    items = rows.scalars().all()
-    return {
-        "total": total or 0, "page": page,
-        "items": [{"id": str(i.id), "old_name": i.old_name,
-                   "new_slug": i.new_slug, "level": i.level} for i in items],
-    }
