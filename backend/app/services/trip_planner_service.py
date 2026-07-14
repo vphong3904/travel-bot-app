@@ -13,7 +13,9 @@ Flow: detect_missing_slots → resolve_destination → build_plan → generate_s
 from __future__ import annotations
 
 import asyncio
+import json
 import math
+import re
 from datetime import date, timedelta
 from typing import Any, Optional
 
@@ -44,6 +46,34 @@ _TRAVEL_TYPE_LABEL = {
     "family": "gia đình",
     "group": "nhóm bạn",
 }
+
+# Quy mô nhóm chuẩn hoá theo travel_type thay vì nhân chi phí tự do theo đầu
+# người user gõ: solo luôn 1, couple luôn 2, family/group luôn trong khoảng
+# 3-7 (mặc định 4 khi không rõ, ép về 7 nếu user báo số đông hơn). Tránh việc
+# user gõ "nhóm 20 người" khiến khách sạn/vé/ăn uống nhân vọt lên vô lý —
+# áp dụng NGAY TRONG build_plan() nên có hiệu lực cho cả chat lẫn màn hình
+# chọn kế hoạch (cả hai đều dùng chung engine này).
+_FIXED_GROUP_SIZE = {"solo": 1, "couple": 2}
+GROUP_MIN_TRAVELERS = 3
+GROUP_MAX_TRAVELERS = 7
+GROUP_DEFAULT_TRAVELERS = 4
+
+
+def normalize_group_size(travel_type: str, travelers: Optional[int]) -> tuple[str, int]:
+    """Trả về (travel_type hợp lệ, số người dùng để tính chi phí)."""
+    if travel_type in _FIXED_GROUP_SIZE:
+        return travel_type, _FIXED_GROUP_SIZE[travel_type]
+    if travel_type in ("family", "group"):
+        size = travelers or GROUP_DEFAULT_TRAVELERS
+        return travel_type, max(GROUP_MIN_TRAVELERS, min(size, GROUP_MAX_TRAVELERS))
+    # travel_type chưa rõ (hoặc không hợp lệ) — suy luận ngược từ số người
+    if travelers == 1:
+        return "solo", 1
+    if travelers == 2:
+        return "couple", 2
+    if travelers and travelers >= 3:
+        return "group", max(GROUP_MIN_TRAVELERS, min(travelers, GROUP_MAX_TRAVELERS))
+    return "solo", 1
 
 SLOT_QUESTIONS = {
     "destination": "Bạn muốn đi đâu? (ví dụ: Đà Lạt, Phú Quốc, Sa Pa...)",
@@ -156,6 +186,54 @@ async def resolve_destination(db: AsyncSession, name: str) -> Optional[dict]:
         )
     ).mappings().first()
     return dict(row) if row else None
+
+
+async def pick_suggested_destination(
+    db: AsyncSession, profile_tags: Optional[list[str]] = None
+) -> Optional[dict]:
+    """Chọn 1 điểm đến để GỢI Ý khi user muốn đi "ngẫu nhiên / đâu cũng được".
+
+    Lấy 30 điểm đến active ngẫu nhiên; nếu có profile_tags (sở thích user) thì
+    ưu tiên điểm khớp keyword sở thích nhất, còn lại random. Trả về cùng shape
+    với resolve_destination để build_plan dùng thẳng."""
+    import random as _random
+
+    rows = (
+        await db.execute(
+            text(
+                """
+                SELECT id::text AS id, name, slug, province, region, description,
+                       special, budget_low, budget_high, image_url
+                FROM destinations
+                WHERE is_active IS NOT FALSE
+                ORDER BY random()
+                LIMIT 30
+                """
+            )
+        )
+    ).mappings().all()
+    if not rows:
+        return None
+    dests = [dict(r) for r in rows]
+
+    kws = keywords_for_tags(profile_tags or [])
+    if kws:
+        kws_na = [strip_accents(k.lower()) for k in kws]
+
+        def _score(d: dict) -> int:
+            hay = strip_accents(
+                " ".join(
+                    str(d.get(k) or "")
+                    for k in ("name", "description", "special", "province")
+                ).lower()
+            )
+            return sum(1 for k in kws_na if k in hay)
+
+        dests.sort(key=_score, reverse=True)
+        if _score(dests[0]) > 0:
+            return dests[0]
+
+    return _random.choice(dests)
 
 
 async def _fetch_hotels(db: AsyncSession, destination_id: str, limit: int = 12) -> list[dict]:
@@ -451,6 +529,220 @@ def estimate_total_cost(
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# AI SCHEDULE SELECTION (hybrid, optional) — Gemini chỉ được CHỌN id trong đúng
+# danh sách ứng viên thật (TR-01 vẫn giữ nguyên); không bao giờ sinh nội dung.
+# Bất kỳ bước nào lỗi/không hợp lệ → trả None, build_plan tự fallback về
+# `schedule_days` rule-based (đã test, luôn ra 1 lịch hoàn chỉnh). LLM chỉ là
+# lớp tối ưu thêm cho đa dạng/ngân sách, KHÔNG phải điểm lỗi duy nhất.
+# ══════════════════════════════════════════════════════════════════════════════
+
+AI_SCHEDULE_TIMEOUT = 15
+
+
+def _sight_brief(items: list[dict]) -> list[dict]:
+    return [
+        {
+            "id": it["id"],
+            "name": it["name"],
+            "rating": it.get("rating_avg") or 0,
+            "ticket_price": it.get("price_adult") or 0,
+            "evening_spot": _is_evening_spot(it),
+        }
+        for it in items
+    ]
+
+
+def _eatery_brief(items: list[dict]) -> list[dict]:
+    return [
+        {
+            "id": it["id"],
+            "name": it["name"],
+            "rating": it.get("rating") or it.get("rating_avg") or 0,
+            "price_range": it.get("price_range") or "",
+        }
+        for it in items
+    ]
+
+
+def _extract_json(text_: str) -> Optional[dict]:
+    text_ = (text_ or "").strip()
+    if text_.startswith("```"):
+        text_ = re.sub(r"^```(?:json)?\s*|\s*```$", "", text_, flags=re.IGNORECASE).strip()
+    try:
+        return json.loads(text_)
+    except Exception:
+        m = re.search(r"\{.*\}", text_, re.DOTALL)
+        if not m:
+            return None
+        try:
+            return json.loads(m.group(0))
+        except Exception:
+            return None
+
+
+def _ai_day_items(
+    day_no: int,
+    d: dict,
+    sight_by_id: dict[str, dict],
+    eatery_by_id: dict[str, dict],
+    hotel: Optional[dict],
+) -> list[dict]:
+    items: list[dict] = []
+    order = 0
+
+    if day_no == 1 and hotel:
+        items.append({
+            "time_slot": "morning", "start_time": "07:30", "end_time": "08:30",
+            "order_in_day": order, "type": "hotel_checkin", "ref_id": hotel["id"],
+            "title": f"Nhận phòng {hotel['name']}",
+            "description": (hotel.get("description") or "")[:300] or None,
+            "estimated_cost": None, "notes": hotel.get("address"),
+            "image_url": hotel.get("image_url"), "address": hotel.get("address"),
+        })
+        order += 1
+
+    morning = sight_by_id.get(d.get("morning"))
+    if morning:
+        items.append(_location_item(morning, "morning", "08:30", "11:30", order))
+    else:
+        items.append(_free_item("morning", "08:30", "11:30", order, "Tự do khám phá",
+                                 "Chưa có dữ liệu điểm tham quan phù hợp cho buổi này."))
+    order += 1
+
+    lunch = eatery_by_id.get(d.get("lunch"))
+    if lunch:
+        items.append(_restaurant_item(lunch, "lunch", "11:45", "13:00", order))
+    else:
+        items.append(_free_item("lunch", "11:45", "13:00", order, "Ăn trưa tự do",
+                                 "Chưa có dữ liệu quán ăn trong hệ thống."))
+    order += 1
+
+    afternoon = sight_by_id.get(d.get("afternoon"))
+    if afternoon:
+        items.append(_location_item(afternoon, "afternoon", "14:00", "17:00", order))
+    else:
+        items.append(_free_item("afternoon", "14:00", "17:00", order, "Nghỉ ngơi / tự do",
+                                 "Thư giãn tại khách sạn hoặc dạo quanh khu trung tâm."))
+    order += 1
+
+    evening_eat = eatery_by_id.get(d.get("evening_eat"))
+    if evening_eat:
+        items.append(_restaurant_item(evening_eat, "evening", "18:00", "19:30", order))
+        order += 1
+    evening_sight = sight_by_id.get(d.get("evening_sight"))
+    if evening_sight:
+        items.append(_location_item(evening_sight, "evening", "19:45", "21:30", order))
+    elif not evening_eat:
+        items.append(_free_item("evening", "18:00", "21:00", order, "Buổi tối tự do",
+                                 "Dạo phố, thưởng thức ẩm thực đêm địa phương."))
+
+    return items
+
+
+def _validate_ai_schedule(
+    days: list[dict], days_count: int, sights: list[dict], eateries: list[dict]
+) -> bool:
+    if len(days) != days_count:
+        return False
+    for expected, d in zip(range(1, days_count + 1), days):
+        if d["day_number"] != expected:
+            return False
+    loc_ids = [it["ref_id"] for d in days for it in d["items"] if it["type"] == "location" and it["ref_id"]]
+    if len(sights) >= len(loc_ids) and len(loc_ids) != len(set(loc_ids)):
+        return False  # đủ sight để không lặp mà vẫn lặp -> coi như không đạt
+    eat_ids = [it["ref_id"] for d in days for it in d["items"] if it["type"] == "restaurant" and it["ref_id"]]
+    if len(eateries) >= len(eat_ids) and len(eat_ids) != len(set(eat_ids)):
+        return False
+    return True
+
+
+async def ai_select_schedule(
+    days_count: int,
+    sights: list[dict],
+    eateries: list[dict],
+    hotel: Optional[dict],
+    travelers: int,
+    budget: Optional[int],
+    preferences: list[str],
+    destination_name: str,
+) -> Optional[list[dict]]:
+    """Nhờ Gemini chọn & sắp thứ tự sight/eatery cho từng ngày, CHỈ trong đúng
+    id ứng viên thật đã fetch từ DB. Trả None nếu Gemini lỗi/timeout/trả JSON
+    hỏng/tự bịa id không có thật/không đạt yêu cầu đa dạng — build_plan sẽ
+    fallback về `schedule_days` rule-based, không bao giờ chặn user."""
+    if not sights and not eateries:
+        return None
+    try:
+        from google.genai import types as genai_types
+
+        from app.core.config import settings
+        from app.services.rag_pipeline import _get_genai_client
+
+        sight_by_id = {s["id"]: s for s in sights}
+        eatery_by_id = {e["id"]: e for e in eateries}
+
+        prompt = (
+            "Bạn là hệ thống sắp lịch trình du lịch. CHỈ được chọn id có trong danh sách "
+            "cho sẵn bên dưới, TUYỆT ĐỐI không bịa id/tên mới. Mỗi ngày cần: 1 sight buổi "
+            "sáng, 1 eatery buổi trưa, 1 sight buổi chiều, 1 eatery buổi tối (thêm 1 sight "
+            "evening_spot=true buổi tối nếu hợp lý, để null nếu không có). Ưu tiên: (1) KHÔNG "
+            "lặp lại cùng 1 id trong toàn bộ chuyến trừ khi danh sách không đủ cho số ngày, "
+            "(2) đa dạng thể loại giữa các ngày, (3) nếu ngân sách hạn chế thì ưu tiên "
+            "sight/eatery có giá thấp hơn.\n\n"
+            f"Điểm đến: {destination_name}. Số ngày: {days_count}. Số người: {travelers}. "
+            f"Ngân sách cả chuyến: {budget or 'không giới hạn'}. "
+            f"Sở thích: {', '.join(preferences) or 'không rõ'}.\n\n"
+            f"Danh sách sight: {json.dumps(_sight_brief(sights), ensure_ascii=False)}\n\n"
+            f"Danh sách eatery: {json.dumps(_eatery_brief(eateries), ensure_ascii=False)}\n\n"
+            "Trả về CHỈ JSON theo đúng format sau, không thêm chữ nào khác:\n"
+            '{"days": [{"day": 1, "morning": "<sight_id>", "lunch": "<eatery_id>", '
+            '"afternoon": "<sight_id>", "evening_eat": "<eatery_id>", '
+            '"evening_sight": "<sight_id hoặc null>"}]}'
+        )
+
+        # Tắt "thinking" (Gemini 2.5 mặc định bật, ăn hết max_output_tokens
+        # bằng suy luận nội bộ trước khi ra JSON → JSON bị cắt cụt giữa chừng
+        # với lịch nhiều ngày). Xem app/services/gemini_optimizer.py::_thinking_off.
+        gen_config_kwargs = dict(temperature=0.4, max_output_tokens=4000)
+        try:
+            gen_config_kwargs["thinking_config"] = genai_types.ThinkingConfig(thinking_budget=0)
+        except Exception:
+            pass
+
+        client = _get_genai_client()
+        response = await asyncio.wait_for(
+            client.aio.models.generate_content(
+                model=settings.GEMINI_MODEL,
+                contents=prompt,
+                config=genai_types.GenerateContentConfig(**gen_config_kwargs),
+            ),
+            timeout=AI_SCHEDULE_TIMEOUT,
+        )
+        data = _extract_json(response.text or "")
+        if not data or not isinstance(data.get("days"), list) or len(data["days"]) != days_count:
+            logger.warning(
+                f"[ai_select_schedule] JSON không hợp lệ hoặc thiếu ngày "
+                f"(raw={(response.text or '')[:300]!r})"
+            )
+            return None
+
+        days: list[dict] = []
+        for idx, d in enumerate(data["days"], start=1):
+            if not isinstance(d, dict) or d.get("day") != idx:
+                logger.warning(f"[ai_select_schedule] Ngày thứ {idx} sai cấu trúc: {d!r}")
+                return None
+            days.append({"day_number": idx, "items": _ai_day_items(idx, d, sight_by_id, eatery_by_id, hotel)})
+
+        if not _validate_ai_schedule(days, days_count, sights, eateries):
+            logger.warning("[ai_select_schedule] Không đạt validate (lặp id dù đủ candidate) — fallback rule-based")
+            return None
+        return days
+    except Exception as e:
+        logger.warning(f"[ai_select_schedule] Bỏ qua LLM schedule, fallback rule-based: {e}")
+        return None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # BUILD PLAN
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -469,9 +761,8 @@ async def build_plan(db: AsyncSession, slots: dict, profile_tags: list[str]) -> 
         }
 
     days_count: int = slots["days"]
-    travelers: int = slots.get("travelers") or 1
     budget: Optional[int] = slots.get("budget")
-    travel_type: str = slots.get("travel_type") or "solo"
+    travel_type, travelers = normalize_group_size(slots.get("travel_type") or "", slots.get("travelers"))
     preferences: list[str] = slots.get("preferences") or profile_tags or []
     pref_keywords = keywords_for_tags(preferences)
 
@@ -505,7 +796,11 @@ async def build_plan(db: AsyncSession, slots: dict, profile_tags: list[str]) -> 
     sights = _rank([l for l in locations if not _is_food_location(l)], pref_keywords, "rating_avg")
     eateries = _rank(restaurants, pref_keywords, "rating") + _rank(food_locs, pref_keywords, "rating_avg")
 
-    days = schedule_days(days_count, sights, eateries, hotel)
+    days = await ai_select_schedule(
+        days_count, sights, eateries, hotel, travelers, budget, preferences, dest["name"]
+    )
+    if days is None:
+        days = schedule_days(days_count, sights, eateries, hotel)
     estimated = estimate_total_cost(days_count, travelers, hotel, days)
 
     start_date = slots.get("start_date")
