@@ -176,7 +176,7 @@ def test_strip_accents():
 
 
 def test_score_text_matches_beach_and_healing():
-    scores = score_text("tôi muốn đi biển chill healing ngắm mây ngắm hoa", weight=3.0)
+    scores = score_text("tôi muốn đi tắm biển chill healing ngắm mây ngắm hoa", weight=3.0)
     assert scores.get("biển")
     assert scores.get("healing")
     assert scores.get("thiên_nhiên")
@@ -265,7 +265,7 @@ def test_chat_travelers_and_type():
 
 def test_chat_collect_slots_cumulative():
     history = [{"role": "user", "content": "lên lịch trình đà lạt 3 ngày"}]
-    slots = tcp.collect_slots(history, "đi 2 người thích biển chill")
+    slots = tcp.collect_slots(history, "đi 2 người thích tắm biển chill")
     assert slots["destination"] == "Đà Lạt"
     assert slots["days"] == 3
     assert slots["travelers"] == 2
@@ -298,7 +298,7 @@ def test_chat_collect_slots_within_planning_flow_accumulates():
         {"role": "user", "content": "3 ngày"},
         {"role": "assistant", "content": f"{tcp.PLANNER_MARKER} Đi mấy người?"},
     ]
-    slots = tcp.collect_slots(history, "gia đình 4 người thích biển")
+    slots = tcp.collect_slots(history, "gia đình 4 người thích tắm biển")
     assert slots["destination"] == "Đà Nẵng"
     assert slots["days"] == 3
     assert slots["travelers"] == 4

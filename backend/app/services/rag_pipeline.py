@@ -829,6 +829,7 @@ class RAGPipeline:
             intent=intent,
             location=ent.get("location"),
             city_slug=ent.get("city_slug"),
+            question=question,
         )
         if structured:
             final_results = structured + final_results

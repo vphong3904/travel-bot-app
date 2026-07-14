@@ -1485,10 +1485,12 @@ async def delete_content(
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
     item = await db.get(ContentItem, item_id)
-    if item:
-        item.is_deleted = True
-        item.updated_at = datetime.now(timezone.utc)
-        await db.commit()
+    
+    if not item or item.is_deleted:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy mục")
+    item.is_deleted = True
+    item.updated_at = datetime.now(timezone.utc)
+    await db.commit()
     return {"ok": True}
 
 
@@ -2016,10 +2018,15 @@ async def delete_media(
         mid = UUID(media_id)
     except (ValueError, TypeError):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "media_id không hợp lệ")
-    await db.execute(
-        update(MediaFile).where(MediaFile.id == mid).values(is_deleted=True)
+    result = await db.execute(
+        update(MediaFile)
+        .where(MediaFile.id == mid, MediaFile.is_deleted.is_(False))
+        .values(is_deleted=True)
     )
     await db.commit()
+    
+    if result.rowcount == 0:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy media")
     return {"ok": True}
 
 
@@ -2386,10 +2393,15 @@ async def revoke_session(
     _: User = Depends(require_role(STAFF_ROLES)),
 ):
     from app.db.models.user import RefreshToken
-    await db.execute(
-        update(RefreshToken).where(RefreshToken.id == session_id).values(revoked=True)
+    result = await db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.id == session_id, RefreshToken.revoked.is_(False))
+        .values(revoked=True)
     )
     await db.commit()
+
+    if result.rowcount == 0:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Không tìm thấy session")
     return {"ok": True}
 
 

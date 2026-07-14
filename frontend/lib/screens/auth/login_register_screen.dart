@@ -473,8 +473,6 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
           const SizedBox(height: 24),
           _primaryButton('Đăng Nhập', _doLogin),
           const SizedBox(height: 12),
-          _googleButton(),
-          const SizedBox(height: 12),
           _skipButton(),
           const SizedBox(height: 24),
           _toggleMode(
@@ -531,8 +529,6 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> {
           ),
           const SizedBox(height: 24),
           _primaryButton('Tiếp Tục — Nhận OTP', _doRegisterSendOtp),
-          const SizedBox(height: 12),
-          _googleButton(),
           const SizedBox(height: 24),
           _toggleMode(
             question: 'Đã có tài khoản? ',

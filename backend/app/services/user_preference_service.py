@@ -27,8 +27,14 @@ logger = get_logger("user_preference")
 # ── Taxonomy sở thích (mục 3 roadmap — keyword đã bỏ dấu, so khớp không dấu) ──
 PREFERENCE_TAXONOMY: dict[str, dict] = {
     "biển": {
+        # Bug: keyword bỏ dấu "bien" trùng cả "biên" (biên giới/biên phòng —
+        # KHÔNG liên quan biển) và "vinh " trùng "Vĩnh" (tên riêng rất phổ biến:
+        # Vĩnh Nghiêm, Vĩnh Long, Vĩnh Phúc...). Phát hiện qua test thật trên DB:
+        # Châu Đốc ("biên giới") và Bắc Giang ("chùa Vĩnh Nghiêm") bị gán nhầm tag
+        # "Biển đảo". Bỏ 2 keyword mơ hồ này, giữ các cụm đặc trưng đủ để nhận
+        # diện biển (đã verify Nha Trang/Đà Nẵng/Vũng Tàu vẫn khớp đúng).
         "label": "Biển đảo",
-        "keywords": ["bien", "dao ", "hon ", "vinh ", "bai tam", "bai bien",
+        "keywords": ["dao ", "hon ", "bai tam", "bai bien",
                      "lan bien", "san ho", "cat trang", "tam bien", "hai dang"],
     },
     "núi": {

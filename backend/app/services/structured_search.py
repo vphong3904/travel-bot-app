@@ -99,16 +99,34 @@ async def resolve_destination(
 
 # ── Query + format từng bảng → list[source dict] ──────────────────────────────
 
-async def _q(db, sql: str, did: UUID) -> list:
-    return list((await db.execute(text(sql), {"did": str(did)})).mappings().all())
+async def _q(db, sql: str, did: UUID, extra: Optional[dict] = None) -> list:
+    params = {"did": str(did)}
+    if extra:
+        params.update(extra)
+    return list((await db.execute(text(sql), params)).mappings().all())
 
 
-async def _hotels(db, did, name) -> list[dict]:
-    rows = await _q(db, """
-        SELECT name, stars, price_per_night, address, amenities, description, rating
-        FROM hotels WHERE destination_id = :did
-        ORDER BY rating DESC NULLS LAST, stars DESC NULLS LAST LIMIT 12
-    """, did)
+async def _hotels(db, did, name, price_ceiling: Optional[int] = None) -> list[dict]:
+    # Bug thật gặp khi user test: hỏi "khách sạn giá dưới 1 triệu/đêm" nhưng
+    # luôn trả về top rating/sao bất kể giá (Dalat Palace 5★ đắt tiền lên đầu).
+    # price_ceiling (rút từ câu hỏi, chỉ áp dụng khi intent=find_hotel — xem
+    # fetch_structured_sources) lọc theo price_per_night; khách sạn CHƯA có giá
+    # trong DB vẫn giữ lại (không chắc có vượt ngân sách hay không, tốt hơn là
+    # ẩn oan) nhưng xếp sau các khách sạn có giá trong ngân sách.
+    if price_ceiling:
+        rows = await _q(db, """
+            SELECT name, stars, price_per_night, address, amenities, description, rating
+            FROM hotels WHERE destination_id = :did
+              AND (price_per_night IS NULL OR price_per_night <= :cap)
+            ORDER BY (price_per_night IS NOT NULL) DESC,
+                     rating DESC NULLS LAST, stars DESC NULLS LAST LIMIT 12
+        """, did, {"cap": price_ceiling})
+    else:
+        rows = await _q(db, """
+            SELECT name, stars, price_per_night, address, amenities, description, rating
+            FROM hotels WHERE destination_id = :did
+            ORDER BY rating DESC NULLS LAST, stars DESC NULLS LAST LIMIT 12
+        """, did)
     out = []
     for r in rows:
         parts = [r["name"]]
@@ -126,11 +144,19 @@ async def _hotels(db, did, name) -> list[dict]:
     return out
 
 
-async def _tours(db, did, name) -> list[dict]:
-    rows = await _q(db, """
-        SELECT name, duration, price, group_size, description, includes
-        FROM tours WHERE destination_id = :did ORDER BY price ASC NULLS LAST LIMIT 12
-    """, did)
+async def _tours(db, did, name, price_ceiling: Optional[int] = None) -> list[dict]:
+    if price_ceiling:
+        rows = await _q(db, """
+            SELECT name, duration, price, group_size, description, includes
+            FROM tours WHERE destination_id = :did
+              AND (price IS NULL OR price <= :cap)
+            ORDER BY (price IS NOT NULL) DESC, price ASC NULLS LAST LIMIT 12
+        """, did, {"cap": price_ceiling})
+    else:
+        rows = await _q(db, """
+            SELECT name, duration, price, group_size, description, includes
+            FROM tours WHERE destination_id = :did ORDER BY price ASC NULLS LAST LIMIT 12
+        """, did)
     out = []
     for r in rows:
         parts = [r["name"]]
@@ -534,16 +560,28 @@ async def fetch_structured_sources(
     intent: Optional[str],
     location: Optional[str],
     city_slug: Optional[str],
+    question: Optional[str] = None,
 ) -> list[dict]:
     """
     Trả về list source dict từ DB có cấu trúc theo intent + destination.
     [] nếu intent không cần structured, hoặc không resolve được destination.
     Tự mở session riêng, không bao giờ raise (lỗi → log + trả []).
+
+    `question` (optional): dùng để rút ngân sách/mức giá user nêu ("giá dưới 1
+    triệu/đêm") lọc khách sạn/tour theo giá — CHỈ áp dụng khi intent đúng là
+    find_hotel/find_tour (số tiền nêu trong câu hỏi khách sạn chắc chắn là giá
+    PHÒNG/ĐÊM hoặc giá TOUR, không suy diễn sang intent khác như ask_budget nơi
+    số tiền thường là NGÂN SÁCH CẢ CHUYẾN — áp nhầm sẽ lọc sai).
     """
     if not intent or intent not in _STRUCTURED_INTENTS:
         return []
     if not location and not city_slug:
         return []
+
+    price_ceiling: Optional[int] = None
+    if question and intent in ("find_hotel", "find_tour"):
+        from app.services.trip_chat_planner import _extract_budget
+        price_ceiling = _extract_budget(question)
 
     try:
         from app.db.database import AsyncSessionLocal
@@ -555,7 +593,10 @@ async def fetch_structured_sources(
             sources: list[dict] = []
             for h in handlers:
                 try:
-                    sources.extend(await h(db, did, dname))
+                    if h in (_hotels, _tours):
+                        sources.extend(await h(db, did, dname, price_ceiling))
+                    else:
+                        sources.extend(await h(db, did, dname))
                 except Exception as e:
                     logger.warning(f"[Structured] handler {h.__name__} lỗi: {e}")
             if len(sources) > _MAX_ROWS:

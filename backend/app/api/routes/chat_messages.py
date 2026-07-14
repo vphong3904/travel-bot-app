@@ -19,7 +19,7 @@ from app.db.models.user import User
 from app.db.models.chat import ChatSession, ChatMessage
 from app.db.schemas.chat import ChatMessageOut, ChatMessageCreate, FeedbackUpdate
 from app.core.sse import format_sse
-from app.services import log_service, trip_chat_planner
+from app.services import destination_advisor, log_service, trip_chat_planner
 from app.core.config import settings
 from app.utils import get_logger
 from app.utils.uuid_v7 import uuid_v7
@@ -125,6 +125,32 @@ async def send_message(
         )
         return assistant_msg
 
+    # ── Tư vấn điểm đến (theo ngân sách/thời gian/sở thích) — trước RAG ────────
+    # Bắt câu "4 triệu đi Đà Lạt được không / có 3 triệu đi đâu / thích biển đi
+    # đâu". None → nhường RAG như cũ. Không đụng get_rag() nên không lỗi lây khi
+    # RAG/Qdrant trục trặc.
+    advisory = await destination_advisor.handle_advisory_turn(
+        db, str(current_user.id), payload.content
+    )
+    if advisory is not None:
+        assistant_msg = ChatMessage(
+            id=str(uuid_v7()),
+            session_id=str(session_id),
+            role="assistant",
+            content=advisory["reply"],
+            intent=advisory.get("intent", "ask_destination"),
+        )
+        db.add(assistant_msg)
+        await db.commit()
+        await db.refresh(assistant_msg)
+        await log_service.log_behavior(
+            user_id=str(current_user.id),
+            event_type="ask_chatbot",
+            entity_type="chat_session",
+            entity_id=str(session_id),
+        )
+        return assistant_msg
+
     rag = get_rag()
     nlp = preprocess(payload.content, history=history)
 
@@ -209,13 +235,19 @@ async def stream_message(
     planner = await trip_chat_planner.handle_planning_turn(
         db, user_id_str, history[:-1], question
     )
+    # ── Tư vấn điểm đến (theo ngân sách/thời gian/sở thích) — sau planner ─────
+    advisory = None
+    if planner is None:
+        advisory = await destination_advisor.handle_advisory_turn(
+            db, user_id_str, question
+        )
     # Bug đã sửa: get_rag() (import + khởi tạo RAGPipeline, kéo theo
     # google-genai/qdrant-client/sentence-transformers) trước đây được gọi ở
     # đây — TRƯỚC khi biết lượt này có phải Trip AI Planner không. RAG/Qdrant
     # có sự cố (thiếu key, Qdrant sập, model lỗi tải...) sẽ làm crash request
     # ngay cả với lượt planner-only, KHÔNG hề đụng tới RAG. Chỉ khởi tạo khi
-    # thật sự cần (planner is None), ngay trước khi gọi rag.stream_query().
-    rag = get_rag() if planner is None else None
+    # thật sự cần (không phải planner cũng không phải tư vấn điểm đến).
+    rag = get_rag() if (planner is None and advisory is None) else None
 
     async def event_generator() -> AsyncGenerator[str, None]:
         full_content: list[str] = []
@@ -252,6 +284,35 @@ async def stream_message(
                 "sources": [],
                 "suggested_questions": [],
                 "itinerary": planner.get("itinerary"),
+            })
+            return
+
+        # Tư vấn điểm đến: stream text trả lời, KHÔNG gọi RAG.
+        if advisory is not None:
+            reply = advisory["reply"]
+            for piece in _chunk_text(reply):
+                if await request.is_disconnected():
+                    return
+                yield format_sse({"type": "chunk", "content": piece})
+            async with AsyncSessionLocal() as db_new:
+                assistant_msg = ChatMessage(
+                    id=str(uuid_v7()),
+                    session_id=session_id_str,
+                    role="assistant",
+                    content=reply,
+                    intent=advisory.get("intent", "ask_destination"),
+                )
+                db_new.add(assistant_msg)
+                await db_new.commit()
+                await db_new.refresh(assistant_msg)
+            yield format_sse({
+                "type": "done",
+                "message_id": assistant_msg.id,
+                "intent": advisory.get("intent", "ask_destination"),
+                "sources": [],
+                "suggested_questions": [],
+                # Phase 2 FE: render card điểm đến bấm vào chi tiết.
+                "destination_suggestions": advisory.get("suggestions", []),
             })
             return
 
