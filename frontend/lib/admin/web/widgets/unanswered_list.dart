@@ -36,6 +36,10 @@ class UnansweredList extends ConsumerWidget {
           itemBuilder: (_, i) {
             final q = questions[i];
             final isPromoted = q['is_promoted'] as bool? ?? false;
+            final answer = q['answer'] as String? ?? '';
+            final suggestion = q['suggestion'] as String? ?? '';
+            final intent = q['intent'] as String? ?? '';
+            final conf = (q['confidence_score'] as num?)?.toDouble();
             return Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -46,14 +50,79 @@ class UnansweredList extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Câu hỏi THẬT của user
                   Text(
                     q['question'] as String? ?? '',
-                    style: const TextStyle(fontSize: 13),
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.w600),
                   ),
+                  const SizedBox(height: 4),
+                  // Độ tin + intent
+                  Row(
+                    children: [
+                      if (conf != null)
+                        _Badge(
+                          text: 'Độ tin ${(conf * 100).toStringAsFixed(0)}%',
+                          color: conf < 0.2
+                              ? Colors.red
+                              : (conf < 0.5 ? Colors.orange : Colors.green),
+                        ),
+                      if (intent.isNotEmpty) ...[
+                        const SizedBox(width: 6),
+                        _Badge(text: intent, color: Colors.blueGrey),
+                      ],
+                    ],
+                  ),
+                  if (answer.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      'Bot trả lời: $answer',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                  ],
+                  if (suggestion.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.lightbulb_outline,
+                              size: 14, color: Color(0xFF7C3AED)),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(suggestion,
+                                style: const TextStyle(fontSize: 11.5)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 8),
                   if (isPromoted || canPromote)
                     Row(
                       children: [
+                        if (canPromote)
+                          TextButton.icon(
+                            onPressed: () => _resolve(context, ref,
+                                q['answer_message_id'] as String?),
+                            icon: const Icon(Icons.done_all, size: 14),
+                            label: const Text('Đã xử lý',
+                                style: TextStyle(fontSize: 12)),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.grey.shade600,
+                              minimumSize: const Size(0, 30),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                            ),
+                          ),
                         const Spacer(),
                         // TP-005/008: AI soạn sẵn draft KB để admin duyệt/sửa
                         if (!isPromoted && canPromote) ...[
@@ -124,6 +193,26 @@ class UnansweredList extends ConsumerWidget {
     }
   }
 
+  Future<void> _resolve(
+      BuildContext context, WidgetRef ref, String? answerMessageId) async {
+    if (answerMessageId == null) return;
+    try {
+      await ref.read(chatRepositoryProvider).resolveAnswer(answerMessageId);
+      ref.invalidate(unansweredQuestionsProvider);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã đánh dấu xử lý xong')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Có lỗi xảy ra')),
+        );
+      }
+    }
+  }
+
   // ── TP-005/008: AI soạn draft → dialog duyệt/sửa → lưu vào KB ──────────────
   Future<void> _aiSuggest(
       BuildContext context, WidgetRef ref, String questionId) async {
@@ -163,6 +252,29 @@ class UnansweredList extends ConsumerWidget {
         const SnackBar(content: Text('Đã lưu Knowledge Entry từ draft AI!')),
       );
     }
+  }
+}
+
+// Nhãn nhỏ hiển thị độ tin / intent
+class _Badge extends StatelessWidget {
+  final String text;
+  final Color color;
+  const _Badge({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+            fontSize: 10.5, color: color, fontWeight: FontWeight.w600),
+      ),
+    );
   }
 }
 

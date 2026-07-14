@@ -14,7 +14,9 @@ PLANNER_MARKER ở đầu câu hỏi trợ lý ở lượt trước.
 from __future__ import annotations
 
 import re
-from typing import Optional
+from datetime import date, datetime
+from decimal import Decimal
+from typing import Any, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -27,6 +29,9 @@ logger = get_logger("trip_chat_planner")
 
 # Marker vô hình đầu câu hỏi slot-filling → nhận biết "đang lên lịch" ở lượt sau.
 PLANNER_MARKER = "🧭"
+# Marker đầu câu trả lời khi ĐÃ dựng xong plan → cho phép lượt sau tiếp tục SỬA
+# (đổi ngày/người/nơi/ngân sách) mà không cần gõ lại "lên lịch trình".
+PLAN_DONE_MARKER = "🗺️"
 
 # Kích hoạt chế độ lên lịch khi câu hỏi chứa 1 trong các cụm này.
 _TRIGGER_KEYWORDS = (
@@ -82,16 +87,87 @@ def _looks_like_new_question(message: str) -> bool:
     return len(message.split()) > 3
 
 
+# Dấu hiệu câu SỬA plan sau khi đã dựng xong (đổi ngày/người/nơi/ngân sách).
+# Cần vì sau khi trả plan, câu như "5 ngày đi", "qua đà lạt", "2 người thôi"
+# KHÔNG có trigger "lên lịch trình" và cũng không phải câu hỏi — trước đây rơi
+# xuống RAG nên plan không sửa được. Chỉ tiếp tục khi câu có TÍN HIỆU sửa để
+# tránh "cảm ơn"/"ok đẹp đấy" vô tình dựng lại plan.
+_EDIT_VERBS = ("doi", "thay", "tang", "giam", "them", "bot", "chuyen", "sua",
+               "khac", "lai", "nua", "thanh")
+_SLOT_UNIT_HINTS = ("ngay", "nguoi", "dem", "trieu", "nghin", "ngan sach",
+                    "gia dinh", "cap doi", "nguoi yeu", "mot minh",
+                    "nhom", "ban be", "solo", "couple")
+
+
+# Dấu hiệu user muốn đi "ngẫu nhiên / đâu cũng được / bạn chọn giúp" → planner
+# tự gợi ý 1 điểm đến (theo sở thích nếu có, else random) thay vì hỏi "đi đâu?".
+_RANDOM_DEST_HINTS = (
+    "ngau nhien", "bat ky", "bat cu", "dau cung duoc", "cho nao cung duoc",
+    "noi nao cung duoc", "di dau cung duoc", "di dau cung", "tuy ban", "tuy ai",
+    "ban chon", "chon giup", "chon ho", "goi y giup", "goi y dia diem",
+    "goi y diem den", "goi y noi", "goi y cho", "random", "sao cung duoc",
+    "gi cung duoc", "chua biet di dau", "chua biet di", "muon di dau do",
+    "di dau do", "o dau cung duoc",
+)
+
+
+def _wants_random_destination(message: str) -> bool:
+    low = strip_accents(message.lower())
+    return any(h in low for h in _RANDOM_DEST_HINTS)
+
+
+def _looks_like_edit(message: str) -> bool:
+    low = strip_accents(message.lower())
+    if any(_keyword_in_text(v, low) for v in _EDIT_VERBS):
+        return True
+    if any(h in low for h in _SLOT_UNIT_HINTS):
+        return True
+    # có địa danh mới ("qua đà lạt", "sang nha trang") cũng là yêu cầu đổi nơi
+    if extract_entities(message).get("location"):
+        return True
+    return False
+
+
+# Danh từ chỉ MỘT hạng mục trong lịch (khách sạn/quán/điểm) — dùng để nhận biết
+# yêu cầu đổi riêng 1 mục (khác với đổi tham số chuyến: ngày/người/nơi/ngân sách).
+_ITEM_SWAP_NOUNS = ("khach san", "hotel", "resort", "homestay", "quan an", "quan",
+                    "nha hang", "cho an", "diem", "dia diem", "cho choi", "cho tham quan")
+
+
+def _is_item_swap_request(message: str) -> bool:
+    low = strip_accents(message.lower())
+    has_swap = any(_keyword_in_text(v, low) for v in ("doi", "thay", "khac", "chuyen"))
+    has_item = any(n in low for n in _ITEM_SWAP_NOUNS)
+    if not (has_swap and has_item):
+        return False
+    # Nếu câu có kèm tham số chuyến (số ngày/người/đêm hoặc địa danh mới) thì
+    # đó là đổi CHUYẾN chứ không phải đổi riêng 1 mục → để flow re-plan xử lý.
+    import re as _re
+    if _re.search(r"\d+\s*(ngay|nguoi|dem)", low):
+        return False
+    if extract_entities(message).get("location"):
+        return False
+    return True
+
+
 def is_planning_turn(history: list[dict], message: str) -> bool:
     """Đang trong luồng lên lịch nếu: câu hiện tại kích hoạt, HOẶC câu trợ lý
-    gần nhất là câu hỏi slot-filling (bắt đầu bằng PLANNER_MARKER) VÀ câu hiện
-    tại không phải một câu hỏi khác hẳn (xem `_looks_like_new_question`)."""
+    gần nhất là câu hỏi slot-filling (PLANNER_MARKER) và câu này không phải câu
+    hỏi khác hẳn, HOẶC câu trợ lý gần nhất là PLAN ĐÃ XONG (PLAN_DONE_MARKER) và
+    câu này là một yêu cầu SỬA (đổi ngày/người/nơi/ngân sách)."""
     if has_trigger(message):
         return True
     last = _last_assistant(history)
-    if not (last and last.lstrip().startswith(PLANNER_MARKER)):
+    if not last:
         return False
-    return not _looks_like_new_question(message)
+    lastl = last.lstrip()
+    if lastl.startswith(PLANNER_MARKER):
+        return not _looks_like_new_question(message)
+    if lastl.startswith(PLAN_DONE_MARKER):
+        # Sau khi plan xong: chỉ tiếp tục nếu là yêu cầu sửa rõ ràng, KHÔNG phải
+        # câu hỏi mới (để "Đà Nẵng có gì ăn ngon?" vẫn ra RAG).
+        return _looks_like_edit(message) and not _looks_like_new_question(message)
+    return False
 
 
 def _asked_optional(history: list[dict]) -> bool:
@@ -166,9 +242,25 @@ def _extract_prefs(text: str) -> set[str]:
 
 
 def collect_slots(history: list[dict], message: str) -> dict:
-    """Gộp slot từ tất cả tin nhắn user trong session (tin mới ghi đè tin cũ)."""
+    """Gộp slot từ các tin user THUỘC lượt lên lịch hiện tại (tin mới ghi đè cũ).
+
+    Bug đã sửa: trước đây gom slot từ TOÀN BỘ tin user trong session → số liệu
+    của câu hỏi KHÁC lẫn vào plan. Ví dụ thật: user hỏi "khách sạn hội an 1
+    ngày 500k" (hỏi khách sạn), rồi sau đó "gợi ý lịch trình đi hội an" —
+    "1 ngày" từ câu khách sạn rò rỉ thành days=1, khiến planner BỎ QUA bước hỏi
+    số ngày và tự dựng lịch 1 ngày. Tương tự "4 người", "500k" ở câu vu vơ.
+
+    Chỉ lấy từ câu trigger "lên lịch trình" GẦN NHẤT trở đi: một lượt lên lịch
+    luôn bắt đầu bằng trigger; các tin trước đó là chuyện khác, không tính."""
     user_texts = [m.get("content", "") for m in history if m.get("role") == "user"]
     user_texts.append(message)
+
+    start = 0
+    for i in range(len(user_texts) - 1, -1, -1):
+        if has_trigger(user_texts[i]):
+            start = i
+            break
+    user_texts = user_texts[start:]
 
     slots: dict = {"preferences": set()}
     for t in user_texts:
@@ -190,12 +282,56 @@ def collect_slots(history: list[dict], message: str) -> dict:
             slots["travel_type"] = tt
         slots["preferences"] |= _extract_prefs(t)
     slots["preferences"] = list(slots["preferences"])
+
+    # Khôi phục điểm đến khi user KHÔNG tự nêu (trường hợp planner đã tự gợi ý
+    # ngẫu nhiên). Thiết kế stateless nên phải đọc lại từ các câu trợ lý trong
+    # lượt lên lịch: chúng luôn nhắc tên điểm đến ("Bạn định đi **Đà Lạt**...",
+    # tiêu đề plan...). BỎ QUA câu hỏi "đi đâu?" vì nó chứa danh sách ví dụ
+    # (Đà Lạt, Phú Quốc...) sẽ bị nhận nhầm thành điểm đã chọn.
+    if not slots.get("destination"):
+        for m in reversed(history):
+            if m.get("role") != "assistant":
+                continue
+            c = (m.get("content") or "").lstrip()
+            if not (c.startswith(PLANNER_MARKER) or c.startswith(PLAN_DONE_MARKER)):
+                continue
+            if "đi đâu" in c.lower():
+                continue
+            loc = extract_entities(c).get("location")
+            if loc:
+                slots["destination"] = loc
+                break
     return slots
 
 
 # ── Chuyển plan → itinerary payload cho mobile (ItineraryCard + save) ─────────
 
 _SLOT_LABELS = {"morning": "Sáng", "lunch": "Trưa", "afternoon": "Chiều", "evening": "Tối"}
+
+
+def _json_safe(obj: Any) -> Any:
+    """Chuyển payload về kiểu JSON thuần: Decimal→int/float, date/datetime→ISO
+    string, đệ quy qua dict/list.
+
+    Bắt buộc vì payload itinerary từ CHAT đi thẳng qua `json.dumps` thô ở 2 chỗ
+    KHÔNG dùng FastAPI jsonable_encoder: (1) `format_sse` khi stream event,
+    (2) lưu vào cột JSON `chat_sessions.last_itinerary`. Giá lấy từ DB là cột
+    NUMERIC → `Decimal`, và `hotel`/`alternatives` (mới thêm để FE render chi
+    tiết) mang theo Decimal `price_per_night`/`rating`/`price_adult` → nếu không
+    ép kiểu, json.dumps raise TypeError giữa chừng stream → client thấy
+    "network error" (endpoint /trips/ai/plan KHÔNG dính vì FastAPI tự encode)."""
+    if isinstance(obj, bool):
+        return obj
+    if isinstance(obj, Decimal):
+        as_int = int(obj)
+        return as_int if as_int == obj else float(obj)
+    if isinstance(obj, (date, datetime)):
+        return obj.isoformat()
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_json_safe(v) for v in obj]
+    return obj
 
 
 def _to_itinerary_payload(plan: dict) -> dict:
@@ -219,7 +355,7 @@ def _to_itinerary_payload(plan: dict) -> dict:
             "stars": hotel.get("stars"),
             "price": hotel.get("price_per_night"),
         })
-    return {
+    return _json_safe({
         "destination": plan.get("destination_name"),
         "destination_id": plan.get("destination_id"),
         "duration": f"{plan.get('days_count')} ngày",
@@ -230,9 +366,13 @@ def _to_itinerary_payload(plan: dict) -> dict:
         "days": days,
         "hotels": hotels,
         # Payload đầy đủ để lưu qua /trips/ai/confirm (mobile ưu tiên khi có).
+        # Thêm destination_image/hotel/alternatives (trước đây thiếu) để FE
+        # render được UI chi tiết (ảnh, đổi lựa chọn) giống hệt màn hình
+        # AiPlannerScreen dù plan đến từ chat, không phải /trips/ai/plan.
         "ai_plan": {
             "title": plan.get("title"),
             "destination_id": plan.get("destination_id"),
+            "destination_image": plan.get("destination_image"),
             "start_date": plan.get("start_date"),
             "end_date": plan.get("end_date"),
             "days_count": plan.get("days_count"),
@@ -240,10 +380,13 @@ def _to_itinerary_payload(plan: dict) -> dict:
             "travel_type": plan.get("travel_type"),
             "budget": plan.get("budget"),
             "estimated_cost": plan.get("estimated_cost"),
+            "budget_warning": plan.get("budget_warning"),
             "summary": plan.get("summary"),
+            "hotel": plan.get("hotel"),
             "days": plan.get("days"),
+            "alternatives": plan.get("alternatives"),
         },
-    }
+    })
 
 
 def _fmt_vnd(v: Optional[int]) -> str:
@@ -260,7 +403,10 @@ def _plan_reply_text(plan: dict) -> str:
     ..." bị dính liền thành 1 dòng dài. Nối bằng "\n\n" (dòng trắng — đúng
     ngữ nghĩa "đoạn mới" của Markdown) để mỗi mục xuống dòng thật.
     """
-    lines = [f"Mình đã lên **{plan['title']}** dựa trên dữ liệu thật trong hệ thống 🎉"]
+    # PLAN_DONE_MARKER ở đầu → lượt sau nhận biết "plan đã xong" để cho phép SỬA
+    # (đổi ngày/người/nơi/ngân sách) mà không cần gõ lại "lên lịch trình".
+    lines = [f"{PLAN_DONE_MARKER} Mình đã lên **{plan['title']}** dựa trên dữ liệu "
+             "thật trong hệ thống 🎉"]
     if plan.get("hotel"):
         h = plan["hotel"]
         lines.append(f"🏨 Khách sạn gợi ý: **{h['name']}**"
@@ -273,12 +419,26 @@ def _plan_reply_text(plan: dict) -> str:
                      f"cho {plan.get('travelers', 1)} người.")
     if plan.get("budget_warning"):
         lines.append(f"⚠️ {plan['budget_warning']}")
-    lines.append("Bạn xem thử nhé — hợp ý thì bấm **Lưu Chuyến Đi**, không lưu cũng "
-                 "được vì lịch trình vẫn nằm trong lịch sử chat này.")
+    lines.append("Bạn xem thử nhé — muốn **đổi số ngày, số người, nơi khác hay "
+                 "ngân sách** cứ nhắn tiếp, hoặc bấm **Lưu Chuyến Đi**. Muốn đổi "
+                 "riêng khách sạn/điểm nào thì bấm nút **Đổi** ngay tại mục đó nhé.")
     return "\n\n".join(lines)
 
 
 # ── Entry point ──────────────────────────────────────────────────────────────
+
+async def _profile_tags(db: AsyncSession, user_id: Optional[str]) -> list[str]:
+    """Lấy tag sở thích của user từ profile (rỗng nếu chưa đăng nhập/ lỗi)."""
+    if not user_id:
+        return []
+    try:
+        from app.services.user_preference_service import get_profile
+        profile = await get_profile(db, user_id)
+        return [p["tag"] for p in profile]
+    except Exception as e:
+        logger.warning(f"[trip_chat_planner] Bỏ profile do lỗi: {e}")
+        return []
+
 
 async def handle_planning_turn(
     db: AsyncSession,
@@ -294,16 +454,59 @@ async def handle_planning_turn(
     if not is_planning_turn(history, message):
         return None
 
+    # Yêu cầu ĐỔI RIÊNG khách sạn/quán/điểm (không đổi ngày/người/nơi) → không
+    # dựng lại plan (build_plan luôn chọn lại đúng khách sạn top → ra y hệt,
+    # gây hiểu nhầm). Hướng user bấm nút "Đổi" ngay tại mục đó (TripPlanView có
+    # sẵn danh sách thay thế), đổi tức thì không cần gọi lại AI.
+    if _is_item_swap_request(message):
+        return {
+            "status": "asking",
+            "itinerary": None,
+            "reply": f"{PLAN_DONE_MARKER} Để đổi riêng **khách sạn** hoặc **một "
+                     "điểm/quán** trong lịch, bạn bấm nút **Đổi** ngay cạnh mục đó "
+                     "trong lịch trình bên trên nhé — mình sẽ thay bằng lựa chọn "
+                     "khác trong khu vực ngay. Còn muốn đổi **số ngày, số người, "
+                     "nơi đến hay ngân sách** thì cứ nhắn cho mình.",
+        }
+
     slots = collect_slots(history, message)
 
     # Bước 1: thiếu điểm đến
     if not slots.get("destination"):
-        return {
-            "status": "asking",
-            "itinerary": None,
-            "reply": f"{PLANNER_MARKER} Tuyệt vời, mình giúp bạn lên lịch trình nhé! "
-                     "Bạn muốn đi đâu? (ví dụ: Đà Lạt, Phú Quốc, Sa Pa...)",
-        }
+        # User muốn "ngẫu nhiên / đâu cũng được / bạn chọn giúp" → tự gợi ý 1
+        # điểm đến (ưu tiên sở thích trong profile), thay vì hỏi lại "đi đâu?".
+        if _wants_random_destination(message):
+            profile_tags = await _profile_tags(db, user_id)
+            picked = await trip_planner_service.pick_suggested_destination(
+                db, profile_tags)
+            if picked:
+                slots["destination"] = picked["name"]
+                reason = ("— khá hợp gu của bạn"
+                          if profile_tags else "— một điểm đến rất đáng đi")
+                if not slots.get("days"):
+                    return {
+                        "status": "asking",
+                        "itinerary": None,
+                        "reply": f"{PLANNER_MARKER} Mình gợi ý bạn tới "
+                                 f"**{picked['name']}** {reason} 🎒 Bạn muốn đi "
+                                 "mấy ngày?",
+                    }
+                # đủ điểm đến (vừa gợi ý) + đã có ngày → rơi xuống các bước sau
+            else:
+                return {
+                    "status": "asking",
+                    "itinerary": None,
+                    "reply": f"{PLANNER_MARKER} Hiện mình chưa lấy được điểm đến "
+                             "nào để gợi ý. Bạn cho mình 1 nơi cụ thể nhé? "
+                             "(ví dụ: Đà Lạt, Phú Quốc, Sa Pa...)",
+                }
+        else:
+            return {
+                "status": "asking",
+                "itinerary": None,
+                "reply": f"{PLANNER_MARKER} Tuyệt vời, mình giúp bạn lên lịch trình nhé! "
+                         "Bạn muốn đi đâu? (ví dụ: Đà Lạt, Phú Quốc, Sa Pa...)",
+            }
 
     # Bước 2: thiếu số ngày
     if not slots.get("days"):
@@ -313,28 +516,33 @@ async def handle_planning_turn(
             "reply": f"{PLANNER_MARKER} Bạn định đi **{slots['destination']}** trong mấy ngày?",
         }
 
-    # Bước 3: hỏi tuỳ chọn 1 lần (nếu chưa có thông tin nào & chưa hỏi)
+    # Bước 3: hỏi 1 lần cho nhóm thông tin quyết định độ CHÍNH XÁC của lịch:
+    # số người/đi với ai (quyết định chi phí) + ngân sách + sở thích.
+    # Điều kiện bỏ qua CHỈ dựa trên "đã biết quy mô nhóm chưa" (travelers/
+    # travel_type) — KHÔNG dựa vào preferences, vì score_text đôi khi tự bắt
+    # nhầm 1 tag từ câu chung chung ("gợi ý lịch trình đi hội an" → 'thiên_nhiên')
+    # khiến trước đây planner tưởng đủ optional rồi bỏ qua hỏi số người/ngân
+    # sách → tự dựng lịch "1 người" thiếu chính xác.
     low_msg = strip_accents(message)
     user_skipped = any(w in low_msg for w in (strip_accents(s) for s in _SKIP_WORDS))
-    has_optional = any(slots.get(k) for k in ("travelers", "travel_type")) or slots.get("preferences")
-    if not has_optional and not user_skipped and not _asked_optional(history):
+    has_group_info = bool(slots.get("travelers") or slots.get("travel_type"))
+    if not has_group_info and not user_skipped and not _asked_optional(history):
         return {
             "status": "asking",
             "itinerary": None,
-            "reply": f"{PLANNER_MARKER} Gần xong rồi! Đi **mấy người** và bạn thích kiểu gì "
-                     "(biển, núi, chill/healing, ẩm thực, văn hoá...)? Ngân sách dự kiến bao "
-                     "nhiêu? Bạn có thể trả lời hoặc gõ *bỏ qua* để mình lên luôn nhé.",
+            "reply": f"{PLANNER_MARKER} Để mình lên lịch **{slots['destination']} "
+                     f"{slots['days']} ngày** cho chính xác nhé — cho mình hỏi thêm:\n\n"
+                     "• Bạn đi **một mình, với người yêu, hay cùng gia đình/bạn bè** "
+                     "(khoảng mấy người)?\n"
+                     "• **Ngân sách** dự kiến cả chuyến khoảng bao nhiêu?\n"
+                     "• Bạn thích kiểu gì (biển, núi, chill/healing, ẩm thực, văn hoá...)?\n\n"
+                     "Trả lời giúp mình, hoặc gõ *bỏ qua* để mình lên luôn theo mặc định nhé.",
         }
 
     # Đủ dữ liệu → dựng plan (dùng profile khi user không nêu sở thích)
     profile_tags: list[str] = []
     if user_id and not slots.get("preferences"):
-        try:
-            from app.services.user_preference_service import get_profile
-            profile = await get_profile(db, user_id)
-            profile_tags = [p["tag"] for p in profile]
-        except Exception as e:
-            logger.warning(f"[handle_planning_turn] Bỏ profile do lỗi: {e}")
+        profile_tags = await _profile_tags(db, user_id)
 
     result = await trip_planner_service.build_plan(db, slots, profile_tags)
     if result["status"] != "draft":

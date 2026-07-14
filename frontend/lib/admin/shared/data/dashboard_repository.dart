@@ -17,7 +17,7 @@ class DashboardRepository {
   }
 
   /// TP-004: Câu hỏi user hay hỏi nhất (đã lọc smalltalk).
-  /// Backend nhận period day|week|month — period khác sẽ dùng week.
+  /// Backend nhận period day|week|month|quarter|year.
   Future<List<Map<String, dynamic>>> topQuestions(String period,
       {int limit = 10}) async {
     final res = await _dio.get<Map<String, dynamic>>(

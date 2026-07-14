@@ -6,7 +6,6 @@ import '../../shared/data/chat_management_repository.dart';
 import '../../shared/models/auth_user.dart';
 import '../../shared/providers/auth_provider.dart';
 import 'chat_bubble.dart';
-import 'tag_editor.dart';
 
 class ChatView extends ConsumerWidget {
   final String sessionId;
@@ -30,7 +29,6 @@ class ChatView extends ConsumerWidget {
         final session = data.session;
         final messages = data.messages;
         final isFlagged = session['is_flagged'] as bool? ?? false;
-        final tags = (session['tags'] as List?)?.cast<String>() ?? [];
 
         return Column(
           children: [
@@ -72,15 +70,6 @@ class ChatView extends ConsumerWidget {
                     ),
                   ),
                   if (canModerate) ...[
-                    TagEditor(
-                      tags: tags,
-                      onChanged: (newTags) => ref
-                          .read(chatRepositoryProvider)
-                          .updateSession(sessionId, tags: newTags)
-                          .then((_) => ref.invalidate(
-                              chatSessionMessagesProvider(sessionId))),
-                    ),
-                    const SizedBox(width: 8),
                     OutlinedButton.icon(
                       onPressed: () => ref
                           .read(chatRepositoryProvider)

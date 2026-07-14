@@ -24,7 +24,7 @@ from typing import Any, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, status
-from sqlalchemy import cast, func, or_, select, update, delete, Date, case
+from sqlalchemy import and_, cast, func, or_, select, update, delete, Date, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
@@ -35,7 +35,7 @@ from app.db.database import AsyncSessionLocal
 from app.db.models.admin import EmbeddingJob, KnowledgeEntry
 from app.db.models.media import ContentItem, ContentOption
 from app.db.models.chat import ChatMessage, ChatSession
-from app.db.models.travel import Destination, Ticket, Review, City
+from app.db.models.travel import Destination, Ticket, Review, City, IntentPattern
 from app.db.models.user import User
 from app.services.knowledge import KnowledgeService
 from app.core.security import hash_password
@@ -59,11 +59,24 @@ AdminUser = CurrentUser  # re-use; guard applied per endpoint with Depends
 # DASHBOARD STATS
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Số ngày cho mỗi kỳ thống kê (khớp PeriodSelector FE: Hôm nay/7 ngày/30 ngày/
+# Quý này/Năm nay). `quarter` trước đây bị THIẾU ở đây + bị regex chặn nên FE gửi
+# period=quarter là lỗi 422 → dashboard "Quý" trắng. Dùng chung 1 bảng cho mọi
+# endpoint stats để không lệch nhau.
+_PERIOD_DAYS: dict[str, int] = {
+    "day": 1, "week": 7, "month": 30, "quarter": 90, "year": 365,
+}
+_PERIOD_PATTERN = "^(day|week|month|quarter|year)$"
+
+
+def _period_days(period: str) -> int:
+    return _PERIOD_DAYS.get(period, 30)
+
+
 async def _overview_data(db: AsyncSession, period: str) -> dict:
     """Dashboard tổng quan — trả về đúng cấu trúc DashboardOverview cho Flutter."""
     now = datetime.now(timezone.utc)
-    delta = {"day": 1, "week": 7, "month": 30, "year": 365}[period]
-    since = now - timedelta(days=delta)
+    since = now - timedelta(days=_period_days(period))
 
     # ── KPI counts ────────────────────────────────────────────────────────────
     total_users = await db.scalar(
@@ -184,7 +197,7 @@ async def _overview_data(db: AsyncSession, period: str) -> dict:
 
 @router.get("/stats/overview")
 async def stats_overview(
-    period: str = Query("month", pattern="^(day|week|month|year)$"),
+    period: str = Query("month", pattern=_PERIOD_PATTERN),
     db: DB = None,
     _: User = Depends(require_admin),
 ):
@@ -193,14 +206,13 @@ async def stats_overview(
 
 @router.get("/stats/feedback")
 async def stats_feedback(
-    period: str = Query("month", pattern="^(day|week|month|year)$"),
+    period: str = Query("month", pattern=_PERIOD_PATTERN),
     db: DB = None,
     _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     """Thống kê feedback theo ngày trong period."""
     now = datetime.now(timezone.utc)
-    delta = {"day": 1, "week": 7, "month": 30, "year": 365}[period]
-    since = now - timedelta(days=delta)
+    since = now - timedelta(days=_period_days(period))
 
     rows = await db.execute(
         select(
@@ -231,7 +243,7 @@ async def stats_feedback(
 async def stats_export(
     format: str = Query("excel"),
     report: str = Query("overview"),
-    period: str = Query("month", pattern="^(day|week|month|year)$"),
+    period: str = Query("month", pattern=_PERIOD_PATTERN),
     db: DB = None,
     _: User = Depends(require_admin),
 ):
@@ -931,8 +943,7 @@ async def rag_overview(
         if date_to:
             until = _parse_utc(date_to)
     else:
-        delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
-        since = until - timedelta(days=delta)
+        since = until - timedelta(days=_period_days(period))
 
     avg_confidence = await db.scalar(
         select(func.avg(ChatMessage.confidence_score)).where(
@@ -1053,8 +1064,7 @@ async def rag_latency(
     db: DB = None,
     _: User = Depends(require_role(STAFF_ROLES)),
 ):
-    delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
-    since = datetime.now(timezone.utc) - timedelta(days=delta)
+    since = datetime.now(timezone.utc) - timedelta(days=_period_days(period))
 
     rows = await db.execute(
         select(
@@ -1084,8 +1094,7 @@ async def rag_errors(
     db: DB = None,
     _: User = Depends(require_role(STAFF_ROLES)),
 ):
-    delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
-    since = datetime.now(timezone.utc) - timedelta(days=delta)
+    since = datetime.now(timezone.utc) - timedelta(days=_period_days(period))
 
     rows = await db.execute(
         select(ChatMessage)
@@ -1178,21 +1187,76 @@ async def update_city_mapping(
 # INTENT PATTERNS
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Nguồn sự thật = bảng DB `intent_patterns` (admin sửa được). Trước đây các
+# endpoint này đọc/ghi app/data/intent_patterns.json + dict RAM, TRONG KHI runtime
+# chatbot lại nạp keyword từ DB lúc startup (intent_loader.load_intent_patterns_from_db)
+# → admin sửa file nhưng chatbot không hề đổi. Nay CRUD thẳng bảng DB rồi nạp lại
+# runtime NLP ngay lập tức để có hiệu lực tức thì, không cần deploy.
+
+
+async def _reload_intent_runtime(db: AsyncSession) -> None:
+    from app.services.intent_loader import load_intent_patterns_from_db
+    await load_intent_patterns_from_db(db)
+
+
+async def _db_patterns_by_intent(db: AsyncSession) -> dict[str, list[str]]:
+    """Gom keyword đang active trong DB theo intent."""
+    rows = (await db.execute(
+        select(IntentPattern)
+        .where(IntentPattern.is_active == True)  # noqa: E712
+        .order_by(IntentPattern.intent, IntentPattern.keyword)
+    )).scalars().all()
+    out: dict[str, list[str]] = {}
+    for r in rows:
+        out.setdefault(r.intent, []).append(r.keyword)
+    return out
+
+
+async def _ensure_intent_seeded(db: AsyncSession, intent: str) -> None:
+    """Nếu intent chưa có dòng nào trong DB nhưng đang có keyword ở runtime (bộ
+    nạp từ file), copy toàn bộ keyword runtime vào DB để DB thành nguồn sự thật
+    ĐẦY ĐỦ cho intent đó. Không làm bước này thì xoá 1 keyword của intent chỉ-có-
+    trong-file sẽ bị 'sống lại' ở lần reload do intent_loader merge với file."""
+    from app.services.nlp_preprocessor import INTENT_PATTERNS
+    existing = await db.scalar(
+        select(func.count(IntentPattern.id)).where(IntentPattern.intent == intent)
+    )
+    if existing and existing > 0:
+        return
+    for kw in INTENT_PATTERNS.get(intent, []):
+        db.add(IntentPattern(intent=intent, keyword=kw, weight=1, is_active=True))
+    await db.flush()
+
+
 @router.get("/intent-patterns")
 async def list_intent_patterns(
+    db: DB = None,
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
+    """Keyword theo intent. Nguồn = DB, overlay lên bộ file cho intent chưa có
+    dòng DB, để admin luôn thấy đủ tất cả intent hệ thống."""
     from app.services.nlp_preprocessor import INTENT_PATTERNS
+    merged: dict[str, list[str]] = {
+        intent: list(kws) for intent, kws in INTENT_PATTERNS.items()
+    }
+    for intent, kws in (await _db_patterns_by_intent(db)).items():
+        merged[intent] = kws
+
+    # đếm số intent chứa mỗi keyword → cảnh báo va chạm (1 keyword ở >1 intent)
+    kw_intent_count: dict[str, int] = {}
+    for kws in merged.values():
+        for kw in set(kws):
+            kw_intent_count[kw] = kw_intent_count.get(kw, 0) + 1
+
     result: dict = {}
-    for intent, kws in INTENT_PATTERNS.items():
-        keyword_list = [
-            {
-                "keyword": kw,
-                "is_collision": sum(1 for _, v in INTENT_PATTERNS.items() if kw in v) > 1,
-            }
-            for kw in kws
-        ]
-        result[intent] = {"keywords": keyword_list, "collision_warnings": []}
+    for intent, kws in merged.items():
+        result[intent] = {
+            "keywords": [
+                {"keyword": kw, "is_collision": kw_intent_count.get(kw, 0) > 1}
+                for kw in kws
+            ],
+            "collision_warnings": [],
+        }
     return result
 
 
@@ -1200,18 +1264,28 @@ async def list_intent_patterns(
 async def add_keyword(
     intent: str,
     body: dict,
+    db: DB = None,
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
-    from app.services.nlp_preprocessor import INTENT_PATTERNS, reload_intent_patterns
-    kw = body.get("keyword", "").strip().lower()
+    from app.services.nlp_preprocessor import INTENT_PATTERNS
+    kw = (body.get("keyword") or "").strip().lower()
     if not kw:
         raise HTTPException(400, "keyword không được trống")
-    if intent not in INTENT_PATTERNS:
+    known = set(INTENT_PATTERNS.keys()) | set((await _db_patterns_by_intent(db)).keys())
+    if intent not in known:
         raise HTTPException(404, f"Intent '{intent}' không tồn tại")
-    if kw not in INTENT_PATTERNS[intent]:
-        INTENT_PATTERNS[intent].append(kw)
-        _save_intent_patterns(INTENT_PATTERNS)
-        reload_intent_patterns()
+
+    await _ensure_intent_seeded(db, intent)
+    exists = await db.scalar(
+        select(func.count(IntentPattern.id)).where(
+            IntentPattern.intent == intent,
+            func.lower(IntentPattern.keyword) == kw,
+        )
+    )
+    if not exists:
+        db.add(IntentPattern(intent=intent, keyword=kw, weight=1, is_active=True))
+    await db.commit()
+    await _reload_intent_runtime(db)
     return {"ok": True}
 
 
@@ -1219,15 +1293,18 @@ async def add_keyword(
 async def delete_keyword(
     intent: str,
     keyword: str,
+    db: DB = None,
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
-    from app.services.nlp_preprocessor import INTENT_PATTERNS, reload_intent_patterns
-    if intent not in INTENT_PATTERNS:
-        raise HTTPException(404, f"Intent '{intent}' không tồn tại")
-    if keyword in INTENT_PATTERNS[intent]:
-        INTENT_PATTERNS[intent].remove(keyword)
-        _save_intent_patterns(INTENT_PATTERNS)
-        reload_intent_patterns()
+    await _ensure_intent_seeded(db, intent)  # DB phải đầy đủ trước khi xoá
+    await db.execute(
+        delete(IntentPattern).where(
+            IntentPattern.intent == intent,
+            func.lower(IntentPattern.keyword) == keyword.strip().lower(),
+        )
+    )
+    await db.commit()
+    await _reload_intent_runtime(db)
     return {"ok": True}
 
 
@@ -1240,28 +1317,31 @@ async def test_intent(body: dict, _: User = Depends(require_role(CONTENT_ROLES))
     return {"intent": intent, "confidence": confidence, "matched_keywords": []}
 
 
-def _save_intent_patterns(patterns: dict) -> None:
-    """Lưu patterns về file JSON."""
-    import os
-    path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "app", "data", "intent_patterns.json")
-    path = os.path.normpath(path)
-    try:
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(patterns, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.warning(f"Không thể lưu intent_patterns.json: {e}")
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # CONTENT MANAGEMENT (generic CRUD)
 # ══════════════════════════════════════════════════════════════════════════════
 
 # content_type hợp lệ. faq & experiences KHÔNG ở đây — chúng là knowledge entries
 # (quản lý qua /admin/knowledge). Content lưu ở bảng content_items (JSONB).
+# "city" = ảnh đại diện + mô tả cấp thành phố (1 item/city_slug) — publish sẽ
+# đồng bộ image_url sang bảng destinations (xem _sync_city_image) vì mobile
+# Explore đọc ảnh trực tiếp từ Destination.image_url, chưa qua content_items.
 CONTENT_TYPES: set[str] = {
     "destinations", "hotels", "tours", "foods", "restaurants",
-    "shopping", "itineraries", "events", "transport",
+    "shopping", "itineraries", "events", "transport", "city",
 }
+
+
+async def _sync_city_image(db: AsyncSession, item: "ContentItem") -> None:
+    """content_type='city' + published → đồng bộ ảnh vào destinations.image_url
+    (khớp theo slug) để mobile Explore hiển thị ngay, không cần đổi API mobile."""
+    if item.content_type != "city" or item.status != "published" or not item.city_slug:
+        return
+    await db.execute(
+        update(Destination)
+        .where(Destination.slug == item.city_slug)
+        .values(image_url=item.image_url)
+    )
 
 
 def _serialize_content(c: ContentItem) -> dict:
@@ -1382,6 +1462,7 @@ async def update_content(
     item.data = data
     item.image_url = image_url
     item.updated_at = datetime.now(timezone.utc)
+    await _sync_city_image(db, item)
     await db.commit()
     await db.refresh(item)
     return _serialize_content(item)
@@ -1409,11 +1490,12 @@ async def publish_content(
     db: DB = None,
     _: User = Depends(require_role(CONTENT_ROLES)),
 ):
-    await db.execute(
-        update(ContentItem)
-        .where(ContentItem.id == item_id)
-        .values(status="published", updated_at=datetime.now(timezone.utc))
-    )
+    item = await db.get(ContentItem, item_id)
+    if not item or item.is_deleted or item.content_type != content_type:
+        raise HTTPException(404, "Không tìm thấy mục")
+    item.status = "published"
+    item.updated_at = datetime.now(timezone.utc)
+    await _sync_city_image(db, item)
     await db.commit()
     return {"ok": True}
 
@@ -1936,34 +2018,102 @@ async def delete_media(
 # UNANSWERED QUESTIONS
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _handling_suggestion(intent: Optional[str], conf: Optional[float]) -> str:
+    """Gợi ý cách xử lý cho admin với 1 câu trả lời kém."""
+    if intent == "out_of_scope":
+        return ("Ngoài phạm vi du lịch — thường không cần bổ sung KB; cân nhắc "
+                "câu từ chối rõ ràng hơn cho intent out_of_scope.")
+    if conf is None or conf < 0.2:
+        return ("Chatbot gần như không có dữ liệu cho câu này — nên tạo Knowledge "
+                "Entry mới (bấm 'AI soạn draft' rồi duyệt/sửa và lưu).")
+    return ("Câu trả lời độ tin thấp — kiểm tra & bổ sung nội dung KB liên quan "
+            "(hoặc thêm keyword intent) rồi đồng bộ lại.")
+
+
 @router.get("/unanswered-questions")
 async def list_unanswered(
+    max_confidence: float = Query(0.5, ge=0.0, le=1.0),
+    limit: int = Query(100, ge=1, le=300),
     db: DB = None,
     _: User = Depends(require_role(MONITOR_ROLES)),
 ):
-    rows = await db.execute(
-        select(ChatMessage)
+    """
+    Câu hỏi CHATBOT TRẢ LỜI KÉM — độ tin thấp (< max_confidence) hoặc bị user
+    chấm sai (feedback = -1). KHÔNG phải câu "không trả lời gì"; đây là câu trả
+    lời SAI/không chắc, tỉ lệ thấp.
+
+    Mỗi dòng gồm: câu hỏi THẬT của user (tin nhắn user ngay trước câu trả lời),
+    câu trả lời sai của bot, độ tin, và GỢI Ý cách xử lý. `id` trả về là id tin
+    nhắn USER (nếu tìm được) để promote/ai-suggest soạn KB từ đúng câu hỏi —
+    không phải từ câu trả lời sai. Bỏ các câu đã được đánh dấu xử lý xong.
+    """
+    from sqlalchemy.orm import aliased
+    UserMsg = aliased(ChatMessage)
+
+    # tin nhắn user gần nhất TRƯỚC (hoặc cùng lúc) câu trả lời — trong cùng session
+    _prev_user = (
+        select(UserMsg.id, UserMsg.content)
         .where(
-            ChatMessage.role == "assistant",
-            ChatMessage.confidence_score < 0.3,
+            UserMsg.session_id == ChatMessage.session_id,
+            UserMsg.role == "user",
+            UserMsg.created_at <= ChatMessage.created_at,
         )
-        .order_by(ChatMessage.created_at.desc())
-        .limit(50)
+        .order_by(UserMsg.created_at.desc())
+        .limit(1)
+        .correlate(ChatMessage)
     )
-    messages = rows.scalars().all()
-    # FE (unanswered_list) mong {items:[...]} với field `question` + `is_promoted`.
+    uq_id_sq = _prev_user.with_only_columns(UserMsg.id).scalar_subquery()
+    uq_text_sq = _prev_user.with_only_columns(UserMsg.content).scalar_subquery()
+
+    cond = and_(
+        ChatMessage.role == "assistant",
+        or_(
+            ChatMessage.confidence_score < max_confidence,
+            ChatMessage.feedback == -1,
+        ),
+        or_(
+            ChatMessage.feedback_resolved.is_(None),
+            ChatMessage.feedback_resolved == False,  # noqa: E712
+        ),
+    )
+
+    total = await db.scalar(
+        select(func.count()).select_from(
+            select(ChatMessage.id).where(cond).subquery()
+        )
+    )
+
+    rows = (await db.execute(
+        select(
+            ChatMessage.id,
+            ChatMessage.content,
+            ChatMessage.confidence_score,
+            ChatMessage.intent,
+            ChatMessage.created_at,
+            uq_id_sq.label("uq_id"),
+            uq_text_sq.label("uq_text"),
+        )
+        .where(cond)
+        .order_by(ChatMessage.created_at.desc())
+        .limit(limit)
+    )).all()
+
     return {
-        "total": len(messages),
+        "total": total or 0,
         "items": [
             {
-                "id": m.id,
-                "question": (m.content or "")[:300],
-                "confidence_score": m.confidence_score,
-                "intent": m.intent,
+                # ưu tiên id câu hỏi user để KB soạn từ đúng câu hỏi
+                "id": r.uq_id or r.id,
+                "answer_message_id": r.id,
+                "question": (r.uq_text or r.content or "")[:300],
+                "answer": (r.content or "")[:300],
+                "confidence_score": r.confidence_score,
+                "intent": r.intent,
+                "suggestion": _handling_suggestion(r.intent, r.confidence_score),
                 "is_promoted": False,
-                "created_at": str(m.created_at),
+                "created_at": str(r.created_at),
             }
-            for m in messages
+            for r in rows
         ],
     }
 
@@ -2037,8 +2187,7 @@ async def top_questions(
     _: User = Depends(require_role(MONITOR_ROLES)),
 ):
     """Câu hỏi user hay hỏi nhất — normalize lower + trim + cắt 120 ký tự."""
-    delta = {"day": 1, "week": 7, "month": 30}.get(period, 7)
-    since = datetime.now(timezone.utc) - timedelta(days=delta)
+    since = datetime.now(timezone.utc) - timedelta(days=_period_days(period))
 
     normalized = func.lower(func.left(func.trim(ChatMessage.content), 120))
     rows = await db.execute(
