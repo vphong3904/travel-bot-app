@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../shared/data/content_repository.dart';
 import '../../shared/data/content_option_repository.dart';
+import '../../shared/providers/content_provider.dart';
 import '../../shared/models/content_item.dart';
 import '../../shared/providers/dio_provider.dart';
 import '../../shared/content_labels.dart';
@@ -15,12 +16,18 @@ class ContentFormField {
   final int maxLines;
   final List<String>? options;
 
+  /// Khi true: render dropdown chọn thành phố từ DB (/admin/cities) thay vì gõ
+  /// tay. Giá trị chọn vừa điền tên hiển thị vào [key], vừa gán city_slug cho
+  /// content item — dùng cho màn "Thành phố" để lấy dữ liệu từ DB, không nhập mới.
+  final bool fromCities;
+
   const ContentFormField({
     required this.key,
     required this.label,
     this.required = false,
     this.maxLines = 1,
     this.options,
+    this.fromCities = false,
   });
 }
 
@@ -57,6 +64,10 @@ class _ContentFormSheetState
   String? _imageUrl;
   bool _loading = false;
 
+  // Field fromCities: slug + tên thành phố chọn từ DB
+  String? _citySlug;
+  String? _cityName;
+
   @override
   void initState() {
     super.initState();
@@ -69,7 +80,11 @@ class _ContentFormSheetState
     for (final f in widget.formFields) {
       final existing = widget.item?.getString(f.key) ??
           (widget.item?.data[f.key]?.toString() ?? '');
-      if (f.options != null) {
+      if (f.fromCities) {
+        _cityName = existing.isEmpty ? null : existing;
+        _citySlug = (widget.item?.data['city_slug'] as String?) ??
+            (widget.citySlug.isNotEmpty ? widget.citySlug : null);
+      } else if (f.options != null) {
         _dropdownValues[f.key] =
             existing.isEmpty ? null : existing;
       } else {
@@ -92,8 +107,14 @@ class _ContentFormSheetState
     setState(() => _loading = true);
     try {
       final data = <String, dynamic>{};
+      String submitCitySlug = widget.citySlug;
       for (final f in widget.formFields) {
-        if (f.options != null) {
+        if (f.fromCities) {
+          data[f.key] = _cityName ?? '';
+          if (_citySlug != null && _citySlug!.isNotEmpty) {
+            submitCitySlug = _citySlug!;
+          }
+        } else if (f.options != null) {
           data[f.key] = _dropdownValues[f.key];
         } else {
           data[f.key] = _controllers[f.key]?.text ?? '';
@@ -104,7 +125,7 @@ class _ContentFormSheetState
       if (widget.item == null) {
         await repo.create(
           contentType: widget.contentType,
-          citySlug: widget.citySlug,
+          citySlug: submitCitySlug,
           data: data,
         );
       } else {
@@ -128,6 +149,51 @@ class _ContentFormSheetState
     if (picked != null && picked.isNotEmpty) {
       setState(() => _imageUrl = picked);
     }
+  }
+
+  // Dropdown chọn thành phố từ DB (/admin/cities) — dùng cho field fromCities.
+  Widget _buildCityDropdown(ContentFormField f) {
+    final citiesAsync = ref.watch(citiesProvider);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: citiesAsync.when(
+        loading: () => const LinearProgressIndicator(),
+        error: (e, _) => Text('Lỗi tải danh sách thành phố: $e',
+            style: const TextStyle(color: Colors.red, fontSize: 12)),
+        data: (cities) {
+          final valid =
+              cities.any((c) => c.slug == _citySlug) ? _citySlug : null;
+          return DropdownButtonFormField<String>(
+            initialValue: valid,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: f.required ? '${f.label} *' : f.label,
+              border: const OutlineInputBorder(),
+              isDense: true,
+              prefixIcon: const Icon(Icons.location_city, size: 18),
+            ),
+            items: cities
+                .map((c) => DropdownMenuItem(
+                      value: c.slug,
+                      child: Text(
+                        (c.province != null && c.province!.isNotEmpty)
+                            ? '${c.name} · ${c.province}'
+                            : c.name,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ))
+                .toList(),
+            onChanged: (slug) => setState(() {
+              _citySlug = slug;
+              _cityName =
+                  cities.firstWhere((c) => c.slug == slug).name;
+            }),
+            validator:
+                f.required ? (v) => v == null ? 'Bắt buộc' : null : null,
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildImagePicker() {
@@ -246,6 +312,9 @@ class _ContentFormSheetState
                   _buildImagePicker(),
                   const SizedBox(height: 16),
                   ...widget.formFields.map((f) {
+                  if (f.fromCities) {
+                    return _buildCityDropdown(f);
+                  }
                   if (f.options != null) {
                     final current = _dropdownValues[f.key];
                     // Ưu tiên options từ DB (taxonomy) theo field; fallback hardcode.

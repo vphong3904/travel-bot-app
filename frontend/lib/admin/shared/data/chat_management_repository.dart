@@ -85,6 +85,12 @@ class ChatManagementRepository {
     );
     return res.data!;
   }
+
+  /// Đánh dấu 1 câu trả lời kém là ĐÃ XỬ LÝ (bỏ khỏi danh sách chưa trả lời).
+  /// `answerMessageId` = id tin nhắn CÂU TRẢ LỜI của bot (field answer_message_id).
+  Future<void> resolveAnswer(String answerMessageId) async {
+    await _dio.patch<void>('/admin/feedback/$answerMessageId/resolve');
+  }
 }
 
 final chatRepositoryProvider = Provider<ChatManagementRepository>((ref) {
