@@ -1,44 +1,45 @@
 {
   "_meta": {
-    "city": "lam-dong-mui-ne",
-    "last_updated": "2026-06-24",
-    "agent_task": "T-006",
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006 (bổ sung, file không thuộc 12 file bắt buộc — không dùng bởi seed_kb_to_sql.py, tickets bảng SQL được sinh từ destinations.json entry_fee)",
     "status": "complete",
     "missing_fields": [],
-    "data_sources": ["Klook", "Traveloka"]
+    "data_sources": ["Traveloka (07/2026)", "TripAdvisor (07/2026)"],
+    "fix_note": "2026-07-13: file này trước đó bị dán nhầm dữ liệu vé của lam-dong-mui-ne (Đồi Robin, ATV Bàu Trắng, Datanla) — không liên quan Sa Pa. Đã thay bằng dữ liệu vé thật của Sa Pa. Lưu ý: bảng `tickets` trong SQL thực tế được sinh tự động từ trường entry_fee của destinations.json (xem backend/scripts/seed_kb_to_sql.py, hàm import_tickets), file này chỉ mang tính tham khảo bổ sung."
   },
   "data": [
     {
-      "id": "019f3b22-6001-7000-8000-000000000001",
-      "city_id": "019f3b22-1000-7000-8000-000000000000",
+      "id": "019ef658-6c00-7801-8801-a12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "location_id": "019ef658-6c00-7201-8201-b12345678902",
+      "name": "Vé Cáp Treo Fansipan Legend (khứ hồi)",
+      "price": { "adult": 850000, "child": 550000, "currency": "VND" },
+      "price_source": "Traveloka (07/2026)",
+      "hours": "Cáp treo hoạt động khoảng 07:30 - 17:30 hằng ngày — xác nhận trước khi đến",
+      "description": "Vé cáp treo ba dây khứ hồi lên đỉnh Fansipan 3.143m. Giá tăng lên 900.000đ/người lớn vào thứ 7 và ngày lễ, Tết. Trẻ em dưới 1m miễn phí.",
+      "booking_required": false
+    },
+    {
+      "id": "019ef658-6c00-7802-8802-a12345678931",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
       "location_id": null,
-      "name": "Vé Cáp Treo Đồi Robin - Thiền Viện Trúc Lâm",
-      "price": { "adult": 120000, "child": 90000, "currency": "VND" },
-      "price_source": "Trạm cáp treo Đà Lạt",
-      "hours": "07:30 - 17:00",
-      "description": "Vé khứ hồi ngắm nhìn toàn cảnh đồi thông rậm rạp và Hồ Tuyền Lâm từ trên cao.",
+      "name": "Vé Tàu Hỏa Leo Núi Mường Hoa (khứ hồi)",
+      "price": { "adult": 200000, "child": null, "currency": "VND" },
+      "price_source": "Traveloka (07/2026)",
+      "hours": "Theo giờ hoạt động ga cáp treo — xác nhận trước khi đến",
+      "description": "Tàu hỏa leo núi nối ga cáp treo với chân đỉnh Fansipan, giúp rút ngắn quãng đường đi bộ lên đỉnh.",
       "booking_required": false
     },
     {
-      "id": "019f3b22-6002-7000-8000-000000000002",
-      "city_id": "019f3b22-1000-7000-8000-000000000000",
-      "location_id": "019f3b22-2002-7000-8000-000000000002",
-      "name": "Vé Xe Mô Tô Địa Hình ATV Bàu Trắng",
-      "price": { "adult": 600000, "child": null, "currency": "VND" },
-      "price_source": "Ban quản lý dịch vụ đồi cát",
-      "hours": "05:00 - 18:00",
-      "description": "Trải nghiệm cảm giác mạnh đua xe ATV leo cồn cát dựng đứng tại Bàu Trắng trong 20 phút.",
-      "booking_required": false
-    },
-    {
-      "id": "019f3b22-6003-7000-8000-000000000003",
-      "city_id": "019f3b22-1000-7000-8000-000000000000",
-      "location_id": "019f3b22-2004-7000-8000-000000000004",
-      "name": "Vé Xe Trượt Ống Alpine Coaster Datanla",
-      "price": { "adult": 250000, "child": 150000, "currency": "VND" },
-      "price_source": "KDL Datanla",
-      "hours": "07:30 - 17:00",
-      "description": "Vé trượt xe ống máng đôi vòng vèo xuyên rừng thông xuống chân thác 1 và thác 3.",
+      "id": "019ef658-6c00-7803-8803-a12345678932",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "location_id": "019ef658-6c00-7202-8202-b12345678903",
+      "name": "Vé Tham Quan Bản Cát Cát",
+      "price": { "adult": 150000, "child": 70000, "currency": "VND" },
+      "price_source": "TripAdvisor (07/2026)",
+      "hours": "06:00 - 18:00 — xác nhận trước khi đến",
+      "description": "Vé vào cổng tham quan Bản Cát Cát, bao gồm khu vực thác nước, cầu treo, nhà H'Mông truyền thống và show văn nghệ dân tộc. Trẻ em cao dưới 1m miễn phí.",
       "booking_required": false
     }
   ]

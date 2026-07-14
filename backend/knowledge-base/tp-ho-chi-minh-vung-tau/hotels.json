@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-003",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-003 + nâng cấp độ sâu Vũng Tàu",
     "status": "partial",
-    "missing_fields": ["exact_weekend_rates"],
-    "data_sources": ["Booking.com", "Traveloka"]
+    "missing_fields": ["exact_weekend_rates", "price_per_night chính xác Pullman/Imperial/Marina Bay (giá hiển thị động trên Traveloka, không lấy được số tĩnh)"],
+    "data_sources": ["Booking.com", "Traveloka", "iVIVU (07/2026)"]
   },
   "data": [
     {
@@ -14,7 +14,8 @@
       "segment": "5-star",
       "address": "159 Thùy Vân, Thắng Tam, TP. Vũng Tàu",
       "price_range": null,
-      "price_note": "// TODO: Khảo sát phụ thu phòng view biển Bãi Sau dịp cuối tuần hè"
+      "rating": "9,5/10 (2.255 đánh giá) (Nguồn: iVIVU, 07/2026)",
+      "price_note": "// TODO: Khảo sát phụ thu phòng view biển Bãi Sau dịp cuối tuần hè — giá phòng hiển thị động trên Traveloka/iVIVU, chưa lấy được số cụ thể"
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60102",
@@ -30,7 +31,53 @@
       "segment": "resort",
       "address": "115 Trần Phú, Phường 5, TP. Vũng Tàu",
       "price_range": null,
-      "price_note": "// TODO: Check tình trạng phòng bungalow ngắm hoàng hôn Bãi Trước"
+      "rating": "9,6/10 (810 đánh giá) (Nguồn: iVIVU, 07/2026)",
+      "price_note": "// TODO: Check tình trạng phòng bungalow ngắm hoàng hôn Bãi Trước — resort 5 sao, phòng đều hướng biển; giá phòng hiển thị động, chưa lấy được số cụ thể tĩnh"
+    },
+    {
+      "id": "a2d8f3e5-7c4a-4b9f-8d2e-3a6c9b8f5d11",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "The Malibu Hotel",
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": { "amount": 1550000, "currency": "VND" },
+      "price_note": "Giá phòng từ 1.550.000đ/phòng/đêm (Nguồn: iVIVU)",
+      "address": "263 Lê Hồng Phong, Phường Thắng Tam, TP. Vũng Tàu",
+      "amenities": ["hồ bơi vô cực tầng 5", "wifi", "nhà hàng", "view toàn cảnh thành phố"],
+      "description": "Khách sạn boutique nổi bật với hồ bơi vô cực (infinity pool) tầng 5 nhìn bao quát toàn thành phố Vũng Tàu, một trong những góc check-in được yêu thích nhất.",
+      "image_url": null,
+      "rating": "9,5/10 (704 đánh giá) (Nguồn: iVIVU, 07/2026)",
+      "booking_url": null
+    },
+    {
+      "id": "a2d8f3e5-7c4a-4b9f-8d2e-3a6c9b8f5d12",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Song Homestay - The Song Vung Tau",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: giá phòng hiển thị động trên Traveloka, chưa lấy được số cụ thể — Traveloka ghi accommodation Vũng Tàu khởi điểm chung từ ~107.880đ/đêm (không phải giá riêng của cơ sở này)",
+      "address": "28 Thi Sách, Phường Thắng Tam, TP. Vũng Tàu (tòa nhà The Song An Gia)",
+      "amenities": ["wifi", "điều hòa", "hồ bơi chung", "gần biển Bãi Sau"],
+      "description": "Căn hộ homestay trong tòa nhà The Song An Gia, gần biển Bãi Sau, phù hợp khách muốn không gian riêng tư kiểu căn hộ với giá hợp lý hơn khách sạn lớn.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
+    },
+    {
+      "id": "a2d8f3e5-7c4a-4b9f-8d2e-3a6c9b8f5d13",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Dream Box Hostel",
+      "type": "hostel",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "price_note": "// TODO: giá phòng dorm hiển thị động trên Traveloka, chưa lấy được số cụ thể riêng cho cơ sở này",
+      "address": "27-29-31 Trung Nhị, Phường 1, TP. Vũng Tàu",
+      "amenities": ["wifi", "phòng dorm & phòng riêng", "khu sinh hoạt chung"],
+      "description": "Hostel trung tâm thành phố phù hợp khách du lịch bụi (backpacker), có cả phòng dorm nhiều giường và phòng riêng, gần chợ Vũng Tàu và Bãi Trước.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null
     }
   ]
 }

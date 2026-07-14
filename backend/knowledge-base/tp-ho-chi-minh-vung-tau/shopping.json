@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-006",
-    "status": "completed",
-    "missing_fields": [],
-    "data_sources": ["manual_curated"]
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006 + nâng cấp độ sâu Vũng Tàu",
+    "status": "partial",
+    "missing_fields": ["price_range Chợ Vũng Tàu/Chợ đêm — cần xác nhận qua Traveloka/TripAdvisor"],
+    "data_sources": ["manual_curated", "Traveloka (địa chỉ/giờ mở cửa Lam Sơn Square, 07/2026)"]
   },
   "data": [
     {
@@ -21,6 +21,39 @@
       "type": "traditional_market",
       "address": "Góc đường Phan Bội Châu - Nguyễn Công Trứ, TP. Vũng Tàu",
       "specialty": "Ghẹ xanh sống nhảy, mực trứng tươi roi rói, tôm tít cân ký hấp chín tại chỗ ăn liền cực ngọt"
+    },
+    {
+      "id": "f7b3d8e0-2c9f-4a5e-9c7d-8f1b4e3a0c61",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Chợ Vũng Tàu (Chợ Trung tâm)",
+      "type": "market",
+      "items": ["quần áo", "đồ lưu niệm", "thực phẩm khô", "hải sản", "đặc sản địa phương"],
+      "address": "Đường Nam Kỳ Khởi Nghĩa, TP. Vũng Tàu (cách Bãi Trước khoảng 5 phút đi xe)",
+      "opening_hours": "Khoảng 4:00 chiều đến 3:00 sáng hôm sau — xác nhận trước khi đến",
+      "price_range": null,
+      "tips": "Chợ trung tâm lớn nhất Vũng Tàu, nên mặc cả nhẹ nhàng khi mua đồ lưu niệm hoặc hải sản với số lượng lớn."
+    },
+    {
+      "id": "f7b3d8e0-2c9f-4a5e-9c7d-8f1b4e3a0c62",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Chợ đêm Vũng Tàu",
+      "type": "market",
+      "items": ["hải sản nướng/hấp", "đồ ăn vặt", "quần áo giá rẻ", "đồ lưu niệm"],
+      "address": "Khu vực ngã ba Nguyễn Biểu – Đào Duy Từ, đối diện khách sạn Imperial (159 Thùy Vân), TP. Vũng Tàu",
+      "opening_hours": "Khoảng 15:00 đến 1:00 sáng hôm sau, đông nhất khoảng 19:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "tips": "Đi khoảng 19h để không khí nhộn nhịp và hải sản tươi nhất; nhiều món hải sản giá bình dân phù hợp ăn vặt nhóm bạn."
+    },
+    {
+      "id": "f7b3d8e0-2c9f-4a5e-9c7d-8f1b4e3a0c63",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Lam Sơn Square",
+      "type": "mall",
+      "items": ["thời trang", "mỹ phẩm", "đồ gia dụng", "khu vui chơi giải trí", "rạp chiếu phim", "ẩm thực"],
+      "address": "09 Lê Lợi, Phường 1, TP. Vũng Tàu",
+      "opening_hours": "9:30–22:00 (Nguồn: Traveloka)",
+      "price_range": null,
+      "tips": "Trung tâm thương mại đa chức năng đầu tiên tại Vũng Tàu, phù hợp mua sắm trong không gian máy lạnh vào ngày nắng gắt hoặc mưa; có rạp chiếu phim tiện kết hợp giải trí."
     }
   ]
 }

@@ -1,33 +1,67 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-006",
-    "status": "completed",
-    "missing_fields": [],
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006 (nâng cấp 07/2026)",
+    "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng time_lunar không khớp schema event_date — đã sửa để import đúng vào bảng destination_events). Giữ nguyên id và nội dung cốt lõi 3 lễ hội cũ, bổ sung 1 lễ hội mới.",
+    "missing_fields": [
+      "cost — hầu hết lễ hội miễn phí tham gia phần lễ, chưa có nguồn xác thực chi phí dịch vụ đi kèm (gửi xe, ăn uống...)"
+    ],
     "data_sources": [
-      "manual_curated",
-      "Sở Văn hóa Thể thao và Du lịch Tây Ninh"
+      "Sở Văn hóa Thể thao và Du lịch Tây Ninh",
+      "Cổng thông tin Khu du lịch quốc gia núi Bà Đen (khudulichnuibaden.tayninh.gov.vn)",
+      "manual_curated"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60501",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Hội xuân Núi Bà Đen",
-      "time_lunar": "Mùng 4 đến hết tháng Giêng Âm lịch",
-      "description": "Lễ hội lớn nhất năm thu hút hàng triệu tăng ni phật tử và du khách đến hành hương, cầu may mắn đầu năm tại Điện Bà."
+      "event_date": "Mùng 4 đến hết tháng Giêng Âm lịch hằng năm",
+      "location_text": "Quần thể chùa núi Bà Đen, TP. Tây Ninh",
+      "cost": null,
+      "description": "Lễ hội lớn nhất năm thu hút hàng triệu tăng ni phật tử và du khách đến hành hương, cầu may mắn đầu năm tại Điện Bà Linh Sơn Thánh Mẫu.",
+      "annual": true,
+      "highlight": true,
+      "source": "manual_curated"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60502",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Đại lễ Vía Đức Chí Tôn (Đạo Cao Đài)",
-      "time_lunar": "Mùng 9 tháng Giêng Âm lịch",
-      "description": "Đại lễ quan trọng nhất của đạo Cao Đài biểu dương sức mạnh tâm linh, tổ chức tại nội ô Tòa Thánh với các điệu múa rồng nhang độc đáo."
+      "event_date": "Mùng 9 tháng Giêng Âm lịch hằng năm",
+      "location_text": "Tòa Thánh Tây Ninh, phường Long Hoa, TP. Tây Ninh",
+      "cost": null,
+      "description": "Đại lễ quan trọng nhất của đạo Cao Đài biểu dương sức mạnh tâm linh, tổ chức tại nội ô Tòa Thánh với các điệu múa rồng nhang độc đáo.",
+      "annual": true,
+      "highlight": true,
+      "source": "manual_curated"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60503",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Đại lễ Hội Yến Diêu Trì Cung",
-      "time_lunar": "Rằm tháng Tám Âm lịch (Trung thu)",
-      "description": "Lễ hội tâm linh cực lớn của đạo Cao Đài, có phần rước cộ bông Đức Phật Mẫu và các tiết mục biểu diễn nghệ thuật truyền thống đặc sắc."
+      "event_date": "Rằm tháng Tám Âm lịch (Trung thu) hằng năm",
+      "location_text": "Tòa Thánh Tây Ninh, phường Long Hoa, TP. Tây Ninh",
+      "cost": null,
+      "description": "Lễ hội tâm linh cực lớn của đạo Cao Đài, có phần rước cộ bông Đức Phật Mẫu và các tiết mục biểu diễn nghệ thuật truyền thống đặc sắc.",
+      "annual": true,
+      "highlight": true,
+      "source": "manual_curated"
+    },
+    {
+      "id": "bdbda414-953b-49ad-bfa7-2b41745b3e03",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Lễ vía Bà Linh Sơn Thánh Mẫu (Lễ vía Bà núi Bà Đen)",
+      "event_date": "Mùng 4 đến mùng 6 tháng 5 Âm lịch hằng năm (năm 2026 nhằm 18–20/6/2026 dương lịch)",
+      "location_text": "Hệ thống chùa núi Bà Đen, TP. Tây Ninh",
+      "cost": null,
+      "description": "Di sản văn hóa phi vật thể quốc gia (công nhận năm 2018), lễ hội dân gian lớn với các nghi lễ truyền thống tại hệ thống chùa núi Bà Đen, chương trình cải lương tuồng cổ, và đại lễ dâng đăng với hàng chục nghìn ngọn đăng tại quảng trường dưới chân tượng Phật Bà Tây Bổ Đà Sơn vào tối cuối lễ hội.",
+      "annual": true,
+      "highlight": true,
+      "source": "Cổng thông tin Khu du lịch quốc gia núi Bà Đen (khudulichnuibaden.tayninh.gov.vn)"
     }
   ]
 }

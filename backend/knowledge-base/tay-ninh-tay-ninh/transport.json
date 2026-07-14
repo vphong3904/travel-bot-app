@@ -1,59 +1,71 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-005",
-    "status": "completed",
-    "missing_fields": [],
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005 (nâng cấp 07/2026)",
+    "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng route/provider/estimated_price và mode/scope/note không khớp schema type/from/duration/price_range/providers/notes — đã sửa để import đúng vào bảng transport_options). Giữ nguyên nội dung cốt lõi, điền thêm giá thật đã xác thực.",
+    "missing_fields": [
+      "price_range xe khách/xe bus công cộng tuyến TP.HCM - Tây Ninh — chỉ tìm được số liệu từ Vexere (không thuộc danh sách nguồn cho phép của tác vụ này) nên để null",
+      "price_info xe máy thuê, taxi nội thành — chưa xác nhận"
+    ],
     "data_sources": [
-      "Vexere",
-      "Phương Trang"
+      "Traveloka (07/2026)",
+      "vietnamtourism.gov.vn",
+      "Google Maps (chéo kiểm thời gian di chuyển, 07/2026)"
     ]
   },
   "data": {
     "getting_there": [
       {
-        "route": "TP.HCM - Tây Ninh (Xe khách Limousine)",
-        "provider": "Huệ Nghĩa / Saco Travel",
-        "duration": "2.5 - 3 hours",
-        "estimated_price": null,
-        "price_note": "// TODO: Tra cứu giá vé chính xác tại vexere.com"
+        "type": "limousine_transfer",
+        "from": "TP. Hồ Chí Minh",
+        "duration": "Khoảng 2 – 2,5 giờ (khoảng 110km qua Quốc lộ 22)",
+        "price_range": "Từ 615.000đ/khách khứ hồi (xe limousine 9 chỗ, dịch vụ đưa đón chung) (Nguồn: Traveloka)",
+        "providers": ["Dịch vụ đưa đón chia sẻ (shared transfer) qua Traveloka", "Huệ Nghĩa", "Saco Travel"],
+        "notes": "Có nhiều loại xe phục vụ tuyến này, từ xe khách phổ thông đến limousine; nên đặt trước vào cuối tuần và dịp lễ vì lượng khách hành hương núi Bà Đen rất đông."
       },
       {
-        "route": "TP.HCM - Tây Ninh (Xe bus công cộng)",
-        "provider": "Tuyến bus số 70-3 (Bến Thành - Mộc Bài)",
-        "duration": "3.5 hours",
-        "estimated_price": null,
-        "price_note": "// TODO: Cập nhật lộ trình bus mới nhất"
+        "type": "bus",
+        "from": "TP. Hồ Chí Minh",
+        "duration": "Khoảng 3 – 3,5 giờ",
+        "price_range": null,
+        "providers": ["Các hãng xe khách tuyến Bến xe An Sương/Bến xe Miền Tây (mới) – Tây Ninh"],
+        "notes": "// TODO: giá vé xe khách phổ thông chỉ tìm thấy trên Vexere (không thuộc danh sách nguồn cho phép của tác vụ này) — cần bổ sung khi có nguồn thuộc Traveloka/Vietravel/Trip.com"
       },
       {
-        "route": "TP.HCM - Tây Ninh (Phương tiện cá nhân)",
-        "provider": "Tự túc (Quốc lộ 22)",
-        "duration": "2.5 hours",
-        "estimated_price": null,
-        "price_note": "Chi phí xăng xe tự túc"
+        "type": "self_drive",
+        "from": "TP. Hồ Chí Minh",
+        "duration": "Khoảng 2,5 giờ bằng ô tô/xe máy cá nhân qua Quốc lộ 22",
+        "price_range": null,
+        "providers": ["Tự túc phương tiện cá nhân"],
+        "notes": "Chi phí xăng xe và phí cầu đường tự túc, tùy loại phương tiện."
       }
     ],
     "getting_around": [
       {
-        "mode": "Xe máy thuê",
-        "scope": "Nội thành và các điểm lân cận",
-        "note": "Phổ biến nhất cho khách đi phượt hồ Dầu Tiếng"
+        "type": "motorbike_rental",
+        "price_info": null,
+        "notes": "Phổ biến nhất cho khách đi phượt hồ Dầu Tiếng và di chuyển linh hoạt trong nội thành.",
+        "recommended": true
       },
       {
-        "mode": "Taxi",
-        "scope": "Mai Linh / Taxi Tây Ninh",
-        "note": "Phù hợp di chuyển nhóm gia đình đi Tòa Thánh, Núi Bà"
+        "type": "taxi",
+        "price_info": null,
+        "notes": "Mai Linh / Taxi Tây Ninh — phù hợp di chuyển nhóm gia đình đi Tòa Thánh, núi Bà Đen.",
+        "recommended": true
       },
       {
-        "mode": "Cáp treo",
-        "scope": "Nội khu Núi Bà Đen",
-        "note": "Tuyến đỉnh Vân Sơn và tuyến Chùa Hang của Sun World"
+        "type": "cable_car",
+        "price_info": "Xem giá chi tiết tại destinations.json — mục Sun World Núi Bà Đen (Nguồn: Traveloka)",
+        "notes": "Tuyến đỉnh Vân Sơn và tuyến Chùa Hang của Sun World, phương tiện chính để lên núi Bà Đen.",
+        "recommended": true
       },
       {
-        "mode": "Xe điện",
-        "scope": "Nội khu Tòa Thánh / KDL Núi Bà",
-        "note": "Hỗ trợ di chuyển khoảng cách ngắn trong khuôn viên rộng"
+        "type": "electric_car",
+        "price_info": null,
+        "notes": "Xe điện hỗ trợ di chuyển khoảng cách ngắn trong khuôn viên rộng của Tòa Thánh và khu du lịch núi Bà.",
+        "recommended": false
       }
     ]
   }

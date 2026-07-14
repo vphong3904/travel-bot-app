@@ -24,6 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_current_user
 from app.db.models.user import User
 from app.db.models.trip import TripPlan, TripPlanItem
+from app.db.models.travel import Destination
 from app.services import log_service, trip_planner_service
 from app.db.schemas.trip import (
     AiPlanConfirmRequest,
@@ -38,6 +39,29 @@ from app.db.schemas.trip import (
 )
 
 router = APIRouter(tags=["trips"])
+
+
+async def _attach_destination_info(db: AsyncSession, trips: list[TripPlan]) -> None:
+    """Gắn destination_name/destination_image (không có trong TripPlan model)
+    lên từng object trước khi serialize qua TripPlanOut/TripPlanListOut —
+    phục vụ ảnh hero + tên điểm đến ở màn chi tiết/danh sách "Chuyến đi"."""
+    dest_ids = {t.destination_id for t in trips if t.destination_id}
+    if not dest_ids:
+        for t in trips:
+            t.destination_name = None
+            t.destination_image = None
+        return
+    rows = (
+        await db.execute(
+            select(Destination.id, Destination.name, Destination.image_url)
+            .where(Destination.id.in_(dest_ids))
+        )
+    ).all()
+    by_id = {r.id: r for r in rows}
+    for t in trips:
+        row = by_id.get(t.destination_id)
+        t.destination_name = row.name if row else None
+        t.destination_image = row.image_url if row else None
 
 
 # ── AI Trip Planner (TR-06: khai báo TRƯỚC các route /{trip_id}) ──────────────
@@ -87,6 +111,7 @@ async def ai_confirm_trip(
         end_date=payload.end_date,
         travelers=payload.travelers,
         travel_type=payload.travel_type,
+        estimated_cost=payload.estimated_cost,
         status="saved",
         ai_generated=True,
     )
@@ -107,6 +132,13 @@ async def ai_confirm_trip(
                     end_time=_parse_time(item.end_time),
                     estimated_cost=item.estimated_cost,
                     notes=item.notes,
+                    # Bug đã sửa: trước đây bỏ trống 4 field này khi lưu →
+                    # ảnh + buổi trong ngày + loại mục mất vĩnh viễn sau khi
+                    # user bấm "Lưu chuyến đi" (xem 42_trip_plan_items_metadata.sql).
+                    time_slot=item.time_slot,
+                    type=item.type,
+                    ref_id=item.ref_id,
+                    image_url=item.image_url,
                 )
             )
     await db.commit()
@@ -117,6 +149,7 @@ async def ai_confirm_trip(
         .where(TripPlan.id == trip.id)
     )
     trip = result.scalar_one()
+    await _attach_destination_info(db, [trip])
 
     await log_service.log_behavior(
         user_id=str(current_user.id),
@@ -141,7 +174,9 @@ async def list_trips(
         stmt = stmt.where(TripPlan.status == status)
     stmt = stmt.order_by(TripPlan.updated_at.desc()).offset(skip).limit(limit)
     result = await db.execute(stmt)
-    return result.scalars().all()
+    trips = list(result.scalars().all())
+    await _attach_destination_info(db, trips)
+    return trips
 
 
 # ── Create trip ───────────────────────────────────────────────────────────────
@@ -158,6 +193,7 @@ async def create_trip(
     db.add(trip)
     await db.commit()
     await db.refresh(trip)
+    await _attach_destination_info(db, [trip])
     # Ghi behavior log vào MongoDB
     await log_service.log_behavior(
         user_id=str(current_user.id),
@@ -183,6 +219,7 @@ async def get_trip(
     trip = result.scalar_one_or_none()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
+    await _attach_destination_info(db, [trip])
     return trip
 
 
@@ -199,6 +236,7 @@ async def update_trip(
         setattr(trip, field, value)
     await db.commit()
     await db.refresh(trip)
+    await _attach_destination_info(db, [trip])
     return trip
 
 

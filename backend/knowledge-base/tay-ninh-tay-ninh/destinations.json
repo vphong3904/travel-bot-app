@@ -1,65 +1,101 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-29",
-    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
-    "status": "completed",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi, nâng cấp 07/2026)",
+    "status": "partial",
+    "partial_note": "Chuẩn hoá lại field theo docs/KB_CITY_FORMAT.md (bản cũ dùng ticket_price/price_note không khớp schema entry_fee — đã sửa để import đúng vào bảng locations/tickets). Giữ nguyên id và nội dung cốt lõi của 6 điểm cũ, bổ sung 4 điểm mới.",
     "missing_fields": [
-      "ticket_price (xác thực biến động 2026)",
-      "image_url",
-      "coordinates các điểm vui chơi (chưa verify — để null)"
+      "coordinates chính xác nhiều điểm (cần xác minh qua Google Maps)",
+      "image_url (chưa có ảnh thật)",
+      "entry_fee Căn cứ Trung ương Cục Miền Nam (chưa tìm được nguồn giá từ danh sách nguồn cho phép)",
+      "entry_fee Vườn quốc gia Lò Gò-Xa Mát, Ma Thiên Lãnh (chưa xác thực)",
+      "stats.rating_avg / review_count mọi điểm (không tự bịa số)"
     ],
     "data_sources": [
-      "vietnamtourism.gov.vn",
+      "Traveloka (07/2026)",
+      "TripAdvisor (07/2026)",
       "Sở Văn hóa Thể thao và Du lịch Tây Ninh",
-      "T-037: Sun World Núi Bà Đen — sunworld.vn & Traveloka (2025)"
+      "vietnamtourism.gov.vn",
+      "Google Maps (chéo kiểm địa chỉ/giờ mở cửa, 07/2026)"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60001",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Núi Bà Đen",
       "type": "mountain",
-      "description": "Ngọn núi cao nhất Nam Bộ với hệ thống cáp treo hiện đại và quần thể tâm linh Ga Bà cổ kính.",
-      "rating": null,
-      "ticket_price": null,
-      "price_note": "// TODO: xác nhận giá vé cáp treo Sun World tại traveloka.com"
+      "address": "Khu phố Ninh Phú, phường Ninh Sơn, TP. Tây Ninh, tỉnh Tây Ninh (cách trung tâm TP. Tây Ninh ~11km)",
+      "coordinates": { "lat": 11.3653, "lng": 106.1706 },
+      "hours": "Khu du lịch mở cửa cả ngày; cáp treo hoạt động theo khung giờ riêng — xác nhận trước khi đến",
+      "description": "Ngọn núi cao nhất Nam Bộ (986m), được mệnh danh 'nóc nhà Nam Bộ', là quần thể du lịch tâm linh — sinh thái lớn nhất Tây Ninh, gồm hệ thống cáp treo hiện đại, quần thể chùa cổ Điện Bà — Chùa Hang hơn 300 năm tuổi và tượng Phật Bà Tây Bổ Đà Sơn cao nhất châu Á trên đỉnh núi.",
+      "tips": "Có thể leo bộ theo đường mòn khoảng 2–3 giờ nếu không đi cáp treo (đường mòn qua chùa Bà). Đi sáng sớm để tránh nắng gắt và có cơ hội ngắm biển mây trước khi sương tan.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Miễn phí vào khu du lịch chân núi; vé cáp treo lên đỉnh xem chi tiết tại mục \"Sun World Núi Bà Đen\" cùng file này"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60002",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Tòa Thánh Tây Ninh",
       "type": "temple",
-      "description": "Công trình kiến trúc tôn giáo vĩ đại của Đạo Cao Đài với sự kết hợp độc đáo giữa kiến trúc Á - Âu.",
-      "rating": null,
-      "ticket_price": 0,
-      "price_note": "Miễn phí tham quan, cần lưu ý trang phục lịch sự"
+      "address": "Đường Phạm Hộ Pháp, phường Long Hoa (thị xã Hòa Thành cũ), tỉnh Tây Ninh — cách trung tâm TP. Tây Ninh ~5km",
+      "coordinates": { "lat": 11.3131, "lng": 106.0989 },
+      "hours": "Mở cửa tham quan cả ngày; 4 giờ lễ chính trong ngày: 6:00, 12:00 (chính ngọ — đông khách nhất), 18:00, 0:00",
+      "description": "Công trình kiến trúc tôn giáo vĩ đại của Đạo Cao Đài, khởi công năm 1926 và khánh thành năm 1947, kết hợp độc đáo giữa kiến trúc Á – Âu. Thánh đường dài 97,5m, rộng 22m, mang hình dáng biểu tượng Long Mã Bái Sư với 112 cột đỡ chạm khắc hoa văn tinh xảo.",
+      "tips": "Nên đến đúng giờ lễ 12:00 trưa để xem đầy đủ nghi thức hành lễ và nhã nhạc. Bỏ giày dép trước khi vào chính điện; nam vào cửa phải, nữ vào cửa trái; trang phục kín đáo, lịch sự, giữ trật tự và tắt/im lặng điện thoại.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Miễn phí (Nguồn: Traveloka)"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60003",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Hồ Dầu Tiếng",
       "type": "nature",
-      "description": "Hồ nước nhân tạo lớn nhất Việt Nam, địa điểm cắm trại và ngắm hoàng hôn hoang sơ lý tưởng.",
-      "rating": null,
-      "ticket_price": 0,
-      "price_note": "Không thu vé vào cổng, có phí dịch vụ bãi cắm trại tự phát"
+      "address": "Khu vực hồ Dầu Tiếng, huyện Dương Minh Châu, tỉnh Tây Ninh (hồ trải rộng qua địa phận Tây Ninh, Bình Dương và Bình Phước cũ)",
+      "coordinates": { "lat": 11.2833, "lng": 106.3667 },
+      "hours": "24/7",
+      "description": "Hồ nước nhân tạo lớn nhất Đông Nam Á với diện tích mặt nước khoảng 270km², vốn được xây dựng phục vụ thủy lợi, nay là điểm cắm trại, ngắm hoàng hôn và chèo SUP hoang sơ được giới trẻ TP.HCM ưa chuộng vào dịp cuối tuần.",
+      "tips": "Mùa đẹp nhất để cắm trại là tháng 12 đến tháng 4 năm sau (mùa khô). Một số khu glamping ven hồ (như Bằng Lăng Glamping) có thu phí vào cổng và dịch vụ lều trại trọn gói; nên đặt trước vào cuối tuần vì lượng khách đông.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Không thu vé vào khu vực hồ; các bãi cắm trại/glamping tư nhân ven hồ thu phí riêng theo dịch vụ (xem tours.json)"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60004",
-      "name": "Chùa Gò Kén",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Chùa Gò Kén (Thiền Lâm Tự)",
       "type": "temple",
-      "description": "Ngôi chùa cổ hơn trăm năm tuổi với tượng Phật Bà Quán Thế Âm đứng trên dòng súng lớn.",
-      "rating": null,
-      "ticket_price": 0,
-      "price_note": "Miễn phí tham quan"
+      "address": "Xã Long Thành Trung, thị xã Hòa Thành (nay thuộc TP. Tây Ninh), tỉnh Tây Ninh — cách trung tâm TP. Tây Ninh ~8km",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "6:00–20:00 hằng ngày — xác nhận trước khi đến",
+      "description": "Ngôi chùa cổ hơn 100 năm tuổi, khởi lập năm 1904 từ một am tranh đơn sơ, đến năm 1914 được trùng tu theo bản vẽ gửi từ Paris mang phong cách kiến trúc Đông – Tây giao hòa, thi công 12 năm và mang tên chính thức Thiền Lâm Tự. Nổi bật với tượng Phật Bà Quán Thế Âm đứng trên đài sen giữa hồ súng lớn trước chùa.",
+      "tips": "Kết hợp tham quan trong hành trình Tòa Thánh – Chùa Gò Kén vì hai điểm khá gần nhau. Ăn mặc lịch sự, giữ yên tĩnh khi vào chánh điện.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Miễn phí"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60005",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Căn cứ Trung ương Cục Miền Nam",
       "type": "museum",
-      "description": "Di tích lịch sử quốc gia đặc biệt, thủ đô kháng chiến của cách mạng miền Nam.",
-      "rating": null,
-      "ticket_price": null,
-      "price_note": "// TODO: cập nhật lệ phí thuyết minh đoàn tại di tích"
+      "address": "Ấp Tân Tiến, xã Tân Lập, huyện Tân Biên, tỉnh Tây Ninh — cách trung tâm TP. Tây Ninh khoảng 60km",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Khoảng 7:00–17:00 hằng ngày — giờ mở cửa có ghi nhận khác nhau giữa các nguồn, xác nhận trước khi đến",
+      "description": "Di tích Quốc gia đặc biệt, từng là căn cứ đầu não — 'thủ đô kháng chiến' của cách mạng miền Nam giai đoạn 1961–1975, nằm giữa khu rừng nguyên sinh giáp biên giới Campuchia, còn lưu giữ hệ thống nhà làm việc, hầm trú ẩn của các cơ quan lãnh đạo thời chiến.",
+      "tips": "Nên thuê thuyết minh viên tại chỗ để hiểu rõ giá trị lịch sử; kết hợp với vườn quốc gia Lò Gò – Xa Mát vì cùng khu vực huyện Tân Biên.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: chưa xác thực được giá vé từ nguồn thuộc danh sách cho phép (Traveloka/TripAdvisor/iVIVU/Trip.com/Vietravel/Saigon Tourist/vietnamtourism.gov.vn) — không dùng số liệu từ nguồn ngoài danh sách"
     },
     {
       "id": "cdfedee0-1e60-43f0-a54f-1dd99125b555",
@@ -67,17 +103,76 @@
       "name": "Sun World Núi Bà Đen (Cáp treo & khu vui chơi)",
       "type": "entertainment",
       "address": "Khu phố Ninh Phú, phường Ninh Sơn, TP. Tây Ninh, tỉnh Tây Ninh (cách trung tâm ~11km)",
-      "coordinates": {
-        "lat": null,
-        "lng": null
-      },
-      "hours": "Cáp treo tuyến Chùa Hang: T2–T6 7:00–18:00, T7 7:00–19:15, CN 6:00–19:15; tuyến Vân Sơn theo khung giờ — xác nhận trước khi đến",
-      "description": "Quần thể du lịch trên núi Bà Đen (nóc nhà Nam Bộ) với hệ thống cáp treo hiện đại (tuyến Vân Sơn, Chùa Hang, Tâm An), khu tâm linh trên đỉnh, vườn hoa và nhiều trải nghiệm vui chơi, check-in biển mây.",
-      "tips": "Lên đỉnh bằng tuyến Vân Sơn để ngắm tượng Phật Bà và biển mây; tuyến Chùa Hang để viếng chùa Bà. Đi sáng sớm tránh nắng.",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Cáp treo tuyến Chùa Hang: T2–T6 7:00–18:00, T7 7:00–19:15, CN 6:00–19:15; tuyến Vân Sơn theo khung giờ riêng — xác nhận trước khi đến",
+      "description": "Quần thể du lịch trên núi Bà Đen (nóc nhà Nam Bộ) với hệ thống cáp treo hiện đại gồm 2 tuyến chính — Chùa Hang (lên khu tâm linh Điện Bà ở độ cao ~350m) và Vân Sơn (lên đỉnh núi, khu tượng Phật Bà) — cùng vườn hoa và các trải nghiệm check-in biển mây. Ga cáp treo Bà Đen từng được ghi nhận kỷ lục nhà ga cáp treo lớn nhất thế giới.",
+      "tips": "Lên đỉnh bằng tuyến Vân Sơn để chiêm bái tượng Phật Bà và ngắm biển mây; tuyến Chùa Hang để viếng Điện Bà. Đi sáng sớm để tránh nắng và né đông khách cuối tuần; mang áo khoác nhẹ vì trên đỉnh gió khá mạnh.",
       "image_url": null,
-      "stats": null,
+      "stats": { "rating_avg": null, "review_count": null },
       "verified": true,
-      "entry_fee": "Cáp treo khứ hồi (khách ngoại tỉnh): tuyến Chùa Hang từ 150.000đ, tuyến Vân Sơn từ 300.000đ. (nguồn: sunworld.vn & Traveloka, 2025 — có thể thay đổi)"
+      "entry_fee": "Cáp treo khứ hồi: tuyến Chùa Hang từ 250.000đ/người lớn, tuyến Vân Sơn từ 450.000đ/người lớn, combo 2 tuyến từ 650.000đ, combo 2 tuyến kèm buffet từ 800.000đ (giá niêm yết, có ưu đãi giảm giá theo thời điểm) (Nguồn: Traveloka)"
+    },
+    {
+      "id": "d1b772c2-aa27-4d55-9f10-91db8cfc9014",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Điện Bà Linh Sơn Thánh Mẫu (Chùa Bà)",
+      "type": "temple",
+      "address": "Lưng chừng núi Bà Đen, độ cao khoảng 350m, tiếp cận qua cáp treo tuyến Chùa Hang hoặc đường bộ, phường Ninh Sơn, TP. Tây Ninh",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "6:00–21:00 hằng ngày — xác nhận trước khi đến",
+      "description": "Quần thể chùa cổ hơn 300 năm tuổi gồm Điện Bà, Chùa Hang, Chùa Trung, thờ Linh Sơn Thánh Mẫu (Bà Đen) — điểm hành hương tâm linh quan trọng nhất của núi Bà Đen, gắn với Lễ vía Bà Linh Sơn Thánh Mẫu (Di sản văn hóa phi vật thể quốc gia). TripAdvisor ghi nhận đây là 'Hang Pagoda' — một trong những điểm tham quan nổi bật nhất khu vực.",
+      "tips": "Kết hợp đi cáp treo tuyến Chùa Hang lên viếng Điện Bà rồi đi bộ khám phá thêm các hang động và chùa nhỏ xung quanh. Ăn mặc lịch sự khi vào khu vực chánh điện.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Đã bao gồm trong vé cáp treo tuyến Chùa Hang (xem mục Sun World Núi Bà Đen)"
+    },
+    {
+      "id": "e0dd754c-dd6b-49ea-a225-8a1bdc3f5918",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Tượng Phật Bà Tây Bổ Đà Sơn & Quảng trường đỉnh núi",
+      "type": "attraction",
+      "address": "Đỉnh núi Bà Đen (986m), tiếp cận qua cáp treo tuyến Vân Sơn, TP. Tây Ninh",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Theo giờ hoạt động cáp treo tuyến Vân Sơn — xác nhận trước khi đến",
+      "description": "Tượng Phật Bà Tây Bổ Đà Sơn bằng đồng cao 72m, được ghi nhận là tượng Phật Bà bằng đồng cao nhất châu Á, tọa lạc ngay trên đỉnh núi Bà Đen (TripAdvisor). Khu quảng trường xung quanh có tôn tượng Bồ Tát Di Lặc và là nơi tổ chức đại lễ dâng đăng với hàng chục nghìn ngọn đăng vào dịp Lễ vía Bà Linh Sơn Thánh Mẫu (tháng 5 âm lịch).",
+      "tips": "Lên vào sáng sớm để có cơ hội ngắm 'biển mây' trước khi sương tan; thời điểm quang mây đẹp nhất là mùa khô tháng 11–4. Trời trên đỉnh khá lạnh và nhiều gió, nên mang áo khoác.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": "Đã bao gồm trong vé cáp treo tuyến Vân Sơn (xem mục Sun World Núi Bà Đen)"
+    },
+    {
+      "id": "8343f6b9-a6f8-46c3-abfb-c6f25479dfb1",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Vườn quốc gia Lò Gò – Xa Mát",
+      "type": "nature",
+      "address": "Quốc lộ 22B, xã Tân Bình, huyện Tân Biên, tỉnh Tây Ninh — giáp biên giới Campuchia",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Nên liên hệ trước Trung tâm Giáo dục và Dịch vụ Môi trường rừng để đăng ký lộ trình tham quan",
+      "description": "Vườn quốc gia rộng lớn giáp biên giới Campuchia, nổi bật với hệ sinh thái rừng khộp đặc trưng vùng Đông Nam Bộ, đa dạng động thực vật quý hiếm và các tuyến quan sát chim, trekking giữa rừng nguyên sinh.",
+      "tips": "Liên hệ Ban quản lý/Trung tâm Giáo dục và Dịch vụ Môi trường rừng trước chuyến đi để được tư vấn lộ trình, thời gian và chi phí phát sinh cụ thể. Phù hợp nhóm yêu thích sinh thái, trekking, quan sát chim.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: chưa xác thực được giá vé/dịch vụ từ nguồn thuộc danh sách cho phép"
+    },
+    {
+      "id": "96167c5b-6245-4829-b3aa-5f2f796abd55",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Khu du lịch Ma Thiên Lãnh",
+      "type": "nature",
+      "address": "Chân núi Bà Đen, khu vực phường Ninh Sơn/Ninh Thạnh, TP. Tây Ninh",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": null,
+      "description": "Thung lũng hoang sơ dưới chân núi Bà Đen với hồ nước, vách đá và rừng cây, thường được ví như 'thung lũng tình yêu' của Tây Ninh — điểm cắm trại, dã ngoại và check-in gần trung tâm thành phố.",
+      "tips": "Phù hợp kết hợp buổi chiều sau khi tham quan núi Bà Đen; nên hỏi người dân địa phương hoặc dịch vụ tại chỗ về tình trạng đường vào trước khi đi.",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true,
+      "entry_fee": null,
+      "price_note": "// TODO: chưa xác thực được giá vé/dịch vụ từ nguồn thuộc danh sách cho phép"
     }
   ]
 }

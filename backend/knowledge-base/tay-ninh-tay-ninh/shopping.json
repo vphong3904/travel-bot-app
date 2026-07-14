@@ -1,43 +1,74 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-006",
-    "status": "completed",
-    "missing_fields": [],
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006 (nâng cấp 07/2026)",
+    "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng 'specialty' dạng chuỗi không khớp schema 'items' dạng mảng — đã sửa để import đúng vào bảng shopping_places). Giữ nguyên id và nội dung cốt lõi 4 điểm cũ, bổ sung 1 điểm mới.",
+    "missing_fields": [
+      "opening_hours chính xác Chợ Tây Ninh, Siêu thị đặc sản Quốc Thắng, Làng nghề bánh tráng — chưa xác nhận",
+      "price_range — chưa xác nhận được số VND cụ thể từ nguồn cho phép"
+    ],
     "data_sources": [
       "manual_curated",
-      "Google Maps"
+      "Google Maps (chéo kiểm địa chỉ/giờ mở cửa, 07/2026)"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60601",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Chợ Long Hoa",
-      "type": "traditional_market",
-      "address": "Phường Long Hoa, Thị xã Hòa Thành, Tây Ninh",
-      "specialty": "Muối tôm, các loại bánh tráng trứ danh, đồ chay Tây Ninh"
+      "type": "market",
+      "items": ["muối tôm", "các loại bánh tráng trứ danh", "đồ chay Tây Ninh", "hàng nhu yếu phẩm"],
+      "address": "Phường Long Hoa, TP. Tây Ninh (thị xã Hòa Thành cũ)",
+      "opening_hours": "Hoạt động cả ngày, cao điểm 6:00–10:00; chợ đầu mối sỉ họp đêm khoảng 0:00–4:00–5:00 sáng hôm sau",
+      "price_range": null,
+      "tips": "Chợ được khởi công từ năm 1952 theo bản vẽ của Hộ pháp Phạm Công Tắc, gắn liền với văn hóa Đạo Cao Đài — nên ghé buổi sáng sớm để mua đồ tươi và tránh đông."
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60602",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Chợ Tây Ninh",
-      "type": "traditional_market",
+      "type": "market",
+      "items": ["mãng cầu ta (na)", "trái cây địa phương", "đặc sản ăn vặt"],
       "address": "Đường Yết Kiêu, Phường 1, TP. Tây Ninh",
-      "specialty": "Trái cây địa phương (mãng cầu ta), đặc sản ăn vặt"
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Chợ trung tâm phù hợp mua trái cây và đặc sản ăn vặt địa phương với giá hợp lý."
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60603",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Siêu thị đặc sản Tây Ninh Quốc Thắng",
-      "type": "specialty_shop",
-      "address": "Quốc lộ 22B, Phường Hiệp Tân, Thị xã Hòa Thành, Tây Ninh",
-      "specialty": "Nơi đóng gói chuẩn chỉnh các loại muối, bánh tráng, thích hợp mua làm quà"
+      "type": "specialty_store",
+      "items": ["muối tôm đóng gói", "bánh tráng đóng gói", "quà tặng đặc sản"],
+      "address": "Quốc lộ 22B, Phường Hiệp Tân, TP. Tây Ninh (thị xã Hòa Thành cũ)",
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Nơi đóng gói chuẩn chỉnh các loại muối, bánh tráng, thích hợp mua làm quà số lượng lớn."
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60604",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Làng nghề Bánh tráng phơi sương Trảng Bàng",
       "type": "craft_village",
-      "address": "Thị xã Trảng Bàng, Tây Ninh",
-      "specialty": "Mua bánh tráng phơi sương gốc từ các lò sản xuất truyền thống"
+      "items": ["bánh tráng phơi sương làm thủ công tại lò"],
+      "address": "Thị xã Trảng Bàng, tỉnh Tây Ninh",
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Mua bánh tráng phơi sương gốc từ các lò sản xuất truyền thống, đảm bảo hàng mới phơi trong ngày."
+    },
+    {
+      "id": "93ec4c6f-1e67-4686-a367-4ba69cdc2a0c",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Chợ đêm Tây Ninh",
+      "type": "night_market",
+      "items": ["ẩm thực đường phố", "đồ ăn vặt", "hàng lưu niệm"],
+      "address": "Cạnh rạch Tây Ninh, gần cầu Quan và cầu Mới, phường Tân Ninh, TP. Tây Ninh",
+      "opening_hours": "13:00–24:00 hằng ngày",
+      "price_range": null,
+      "tips": "Tổ hợp ẩm thực và mua sắm về đêm sôi động, phù hợp dạo chơi và ăn vặt buổi tối sau khi tham quan Tòa Thánh."
     }
   ]
 }

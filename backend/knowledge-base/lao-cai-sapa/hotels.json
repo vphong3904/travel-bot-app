@@ -1,11 +1,14 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-003",
-    "status": "complete",
-    "missing_fields": ["price_per_night.amount"],
-    "data_sources": ["Booking.com (06/2026)", "Agoda (06/2026)"]
+    "status": "partial",
+    "missing_fields": [
+      "price_per_night.amount của Hotel de la Coupole, Topas Ecolodge, Sapa Clay House, Mega Homestay, Sapa View Hotel — Traveloka không hiển thị giá cụ thể khi chưa chọn ngày lưu trú",
+      "booking_url tất cả khách sạn"
+    ],
+    "data_sources": ["Traveloka (07/2026)", "TripAdvisor (07/2026)", "Booking.com (06/2026)", "Agoda (06/2026)"]
   },
   "data": [
     {
@@ -19,8 +22,9 @@
       "amenities": ["Bể bơi trong nhà", "Spa", "Nhà hàng", "Quầy bar", "Wifi miễn phi"],
       "description": "Khách sạn 5 sao mang kiến trúc Pháp hoàng gia kết hợp hoa văn thổ cẩm Tây Bắc đặc sắc.",
       "image_url": null,
-      "rating": 4.9,
-      "booking_url": null
+      "rating": 4.8,
+      "booking_url": null,
+      "price_note": "Rating 9.5/10 từ 696 đánh giá, quy đổi thang 5 (Nguồn: Traveloka); giá phòng/đêm chưa có số cụ thể do Traveloka chỉ hiện giá khi chọn ngày lưu trú"
     },
     {
       "id": "019ef658-6c00-7302-8302-c12345678908",
@@ -33,8 +37,9 @@
       "amenities": ["Bể bơi vô cực nước nóng", "Nhà hàng", "Quầy bar", "Spa sinh thái"],
       "description": "Khu nghỉ dưỡng sinh thái nằm biệt lập trên đồi cao, bao trọn view ruộng bậc thang hùng vĩ.",
       "image_url": null,
-      "rating": 4.8,
-      "booking_url": null
+      "rating": 4.4,
+      "booking_url": null,
+      "price_note": "Rating 8.8/10 từ 64 đánh giá, quy đổi thang 5 (Nguồn: Traveloka); giá phòng thay đổi theo mùa, chưa có số cụ thể"
     },
     {
       "id": "019ef658-6c00-7303-8303-c12345678909",
@@ -63,6 +68,36 @@
       "image_url": null,
       "rating": 4.2,
       "booking_url": null
+    },
+    {
+      "id": "019ef658-6c00-7305-8305-c12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Silk Path Grand Sapa Resort & Spa",
+      "type": "resort",
+      "stars": 5,
+      "price_per_night": { "amount": 2430000, "currency": "VND" },
+      "address": "Đồi Quan 6, thị trấn Sa Pa, Lào Cai",
+      "amenities": ["Hồ bơi ngoài trời", "Spa & jacuzzi", "Nhà hàng buffet", "Đưa đón sân bay", "Wifi miễn phí", "Phòng gym"],
+      "description": "Resort 5 sao quy mô 152 phòng trên đồi cao yên tĩnh cách trung tâm thị trấn, mỗi phòng có ban công riêng hướng dãy Hoàng Liên Sơn, gần cáp treo Fansipan, Nhà thờ đá và Thác Bạc.",
+      "image_url": null,
+      "rating": 4.7,
+      "booking_url": null,
+      "price_note": "Giá phòng thấp nhất từ 2.430.000đ/đêm (hạng Balcony Classic Garden) đến 9.420.000đ/đêm (hạng Bungalow); rating 9.4/10 từ 395 đánh giá quy đổi thang 5 (Nguồn: Traveloka)"
+    },
+    {
+      "id": "019ef658-6c00-7306-8306-c12345678931",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Sapa View Hotel",
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Số 41, đường Mường Hoa, trung tâm Sa Pa, Lào Cai",
+      "amenities": ["Nhà hàng", "Lễ tân 24h", "Wifi miễn phí", "Quầy bar", "Dịch vụ giặt ủi", "Bãi gửi xe"],
+      "description": "Khách sạn 3 sao 30 phòng ngay trung tâm thị trấn, đa số phòng có ban công riêng nhìn ra dãy Fansipan và thung lũng Violet, phù hợp khách muốn ở gần khu chợ đêm với chi phí hợp lý.",
+      "image_url": null,
+      "rating": 4.1,
+      "booking_url": null,
+      "price_note": "Rating 8.1/10 từ 168 đánh giá, quy đổi thang 5 (Nguồn: Traveloka); giá phòng/đêm chưa có số cụ thể do Traveloka chỉ hiện giá khi chọn ngày lưu trú"
     }
   ]
 }

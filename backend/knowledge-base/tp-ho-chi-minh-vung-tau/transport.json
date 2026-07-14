@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-005",
-    "status": "completed",
-    "missing_fields": [],
-    "data_sources": ["Vexere", "Greenlines DP"]
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005 + nâng cấp độ sâu Vũng Tàu",
+    "status": "partial",
+    "missing_fields": ["price_range chính xác tuyến từ Biên Hòa", "price_info xe buýt nội thành"],
+    "data_sources": ["Vexere", "Greenlines DP (07/2026)"]
   },
   "data": {
     "getting_there": [
@@ -13,15 +13,23 @@
         "route": "TP.HCM - Vũng Tàu (Xe Limousine VIP)",
         "provider": "Hoa Mai / Toàn Thắng / Vie Limousine",
         "duration": "2 hours (Qua cao tốc TP.HCM - Long Thành)",
-        "estimated_price": null,
+        "estimated_price": "Khoảng 150.000–180.000 VND/chiều (limousine đón tận nơi); xe ghế ngồi thường ~90.000–100.000 VND/chiều (Nguồn: Vexere)",
         "price_note": "Tần suất 15-30 phút/chuyến đón trả tận nơi nội đô quận 1"
       },
       {
         "route": "Bến Bạch Đằng (Q1) - Bến Hồ Mây (Vũng Tàu) (Tàu cao tốc)",
         "provider": "Greenlines DP",
         "duration": "1.5 hours lướt sóng sông Lòng Tàu ra vịnh biển",
+        "estimated_price": "260.000–380.000 VND/chiều tùy loại vé và ngày; vé sớm (đặt trước ≥3 ngày) từ 260.000đ, ngày thường ~320.000đ (Nguồn: Greenlines DP)",
+        "price_note": "Khởi hành Sài Gòn 8:00/10:00/12:00/14:00; chiều về Vũng Tàu 10:00/12:00/14:00/16:00 — lịch có thể thay đổi, xác nhận trước khi đi"
+      },
+      {
+        "type": "bus",
+        "route": "Biên Hòa (Đồng Nai) - Vũng Tàu",
+        "provider": "Các hãng xe khách tuyến Biên Hòa – Vũng Tàu (qua QL51)",
+        "duration": "Khoảng 2–2,5 giờ tùy điểm đón",
         "estimated_price": null,
-        "price_note": "// TODO: Tra bảng giá ngày thường và cuối tuần tại greenlines-dp.com"
+        "price_note": "// TODO: chưa có nguồn xác thực giá vé riêng tuyến Biên Hòa – Vũng Tàu — cần tra Vexere"
       }
     ],
     "getting_around": [
@@ -33,7 +41,17 @@
       {
         "mode": "Xe máy thuê",
         "scope": "Cung đường ven biển Trần Phú - Hạ Long Vũng Tàu",
-        "note": "Hoàn hảo để tự do đi hóng gió biển Bãi Trước, Bãi Sau"
+        "note": "Hoàn hảo để tự do đi hóng gió biển Bãi Trước, Bãi Sau, lên núi Lớn/núi Nhỏ tham quan Thích Ca Phật Đài, Hải Đăng"
+      },
+      {
+        "mode": "Xe đạp thuê",
+        "scope": "Tuyến đường ven biển Thùy Vân (Bãi Sau)",
+        "note": "Phù hợp đạp dạo buổi sáng sớm hoặc chiều mát dọc bờ biển, nhiều điểm cho thuê gần các khách sạn khu Bãi Sau"
+      },
+      {
+        "mode": "Xe buýt nội thành Vũng Tàu",
+        "scope": "Các tuyến nội thành và lân cận (Bà Rịa, Long Hải, Long Điền)",
+        "note": "Giá rẻ nhưng tần suất không cao bằng xe công nghệ, phù hợp di chuyển tiết kiệm giữa các khu vực xa trung tâm"
       }
     ]
   }

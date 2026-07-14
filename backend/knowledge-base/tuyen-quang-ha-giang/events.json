@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006",
+    "status": "partial",
+    "partial_note": "Thiếu nguồn cost do chưa có xác thực từ danh sách nguồn cho phép — không phải agent quên làm (RULE-16).",
+    "missing_fields": [
+      "cost — chưa có nguồn xác thực giá vé/chi phí tham gia (đa số lễ hội cộng đồng miễn phí tham gia phần hội)",
+      "event_date chính xác hàng năm — cần xác nhận lại lịch chính thức theo từng năm tổ chức"
+    ],
+    "data_sources": [
+      "vietnamtourism.gov.vn (07/2026)",
+      "Vietravel (07/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "e8d58f87-84ac-4a4d-beb8-c65acdb3fdba",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Lễ hội Hoa Tam giác mạch",
+      "event_date": "Cuối tháng 10 – cuối tháng 11 dương lịch hàng năm (mùa 2025: 25/10–30/11, khai mạc 9/11/2025 tại Quảng trường Thanh Niên, huyện Đồng Văn) — xác nhận lịch chính thức từng năm trước khi đến",
+      "location_text": "Huyện Đồng Văn và các thung lũng hoa trên cao nguyên đá Đồng Văn, Hà Giang",
+      "cost": null,
+      "description": "Lễ hội thường niên tôn vinh vẻ đẹp hoa tam giác mạch — loài hoa biểu tượng của Hà Giang, tổ chức lần đầu năm 2015. Gồm lễ khai mạc, các hoạt động văn hóa dân tộc H'Mông và trải nghiệm ngắm hoa tại các thung lũng nổi tiếng như Sủng Là, Lũng Cẩm.",
+      "annual": true,
+      "highlight": true,
+      "source": "vietnamtourism.gov.vn"
+    },
+    {
+      "id": "f1962676-b7f9-4024-9572-7169a0658854",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Chợ tình Khâu Vai",
+      "event_date": "27 tháng 3 âm lịch hàng năm (những năm gần đây tổ chức 3 ngày, từ 25–27/3 âm lịch, cao điểm tối 26/3) — xác nhận lịch chính thức trước khi đến",
+      "location_text": "Xã Khâu Vai, huyện Mèo Vạc, Hà Giang",
+      "cost": null,
+      "description": "Phiên chợ độc đáo có từ khoảng năm 1919, chỉ họp duy nhất một lần mỗi năm, gắn với truyền thuyết tình yêu của các đôi lứa lỡ duyên xưa hẹn gặp lại. Gồm lễ dâng hương tại miếu Ông, miếu Bà và các hoạt động giao lưu văn hóa của người H'Mông, Nùng, Giáy.",
+      "annual": true,
+      "highlight": true,
+      "source": "Vietravel"
+    },
+    {
+      "id": "ce2b5b5d-791a-44a8-a3a8-561a025b41f9",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Lễ hội Gầu Tào",
+      "event_date": "Mồng 1 đến 15 tháng Giêng âm lịch hàng năm (một lần tổ chức thường kéo dài 3–9 ngày) — xác nhận lịch chính thức theo từng bản/xã trước khi đến",
+      "location_text": "Các bản làng người H'Mông trên cao nguyên đá Đồng Văn, Hà Giang (phổ biến tại Yên Minh, Đồng Văn, Mèo Vạc)",
+      "cost": null,
+      "description": "Lễ hội đầu xuân quan trọng nhất của người H'Mông, mang ý nghĩa lễ cúng tạ ơn trời đất, cầu phúc lộc và mùa màng bội thu. Gồm nghi lễ truyền thống cùng các hoạt động văn hóa như múa khèn, hát giao duyên, trò chơi dân gian.",
+      "annual": true,
+      "highlight": false,
+      "source": "Vietravel"
+    },
+    {
+      "id": "27e33894-1deb-43c3-ad2b-6ce1e079fda1",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Tuần văn hóa du lịch ruộng bậc thang Hoàng Su Phì",
+      "event_date": "24–26 tháng 9 dương lịch hàng năm — xác nhận lịch chính thức trước khi đến",
+      "location_text": "Huyện Hoàng Su Phì, tỉnh Hà Giang",
+      "cost": null,
+      "description": "Tuần lễ văn hóa \"Qua những miền di sản ruộng bậc thang Hoàng Su Phì\" tổ chức đúng mùa lúa chín, gồm ngày hội văn hóa dân tộc Mông, biểu diễn dù lượn, trưng bày sản phẩm và không gian chợ phiên — thời điểm đông khách nhất trong năm tại Hoàng Su Phì.",
+      "annual": true,
+      "highlight": false,
+      "source": "vietnamtourism.gov.vn"
+    }
+  ]
+}

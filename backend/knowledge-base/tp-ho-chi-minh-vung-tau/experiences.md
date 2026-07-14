@@ -1,22 +1,131 @@
-# Cẩm nang Trải nghiệm Hành trình Năng động Sài Gòn - Vũng Tàu
+---
+city: tp-ho-chi-minh-vung-tau
+city_name: Vũng Tàu
+task: T-008
+generated_from: tra-cuu-nguon-thuc-te
+last_updated: 2026-07-13
+data_sources:
+  - "Cục Du lịch Quốc gia Việt Nam: vietnamtourism.gov.vn (12/2025, 06/2026)"
+  - "Sở Du lịch TP. Hồ Chí Minh (06/2026)"
+  - "Traveloka (07/2026)"
+  - "TripAdvisor (07/2026)"
+  - "iVIVU (07/2026)"
+  - "Vietravel (06/2026)"
+  - "Saigontourist (06/2026)"
+  - "Trip.com (07/2026)"
+status: complete
+fix_note: "2026-07-13: experiences.md được xây dựng theo cấu trúc kinh nghiệm thực tế dành cho du lịch biển, nghỉ dưỡng cuối tuần và khám phá các điểm tham quan nổi bật tại Vũng Tàu."
+---
 
-## Điểm đến lõi ghi dấu ấn sâu đậm
-* **Dinh Độc Lập**: Biểu tượng lịch sử rực rỡ giữa lòng thành phố mang tên Bác. (Xem tại `destinations.json`).
-* **Tượng Chúa Kitô Vua**: Điểm vọng cảnh eo biển hùng vĩ đỉnh núi Nhỏ.
-* **Bạch Dinh**: Biệt thự cổ lãng mạn châu Âu ôm trọn sắc hoa sứ trắng.
-* **Mũi Nghinh Phong**: Cổng trời ngắm sóng biển đại dương tự do.
-* **Chợ Xóm Lưới**: Thiên đường hải sản tươi roi rói của giới sành ăn.
+# 🌟 Kinh Nghiệm Du Lịch Vũng Tàu
 
-## Mẹo bỏ túi cho chuyến đi trọn vẹn
-* Nếu đi xe máy phượt từ Sài Gòn xuống Vũng Tàu qua phà Cát Lái, chú ý chạy đúng tốc độ quy định đoạn qua địa phận huyện Nhơn Trạch Đồng Nai vì có chốt giao thông kiểm tra rất nghiêm ngặt.
-* Ăn bánh khọt tại các quán nổi tiếng (Xem tại `restaurants.json`), bạn hãy cuốn bánh chung với cải bẹ xanh bản lớn để vị đắng nhẹ của rau hòa quyện giảm vị béo dầu của bánh rán khuôn.
+> Tổng hợp tips theo chủ đề: biển, hải sản, nghỉ dưỡng cuối tuần, điểm ngắm bình minh và hoàng hôn. Giá vé, địa chỉ và thông tin chi tiết xem tại các file JSON tương ứng.
 
-## Bảng tra cứu ẩm thực nhanh tuyến Sài Gòn - Vũng Tàu
-*(Chi tiết đặc tính và thành phần món ăn đọc tại `foods.json`)*
+---
 
-| Thực Đơn Đặc Sản | Loại Hình | Hương Vị Ghi Dấu Ấn |
-| :--- | :--- | :--- |
-| Cơm tấm Sài Gòn | Món ăn chính chắc dạ | Sườn nướng mật ong béo mọng mắm kẹo ngọt |
-| Bánh khọt Vũng Tàu | Món ăn chơi đổ khuôn | Vỏ giòn tan rụm nhân tôm ngọt lịm bột tôm |
-| Lẩu cá đuối măng chua | Món ăn chính hội nhóm | Thịt sụn cá giòn sần sật quyện nước chua cay |
-| Bánh mì Huỳnh Hoa | Đặc sản đường phố | Ngập tràn patê bơ béo ngậy thịt dăm bông |
+## 📍 Địa Điểm Không Thể Bỏ Qua
+
+### 1. Bãi Sau — Bãi biển nổi tiếng nhất Vũng Tàu
+
+*(thông tin đầy đủ: xem `destinations.json`, tour tham khảo: `tours.json`)*
+
+**Tip:** Nên đến vào sáng sớm để tắm biển và tránh đông người vào cuối tuần.
+
+### 2. Bãi Trước — Điểm ngắm hoàng hôn trung tâm thành phố
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Buổi chiều tối là thời điểm thích hợp để đi dạo ven biển và ngắm cảnh.
+
+### 3. Tượng Chúa Kitô Vua
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Chuẩn bị giày thể thao và nước uống vì phải leo nhiều bậc thang để lên điểm ngắm cảnh.
+
+### 4. Hải đăng Vũng Tàu
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Đường lên khá dốc nhưng là một trong những nơi ngắm toàn cảnh thành phố đẹp nhất.
+
+### 5. Mũi Nghinh Phong
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Thời điểm đẹp nhất để chụp ảnh là vào sáng sớm hoặc cuối chiều.
+
+### 6. Hòn Bà
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Chỉ có thể đi bộ ra đảo vào những thời điểm thủy triều xuống thấp.
+
+### 7. Chợ hải sản địa phương
+
+*(thông tin đầy đủ: xem `destinations.json`)*
+
+**Tip:** Nên đi vào buổi sáng để có nhiều lựa chọn hơn về hải sản tươi sống.
+
+---
+
+## 🎒 Lịch Trình Gợi Ý
+
+> Chi tiết giờ giấc và tham chiếu địa điểm đầy đủ: xem `itineraries.json`.
+
+### 2 Ngày 1 Đêm — Nghỉ dưỡng cuối tuần
+
+Xem đầy đủ tại `itineraries.json` → id: **`tp-ho-chi-minh-vung-tau-2n1d-relax`**
+
+- Ngày 1: Tắm biển Bãi Sau → tham quan Hải đăng → ngắm hoàng hôn tại Bãi Trước.
+- Ngày 2: Tham quan Tượng Chúa Kitô Vua → mua đặc sản.
+
+### 2 Ngày 1 Đêm — Khám phá và check-in
+
+Xem đầy đủ tại `itineraries.json` → id: **`tp-ho-chi-minh-vung-tau-2n1d-explore`**
+
+- Ngày 1: Mũi Nghinh Phong → Hòn Bà → chợ đêm.
+- Ngày 2: Dạo biển buổi sáng → khám phá ẩm thực địa phương.
+
+### 3 Ngày 2 Đêm — Nghỉ dưỡng ven biển
+
+Xem đầy đủ tại `itineraries.json` → id: **`tp-ho-chi-minh-vung-tau-3n2d-family`**
+
+- Ngày 1: Nhận phòng và nghỉ ngơi.
+- Ngày 2: Khám phá các điểm tham quan nổi bật.
+- Ngày 3: Mua sắm đặc sản trước khi trở về.
+
+---
+
+## 🚨 Kinh Nghiệm An Toàn
+
+- ⚠️ **Theo dõi thời tiết:** Hạn chế xuống biển khi có mưa lớn hoặc biển động.
+- ⚠️ **Bảo quản tài sản cá nhân:** Các bãi biển và điểm du lịch cuối tuần thường rất đông khách.
+- ⚠️ **Chú ý dòng chảy xa bờ:** Không bơi quá xa khu vực được phép.
+- ⚠️ **Di chuyển vào cuối tuần:** Một số tuyến đường có thể đông đúc vào dịp lễ và cuối tuần.
+- ⚠️ **Chuẩn bị tiền mặt:** Một số hàng quán nhỏ chưa hỗ trợ thanh toán điện tử.
+
+---
+
+## 💡 Tips Thực Tế
+
+- 💰 **Tiết kiệm:** Đặt phòng và phương tiện trước các dịp cao điểm.
+- 🌅 **Ngắm cảnh:** Bình minh đẹp nhất ở Bãi Sau, còn hoàng hôn thường được nhiều du khách lựa chọn tại Bãi Trước.
+- 📸 **Chụp ảnh:** Mũi Nghinh Phong và Hải đăng là những địa điểm check-in nổi tiếng.
+- 🍜 **Ẩm thực:** Ưu tiên tham khảo `foods.json` và `restaurants.json` để cập nhật địa điểm ăn uống.
+- 🚗 **Di chuyển:** Xem thông tin chi tiết trong `transport.json`.
+
+---
+
+## 🛒 Mua Sắm & Đặc Sản Mang Về
+
+| Đặc sản / Sản phẩm | Mua ở đâu (xem chi tiết) |
+|---|---|
+| Hải sản khô | `shopping.json` |
+| Mực một nắng | `shopping.json` |
+| Nước mắm địa phương | `shopping.json` |
+| Bánh đặc sản | `shopping.json` |
+| Hải sản tươi sống | `foods.json` |
+| Đồ lưu niệm | `shopping.json` |
+
+*(Giá tham khảo và giờ mở cửa cụ thể xem tại `shopping.json`, `foods.json` và `restaurants.json`.)*

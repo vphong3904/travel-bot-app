@@ -1,17 +1,21 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-29",
-    "agent_task": "T-002 (+ T-037 điểm vui chơi)",
-    "status": "completed",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-002 (+ T-037 điểm vui chơi) + nâng cấp độ sâu Vũng Tàu",
+    "status": "partial",
     "missing_fields": [
       "image_url",
-      "coordinates các điểm vui chơi (chưa verify — để null)"
+      "coordinates các điểm vui chơi (chưa verify — để null)",
+      "entry_fee Ngọn Hải Đăng, Thích Ca Phật Đài, Chùa Linh Sơn Cổ Tự (chưa có nguồn Traveloka/TripAdvisor/iVIVU xác nhận số cụ thể — để null)",
+      "ticket_price Bạch Dinh (tìm được 15.000đ từ Ban Quản lý Di tích BR-VT nhưng KHÔNG thuộc danh sách nguồn được duyệt cho giá — để null, chỉ điền address/hours)"
     ],
     "data_sources": [
       "Sở Du lịch TP.HCM",
       "Sở Du lịch tỉnh Bà Rịa - Vũng Tàu",
-      "T-037: Hồ Mây Park — homaypark.com & Traveloka (2025)"
+      "T-037: Hồ Mây Park — homaypark.com & Traveloka (2025)",
+      "Traveloka (địa chỉ Bạch Dinh, Hải Đăng, Tượng Chúa; explore articles, 07/2026)",
+      "TripAdvisor (review_count Tượng Chúa Kitô Vua, 07/2026)"
     ]
   },
   "data": [
@@ -28,8 +32,10 @@
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60002",
       "name": "Tượng Chúa Kitô Vua Vũng Tàu",
       "type": "temple",
-      "description": "Bức tượng Chúa cao lớn sừng sững trên đỉnh núi Nhỏ, du khách vượt qua 847 bậc thang để ngắm trọn vẹn view biển Vũng Tàu tuyệt mỹ.",
+      "description": "Bức tượng Chúa cao lớn sừng sững trên đỉnh núi Nhỏ, du khách vượt qua bậc thang bên trong lòng tượng để ngắm trọn vẹn view biển Vũng Tàu tuyệt mỹ.",
       "rating": null,
+      "review_count": 875,
+      "review_count_source": "TripAdvisor (07/2026)",
       "ticket_price": 0,
       "price_note": "Miễn phí vé vào cổng, du khách lưu ý trang phục kín đáo khi vào trong lòng tượng Chúa"
     },
@@ -37,10 +43,12 @@
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60003",
       "name": "Di tích kiến trúc Bạch Dinh",
       "type": "museum",
+      "address": "Số 4–6 Trần Phú, Phường 1, TP. Vũng Tàu (Nguồn địa chỉ: Traveloka)",
+      "hours": "// TODO: giờ mở cửa tìm được 8:00–17:00 (Thứ 3–Chủ Nhật) nhưng nguồn (Ban Quản lý Di tích BR-VT) không thuộc danh sách nguồn được duyệt — cần Traveloka/TripAdvisor xác nhận",
       "description": "Dinh thự mang phong cách kiến trúc Pháp thế kỷ XIX tựa lưng vào núi Lớn, từng là nơi giam lỏng vua Thành Thái.",
       "rating": null,
       "ticket_price": null,
-      "price_note": "Giá vé vào cửa tham quan khuôn viên nội sảnh công cộng"
+      "price_note": "// TODO: tìm được mức 15.000đ/người từ Ban Quản lý Di tích BR-VT nhưng nguồn này không thuộc danh sách được duyệt (Traveloka/TripAdvisor/iVIVU/Vietravel/Saigon Tourist/Trip.com/vietnamtourism.gov.vn) — để null theo RULE, cần xác nhận lại"
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60004",
@@ -55,7 +63,7 @@
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60005",
       "name": "Địa đạo Củ Chi",
       "type": "museum",
-      "description": "Kỳ quan nghệ thuật quân sự ngầm độc sắc dài hơn 250km dưới lòng đất ngoại thành TP.HCM.",
+      "description": "Kỳ quan nghệ thuật quân sự ngầm độc đáo dài hơn 250km dưới lòng đất ngoại thành TP.HCM.",
       "rating": null,
       "ticket_price": null,
       "price_note": "// TODO: cập nhật giá vé cho khách Việt Nam và khách quốc tế phân định riêng"
@@ -77,6 +85,81 @@
       "stats": null,
       "verified": true,
       "entry_fee": "Vé trọn gói dao động ~150.000–1.200.000đ tùy gói dịch vụ; giảm ~20% từ T2–T5. (nguồn: homaypark.com & Traveloka, 2025 — có thể thay đổi)"
+    },
+    {
+      "id": "a1c9e2d4-6b3f-4a8e-9c1d-2f5b8a7e4c01",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Bãi Sau (Bãi Thùy Vân)",
+      "type": "beach",
+      "address": "Đường Thùy Vân, Phường Thắng Tam, TP. Vũng Tàu",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "24/7",
+      "description": "Một trong những bãi biển đẹp và dài nhất Việt Nam, cát trắng mịn, đường bờ biển dài và rộng, sóng vừa phải nhưng đủ lớn để chơi các môn thể thao biển như lướt sóng, mô tô nước, dù lượn. Không khí sôi động, nhộn nhịp hơn Bãi Trước, tập trung nhiều khách sạn và quán ăn dọc đường Thùy Vân.",
+      "tips": "Buổi sáng sớm biển yên tĩnh, ít nắng gắt, phù hợp tắm biển; buổi tối dọc bờ có nhiều quán hải sản và hoạt động thể thao biển.",
+      "entry_fee": "Miễn phí (bãi biển công cộng)",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true
+    },
+    {
+      "id": "a1c9e2d4-6b3f-4a8e-9c1d-2f5b8a7e4c02",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Bãi Trước (Bãi Tầm Dương)",
+      "type": "nature",
+      "address": "Đường Trần Phú / Quang Trung, Phường 1, TP. Vũng Tàu",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "24/7",
+      "description": "Vịnh nhỏ hình lưỡi liềm nơi tàu thuyền neo đậu, nước biển thường lặng sóng, được bao quanh bởi núi Lớn và núi Nhỏ. Tập trung nhiều quán xá, khu vui chơi giải trí, về đêm lung linh ánh đèn — khác với sự sôi động của Bãi Sau, Bãi Trước mang không khí yên tĩnh, thích hợp dạo bộ ngắm cảnh và cà phê view biển.",
+      "tips": "Buổi chiều tối ra công viên bờ kè Bãi Trước ngắm hoàng hôn và tàu thuyền; khu vực này gần chợ Vũng Tàu, đi bộ ra chợ chỉ khoảng 5 phút.",
+      "entry_fee": "Miễn phí (khu vực công cộng)",
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true
+    },
+    {
+      "id": "a1c9e2d4-6b3f-4a8e-9c1d-2f5b8a7e4c03",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Ngọn Hải Đăng Vũng Tàu",
+      "type": "heritage",
+      "address": "150 Hạ Long, Phường 2, TP. Vũng Tàu (Nguồn địa chỉ: Traveloka)",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "7:30–17:00 — xác nhận trước khi đến (một số nguồn ghi đến 22:00, cần xác nhận tại chỗ)",
+      "description": "Ngọn hải đăng cổ nhất Việt Nam, được người Pháp xây dựng từ năm 1862 (sửa lại năm 1913) trên đỉnh núi Nhỏ (núi Tao Phùng), ban đầu phục vụ tàu buôn và quân sự. Là điểm ngắm toàn cảnh thành phố biển Vũng Tàu từ trên cao, đặc biệt đẹp lúc hoàng hôn.",
+      "tips": "Kết hợp tham quan cùng Tượng Chúa Kitô Vua vì cùng nằm trên núi Nhỏ; đường lên dốc, nên đi xe máy hoặc taxi thay vì đi bộ nếu trời nắng.",
+      "entry_fee": null,
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true
+    },
+    {
+      "id": "a1c9e2d4-6b3f-4a8e-9c1d-2f5b8a7e4c04",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Thích Ca Phật Đài",
+      "type": "temple",
+      "address": "608 Trần Phú, Phường 5, TP. Vũng Tàu",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "Thứ 2–Thứ 7: 5:00–10:00 và 14:00–20:00; Chủ Nhật: 5:30–10:00 — xác nhận trước khi đến",
+      "description": "Quần thể kiến trúc Phật giáo lớn trên sườn núi Lớn, trung tâm là tượng Phật Thích Ca ngồi thiền cao lớn giữa khuôn viên nhiều bậc thang và tượng Phật khác, là một trong những điểm hành hương và tham quan tâm linh tiêu biểu của Vũng Tàu.",
+      "tips": "Đi vào khoảng 8:00–9:00 sáng là lúc đông khách nhất; nên mặc trang phục kín đáo, lịch sự khi vào khuôn viên chùa.",
+      "entry_fee": null,
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true
+    },
+    {
+      "id": "a1c9e2d4-6b3f-4a8e-9c1d-2f5b8a7e4c05",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Chùa Linh Sơn Cổ Tự",
+      "type": "temple",
+      "address": "104 Hoàng Hoa Thám, Phường 2, TP. Vũng Tàu",
+      "coordinates": { "lat": null, "lng": null },
+      "hours": "6:00–19:00 — xác nhận trước khi đến",
+      "description": "Ngôi chùa được xem là cổ nhất Vũng Tàu, khởi dựng năm 1919 trên núi Nhỏ, sau dời về vị trí hiện tại năm 1921 và được trùng tu quy mô năm 1959. Chùa được công nhận di tích lịch sử — văn hóa cấp quốc gia ngày 3/8/1991, nổi bật với tượng Phật điêu khắc mang phong cách tiền Angkor.",
+      "tips": "Kết hợp tham quan cùng chợ Vũng Tàu và khu trung tâm vì vị trí khá gần; ăn mặc lịch sự khi vào chánh điện.",
+      "entry_fee": null,
+      "image_url": null,
+      "stats": { "rating_avg": null, "review_count": null },
+      "verified": true
     }
   ]
 }

@@ -1,15 +1,23 @@
 // lib/screens/trip/ai_planner_screen.dart
-// TP-006 — AI Trip Planner: form thu thập nhu cầu (thiếu gì hỏi đó) →
-// draft lịch trình (đổi từng điểm từ alternatives) → xác nhận lưu chuyến đi.
-// Contract: .agent/trip-ai/TRIP_AI_ROADMAP.md §2.1–2.2.
+// TP-006 — AI Trip Planner: form thu thập nhu cầu → soạn 1 câu thoại tự
+// nhiên GỬI QUA CHAT THẬT (cùng pipeline trip_chat_planner.py với chatbot,
+// không tự gọi /trips/ai/plan riêng nữa — tránh 2 luồng lệch nhau) → draft
+// lịch trình (đổi từng điểm từ alternatives) → xác nhận lưu chuyến đi.
+// Nếu 1 câu chưa đủ (hiếm, vì đã soạn đủ thông tin form thu thập được), AI
+// sẽ hỏi lại — màn này điều hướng thẳng sang ChatBotScreen để user gõ tiếp
+// tự nhiên, không dựng lại UI hỏi-đáp riêng.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/app_state.dart';
 import '../../services/api_service.dart';
+import '../../services/chat_api_service.dart';
+import '../../services/chat_stream_utils.dart';
 import '../../services/trip_api_service.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/trip_plan_view.dart';
 import '../auth/login_register_screen.dart';
+import '../chat/chatbot_screen.dart';
 
 const _prefOptions = <String, String>{
   'biển': 'Biển đảo',
@@ -36,11 +44,14 @@ const _travelTypes = <String, String>{
   'group': 'Nhóm bạn',
 };
 
-const _slotLabels = <String, String>{
-  'morning': 'Sáng',
-  'lunch': 'Trưa',
-  'afternoon': 'Chiều',
-  'evening': 'Tối',
+// Từ khoá khớp _TRAVEL_TYPE_KEYWORDS/_extract_travel_type ở
+// trip_chat_planner.py — soạn câu đúng từ để AI nhận diện được travel_type
+// trong 1 lượt, không cần hỏi lại.
+const _travelTypePhrase = <String, String>{
+  'solo': 'đi một mình',
+  'couple': 'đi cùng người yêu',
+  'family': 'đi cùng gia đình',
+  'group': 'đi cùng nhóm bạn',
 };
 
 String _fmtVnd(num? v) {
@@ -78,11 +89,16 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
   DateTime? _startDate;
 
   bool _loading = false;
-  List<String> _questions = [];
-  List<String> _missing = [];
-  Map<String, dynamic>? _plan; // draft plan từ backend
+  String? _pendingQuestion; // câu hỏi AI trả lời khi 1 câu chưa đủ thông tin
+  String? _sessionId; // session chat thật đứng sau — hiện bình thường ở lịch sử chat
+  Map<String, dynamic>? _plan; // draft plan (ai_plan) từ backend
 
   TripApiService _api(AppState s) => TripApiService(
+        tokenProvider: () => s.token,
+        tokenRefresher: () => s.refreshAccessToken(),
+      );
+
+  ChatSessionApiService _chatApi(AppState s) => ChatSessionApiService(
         tokenProvider: () => s.token,
         tokenRefresher: () => s.refreshAccessToken(),
       );
@@ -91,13 +107,13 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
   void initState() {
     super.initState();
     // Mở từ nút "Gợi ý lịch trình" (destination_detail_screen) → có sẵn
-    // destination → điền form + gọi /trips/ai/plan luôn (skip_optional),
-    // hiện thẳng lịch trình mẫu, không bắt user điền lại hay chat từng bước.
+    // destination → điền form + gửi câu thoại luôn (bỏ qua tuỳ chọn), hiện
+    // thẳng lịch trình mẫu, không bắt user điền lại hay chat từng bước.
     final dest = widget.initialDestination;
     if (dest != null && dest.isNotEmpty) {
       _destCtrl.text = dest;
       _daysCtrl.text = '${widget.initialDays ?? 3}';
-      WidgetsBinding.instance.addPostFrameCallback((_) => _submit(skipOptional: true));
+      WidgetsBinding.instance.addPostFrameCallback((_) => _submit());
     }
   }
 
@@ -109,36 +125,77 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
     super.dispose();
   }
 
-  // ── Gọi /trips/ai/plan ──────────────────────────────────────────────────────
-  Map<String, dynamic> _payload({required bool skipOptional}) => {
-        if (_destCtrl.text.trim().isNotEmpty) 'destination': _destCtrl.text.trim(),
-        if (int.tryParse(_daysCtrl.text) != null) 'days': int.parse(_daysCtrl.text),
-        if (_startDate != null)
-          'start_date': _startDate!.toIso8601String().substring(0, 10),
-        if (int.tryParse(_budgetCtrl.text.replaceAll('.', '')) != null)
-          'budget': int.parse(_budgetCtrl.text.replaceAll('.', '')),
-        'travelers': _travelers,
-        if (_travelType != null) 'travel_type': _travelType,
-        if (_prefs.isNotEmpty) 'preferences': _prefs.toList(),
-        'skip_optional': skipOptional,
-      };
+  // ── Soạn 1 câu thoại tự nhiên từ form — gửi qua CHAT THẬT thay vì tự gọi
+  // /trips/ai/plan riêng (đồng bộ với luồng chat, dùng chung
+  // trip_chat_planner.py). Dùng đúng từ khoá mà các hàm trích xuất slot ở
+  // backend nhận diện được để giải quyết đủ trong 1 lượt, không cần hỏi lại.
+  String _composeMessage() {
+    final dest = _destCtrl.text.trim();
+    final days = int.tryParse(_daysCtrl.text) ?? widget.initialDays ?? 3;
+    final parts = <String>['Lên lịch trình đi $dest $days ngày'];
 
-  Future<void> _submit({bool skipOptional = false}) async {
+    var hasOptional = false;
+    if (_travelType != null) {
+      var phrase = _travelTypePhrase[_travelType]!;
+      if ((_travelType == 'family' || _travelType == 'group') && _travelers > 2) {
+        phrase += ' $_travelers người';
+      }
+      parts.add(phrase);
+      hasOptional = true;
+    } else if (_travelers > 1) {
+      parts.add('đi $_travelers người');
+      hasOptional = true;
+    }
+
+    final budgetVal = int.tryParse(_budgetCtrl.text.replaceAll('.', ''));
+    if (budgetVal != null && budgetVal > 0) {
+      parts.add(budgetVal % 1000000 == 0
+          ? 'ngân sách ${budgetVal ~/ 1000000} triệu'
+          : 'ngân sách $budgetVal đồng');
+      hasOptional = true;
+    }
+
+    if (_prefs.isNotEmpty) {
+      parts.add('thích ${_prefs.map((k) => _prefOptions[k] ?? k).join(', ')}');
+      hasOptional = true;
+    }
+
+    // Form không có field nào để nhập tuỳ chọn thêm → báo AI bỏ qua luôn
+    // thay vì hỏi lại (trùng nghĩa "bỏ qua" trong _SKIP_WORDS backend).
+    if (!hasOptional) parts.add('bỏ qua các lựa chọn khác');
+
+    return '${parts.join(", ")}.';
+  }
+
+  Future<void> _submit() async {
+    if (_destCtrl.text.trim().isEmpty || _daysCtrl.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Nhập điểm đến và số ngày nhé.')));
+      return;
+    }
     final s = context.read<AppState>();
-    setState(() { _loading = true; _questions = []; _missing = []; });
+    setState(() { _loading = true; _pendingQuestion = null; });
     try {
-      final res = await _api(s).aiPlan(_payload(skipOptional: skipOptional));
+      final chatApi = _chatApi(s);
+      _sessionId ??= (await chatApi.createSession(title: 'Lịch trình ${_destCtrl.text.trim()}')).id;
+      final result = await collectChatStream(
+        chatApi.sendMessageStream(_sessionId!, _composeMessage()),
+      );
       if (!mounted) return;
-      if (res['status'] == 'need_info') {
+      final aiPlan = result.itinerary?['ai_plan'];
+      if (aiPlan is Map) {
         setState(() {
           _loading = false;
-          _questions = (res['questions'] as List? ?? []).map((e) => '$e').toList();
-          _missing = (res['missing_fields'] as List? ?? []).map((e) => '$e').toList();
+          _plan = Map<String, dynamic>.from(aiPlan);
         });
       } else {
+        // AI vẫn cần hỏi thêm (hiếm) — hiện câu hỏi, cho phép tiếp tục ở
+        // ChatBotScreen thật thay vì dựng lại UI hỏi-đáp riêng ở đây.
         setState(() {
           _loading = false;
-          _plan = Map<String, dynamic>.from(res['plan'] as Map);
+          _pendingQuestion = result.text.isNotEmpty
+              ? result.text
+              : 'Mình cần thêm thông tin — bạn tiếp tục trò chuyện nhé.';
         });
       }
     } catch (e) {
@@ -147,6 +204,13 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(friendlyError(e))));
     }
+  }
+
+  void _continueInChat() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => ChatBotScreen(sessionId: _sessionId)),
+    );
   }
 
   // ── Gọi /trips/ai/confirm ───────────────────────────────────────────────────
@@ -370,13 +434,11 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
 
   // ── Bước 1: Form nhu cầu ───────────────────────────────────────────────────
   Widget _buildForm() {
-    final onlyOptionalMissing = _missing.isNotEmpty &&
-        !_missing.contains('destination') && !_missing.contains('days');
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        if (_questions.isNotEmpty) _questionBanner(onlyOptionalMissing),
-        _label('Bạn muốn đi đâu? *', highlight: _missing.contains('destination')),
+        if (_pendingQuestion != null) _questionBanner(),
+        _label('Bạn muốn đi đâu? *'),
         TextField(
           controller: _destCtrl,
           decoration: _input('VD: Đà Lạt, Phú Quốc, Sa Pa...'),
@@ -385,7 +447,7 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
         Row(children: [
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _label('Mấy ngày? *', highlight: _missing.contains('days')),
+              _label('Mấy ngày? *'),
               TextField(
                 controller: _daysCtrl,
                 keyboardType: TextInputType.number,
@@ -424,14 +486,14 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
           ),
         ]),
         const SizedBox(height: 14),
-        _label('Ngân sách cả chuyến (VND)', highlight: _missing.contains('budget')),
+        _label('Ngân sách cả chuyến (VND)'),
         TextField(
           controller: _budgetCtrl,
           keyboardType: TextInputType.number,
           decoration: _input('VD: 5000000 (bỏ trống nếu chưa rõ)'),
         ),
         const SizedBox(height: 14),
-        _label('Số người', highlight: _missing.contains('travelers')),
+        _label('Số người'),
         Row(children: [
           IconButton(
             onPressed: _travelers > 1 ? () => setState(() => _travelers--) : null,
@@ -445,7 +507,7 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
           ),
         ]),
         const SizedBox(height: 8),
-        _label('Đi với ai?', highlight: _missing.contains('travel_type')),
+        _label('Đi với ai?'),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -462,8 +524,7 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
           }).toList(),
         ),
         const SizedBox(height: 14),
-        _label('Sở thích (chọn nhiều — bỏ trống AI sẽ tự đoán từ lịch sử của bạn)',
-            highlight: _missing.contains('preferences')),
+        _label('Sở thích (chọn nhiều — bỏ trống AI sẽ tự đoán từ lịch sử của bạn)'),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -503,7 +564,10 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
     );
   }
 
-  Widget _questionBanner(bool onlyOptionalMissing) => Container(
+  // AI chưa đủ thông tin từ 1 câu ghép (hiếm) → hiện câu hỏi + cho tiếp tục
+  // ở ChatBotScreen thật (dùng lại _sessionId đã tạo), không dựng UI hỏi-đáp
+  // riêng ở màn này.
+  Widget _questionBanner() => Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -520,21 +584,16 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
                     color: AppColors.dark)),
           ]),
           const SizedBox(height: 6),
-          ..._questions.map((q) => Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text('• $q',
-                    style: const TextStyle(fontSize: 13, color: AppColors.dark)),
-              )),
-          if (onlyOptionalMissing) ...[
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: () => _submit(skipOptional: true),
-              style: TextButton.styleFrom(padding: EdgeInsets.zero),
-              child: const Text('Bỏ qua, lên lịch trình luôn →',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,
-                      color: AppColors.primary)),
-            ),
-          ],
+          Text(_pendingQuestion ?? '',
+              style: const TextStyle(fontSize: 13, color: AppColors.dark)),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: _continueInChat,
+            style: TextButton.styleFrom(padding: EdgeInsets.zero),
+            child: const Text('Tiếp tục trò chuyện →',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold,
+                    color: AppColors.primary)),
+          ),
         ]),
       );
 
@@ -562,62 +621,17 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
       );
 
   // ── Bước 2: Draft plan — tổng kết + đổi lựa chọn + xác nhận ────────────────
+  // Dùng chung TripPlanView (widgets/trip_plan_view.dart) với chatbot_screen
+  // và TripDetailsScreen — cùng 1 chỗ hiển thị ảnh/hotel/timeline, không vẽ
+  // riêng ở đây nữa (trước đây _metaChip/_hotelCard/_dayCard chỉ có ở màn
+  // này, chat chỉ có bare text — giờ đồng bộ cả 2 nơi).
   Widget _buildDraft() {
-    final p = _plan!;
-    final days = (p['days'] as List? ?? []);
-    final hotel = p['hotel'] as Map?;
     return Column(children: [
       Expanded(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Text(p['title']?.toString() ?? 'Lịch trình',
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.dark)),
-            const SizedBox(height: 6),
-            Wrap(spacing: 12, runSpacing: 4, children: [
-              _metaChip(Icons.calendar_today_outlined, '${p['days_count']} ngày'),
-              _metaChip(Icons.group_outlined, '${p['travelers']} người'),
-              if (p['budget'] != null)
-                _metaChip(Icons.account_balance_wallet_outlined,
-                    'NS ${_fmtVnd(p['budget'] as num?)}'),
-              _metaChip(Icons.payments_outlined,
-                  'Ước tính ${_fmtVnd(p['estimated_cost'] as num?)}'),
-            ]),
-            if (p['summary'] != null) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(p['summary'].toString(),
-                    style: const TextStyle(fontSize: 13, color: AppColors.dark, height: 1.5)),
-              ),
-            ],
-            if (p['budget_warning'] != null) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.07),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(children: [
-                  const Icon(Icons.warning_amber_rounded,
-                      size: 16, color: AppColors.error),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: Text(p['budget_warning'].toString(),
-                          style: const TextStyle(fontSize: 12, color: AppColors.error))),
-                ]),
-              ),
-            ],
-            const SizedBox(height: 16),
-            if (hotel != null) _hotelCard(Map<String, dynamic>.from(hotel)),
-            const SizedBox(height: 8),
-            ...days.map((d) => _dayCard(Map<String, dynamic>.from(d as Map))),
+            TripPlanView(plan: _plan!, onSwapHotel: _swapHotel, onSwapItem: _swapItem),
             const SizedBox(height: 90),
           ],
         ),
@@ -659,116 +673,4 @@ class _AiPlannerScreenState extends State<AiPlannerScreen> {
     ]);
   }
 
-  Widget _metaChip(IconData icon, String text) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 13, color: AppColors.muted),
-          const SizedBox(width: 4),
-          Text(text, style: const TextStyle(fontSize: 12.5, color: AppColors.muted)),
-        ],
-      );
-
-  Widget _hotelCard(Map<String, dynamic> h) => Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade100),
-        ),
-        child: Row(children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: AppColors.secondary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.hotel_outlined, color: AppColors.secondary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(h['name']?.toString() ?? '',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  maxLines: 1, overflow: TextOverflow.ellipsis),
-              const SizedBox(height: 3),
-              Text(
-                [
-                  if (h['stars'] != null) '${h['stars']}★',
-                  if (h['price_per_night'] != null)
-                    '${_fmtVnd(h['price_per_night'] as num?)}/đêm',
-                  if (h['rating'] != null) '${h['rating']} điểm',
-                ].join(' · '),
-                style: const TextStyle(fontSize: 12, color: AppColors.muted),
-              ),
-            ]),
-          ),
-          TextButton(onPressed: _swapHotel, child: const Text('Đổi')),
-        ]),
-      );
-
-  Widget _dayCard(Map<String, dynamic> d) {
-    final items = (d['items'] as List? ?? []);
-    return Container(
-      margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Ngày ${d['day_number']}',
-            style: const TextStyle(
-                fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.primary)),
-        const SizedBox(height: 8),
-        ...items.map((raw) {
-          final it = raw as Map;
-          final canSwap = it['type'] == 'location' || it['type'] == 'restaurant';
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                width: 52,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(_slotLabels[it['time_slot']] ?? '',
-                      style: const TextStyle(
-                          fontSize: 11.5, fontWeight: FontWeight.bold,
-                          color: AppColors.secondary)),
-                  if (it['start_time'] != null)
-                    Text(it['start_time'].toString(),
-                        style: const TextStyle(fontSize: 10.5, color: AppColors.muted)),
-                ]),
-              ),
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(it['title']?.toString() ?? '',
-                      style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600)),
-                  if (it['notes'] != null && it['notes'].toString().isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(it['notes'].toString(),
-                          maxLines: 2, overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 11.5, color: AppColors.muted)),
-                    ),
-                  if (it['estimated_cost'] != null && (it['estimated_cost'] as num) > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text('Vé ~${_fmtVnd(it['estimated_cost'] as num?)}/người',
-                          style: const TextStyle(fontSize: 11.5, color: AppColors.primary)),
-                    ),
-                ]),
-              ),
-              if (canSwap)
-                InkWell(
-                  onTap: () => _swapItem(it),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Icon(Icons.swap_horiz, size: 18, color: AppColors.muted),
-                  ),
-                ),
-            ]),
-          );
-        }),
-      ]),
-    );
-  }
 }

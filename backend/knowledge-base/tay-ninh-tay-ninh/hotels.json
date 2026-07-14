@@ -1,49 +1,110 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-003",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-003 (nâng cấp 07/2026)",
     "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng segment/price_range không khớp schema type/stars/price_per_night/amenities — đã sửa để import đúng vào bảng hotels). Giữ nguyên id và tên 4 khách sạn cũ, bổ sung 2 khách sạn mới.",
     "missing_fields": [
-      "exact_room_rates_2026"
+      "price_per_night.amount tất cả khách sạn — chưa xác nhận được số VND/đêm cụ thể từ nguồn cho phép (Traveloka/iVIVU/Trip.com chỉ hiện giá khi nhập ngày cụ thể, không có mức giá niêm yết cố định)",
+      "booking_url"
     ],
     "data_sources": [
-      "Booking.com",
-      "Agoda"
+      "Traveloka (07/2026)",
+      "iVIVU (07/2026)",
+      "Trip.com (07/2026)"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60101",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Melia Vinpearl Tay Ninh",
-      "segment": "5-star",
-      "address": "90 Đường Lê Duẩn, Khu phố 5, Phường 3, TP. Tây Ninh",
-      "price_range": null,
-      "price_note": "// TODO: check giá thực tế theo mùa tại booking.com"
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "90 Đường Lê Duẩn, Khu phố 5, Phường 3, TP. Tây Ninh (trong tổ hợp Vincom & Vincom Shophouse)",
+      "amenities": ["hồ bơi trong nhà", "spa", "sauna", "phòng gym", "wifi miễn phí", "xe đạp miễn phí", "nhà hàng", "quầy bar", "lễ tân 24/7"],
+      "description": "Khách sạn 5 sao cao 21 tầng với 127 phòng, tọa lạc ngay trung tâm TP. Tây Ninh, cách Tòa Thánh Cao Đài khoảng 14 phút lái xe và cách núi Bà Đen khoảng 12,7km.",
+      "image_url": null,
+      "rating": 4.6,
+      "booking_url": null,
+      "price_note": "Rating 9.1/10 trên Traveloka (Nguồn: Traveloka); giá phòng/đêm cần nhập ngày cụ thể trên nền tảng đặt phòng — chưa có mức giá niêm yết cố định để trích dẫn"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60102",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Sunrise Hotel Tay Ninh",
-      "segment": "4-star",
-      "address": "81 Đường Hoàng Lê Kha, Phường 3, TP. Tây Ninh",
-      "price_range": null,
-      "price_note": "// TODO: xác nhận tại agoda.com"
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "81 Đường Hoàng Lê Kha, Phường 3, TP. Tây Ninh — cách Tòa Thánh Cao Đài khoảng 4km",
+      "amenities": ["wifi miễn phí", "nhà hàng", "phòng gym", "bồn sục", "sân tennis ngoài trời", "sauna", "TV màn hình LCD"],
+      "description": "Khách sạn 110 phòng ngay trung tâm TP. Tây Ninh, thiết kế hướng nhìn toàn cảnh thành phố.",
+      "image_url": null,
+      "rating": 4.4,
+      "booking_url": null,
+      "price_note": "Rating 8.8/10 trên Traveloka (Nguồn: Traveloka); hạng sao 3 sao xác nhận qua Traveloka (bản KB cũ ghi nhầm 4 sao, đã sửa)"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60103",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Gold City Hotel",
-      "segment": "3-star",
-      "address": "Phường 3, Thành phố Tây Ninh",
-      "price_range": null,
-      "price_note": "// TODO: tra cứu địa chỉ số nhà chính xác trên Google Maps"
+      "type": "hotel",
+      "stars": 3,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Phường 3, TP. Tây Ninh",
+      "amenities": ["wifi", "nhà hàng"],
+      "description": "Khách sạn phân khúc trung, phù hợp khách công tác và gia đình đi tự túc trong nội thành Tây Ninh.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: tra cứu địa chỉ số nhà chính xác và giá phòng từ Traveloka/iVIVU/Trip.com"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60104",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "MaFam Homestay",
-      "segment": "homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
       "address": "Ninh Thuận, Dương Minh Châu, Tây Ninh",
-      "price_range": null,
-      "price_note": "Phân khúc tiết kiệm gần hồ Dầu Tiếng"
+      "amenities": ["gần hồ Dầu Tiếng"],
+      "description": "Phân khúc tiết kiệm gần hồ Dầu Tiếng, phù hợp khách đi cắm trại/dã ngoại muốn có chỗ nghỉ đêm gần hồ.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa tìm thấy trên Traveloka/iVIVU/Trip.com — cần xác thực lại tên/địa chỉ"
+    },
+    {
+      "id": "32bdd702-2697-4fe8-966c-77753496dd13",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Khách sạn Victory Tây Ninh",
+      "type": "hotel",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "255 Đường 30/4, TP. Tây Ninh, tỉnh Tây Ninh",
+      "amenities": ["wifi", "nhà hàng"],
+      "description": "Khách sạn trung tâm TP. Tây Ninh, được đánh giá cao trên nền tảng đặt phòng trực tuyến.",
+      "image_url": null,
+      "rating": 5.0,
+      "booking_url": null,
+      "price_note": "Rating 10/10 trên iVIVU (Nguồn: iVIVU); giá phòng/đêm chưa có mức niêm yết cố định để trích dẫn"
+    },
+    {
+      "id": "c816dd02-5b94-499a-aadc-647f687d1d36",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Mai Vy Hotel Tây Ninh",
+      "type": "hotel",
+      "stars": null,
+      "price_per_night": { "amount": null, "currency": "VND" },
+      "address": "Trung tâm TP. Tây Ninh, tỉnh Tây Ninh",
+      "amenities": ["wifi", "nội thất phong cách Á Âu"],
+      "description": "Khách sạn tọa lạc tại trung tâm TP. Tây Ninh với thiết kế nội thất kết hợp phong cách Á – Âu, có thương hiệu liên kết HANZ Premium Mai Vy Hotel cùng hệ thống.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "// TODO: chưa xác nhận địa chỉ số nhà và giá phòng cụ thể — chỉ có tên & khu vực từ iVIVU (Nguồn: iVIVU)"
     }
   ]
 }

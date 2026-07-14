@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-003",
+    "status": "partial",
+    "partial_note": "6 chỗ ở với giá thật từ Traveloka (07/2026); rating/booking_url/tọa độ để null do chưa xác minh đủ nguồn.",
+    "missing_fields": [
+      "booking_url — cần lấy link thật khi triển khai",
+      "coordinates — chưa verify",
+      "một số amenities cụ thể theo phòng — cần xác nhận trực tiếp trên Traveloka khi đặt"
+    ],
+    "data_sources": [
+      "Traveloka (07/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f3ea24b1-4ac9-42b0-b4a3-b1ee0dca686c",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "PiTu Homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": 755990, "currency": "VND" },
+      "address": "Thị trấn Đồng Văn, huyện Đồng Văn, Hà Giang",
+      "amenities": ["wifi", "view núi", "phòng chung/riêng"],
+      "description": "Homestay nhỏ tại Đồng Văn được đánh giá cao (8,9/10) về không gian gần gũi và view núi đá vôi, phù hợp khách muốn trải nghiệm sinh hoạt cùng người bản địa.",
+      "image_url": null,
+      "rating": 8.9,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "e75535df-a09d-4770-b363-05d3a57e43c9",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Odyssey Hostel",
+      "type": "hostel",
+      "stars": null,
+      "price_per_night": { "amount": 260278, "currency": "VND" },
+      "address": "Thành phố Hà Giang, tỉnh Hà Giang",
+      "amenities": ["wifi", "dorm & phòng riêng", "khu sinh hoạt chung"],
+      "description": "Hostel giá rẻ tại trung tâm TP. Hà Giang, phù hợp backpacker và nhóm bạn trẻ trước khi khởi hành lên cao nguyên đá.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "39cf4a6a-0f17-4797-a68b-958daf9b4f9c",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Epic Dong Van Hotel",
+      "type": "hotel",
+      "stars": null,
+      "price_per_night": { "amount": 550356, "currency": "VND" },
+      "address": "Thị trấn Đồng Văn, huyện Đồng Văn, Hà Giang",
+      "amenities": ["wifi", "nhà hàng", "lễ tân 24h"],
+      "description": "Khách sạn tầm trung ngay trung tâm Đồng Văn, đánh giá 8,6/10, thuận tiện di chuyển ra phố cổ và các điểm tham quan cao nguyên đá.",
+      "image_url": null,
+      "rating": 8.6,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "c7e77ed0-4a5a-46e3-9e94-6bc4d8d7e6ce",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "O'Chau Meo Vac Homestay",
+      "type": "homestay",
+      "stars": null,
+      "price_per_night": { "amount": 729623, "currency": "VND" },
+      "address": "Thị trấn Mèo Vạc, huyện Mèo Vạc, Hà Giang",
+      "amenities": ["wifi", "bữa sáng", "view thung lũng"],
+      "description": "Homestay được đánh giá tốt (8,5/10) tại Mèo Vạc, điểm dừng chân thuận tiện trước khi xuống sông Nho Quế hoặc đi tiếp cung đường Mã Pí Lèng.",
+      "image_url": null,
+      "rating": 8.5,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "0d28b37e-2229-48b9-a7fd-45d55f56504d",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Four Points by Sheraton Hà Giang",
+      "type": "hotel",
+      "stars": 5,
+      "price_per_night": { "amount": 1245632, "currency": "VND" },
+      "address": "Đường Trần Phú, thành phố Hà Giang, tỉnh Hà Giang",
+      "amenities": ["hồ bơi", "nhà hàng", "gym", "wifi", "bãi đỗ xe"],
+      "description": "Khách sạn thương hiệu quốc tế Marriott, 5 sao, tại trung tâm TP. Hà Giang — lựa chọn cao cấp nhất trong thành phố cho khách muốn nghỉ ngơi tiện nghi trước/sau hành trình lên cao nguyên đá.",
+      "image_url": null,
+      "rating": 9.4,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "623c51ac-02ea-42e1-9c42-4dedbb8562f2",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Panhou Retreat",
+      "type": "resort",
+      "stars": 4,
+      "price_per_night": { "amount": 2299110, "currency": "VND" },
+      "address": "Xã Thông Nguyên, huyện Hoàng Su Phì, tỉnh Hà Giang",
+      "amenities": ["bungalow gỗ", "spa", "hồ bơi ngoài trời", "nhà hàng", "view ruộng bậc thang"],
+      "description": "Khu nghỉ dưỡng sinh thái ẩn mình giữa rừng và ruộng bậc thang Hoàng Su Phì, các bungalow gỗ truyền thống hòa vào thiên nhiên — lựa chọn nghỉ dưỡng cao cấp cho khách muốn tách biệt cung đường loop chính.",
+      "image_url": null,
+      "rating": null,
+      "booking_url": null,
+      "price_note": "Nguồn: Traveloka"
+    }
+  ]
+}

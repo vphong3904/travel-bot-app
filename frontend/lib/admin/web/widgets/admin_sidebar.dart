@@ -14,6 +14,7 @@ class _MenuItem {
 }
 
 const _contentItems = [
+  _MenuItem('Thành phố',   '/content/city',         Icons.location_city,     [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Địa điểm',    '/content/destinations', Icons.place,             [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Khách sạn',   '/content/hotels',       Icons.hotel,             [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),
   _MenuItem('Tour',        '/content/tours',        Icons.tour,              [AdminRole.superAdmin, AdminRole.admin, AdminRole.contentManager]),

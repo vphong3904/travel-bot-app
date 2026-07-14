@@ -1,11 +1,12 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-004",
-    "status": "complete",
-    "missing_fields": [],
-    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026)", "Foody (06/2026)"]
+    "status": "partial",
+    "missing_fields": ["price_range cụ thể theo VND — chưa có nguồn hợp lệ (Traveloka/TripAdvisor không niêm yết giá món lẻ)"],
+    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026)", "Foody (06/2026)", "TripAdvisor (07/2026)"],
+    "fix_note": "2026-07-13: where_to_eat trước đó dùng tên nhà hàng (chuỗi text) khiến script seed_kb_to_sql.py (_valid_uuid filter) loại bỏ hết khi import — đã sửa thành UUID khớp restaurants.json."
   },
   "data": [
     {
@@ -13,7 +14,7 @@
       "local_name": "Thắng cố Sapa",
       "category": "main_dish",
       "description": "Món ăn truyền thống của người H'Mông nấu từ thịt và nội tạng ngựa kết hợp với 12 loại thảo mộc rừng đặc trưng.",
-      "where_to_eat": ["Thắng Cố A Quỳnh"],
+      "where_to_eat": ["019ef658-6c00-7403-8403-d12345678913"],
       "price_range": "Mức giá trung bình tùy theo phần ăn",
       "must_try": true,
       "vegetarian": false,
@@ -24,7 +25,7 @@
       "local_name": "Thịt lợn cắp nách",
       "category": "main_dish",
       "description": "Giống lợn đặc sản được nuôi thả rông trên đồi núi, thịt săn chắc, thơm ngọt, lớp da giòn rụm khi nướng.",
-      "where_to_eat": ["Nhà hàng A Phủ"],
+      "where_to_eat": ["019ef658-6c00-7401-8401-d12345678911"],
       "price_range": "Tính theo đĩa hoặc theo kilogram",
       "must_try": true,
       "vegetarian": false,
@@ -35,7 +36,7 @@
       "local_name": "Lẩu cá hồi Sapa",
       "category": "main_dish",
       "description": "Cá hồi xứ lạnh được nuôi ngay tại dòng suối mát Sapa, thịt cá chắc, ít mỡ, làm lẩu hoặc gỏi cực ngon.",
-      "where_to_eat": ["Nhà hàng Đỗ Quyên"],
+      "where_to_eat": ["019ef658-6c00-7402-8402-d12345678912"],
       "price_range": "Tùy thuộc vào kích thước cá hoặc combo nồi lẩu",
       "must_try": true,
       "vegetarian": false,
@@ -45,8 +46,8 @@
       "name": "Com Lam Tay Bac",
       "local_name": "Cơm lam Tây Bắc",
       "category": "snack",
-      "description": "Gạo nếp nương thơm dẻo được cho vào ống tre rồi nướng chín trên than hồng, chấm muối vừng đậm đà.",
-      "where_to_eat": ["Chợ đêm Sapa", "Các bản làng du lịch"],
+      "description": "Gạo nếp nương thơm dẻo được cho vào ống tre rồi nướng chín trên than hồng, chấm muối vừng đậm đà. Bán phổ biến ở chợ đêm và các bản làng du lịch, không gắn với một nhà hàng cụ thể.",
+      "where_to_eat": [],
       "price_range": "Giá rẻ bình dân theo ống",
       "must_try": false,
       "vegetarian": true,
@@ -57,11 +58,33 @@
       "local_name": "Khâu nhục",
       "category": "main_dish",
       "description": "Món thịt ba chỉ được tẩm ướp kỳ công với địa liền, húng lìu, chao đỏ rồi hấp cách thủy đến mức mềm nhừ tan trong miệng.",
-      "where_to_eat": ["Nhà hàng A Phủ"],
+      "where_to_eat": ["019ef658-6c00-7401-8401-d12345678911"],
       "price_range": "Giá theo đĩa ăn kèm xôi hoặc cơm",
       "must_try": false,
       "vegetarian": false,
       "tags": ["đặc sản cổ truyền", "thịt heo"]
+    },
+    {
+      "name": "Rau Cai Meo Xao",
+      "local_name": "Rau cải mèo xào tỏi/thịt bò gác bếp",
+      "category": "main_dish",
+      "description": "Rau cải mèo là đặc sản vùng cao chỉ mọc ở khí hậu lạnh Sa Pa, vị hơi đắng nhẫn rồi ngọt hậu, thường xào tỏi hoặc xào cùng thịt bò gác bếp.",
+      "where_to_eat": ["019ef658-6c00-7402-8402-d12345678912"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["rau đặc sản", "xứ lạnh", "chay (nếu xào tỏi)"]
+    },
+    {
+      "name": "Ruou Tao Meo Sapa",
+      "local_name": "Rượu táo mèo Sa Pa",
+      "category": "drink",
+      "description": "Rượu ngâm từ quả táo mèo (sơn tra) mọc tự nhiên trên núi cao Sa Pa - Bắc Hà, vị chua ngọt nhẹ, thường được bán làm quà đặc sản tại chợ và các bản làng.",
+      "where_to_eat": [],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": true,
+      "tags": ["đặc sản", "quà lưu niệm", "đồ uống"]
     }
   ]
 }

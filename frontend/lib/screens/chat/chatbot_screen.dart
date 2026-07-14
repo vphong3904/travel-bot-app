@@ -8,9 +8,12 @@ import '../../widgets/common_widgets.dart';
 import '../../providers/app_state.dart';
 import '../../models/chat_message.dart';
 import '../../services/chat_api_service.dart';
+import '../../services/chat_stream_utils.dart';
 import '../../services/trip_api_service.dart';
 import '../../services/api_service.dart';
 import '../../widgets/itinerary_card.dart';
+import '../../widgets/trip_plan_view.dart';
+import '../../widgets/trip_plan_swap.dart';
 import '../trip_detail/trip_details_screen.dart';
 import '../auth/login_register_screen.dart';
 import '../../services/sse_client.dart';
@@ -217,7 +220,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
         if (event['type'] == 'chunk') {
           final rawContent = event['content'] as String? ?? '';
-          final parsed = _parseChunkContent(rawContent);
+          final parsed = parseChatChunkContent(rawContent);
           fullContent += parsed['text'] as String;
 
           if (parsed['sources'] != null) {
@@ -264,7 +267,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
               .map((e) => e.toString())
               .toList();
           if (event['content'] != null) {
-            final parsed = _parseChunkContent(event['content'].toString());
+            final parsed = parseChatChunkContent(event['content'].toString());
             final finalText = parsed['text'] as String;
             if (finalText.isNotEmpty) fullContent = finalText;
           }
@@ -380,38 +383,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     );
   }
 
-  Map<String, dynamic> _parseChunkContent(String raw) {
-    final trimmed = raw.trim();
-    if (trimmed.isEmpty) return {'text': ''};
-
-    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
-      try {
-        final decoded = jsonDecode(trimmed) as Map<String, dynamic>;
-        final hasKnownKeys = decoded.containsKey('answer') ||
-            decoded.containsKey('sources') ||
-            decoded.containsKey('itinerary');
-        if (!hasKnownKeys) return {'text': raw};
-
-        final text = (decoded['answer'] ??
-                decoded['content'] ??
-                decoded['text'] ??
-                decoded['response'] ??
-                '')
-            .toString();
-        final rawSources = decoded['sources'] as List<dynamic>?;
-        final sources = rawSources?.map((e) => SourceRef.fromDynamic(e)).toList();
-        final itinerary = decoded['itinerary'] as Map<String, dynamic>?;
-        return {
-          'text': text,
-          if (sources != null && sources.isNotEmpty) 'sources': sources,
-          if (itinerary != null) 'itinerary': itinerary,
-        };
-      } catch (_) {}
-    }
-
-    return {'text': raw};
-  }
-
   // ── Xử lý tin nhắn cho khách — gọi /chat/guest/stream thật ──────────────
 
   Future<void> _sendGuestMessage(String trimmed) async {
@@ -456,7 +427,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
         if (event['type'] == 'chunk') {
           final raw = event['content'] as String? ?? '';
-          final parsed = _parseChunkContent(raw);
+          final parsed = parseChatChunkContent(raw);
           fullContent += parsed['text'] as String;
 
           if (parsed['sources'] != null) {
@@ -967,9 +938,32 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
                                 if (msg.hasItinerary && msg.itinerary != null) ...[
                                   const SizedBox(height: 8),
-                                  ItineraryCard(
-                                      itinerary: Map<String, dynamic>.from(
-                                          msg.itinerary!)),
+                                  // ai_plan = lịch trình AI Trip Planner thật (có
+                                  // ảnh/khách sạn/chi phí) → dùng TripPlanView
+                                  // đồng bộ với AiPlannerScreen/TripDetailsScreen.
+                                  // Không có ai_plan = câu trả lời RAG mẫu tĩnh
+                                  // (itineraries.json) → giữ ItineraryCard cũ.
+                                  if (msg.itinerary!['ai_plan'] is Map)
+                                    // Dùng .cast (view sống, KHÔNG copy) để nút
+                                    // "Đổi" mutate đúng object mà _saveTrip đọc
+                                    // (msg.itinerary['ai_plan']) → bản đã đổi được
+                                    // giữ khi bấm "Lưu Chuyến Đi". Đổi tại chỗ,
+                                    // không gọi lại AI/RAG, không đụng cache.
+                                    Builder(builder: (_) {
+                                      final aiPlan = (msg.itinerary!['ai_plan'] as Map)
+                                          .cast<String, dynamic>();
+                                      return TripPlanView(
+                                        plan: aiPlan,
+                                        onSwapHotel: () => swapHotel(
+                                            context, aiPlan, () => setState(() {})),
+                                        onSwapItem: (item) => swapItem(
+                                            context, aiPlan, item, () => setState(() {})),
+                                      );
+                                    })
+                                  else
+                                    ItineraryCard(
+                                        itinerary: Map<String, dynamic>.from(
+                                            msg.itinerary!)),
                                 ],
 
                                 if (msg.hasItinerary) ...[

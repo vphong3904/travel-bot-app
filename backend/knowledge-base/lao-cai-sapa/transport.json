@@ -1,29 +1,29 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-005",
-    "status": "complete",
-    "missing_fields": [],
-    "data_sources": ["Traveloka (06/2026)", "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"]
+    "status": "partial",
+    "missing_fields": ["price_info chính xác cho motorbike_rental, taxi, xe_om — chưa có nguồn hợp lệ (Traveloka/TripAdvisor không niêm yết biểu giá cố định)"],
+    "data_sources": ["Traveloka (06/2026, 07/2026)", "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"]
   },
   "data": {
     "getting_there": [
       {
         "type": "bus",
         "from": "Hà Nội",
-        "duration": "5.5 - 6 tiếng",
-        "price_range": "Tùy thuộc vào loại xe giường nằm thường hay limousine cabin",
-        "providers": ["Sao Việt", "Inter Bus Lines", "G8 Open Tour"],
-        "notes": "Chạy đường cao tốc Nội Bài - Lào Cai thẳng đến trung tâm Sapa, có nhiều chuyến trong ngày."
+        "duration": "5 - 6 tiếng",
+        "price_range": "250.000đ - 500.000đ/vé một chiều tùy loại xe giường nằm thường, cabin đôi hay limousine VIP (Nguồn: Traveloka)",
+        "providers": ["Sao Việt", "Inter Bus Lines", "G8 Open Tour", "Phúc Lâm Limousine"],
+        "notes": "Chạy đường cao tốc Nội Bài - Lào Cai thẳng đến trung tâm Sapa, có nhiều chuyến trong ngày, xe xuất bến Hà Nội khoảng 7h00."
       },
       {
         "type": "train",
         "from": "Ga Hà Nội",
-        "duration": "8 tiếng",
-        "price_range": "Tùy thuộc vào loại ghế ngồi, giường nằm khoang 4 hoặc khoang luxury",
-        "providers": ["Đường sắt Việt Nam (VNR)", "Chapa Express", "Laman Express"],
-        "notes": "Tàu dừng tại Ga Lào Cai, du khách cần đi thêm xe bus hoặc taxi khoảng 35km để lên thị trấn Sapa."
+        "duration": "8 tiếng (tàu đêm SP1/SP3) tới Ga Lào Cai, cộng thêm ~1 tiếng xe/limousine lên Sa Pa",
+        "price_range": "Khoang giường nằm chung (cabin chia sẻ) từ khoảng 900.000đ - 1.020.000đ/người một chiều tùy nhà tàu (Sapaly Express, Vic Sapa, Chapa Express); ghế ngồi/giường nằm phổ thông của Đường sắt Việt Nam giá thấp hơn (Nguồn: Traveloka)",
+        "providers": ["Đường sắt Việt Nam (VNR)", "Chapa Express", "Sapaly Express", "Vic Sapa"],
+        "notes": "Tàu dừng tại Ga Lào Cai, du khách cần đi thêm xe trung chuyển hoặc taxi khoảng 35km để lên thị trấn Sapa (có thể mua kèm vé trung chuyển)."
       },
       {
         "type": "car",

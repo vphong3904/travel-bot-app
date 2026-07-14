@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-005",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005 + nâng cấp độ sâu Vũng Tàu",
     "status": "partial",
-    "missing_fields": ["tour_operator_id"],
-    "data_sources": ["Klook"]
+    "missing_fields": ["tour_operator_id", "price chính xác tour tâm linh Núi Lớn - Núi Nhỏ"],
+    "data_sources": ["Klook", "Vietravel (07/2026)"]
   },
   "data": [
     {
@@ -31,6 +31,34 @@
       ],
       "price": null,
       "price_note": "// TODO: Khảo sát chính sách giá phòng resort đi kèm tour đoàn"
+    },
+    {
+      "id": "d5f1b6c8-0a7d-4e3c-9a5b-6d9f2e1c8a41",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Vũng Tàu - Sắc Màu Biển Xanh (Tour 1 ngày)",
+      "duration": "1 ngày",
+      "price": { "amount": 299000, "currency": "VND", "per": "person" },
+      "price_note": "Giá từ 299.000đ/khách, khởi hành Chủ Nhật hàng tuần (Nguồn: Vietravel)",
+      "group_size": null,
+      "description": "Tour trong ngày khởi hành từ TP.HCM, đưa khách tắm biển, tham quan các điểm nổi bật Vũng Tàu và ăn trưa hải sản, phù hợp khách muốn đổi gió cuối tuần không cần nghỉ đêm.",
+      "includes": ["xe đưa đón khứ hồi TP.HCM–Vũng Tàu", "hướng dẫn viên", "bảo hiểm du lịch"],
+      "excludes": ["ăn trưa (tùy gói)", "chi phí cá nhân", "vé tham quan riêng lẻ"],
+      "image_url": null,
+      "difficulty": "easy"
+    },
+    {
+      "id": "d5f1b6c8-0a7d-4e3c-9a5b-6d9f2e1c8a42",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Tour Tâm Linh Núi Lớn - Núi Nhỏ: Thích Ca Phật Đài - Linh Sơn Cổ Tự - Bạch Dinh",
+      "duration": "Nửa ngày",
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price_note": "// TODO: chưa có nguồn xác thực giá tour — cần bổ sung từ Klook/Traveloka/Vietravel",
+      "group_size": null,
+      "description": "Hành trình tham quan các điểm tâm linh — lịch sử tiêu biểu nằm trên núi Lớn và núi Nhỏ của Vũng Tàu: Thích Ca Phật Đài, chùa Linh Sơn Cổ Tự và di tích Bạch Dinh, phù hợp khách muốn tìm hiểu văn hóa — tôn giáo địa phương.",
+      "includes": ["xe đưa đón", "hướng dẫn viên"],
+      "excludes": ["ăn uống", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy"
     }
   ]
 }

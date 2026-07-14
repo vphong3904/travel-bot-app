@@ -14,6 +14,10 @@ class TripPlanItemCreate(BaseModel):
     end_time: Optional[time] = None
     estimated_cost: Optional[int] = None
     notes: Optional[str] = None
+    time_slot: Optional[str] = None
+    type: Optional[str] = None
+    ref_id: Optional[UUID] = None
+    image_url: Optional[str] = None
 
 
 class TripPlanItemUpdate(BaseModel):
@@ -26,6 +30,10 @@ class TripPlanItemUpdate(BaseModel):
     end_time: Optional[time] = None
     estimated_cost: Optional[int] = None
     notes: Optional[str] = None
+    time_slot: Optional[str] = None
+    type: Optional[str] = None
+    ref_id: Optional[UUID] = None
+    image_url: Optional[str] = None
 
 
 class TripPlanItemOut(BaseModel):
@@ -40,6 +48,10 @@ class TripPlanItemOut(BaseModel):
     end_time: Optional[time]
     estimated_cost: Optional[int]
     notes: Optional[str]
+    time_slot: Optional[str] = None
+    type: Optional[str] = None
+    ref_id: Optional[UUID] = None
+    image_url: Optional[str] = None
 
     model_config = {"from_attributes": True}
 
@@ -68,8 +80,11 @@ class TripPlanOut(BaseModel):
     id: UUID
     user_id: UUID
     destination_id: Optional[UUID]
+    destination_name: Optional[str] = None
+    destination_image: Optional[str] = None
     title: Optional[str]
     budget: Optional[int]
+    estimated_cost: Optional[int] = None
     start_date: Optional[date]
     end_date: Optional[date]
     travelers: int
@@ -87,6 +102,8 @@ class TripPlanListOut(BaseModel):
     id: UUID
     user_id: UUID
     destination_id: Optional[UUID]
+    destination_name: Optional[str] = None
+    destination_image: Optional[str] = None
     title: Optional[str]
     start_date: Optional[date]
     end_date: Optional[date]
@@ -122,6 +139,7 @@ class AiPlanItemIn(BaseModel):
     description: Optional[str] = None
     estimated_cost: Optional[int] = None
     notes: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class AiPlanDayIn(BaseModel):

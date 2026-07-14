@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-006",
     "status": "complete",
     "missing_fields": [],
-    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026)"]
+    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026, 07/2026)"]
   },
   "data": [
     {
@@ -40,6 +40,17 @@
       "description": "Sự kiện văn hóa du lịch thường niên tổ chức tái hiện không gian tuyết rơi nhân tạo, hội chợ thổ cẩm và biểu diễn nghệ thuật.",
       "annual": true,
       "highlight": false
+    },
+    {
+      "id": "019ef658-6c00-7604-8604-f12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Chợ tình Sa Pa",
+      "event_date": "Tối thứ 7 hàng tuần",
+      "location_text": "Khu vực Nhà thờ đá và quảng trường trung tâm thị trấn Sa Pa, Lào Cai",
+      "cost": "Miễn phí tham gia",
+      "description": "Phiên chợ đặc biệt gắn liền với văn hóa tìm bạn đời của các chàng trai, cô gái dân tộc vùng cao, nơi trai gái gặp gỡ, hát ống, thổi khèn, sáo mèo giao duyên; nay còn là điểm sinh hoạt văn hóa cộng đồng tối cuối tuần thu hút đông du khách.",
+      "annual": true,
+      "highlight": true
     }
   ]
 }

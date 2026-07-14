@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-004",
-    "status": "complete",
-    "missing_fields": [],
-    "data_sources": ["Foody (06/2026)", "Google Maps (06/2026)"]
+    "status": "partial",
+    "missing_fields": ["price_range cụ thể theo VND cho Aliana và Sapa Sky View — chưa có nguồn hợp lệ"],
+    "data_sources": ["Foody (06/2026)", "Google Maps (06/2026)", "TripAdvisor (07/2026)"]
   },
   "data": [
     {
@@ -48,6 +48,34 @@
       "description": "Địa chỉ thưởng thức thắng cố lâu đời bậc nhất tại Sapa, vị thắng cố đã được biến tấu nhẹ để du khách dễ ăn.",
       "tips": "If không quen ăn nội tạng, bạn có thể gọi lẩu ngựa thịt bắp để dễ thưởng thức hơn.",
       "rating": 4.4,
+      "must_try": false
+    },
+    {
+      "id": "019ef658-6c00-7404-8404-d12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Aliana Sapa Restaurant & Bar",
+      "type": "restaurant",
+      "address": "Trung tâm thị trấn Sa Pa, Lào Cai",
+      "hours": "Xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Ẩm thực Á - Âu", "Món Việt", "Cocktail"],
+      "description": "Nhà hàng kiêm quầy bar phong cách hiện đại giữa trung tâm Sa Pa, thực đơn kết hợp món Á và Âu, không gian ấm cúng phù hợp cả bữa ăn gia đình lẫn tụ tập bạn bè buổi tối.",
+      "tips": "Được đánh giá cao trên TripAdvisor, nên đặt bàn trước vào cuối tuần vì lượng khách đông.",
+      "rating": 4.9,
+      "must_try": false
+    },
+    {
+      "id": "019ef658-6c00-7405-8405-d12345678931",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Sapa Sky View Restaurant & Bar",
+      "type": "restaurant",
+      "address": "Tầng thượng khách sạn Châu Long, trung tâm Sa Pa, Lào Cai",
+      "hours": "Xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Món Việt", "Đồ nướng", "Cocktail ngắm hoàng hôn"],
+      "description": "Nhà hàng - quầy bar trên tầng thượng khách sạn Châu Long, được xem là một trong những nơi có view đẹp nhất Sa Pa, nhìn thẳng ra đỉnh Fansipan và toàn cảnh thị trấn.",
+      "tips": "Nên đến vào giờ hoàng hôn để có view đẹp nhất; đặt bàn trước để có chỗ ngồi sát lan can ngắm cảnh.",
+      "rating": 4.8,
       "must_try": false
     }
   ]

@@ -1,36 +1,82 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-004",
-    "status": "completed",
-    "missing_fields": [],
-    "data_sources": ["Ẩm thực Nam Bộ đô thị"]
+    "last_updated": "2026-07-13",
+    "agent_task": "T-004 + nâng cấp độ sâu Vũng Tàu",
+    "status": "partial",
+    "missing_fields": ["price_range Gỏi cá mai, Hải sản chợ đêm — cần xác nhận qua Foody/Google Maps"],
+    "data_sources": ["Ẩm thực Nam Bộ đô thị", "Foody.vn (tham khảo, 07/2026)"]
   },
   "data": [
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60201",
       "name": "Cơm tấm Sài Gòn",
       "type": "dish",
+      "category": "main_dish",
+      "where_to_eat": ["019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60303"],
       "description": "Hạt tấm nhuyễn dẻo thơm ăn kèm sườn heo nướng mật ong cháy cạnh mọng nước, chả trứng chưng đặc sắc, bì heo và nước mắm kẹo ngọt cay."
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60202",
       "name": "Bánh khọt Vũng Tàu",
       "type": "dish",
+      "category": "main_dish",
+      "where_to_eat": ["019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60301"],
       "description": "Bánh chiên khuôn ngập dầu giòn rụm bên ngoài mượt bên trong, nhân tôm tươi roi rói rắc bột tôm, cuốn xà lách cải bẹ xanh chấm mắm đu đủ."
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60203",
       "name": "Lẩu cá đuối Vũng Tàu",
       "type": "dish",
+      "category": "main_dish",
+      "where_to_eat": ["019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60302"],
       "description": "Thịt cá đuối sụn giòn sần sật ngọt lịm, nấu trong nước lẩu măng chua cay nồng ấm, nhúng kèm rau muống rau chuối bào cực bắt mồi."
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60204",
       "name": "Bánh mì Huỳnh Hoa Sài Gòn",
       "type": "specialty",
+      "category": "specialty",
       "description": "Bánh mì ổ siêu khủng kẹp ngập tràn các tầng chả lụa, dăm bông, thịt nguội, quét bơ trứng gà tươi béo ngậy và pate đặc chế siêu thơm."
+    },
+    {
+      "id": "c4f0a5b7-9e6c-4d2b-8f4a-5c8e1d0b7f31",
+      "name": "Bánh canh ghẹ Long Hương",
+      "local_name": "Bánh canh Long Hương",
+      "type": "dish",
+      "category": "main_dish",
+      "where_to_eat": ["b3e9f4a6-8d5b-4c1a-9e3f-4b7d0c9a6e22"],
+      "description": "Món bánh canh đặc sản Vũng Tàu với nước dùng ninh xương kết hợp hải sản tươi cho vị ngọt thanh tự nhiên, sợi bánh canh làm từ bột năng dai, ăn kèm ghẹ, chả cá hoặc giò heo.",
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "bánh canh", "vũng tàu"]
+    },
+    {
+      "id": "c4f0a5b7-9e6c-4d2b-8f4a-5c8e1d0b7f32",
+      "name": "Gỏi cá mai",
+      "local_name": "Gỏi cá mai Vũng Tàu",
+      "type": "dish",
+      "category": "specialty",
+      "where_to_eat": ["Các quán chuyên gỏi cá khu vực Bãi Trước/Bãi Dâu, TP. Vũng Tàu (xem restaurants.json)"],
+      "description": "Cá mai — loài cá nhỏ vùng biển Bà Rịa - Vũng Tàu, không tanh — được lóc xương, thái lát mỏng, trộn cùng nước sốt chua cay, cuốn bánh tráng với rau thơm, xoài xanh, khế chua, đậu phộng rang.",
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "gỏi cá", "hải sản", "vũng tàu"]
+    },
+    {
+      "id": "c4f0a5b7-9e6c-4d2b-8f4a-5c8e1d0b7f33",
+      "name": "Hải sản nướng chợ đêm Vũng Tàu",
+      "local_name": "Hải sản chợ đêm",
+      "type": "dish",
+      "category": "specialty",
+      "where_to_eat": ["Chợ đêm Vũng Tàu, khu vực ngã ba Nguyễn Biểu – Đào Duy Từ (xem shopping.json)"],
+      "description": "Các món hải sản nướng/hấp bình dân giá rẻ tại chợ đêm: bạch tuộc nướng, hàu nướng mỡ hành, ốc các loại, tôm hấp bia, ghẹ hấp — đặc trưng ẩm thực đường phố về đêm của Vũng Tàu.",
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc sản", "hải sản", "ăn đêm", "vũng tàu"]
     }
   ]
 }

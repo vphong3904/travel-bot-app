@@ -10,6 +10,7 @@ import '../../widgets/common_widgets.dart';
 import '../../widgets/loading_state_widgets.dart';
 import '../auth/login_register_screen.dart';
 import '../trip/ai_planner_screen.dart';
+import '../trip_detail/trip_details_screen.dart';
 
 class SavedTripsScreen extends StatefulWidget {
   /// Khi nhúng làm tab trong Trip hub → chỉ render body, không có Scaffold/AppBar.
@@ -200,58 +201,86 @@ class _SavedTripsScreenState extends State<SavedTripsScreen> {
     final status = (t['status'] ?? '').toString();
     final aiGen = t['ai_generated'] == true;
     final travelers = t['travelers'] ?? 1;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.map_outlined, color: AppColors.primary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    maxLines: 2, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Row(children: [
-                  Icon(Icons.group_outlined, size: 12, color: AppColors.muted),
-                  const SizedBox(width: 3),
-                  Text('$travelers người',
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted)),
-                  if (aiGen) ...[
-                    const SizedBox(width: 8),
-                    const Icon(Icons.auto_awesome, size: 12, color: AppColors.secondary),
-                    const SizedBox(width: 2),
-                    const Text('AI', style: TextStyle(fontSize: 11, color: AppColors.secondary)),
-                  ],
-                  if (status.isNotEmpty) ...[
-                    const SizedBox(width: 8),
-                    Text(status, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
-                  ],
-                ]),
-              ],
+    final image = t['destination_image']?.toString();
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: () => _openDetail(id),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade100),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: (image != null && image.isNotEmpty)
+                  ? Image.network(image, width: 48, height: 48, fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => _tripIconFallback())
+                  : _tripIconFallback(),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.muted, size: 20),
-            onPressed: () => _confirmDelete(id, title),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      maxLines: 2, overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 4),
+                  Row(children: [
+                    Icon(Icons.group_outlined, size: 12, color: AppColors.muted),
+                    const SizedBox(width: 3),
+                    Text('$travelers người',
+                        style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                    if (aiGen) ...[
+                      const SizedBox(width: 8),
+                      const Icon(Icons.auto_awesome, size: 12, color: AppColors.secondary),
+                      const SizedBox(width: 2),
+                      const Text('AI', style: TextStyle(fontSize: 11, color: AppColors.secondary)),
+                    ],
+                    if (status.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Text(status, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                    ],
+                  ]),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: AppColors.muted, size: 20),
+              onPressed: () => _confirmDelete(id, title),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _tripIconFallback() => Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(12)),
+        child: const Icon(Icons.map_outlined, color: AppColors.primary),
+      );
+
+  Future<void> _openDetail(String id) async {
+    final s = context.read<AppState>();
+    try {
+      final trip = await _api(s).getTrip(id);
+      if (!mounted) return;
+      await Navigator.push(context,
+          MaterialPageRoute(builder: (_) => TripDetailsScreen(savedTrip: trip)));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Lỗi tải chuyến đi: ${friendlyError(e)}')));
+    }
   }
 
   void _confirmDelete(String id, String title) {

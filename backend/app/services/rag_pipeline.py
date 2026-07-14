@@ -84,10 +84,15 @@ def _clean_faq(text: str) -> str:
     return text.strip()
 
 
-# [OPT-2.3] Cross-encoder rerank (bge-reranker-v2-m3, 568M) tốn ~7s/query khi
-# chạy cùng bge-m3 trên GPU 6GB (tranh VRAM) — phá vỡ mục tiêu <2s. RRF fusion
-# (Qdrant semantic + PG keyword) đã cho thứ hạng tốt, structured DB lại đứng đầu
-# sources, nên TẮT rerank mặc định. Bật lại qua RAG_RERANK=1 nếu có GPU mạnh.
+# [OPT-2.3] Cross-encoder rerank (bge-reranker-v2-m3, 568M). Ước tính cũ
+# "~7s/query khi chạy cùng bge-m3 trên GPU 6GB" — đo lại 2026-07-14 trên đúng
+# GPU 6GB (RTX 3060 Laptop) thì load model lazy lần đầu ~40s (one-time, cache
+# lại), còn rerank 15 candidate/query (đúng rrf_top_k thật) chỉ ~0.03-0.25s
+# khi đo ĐỘC LẬP (không chạy song song embedding thật) — nhanh hơn nhiều so
+# với ước tính cũ. CHƯA đo dưới tải thật (rerank chạy đồng thời với bge-m3
+# embedding trong 1 request chat thật, tranh VRAM) nên vẫn bật qua flag để dễ
+# tắt lại nếu latency thực tế trong app tệ hơn benchmark cô lập này.
+# Bật qua RAG_RERANK=1, tắt lại bằng RAG_RERANK=0 (hoặc bỏ biến, mặc định 0).
 _RERANK_ENABLED: bool = os.getenv("RAG_RERANK", "0") == "1"
 
 

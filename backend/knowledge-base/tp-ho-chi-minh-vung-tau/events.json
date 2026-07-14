@@ -1,24 +1,48 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-006",
-    "status": "completed",
-    "missing_fields": [],
-    "data_sources": ["Cổng văn hóa TP.HCM & Vũng Tàu"]
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006 + nâng cấp độ sâu Vũng Tàu",
+    "status": "partial",
+    "missing_fields": ["cost các sự kiện — chưa xác nhận vé/chi phí tham gia", "lịch tổ chức Festival Diều gần nhất (sự kiện không định kỳ hàng năm)"],
+    "data_sources": ["Cổng văn hóa TP.HCM & Vũng Tàu", "Báo Bà Rịa - Vũng Tàu Online (07/2026)"]
   },
   "data": [
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60501",
       "name": "Lễ hội Nghinh Ông Thắng Tam Vũng Tàu",
       "time_lunar": "Ngày 16 đến 19 tháng 8 Âm lịch",
-      "description": "Lễ hội dân gian lớn nhất vùng biển Bà Rịa - Vũng Tàu nhằm cầu quốc thái dân an, đánh bắt trúng mùa, diễu hành rước Ông Nam Hải hoành tráng trên biển."
+      "description": "Lễ hội dân gian lớn nhất vùng biển Bà Rịa - Vũng Tàu nhằm cầu quốc thái dân an, đánh bắt trúng mùa, diễu hành rước Ông Nam Hải hoành tráng trên biển. Được Bộ Văn hóa Thể thao và Du lịch công nhận là di sản văn hóa phi vật thể quốc gia."
     },
     {
       "id": "019f6f7a-8b9c-7d8e-a1b2-c3d4e5f60502",
       "name": "Đường hoa Nguyễn Huệ Tết Nguyên Đán Sài Gòn",
       "time_lunar": "28 tháng Chạp đến mùng 5 tháng Giêng Âm lịch",
       "description": "Sự kiện văn hóa biểu tượng Tết của người dân Sài Gòn với kiến trúc hoa cảnh linh vật tinh xảo trải dài phố bộ trung tâm."
+    },
+    {
+      "id": "e6a2c7d9-1b8e-4f4d-8b6c-7e0a3f2d9b51",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Festival Diều Quốc tế Vũng Tàu",
+      "event_date": "Tổ chức không định kỳ hàng năm (đã tổ chức nhiều lần từ 2009 đến 2016, thường vào khoảng tháng 3–4 hoặc cuối năm khi được tổ chức) — xác nhận lịch chính thức trước khi đến",
+      "location_text": "Khu du lịch Bãi Sau / Bãi Dâu, TP. Vũng Tàu",
+      "cost": null,
+      "description": "Lễ hội thả diều nghệ thuật quy tụ các đội diều trong nước và quốc tế, từng được tổ chức nhiều lần kể từ năm 2009 tại các bãi biển Vũng Tàu, thu hút đông đảo du khách bởi hàng trăm cánh diều tạo hình đầy màu sắc trên nền trời biển.",
+      "annual": false,
+      "highlight": true,
+      "source": "manual_curated"
+    },
+    {
+      "id": "e6a2c7d9-1b8e-4f4d-8b6c-7e0a3f2d9b52",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Lễ hội Dinh Cô (Long Hải)",
+      "event_date": "Ngày 10 đến 12 tháng 2 Âm lịch",
+      "location_text": "Thị trấn Long Hải, huyện Long Điền, tỉnh Bà Rịa - Vũng Tàu",
+      "cost": null,
+      "description": "Lễ hội cầu ngư lớn thứ hai sau Nghinh Ông Thắng Tam tại vùng biển Bà Rịa - Vũng Tàu, thờ Bà Cô (Long Hải Thần Nữ), gồm phần lễ rước kiệu ra biển và phần hội với nhiều hoạt động văn hóa dân gian, thu hút đông đảo ngư dân và du khách hành hương.",
+      "annual": true,
+      "highlight": false,
+      "source": "manual_curated"
     }
   ]
 }

@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-006",
     "status": "complete",
     "missing_fields": [],
-    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026)", "TripAdvisor (06/2026)"]
+    "data_sources": ["Vietnam Tourism: vietnamtourism.gov.vn (06/2026, 07/2026)", "TripAdvisor (06/2026, 07/2026)"]
   },
   "data": [
     {
@@ -51,6 +51,17 @@
       "opening_hours": "Tối thứ 7 hàng tuần — xác nhận trước khi đến",
       "price_range": "Rất rẻ, mang tính chất quà lưu niệm",
       "tips": "Chủ yếu ngắm văn hóa văn nghệ thổi khèn, mua vài món đồ lưu niệm nhỏ ủng hộ các em bé bản địa."
+    },
+    {
+      "id": "019ef658-6c00-7705-8705-a12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Phố đi bộ Sa Pa (khu Cầu Mây - Xuân Viên)",
+      "type": "street",
+      "items": ["Đồ nướng vỉa hè", "Quần áo giữ nhiệt", "Đồ lưu niệm handmade", "Cà phê, trà đường phố"],
+      "address": "Khu vực đường Cầu Mây - Xuân Viên, trung tâm thị trấn Sa Pa, Lào Cai",
+      "opening_hours": "Buổi tối hàng ngày — xác nhận trước khi đến",
+      "price_range": null,
+      "tips": "Tập trung nhiều quán đồ nướng và cà phê vỉa hè, thích hợp dạo bộ buổi tối sau khi tham quan nhà thờ Đá và chợ đêm; nên mặc ấm vì buổi tối Sa Pa khá lạnh."
     }
   ]
 }

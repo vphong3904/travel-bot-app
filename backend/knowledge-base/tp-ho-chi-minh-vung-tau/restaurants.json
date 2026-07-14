@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "tp-ho-chi-minh-vung-tau",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-004",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-004 + nâng cấp độ sâu Vũng Tàu",
     "status": "partial",
-    "missing_fields": ["average_cost"],
-    "data_sources": ["Foody", "Google Maps"]
+    "missing_fields": ["average_cost chính xác Bánh Khọt Cô Ba/Lẩu Cá Đuối Hoàng Minh", "rating TripAdvisor Gành Hào (trang bị chặn fetch 403, cần thử lại)"],
+    "data_sources": ["Foody", "Google Maps", "TripAdvisor (07/2026)"]
   },
   "data": [
     {
@@ -31,6 +31,34 @@
       "specialty_served": "Cơm tấm sườn bì chả khổng lồ đạt Michelin Selected",
       "average_cost": null,
       "price_note": "Xác nhận giá đĩa cơm sườn cọng trứ danh"
+    },
+    {
+      "id": "b3e9f4a6-8d5b-4c1a-9e3f-4b7d0c9a6e21",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Nhà hàng Hải sản Gành Hào",
+      "type": "restaurant",
+      "address": "03 Trần Phú, Phường 5, TP. Vũng Tàu (Gành Hào 1) và 09 Hạ Long, Phường 2, TP. Vũng Tàu (Gành Hào 2)",
+      "hours": "Thường 9:00–23:00 — xác nhận trước khi đến",
+      "price_range": "Món ăn 50.000–250.000đ; trung bình 300.000–1.650.000đ/người tùy loại hải sản (Nguồn: TripAdvisor)",
+      "specialties": ["cua rang me", "tôm hùm", "cá mú hấp", "ghẹ hấp bia", "hàu phô mai"],
+      "description": "Chuỗi nhà hàng hải sản lâu đời và nổi tiếng bậc nhất Vũng Tàu, có hệ thống bể chứa hải sản sống để khách tự chọn, sân thượng rộng view hoàng hôn biển.",
+      "tips": "Giờ cao điểm cuối tuần rất đông, nên đặt bàn trước; hỏi giá hải sản theo cân trước khi chọn món cao cấp như cua gạch, tôm hùm.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "b3e9f4a6-8d5b-4c1a-9e3f-4b7d0c9a6e22",
+      "city_id": "019eeda8-d830-73f1-b991-72f5bc08da31",
+      "name": "Bánh Canh Long Hương",
+      "type": "street_food",
+      "address": "Khu vực gần cổng chào thành phố, phường Long Hương/Long Toàn, TP. Vũng Tàu — xác nhận địa chỉ cụ thể qua Google Maps",
+      "hours": "7:00–22:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["bánh canh ghẹ", "bánh canh chả cá", "bánh canh giò heo"],
+      "description": "Quán bánh canh bình dân nổi tiếng với nước dùng ninh từ xương và hải sản tươi, sợi bánh canh làm từ bột năng dai đặc trưng — một trong những đặc sản ăn sáng/trưa quen thuộc của người Vũng Tàu.",
+      "tips": "Nên ăn vào buổi sáng hoặc trưa khi nước dùng còn nóng và giữ trọn vị ngọt đặc trưng.",
+      "rating": null,
+      "must_try": false
     }
   ]
 }

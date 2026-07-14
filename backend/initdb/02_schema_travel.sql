@@ -371,6 +371,9 @@ CREATE TABLE trip_plans (
     status         VARCHAR(20) DEFAULT 'draft'
                    CHECK (status IN ('draft','saved','completed')),
     ai_generated   BOOLEAN     DEFAULT FALSE,
+    -- Trước đây /trips/ai/confirm nhận estimated_cost nhưng bỏ trống khi lưu
+    -- → chuyến đi đã lưu không hiện lại được chi phí ước tính.
+    estimated_cost INT         CHECK (estimated_cost >= 0),
     created_at     TIMESTAMPTZ DEFAULT NOW(),
     updated_at     TIMESTAMPTZ DEFAULT NOW()
 );
@@ -390,7 +393,15 @@ CREATE TABLE trip_plan_items (
     end_time     TIME,
     CHECK (end_time IS NULL OR end_time >= start_time),
     estimated_cost INT       CHECK (estimated_cost >= 0),
-    notes        TEXT
+    notes        TEXT,
+    -- time_slot/type/ref_id/image_url: trước đây bị bỏ trống khi lưu
+    -- (/trips/ai/confirm) nên mọi ảnh + buổi trong ngày + loại mục (khách
+    -- sạn/quán ăn/điểm) mất vĩnh viễn sau khi lưu. ref_id KHÔNG đặt FK vì có
+    -- thể trỏ hotels/restaurants/locations tuỳ `type`.
+    time_slot    VARCHAR(20),
+    type         VARCHAR(20) DEFAULT 'free',
+    ref_id       UUID,
+    image_url    TEXT
 );
 CREATE INDEX idx_trip_items_plan ON trip_plan_items(trip_plan_id, day_number);
 

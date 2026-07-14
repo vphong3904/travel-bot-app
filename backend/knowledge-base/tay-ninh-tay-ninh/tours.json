@@ -1,53 +1,75 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-005",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005 (nâng cấp 07/2026)",
     "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng title/highlights, thiếu field 'name' nên KHÔNG import được vào bảng tours — đã sửa). Giữ nguyên id và nội dung cốt lõi 3 tour cũ, bổ sung 1 tour mới có giá thật.",
     "missing_fields": [
-      "tour_operator_details"
+      "price 2 tour cũ (Hồ Dầu Tiếng, Trung ương Cục) — chưa xác nhận được số VND cụ thể từ nguồn cho phép"
     ],
     "data_sources": [
-      "Klook",
-      "Traveloka"
+      "Vietravel / travel.com.vn (07/2026)",
+      "Saigon Tourist / saigontourist.net (07/2026)",
+      "Traveloka (07/2026)"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60401",
-      "title": "Tour Hành Hương Tâm Linh Núi Bà Đen & Tòa Thánh Cao Đài 1 Ngày",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Tour Hành Hương Tâm Linh Núi Bà Đen & Tòa Thánh Cao Đài 1 Ngày",
       "duration": "1 ngày",
-      "highlights": [
-        "Chinh phục đỉnh núi Bà Đen bằng cáp treo",
-        "Chiêm bái tượng Phật Bà bằng đồng cao nhất Châu Á",
-        "Xem lễ cúng chính ngọ tại Tòa Thánh"
-      ],
-      "price": null,
-      "price_note": "// TODO: Tham khảo báo giá tour ghép đoàn tại klook.com"
+      "price": { "amount": 999000, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour trong ngày khởi hành từ TP.HCM, chinh phục đỉnh núi Bà Đen bằng cáp treo, chiêm bái tượng Phật Bà bằng đồng cao nhất châu Á và tham quan Tòa Thánh Cao Đài, xem lễ chính ngọ.",
+      "includes": ["xe đưa đón khứ hồi TP.HCM", "vé cáp treo", "hướng dẫn viên"],
+      "excludes": ["ăn uống", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "Giá tham khảo tour 'Tây Ninh: Vùng Đất Địa Linh - Núi Bà Đen', khởi hành TP.HCM, trong ngày (Nguồn: Vietravel)"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60402",
-      "title": "Tour Cắm Trại Hoang Sơ Hồ Dầu Tiếng - Ngắm Hoàng Hôn 2N1Đ",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Tour Cắm Trại Hoang Sơ Hồ Dầu Tiếng - Ngắm Hoàng Hôn 2N1Đ",
       "duration": "2 ngày 1 đêm",
-      "highlights": [
-        "Cắm trại ven bờ hồ nhân tạo lớn nhất Việt Nam",
-        "Tiệc BBQ tối ngoài trời",
-        "Chèo sup đón bình minh"
-      ],
-      "price": null,
-      "price_note": "// TODO: Xác định chi phí trọn gói đơn vị tổ chức trekking"
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Cắm trại ven bờ hồ nhân tạo lớn nhất Đông Nam Á, tiệc BBQ tối ngoài trời, chèo SUP đón bình minh.",
+      "includes": ["lều trại", "tiệc BBQ tối"],
+      "excludes": ["di chuyển đến hồ", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa tìm được đơn vị tổ chức tour trọn gói trên Traveloka/Vietravel/Saigon Tourist — hiện tại hồ Dầu Tiếng chủ yếu có dịch vụ glamping/camping tư nhân lẻ (xem destinations.json)"
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60403",
-      "title": "Tour Về Nguồn Di Tích Lịch Sử Trung Ương Cục Miền Nam",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Tour Về Nguồn Di Tích Lịch Sử Trung Ương Cục Miền Nam",
       "duration": "1 ngày",
-      "highlights": [
-        "Khám phá khu căn cứ rừng nguyên sinh",
-        "Tìm hiểu lịch sử kháng chiến",
-        "Thưởng thức cơm hoàng cầm"
-      ],
-      "price": null,
-      "price_note": "// TODO: Xác thực dịch vụ lữ hành nội tỉnh"
+      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Khám phá khu căn cứ rừng nguyên sinh, tìm hiểu lịch sử kháng chiến tại Di tích Quốc gia đặc biệt Căn cứ Trung ương Cục Miền Nam, thưởng thức cơm hoàng cầm.",
+      "includes": ["hướng dẫn viên", "thuyết minh tại di tích"],
+      "excludes": ["ăn uống", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "// TODO: chưa xác thực dịch vụ lữ hành nội tỉnh cụ thể từ nguồn thuộc danh sách cho phép"
+    },
+    {
+      "id": "c80873c0-db26-4a91-bcc5-45aa25b4c0ef",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Tour Tây Ninh 2N1Đ: Tòa Thánh - Vườn Dâu Tằm Ba Phong - Cáp Treo Sun World Bà Đen",
+      "duration": "2 ngày 1 đêm",
+      "price": { "amount": 2779000, "currency": "VND", "per": "person" },
+      "group_size": "Tối thiểu 10 khách",
+      "description": "Tour 2 ngày khởi hành từ TP.HCM: ngày 1 tham quan Tòa Thánh Tây Ninh, Chùa Gò Kén và vườn dâu tằm Ba Phong (hái trái, tham quan mô hình nông trại); ngày 2 trải nghiệm cáp treo Sun World Bà Đen hiện đại, ngắm toàn cảnh núi Bà Đen từ trên cao và ghé Bà Đen Farm.",
+      "includes": ["xe đưa đón khứ hồi TP.HCM", "khách sạn 1 đêm", "vé cáp treo Sun World Bà Đen", "các bữa ăn theo chương trình", "hướng dẫn viên"],
+      "excludes": ["chi phí cá nhân", "đồ uống ngoài chương trình"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "Nguồn: Saigon Tourist (tour mã STN084, khởi hành TP.HCM, tối thiểu 10 khách)"
     }
   ]
 }

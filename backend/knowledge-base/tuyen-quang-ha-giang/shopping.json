@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-006",
+    "status": "partial",
+    "partial_note": "4 địa điểm mua sắm; price_range/opening_hours chính xác chưa xác minh đủ nguồn cho phép.",
+    "missing_fields": [
+      "price_range — giá mật ong bạc hà dao động 450.000–1.000.000đ/lít theo nhiều nguồn nhưng không thuộc danh sách nguồn cho phép nên để null",
+      "opening_hours chính xác — cần xác nhận chéo qua Google Maps"
+    ],
+    "data_sources": [
+      "manual_curated",
+      "Vietravel (07/2026 — lịch họp chợ vùng cao)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f16a4115-79a4-4dbd-8d1e-11d2effa4b74",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Chợ trung tâm thành phố Hà Giang",
+      "type": "market",
+      "items": ["nông sản địa phương", "thổ cẩm", "đặc sản khô", "đồ lưu niệm"],
+      "address": "Trung tâm thành phố Hà Giang, tỉnh Hà Giang",
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Phù hợp mua đặc sản đóng gói sẵn (miến dong, chè shan tuyết, mật ong) trước khi lên cao nguyên đá; nên hỏi giá và mặc cả nhẹ nhàng."
+    },
+    {
+      "id": "be6d864c-bf70-43be-bfdb-281ba6ccdfd6",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Chợ phiên Mèo Vạc",
+      "type": "market",
+      "items": ["thổ cẩm H'Mông", "nông sản vùng cao", "gia súc", "ẩm thực chợ phiên (thắng cố, rượu ngô)"],
+      "address": "Thị trấn Mèo Vạc, huyện Mèo Vạc, Hà Giang",
+      "opening_hours": "Chủ nhật hàng tuần, họp từ khoảng 4–5 giờ sáng",
+      "price_range": null,
+      "tips": "Đến thật sớm (trước 7h) để thấy chợ nguyên bản và đông vui nhất; đây cũng là nơi tốt để thưởng thức ẩm thực địa phương giá rẻ."
+    },
+    {
+      "id": "44c630dc-93c0-4f25-b184-5de74fdd2245",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Phố cổ Đồng Văn — khu bán thổ cẩm & lưu niệm",
+      "type": "street",
+      "items": ["thổ cẩm thêu tay", "khèn Mông", "vòng bạc dân tộc", "đồ lưu niệm cao nguyên đá"],
+      "address": "Khu phố cổ, thị trấn Đồng Văn, huyện Đồng Văn, Hà Giang",
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Buổi tối cuối tuần phố cổ lên đèn lồng, các gian hàng nhỏ bán đồ lưu niệm và thổ cẩm hoạt động nhộn nhịp hơn ban ngày."
+    },
+    {
+      "id": "b0f9ad91-292d-4f74-b036-6f5dd72699b0",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Mật ong bạc hà Cao nguyên đá Đồng Văn",
+      "type": "specialty_store",
+      "items": ["mật ong bạc hà nguyên chất (chỉ thu hoạch mùa hoa bạc hà tháng 10–12)"],
+      "address": "Các cửa hàng đặc sản tại Đồng Văn, Mèo Vạc và dọc quốc lộ 4C",
+      "opening_hours": null,
+      "price_range": null,
+      "tips": "Mật ong bạc hà thật chỉ thu hoạch đúng mùa hoa bạc hà nở (tháng 10–12), nên mua tại các cơ sở/hợp tác xã có tem truy xuất nguồn gốc để tránh hàng pha trộn; giá dao động khá lớn tùy chất lượng, nên hỏi kỹ trước khi mua số lượng lớn."
+    }
+  ]
+}

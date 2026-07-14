@@ -19,6 +19,9 @@ class TripPlan(Base):
     travel_type = Column(String(50))
     status = Column(String(20), default="draft")
     ai_generated = Column(Boolean, default=False)
+    # Trước đây /trips/ai/confirm bỏ trống cột này khi lưu — chi phí ước
+    # tính mất luôn, xem lại chuyến đi không hiện được.
+    estimated_cost = Column(Integer)
     created_at = Column(TIMESTAMP(timezone=True))
     updated_at = Column(TIMESTAMP(timezone=True))
 
@@ -39,5 +42,12 @@ class TripPlanItem(Base):
     end_time = Column(Time)
     estimated_cost = Column(Integer)
     notes = Column(Text)
+    # Trước đây thiếu 4 cột này nên ảnh + buổi trong ngày + loại mục mất
+    # vĩnh viễn khi lưu (/trips/ai/confirm). ref_id KHÔNG FK vì tuỳ `type`
+    # có thể trỏ hotels/restaurants/locations.
+    time_slot = Column(String(20))
+    type = Column(String(20), default="free")
+    ref_id = Column(UUID(as_uuid=True), nullable=True)
+    image_url = Column(Text)
 
     trip = relationship("TripPlan", back_populates="items")

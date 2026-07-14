@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "Giá vé xe khách Hà Nội – Hà Giang có nguồn Traveloka; giá thuê xe máy/xe ôm/xe điện chưa xác minh đủ nguồn cho phép nên để null.",
+    "missing_fields": [
+      "price_info thuê xe máy — nhiều nguồn ghi 180.000–550.000đ/ngày nhưng không thuộc danh sách nguồn cho phép",
+      "price_info xe ôm/xe điện nội đô — chưa xác minh"
+    ],
+    "data_sources": [
+      "Traveloka (07/2026)"
+    ]
+  },
+  "data": {
+    "getting_there": [
+      {
+        "type": "bus",
+        "from": "Hà Nội (bến xe Mỹ Đình/Yên Nghĩa)",
+        "duration": "Hơn 6 giờ tùy nhà xe và tình trạng giao thông",
+        "price_range": "Từ 250.000 VND/vé (Nguồn: Traveloka)",
+        "providers": ["Bằng Phấn", "Quang Nghị", "Mạnh Quân", "các hãng limousine tuyến Hà Nội – Hà Giang (~31 nhà xe)"],
+        "notes": "Có cả xe limousine (ghế/giường VIP, wifi, nước uống), xe giường nằm 16 chỗ và 45 chỗ; nên đặt vé sớm vào mùa hoa tam giác mạch (tháng 10–11) và dịp lễ tết."
+      },
+      {
+        "type": "motorbike",
+        "from": "Hà Nội",
+        "duration": "Khoảng 6–7 giờ chạy xe máy (~300km) — thường chia làm điểm nghỉ tại Tuyên Quang hoặc Hà Giang trước khi vào cao nguyên đá",
+        "price_range": null,
+        "providers": [],
+        "notes": "Nhiều phượt thủ chọn tự chạy xe máy từ Hà Nội hoặc gửi xe theo xe khách rồi thuê xe máy tại TP. Hà Giang để bắt đầu cung Loop."
+      },
+      {
+        "type": "car",
+        "from": "Hà Nội",
+        "duration": "Khoảng 5,5–6,5 giờ lái xe ô tô riêng (~300km) qua QL2",
+        "price_range": null,
+        "providers": [],
+        "notes": "Không có sân bay tại Hà Giang; đây là điểm đến duy nhất tiếp cận bằng đường bộ (không có tuyến bay hay tàu hỏa trực tiếp)."
+      }
+    ],
+    "getting_around": [
+      {
+        "type": "motorbike_rental",
+        "price_info": null,
+        "notes": "Phương tiện phổ biến và linh hoạt nhất để đi cung đường Hà Giang Loop; nhiều cửa hàng cho thuê tại TP. Hà Giang và các thị trấn Đồng Văn, Mèo Vạc. Nên kiểm tra kỹ phanh/lốp trước khi nhận xe vì đường đèo dốc nhiều khúc cua.",
+        "recommended": true
+      },
+      {
+        "type": "xe_om",
+        "price_info": null,
+        "notes": "Phù hợp cho khách không tự lái xe máy được nhưng vẫn muốn trải nghiệm cung đường đèo (dịch vụ \"easy rider\" — có tài xế địa phương chở).",
+        "recommended": true
+      },
+      {
+        "type": "car_rental",
+        "price_info": null,
+        "notes": "Phù hợp nhóm gia đình/đoàn không quen địa hình đèo núi; nên thuê xe kèm lái xe quen đường vì cung đường nhiều đoạn cua tay áo nguy hiểm.",
+        "recommended": false
+      },
+      {
+        "type": "walking",
+        "price_info": null,
+        "notes": "Phù hợp khám phá phố cổ Đồng Văn và các bản làng gần trung tâm thị trấn.",
+        "recommended": true
+      }
+    ]
+  }
+}

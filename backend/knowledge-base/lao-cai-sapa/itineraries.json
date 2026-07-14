@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-013",
     "status": "complete",
     "missing_fields": [],
-    "data_sources": ["destinations.json", "hotels.json", "restaurants.json"]
+    "data_sources": ["destinations.json", "hotels.json", "restaurants.json", "tours.json"]
   },
   "data": [
     {
@@ -187,6 +187,105 @@
       ],
       "total_estimated_cost": { "amount": null, "currency": "VND" },
       "tags": ["nghỉ dưỡng", "chữa lành", "view đẹp"]
+    },
+    {
+      "id": "lao-cai-sapa-2n1d-trekking-ban-lang",
+      "title": "Trekking Bản Làng Cát Cát - Tả Van 2 Ngày 1 Đêm",
+      "duration_days": 2,
+      "duration_nights": 1,
+      "audience": "friends_group",
+      "travel_style": "trekking",
+      "estimated_budget": { "low": 1800000, "high": 3200000, "currency": "VND" },
+      "best_for_season": ["Mùa xuân", "Mùa thu"],
+      "summary": "Lịch trình 2N1Đ đi bộ xuyên bản làng dành cho người thích vận động nhẹ, trải nghiệm văn hóa H'Mông, Giáy và ngủ homestay giữa thung lũng Mường Hoa.",
+      "days": [
+        {
+          "day_number": 1,
+          "theme": "Bản Cát Cát & Khởi Hành Trekking Vào Thung Lũng",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:00",
+              "activity": "Xuất phát từ trung tâm Sa Pa, đi bộ tham quan Bản Cát Cát, tìm hiểu nghề dệt vải, chạm bạc truyền thống H'Mông.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7202-8202-b12345678903",
+                "name": "Bản Cát Cát"
+              },
+              "estimated_cost": 150000,
+              "notes": "Vé vào cổng 150.000đ/người lớn (Nguồn: TripAdvisor)."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:00",
+              "activity": "Ăn trưa tại Nhà hàng A Phủ trước khi tiếp tục hành trình trekking.",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef658-6c00-7401-8401-d12345678911",
+                "name": "Nhà hàng A Phủ"
+              },
+              "estimated_cost": null,
+              "notes": "Nạp năng lượng trước buổi chiều đi bộ dài."
+            },
+            {
+              "time_of_day": "afternoon",
+              "start_time": "13:30",
+              "activity": "Trekking xuyên ruộng bậc thang thung lũng Mường Hoa tới Bản Tả Van, băng qua Cầu Mây.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7206-8206-b12345678930",
+                "name": "Bản Tả Van"
+              },
+              "estimated_cost": null,
+              "notes": "Đường đi có đoạn dốc đá, nên mang giày trekking và nước uống."
+            },
+            {
+              "time_of_day": "evening",
+              "start_time": "18:30",
+              "activity": "Nghỉ đêm tại homestay bản làng, ăn tối cùng gia đình chủ nhà, giao lưu văn hóa địa phương.",
+              "location_ref": {
+                "type": "hotel",
+                "id": "019ef658-6c00-7304-8304-c12345678910",
+                "name": "Mega Homestay Sapa"
+              },
+              "estimated_cost": null,
+              "notes": "Có thể đặt homestay ngay tại Tả Van/Lao Chải để rút ngắn quãng đường ngày 1."
+            }
+          ]
+        },
+        {
+          "day_number": 2,
+          "theme": "Trở Về Thị Trấn & Thưởng Thức Đặc Sản",
+          "blocks": [
+            {
+              "time_of_day": "morning",
+              "start_time": "08:30",
+              "activity": "Đi bộ ngắm cảnh sáng sớm khi sương còn giăng trên ruộng bậc thang, sau đó xe đón về trung tâm Sa Pa.",
+              "location_ref": {
+                "type": "destination",
+                "id": "019ef658-6c00-7203-8203-b12345678904",
+                "name": "Thung lũng Mường Hoa"
+              },
+              "estimated_cost": null,
+              "notes": "Thời điểm đẹp nhất để chụp ảnh là trước 9h sáng."
+            },
+            {
+              "time_of_day": "noon",
+              "start_time": "12:30",
+              "activity": "Ăn trưa chia tay với thắng cố và rượu ngô bản địa tại Thắng Cố A Quỳnh trước khi kết thúc chuyến đi.",
+              "location_ref": {
+                "type": "restaurant",
+                "id": "019ef658-6c00-7403-8403-d12345678913",
+                "name": "Thắng Cố A Quỳnh"
+              },
+              "estimated_cost": null,
+              "notes": "Món ăn phù hợp để thử trải nghiệm ẩm thực bản địa đúng chất trước khi rời Sa Pa."
+            }
+          ]
+        }
+      ],
+      "total_estimated_cost": { "amount": null, "currency": "VND" },
+      "tags": ["trekking", "bản làng", "tiết kiệm"]
     }
   ]
 }

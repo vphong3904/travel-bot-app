@@ -1,41 +1,90 @@
 {
   "_meta": {
     "city": "tay-ninh-tay-ninh",
-    "last_updated": "2026-06-25",
-    "agent_task": "T-004",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-004 (nâng cấp 07/2026)",
     "status": "partial",
+    "partial_note": "Chuẩn hoá field theo docs/KB_CITY_FORMAT.md (bản cũ dùng area/specialty_served/average_cost không khớp schema address/specialties/price_range — đã sửa để import đúng vào bảng restaurants). Giữ nguyên id và tên 3 quán cũ, bổ sung 2 quán mới bánh tráng phơi sương Trảng Bàng.",
     "missing_fields": [
-      "average_cost"
+      "price_range chính xác — TripAdvisor có rất ít review cho quán ăn địa phương tại Tây Ninh, chưa xác nhận được số VND cụ thể",
+      "rating — chưa có nguồn xác thực"
     ],
     "data_sources": [
-      "Foody",
-      "Google Maps"
+      "Foody.vn (chéo kiểm địa chỉ, 07/2026)",
+      "Google Maps (chéo kiểm địa chỉ/giờ mở cửa, 07/2026)",
+      "TripAdvisor (07/2026)"
     ]
   },
   "data": [
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60301",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Bánh canh Trảng Bàng Năm Dung",
-      "area": "Huyện Trảng Bàng",
-      "specialty_served": "Bánh canh & Bánh tráng phơi sương",
-      "average_cost": null,
-      "price_note": "// TODO: Xác nhận menu 2026 từ Foody"
+      "type": "restaurant",
+      "address": "Huyện Trảng Bàng, tỉnh Tây Ninh",
+      "hours": null,
+      "price_range": null,
+      "specialties": ["Bánh canh giò heo", "Bánh tráng phơi sương cuốn thịt luộc"],
+      "description": "Một trong những quán bánh tráng phơi sương – bánh canh Trảng Bàng lâu năm được nhiều thực khách lựa chọn, phục vụ đúng chuẩn vị gốc của vùng đất Trảng Bàng.",
+      "tips": "Kết hợp gọi cả bánh canh và đĩa bánh tráng cuốn thịt luộc rau rừng để thưởng thức trọn vẹn đặc sản vùng này.",
+      "rating": null,
+      "must_try": true
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60302",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Bò Tơ Năm Sánh",
-      "area": "TP. Tây Ninh",
-      "specialty_served": "Bò tơ nướng, lẩu bò",
-      "average_cost": null,
-      "price_note": "// TODO: Kiểm tra giá theo set menu hiện tại"
+      "type": "restaurant",
+      "address": "Quốc lộ 22B, khu phố Hiệp Trường, phường Hiệp Tân (thị xã Hòa Thành cũ), tỉnh Tây Ninh",
+      "hours": null,
+      "price_range": null,
+      "specialties": ["Bò tơ nướng tảng", "Bò tơ cuốn bánh tráng rau rừng", "Lẩu bò tơ"],
+      "description": "Thương hiệu Bò Tơ Tây Ninh hình thành hơn 15 năm, nay phát triển thành chuỗi nhà hàng tại nhiều tỉnh thành; chi nhánh Tây Ninh có sức chứa tới 500 khách trên diện tích hơn 10.000m², phù hợp cả gia đình và tổ chức tiệc.",
+      "tips": "Món bò tơ cuốn bánh tráng chấm mắm nêm là món gọi nhiều nhất; nên đặt bàn trước vào cuối tuần vì quán khá đông.",
+      "rating": null,
+      "must_try": true
     },
     {
       "id": "019f1a2b-3c4d-7e5f-a1b2-c3d4e5f60303",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
       "name": "Nhà hàng Lâm Viên (KDL Núi Bà)",
-      "area": "Khu vực Núi Bà Đen",
-      "specialty_served": "Ốc núi, thằn lằn núi, gà nướng",
-      "average_cost": null,
-      "price_note": "// TODO: Đối chiếu báo giá thực tế của KDL"
+      "type": "restaurant",
+      "address": "Khu vực núi Bà Đen, TP. Tây Ninh",
+      "hours": null,
+      "price_range": null,
+      "specialties": ["Ốc núi", "Thằn lằn núi", "Gà nướng"],
+      "description": "Nhà hàng phục vụ các món đặc sản theo mùa của vùng núi Bà Đen, phù hợp dừng chân ăn trưa sau khi tham quan núi.",
+      "tips": "Ốc núi chỉ có nhiều vào mùa mưa (tháng 5–10), nên hỏi trước nếu muốn thưởng thức đúng mùa.",
+      "rating": null,
+      "must_try": false
+    },
+    {
+      "id": "6ecdd0db-d019-4400-a0c4-701670ae6184",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Quán bánh tráng phơi sương Năm Hồng",
+      "type": "restaurant",
+      "address": "Đường Nguyễn Văn Rốp, thị xã Trảng Bàng, tỉnh Tây Ninh",
+      "hours": null,
+      "price_range": null,
+      "specialties": ["Bánh tráng phơi sương cuốn thịt luộc", "Rau rừng Trảng Bàng"],
+      "description": "Quán bánh tráng phơi sương được nhiều thực khách tại Trảng Bàng biết đến, phục vụ bánh tráng cuốn thịt luộc kèm đầy đủ các loại rau rừng đặc trưng.",
+      "tips": "Có bán bánh tráng phơi sương đóng gói mang về làm quà.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "9da52e06-35d4-4aa6-9df3-f6cb66766175",
+      "city_id": "019eeda8-d830-7a83-8b89-527da5de9455",
+      "name": "Quán 7 Bánh",
+      "type": "restaurant",
+      "address": "Thị xã Trảng Bàng, tỉnh Tây Ninh",
+      "hours": null,
+      "price_range": null,
+      "specialties": ["Bánh canh Trảng Bàng", "Bánh tráng phơi sương cuốn thịt"],
+      "description": "Quán ăn nổi tiếng tại Trảng Bàng với món bánh canh hai tô đặc trưng, đồng thời phục vụ bánh tráng phơi sương cuốn thịt được nhiều thực khách tìm đến.",
+      "tips": "Gọi món bánh canh trước rồi dùng kèm bánh tráng cuốn thịt để đổi vị.",
+      "rating": null,
+      "must_try": false
     }
   ]
 }

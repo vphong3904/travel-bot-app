@@ -1,11 +1,11 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-24",
+    "last_updated": "2026-07-13",
     "agent_task": "T-005",
-    "status": "complete",
-    "missing_fields": ["price.amount"],
-    "data_sources": ["Klook Việt Nam (06/2026)", "Traveloka (06/2026)"]
+    "status": "partial",
+    "missing_fields": ["price.amount tour trekking Lao Chải-Tả Van và tour Tả Phìn — sản phẩm Traveloka đang hết vé/không hiện giá tại thời điểm tra cứu"],
+    "data_sources": ["Traveloka (07/2026)"]
   },
   "data": [
     {
@@ -25,12 +25,13 @@
       "city_id": "019ef658-6c00-7100-8100-a12345678901",
       "name": "Tour Chinh Phục Đỉnh Fansipan Bằng Cáp Treo",
       "duration": "Nửa ngày (4 tiếng)",
-      "price": { "amount": null, "currency": "VND", "per": "person" },
+      "price": { "amount": 850000, "currency": "VND", "per": "person" },
       "group_size": "Tour ghép đoàn linh hoạt",
       "description": "Trải nghiệm tuyến cáp treo ba dây đạt kỷ lục thế giới, băng qua thung lũng để chạm tay vào cột mốc 3.143m.",
-      "includes": ["Xe đưa đón từ trung tâm thị trấn", "Vé cáp treo khứ hồi", "Vé tàu hỏa leo núi đỉnh"],
-      "excludes": ["Ăn uống tại ga đỉnh", "Hướng dẫn viên đi kèm suốt tuyến"],
-      "difficulty": "easy"
+      "includes": ["Vé cáp treo khứ hồi"],
+      "excludes": ["Xe đưa đón (tùy gói)", "Ăn uống tại ga đỉnh", "Hướng dẫn viên đi kèm suốt tuyến", "Vé tàu hỏa leo núi đỉnh (mua thêm 150.000-200.000đ)"],
+      "difficulty": "easy",
+      "price_note": "Giá niêm yết vé cáp treo khứ hồi người lớn (900.000đ thứ 7 & ngày lễ); các gói tour có xe đưa đón/HDV có thể cao hơn (Nguồn: Traveloka)"
     },
     {
       "id": "019ef658-6c00-7503-8503-e12345678916",
@@ -43,6 +44,19 @@
       "includes": ["Xe ô tô vận chuyển", "Vé tắm lá thuốc truyền thống chuẩn bản", "Bữa tối đặc sản"],
       "excludes": ["Đồ uống gọi thêm trong bữa ăn"],
       "difficulty": "easy"
+    },
+    {
+      "id": "019ef658-6c00-7504-8504-e12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Tour Chợ Phiên Bắc Hà & Bản Phố 1 Ngày",
+      "duration": "1 ngày (khoảng 06:50 - 17:00, chỉ diễn ra vào Chủ Nhật)",
+      "price": { "amount": 624651, "currency": "VND", "per": "person" },
+      "group_size": "Tour ghép đoàn",
+      "description": "Khởi hành từ Sa Pa tới huyện Bắc Hà tham quan phiên chợ vùng cao lớn và nổi tiếng nhất Tây Bắc, nơi các dân tộc H'Mông Hoa, Dao, Tày, Nùng, La Chí tụ họp mua bán, sau đó ghé Bản Phố tìm hiểu đời sống người H'Mông Hoa.",
+      "includes": ["Xe đưa đón khứ hồi", "Hướng dẫn viên", "Vé tham quan chợ và bản"],
+      "excludes": ["Bữa ăn (tùy gói)", "Chi phí mua sắm cá nhân tại chợ"],
+      "difficulty": "easy",
+      "price_note": "Giá tham khảo ~624.651đ/khách bao gồm ăn trưa và vé tham quan, có thể thay đổi theo ngày đặt (Nguồn: Traveloka)"
     }
   ]
 }

@@ -1,18 +1,89 @@
 {
   "_meta": {
     "city": "tuyen-quang-ha-giang",
-    "last_updated": "2026-06-28",
+    "last_updated": "2026-07-13",
     "agent_task": "T-004",
-    "status": "empty",
-    "partial_note": "Chưa có dữ liệu locations type='restaurant' từ SQL — cần bổ sung từ Foody/Google Maps",
+    "status": "partial",
+    "partial_note": "5 quán ăn với tên/địa chỉ thật từ Traveloka (07/2026); giá cụ thể/rating chưa xác minh đủ nguồn cho phép nên để null.",
     "missing_fields": [
-      "id",
-      "address",
-      "hours",
-      "rating",
-      "price_range"
+      "price_range — chưa xác minh đủ nguồn cho phép",
+      "rating — chưa xác minh đủ nguồn cho phép",
+      "hours chính xác — cần xác nhận chéo qua Google Maps"
     ],
-    "data_sources": []
+    "data_sources": [
+      "Traveloka (07/2026)"
+    ]
   },
-  "data": []
+  "data": [
+    {
+      "id": "88b78486-a1c4-4aa6-a20e-762603902496",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Nhà hàng Cá Sông Lô",
+      "type": "restaurant",
+      "address": "Ngõ 382, tổ 6, phường Hà Giang 1, thành phố Hà Giang",
+      "hours": "Thường 10:00–21:30 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Lẩu cá lăng", "cá tầm nướng", "cá tươi sông Lô"],
+      "description": "Nhà hàng nổi trên sông Lô, không gian thoáng đãng ngắm cảnh sông, chuyên các món cá nước ngọt tươi chế biến đa dạng, món signature là lẩu cá.",
+      "tips": "Đặt bàn trước vào buổi tối cuối tuần vì không gian nổi trên sông có giới hạn chỗ ngồi.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "de5901fb-cce7-4626-8930-81fca0ed1c9c",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Top of the Loop",
+      "type": "restaurant",
+      "address": "38 Hai Bà Trưng, thành phố Hà Giang",
+      "hours": "Thường buổi chiều tối — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Pizza lò củi", "đồ uống rooftop"],
+      "description": "Quán rooftop phong cách phương Tây giữa lòng TP. Hà Giang, nổi tiếng với pizza nướng lò củi và không gian ngắm hoàng hôn — điểm dừng chân được nhiều phượt thủ quốc tế yêu thích trước/sau hành trình Hà Giang Loop.",
+      "tips": "Lên sớm trước giờ hoàng hôn để có chỗ ngồi đẹp ở rooftop.",
+      "rating": null,
+      "must_try": false
+    },
+    {
+      "id": "ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Nhà hàng Ethnic House",
+      "type": "restaurant",
+      "address": "Số 15, Phố cổ Đồng Văn, huyện Đồng Văn",
+      "hours": "Thường 10:00–21:00 — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Thắng cố", "gà đen", "thịt gác bếp"],
+      "description": "Nhà hàng nằm ngay trong phố cổ Đồng Văn, phục vụ các món đặc sản vùng cao như thắng cố, gà đen, thịt gác bếp; có kèm dịch vụ lưu trú cho khách muốn nghỉ lại phố cổ.",
+      "tips": "Vị trí thuận tiện để kết hợp dạo phố cổ buổi tối ngay sau bữa ăn.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "d79ea105-3775-47c9-8011-0b04c6f49c65",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Quán cháo Mộc Miên",
+      "type": "street_food",
+      "address": "Số 140, ngõ 2, xã Phố Bảng, huyện Đồng Văn",
+      "hours": "Thường buổi sáng — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Cháo ấu tẩu ninh giò lợn"],
+      "description": "Quán nhỏ tại Phố Bảng chuyên món cháo ấu tẩu — đặc sản giải cảm, chống rét của vùng cao Hà Giang, ninh từ củ ấu tẩu và giò lợn nhiều giờ.",
+      "tips": "Nên ăn thử vào sáng sớm hoặc tối lạnh — đúng thời điểm món cháo ấu tẩu ngon và ấm bụng nhất.",
+      "rating": null,
+      "must_try": true
+    },
+    {
+      "id": "bb7a7ecb-562d-46ad-bdd9-3364f62a5092",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Hạnh Lèng Quán",
+      "type": "market_stall",
+      "address": "Kiot 28, chợ Mèo Vạc, thị trấn Mèo Vạc",
+      "hours": "Theo giờ họp chợ — xác nhận trước khi đến",
+      "price_range": null,
+      "specialties": ["Phở tráng thủ công", "thịt treo gác bếp", "lạp xưởng gác bếp"],
+      "description": "Quầy ăn trong chợ Mèo Vạc nổi tiếng với phở tráng bánh thủ công tại chỗ, ăn kèm thịt treo và lạp xưởng gác bếp đặc trưng vùng cao nguyên đá.",
+      "tips": "Ghé vào đúng phiên chợ Mèo Vạc (Chủ nhật) để trải nghiệm không khí đông vui nhất.",
+      "rating": null,
+      "must_try": false
+    }
+  ]
 }

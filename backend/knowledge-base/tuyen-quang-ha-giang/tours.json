@@ -1,0 +1,74 @@
+{
+  "_meta": {
+    "city": "tuyen-quang-ha-giang",
+    "last_updated": "2026-07-13",
+    "agent_task": "T-005",
+    "status": "partial",
+    "partial_note": "4 tour với giá thật từ Traveloka (07/2026); group_size và excludes chi tiết chưa xác minh đủ nguồn.",
+    "missing_fields": [
+      "group_size — chưa xác minh",
+      "excludes chi tiết — cần xác nhận trực tiếp trên trang đặt tour"
+    ],
+    "data_sources": [
+      "Traveloka (07/2026)"
+    ]
+  },
+  "data": [
+    {
+      "id": "f2289a2f-5267-4369-b15c-e205f255ea2e",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Tour Hà Giang Loop trọn gói 2N3Đ (khứ hồi Hà Nội)",
+      "duration": "2 ngày 3 đêm (2 đêm di chuyển bằng xe giường nằm khứ hồi Hà Nội – Hà Giang)",
+      "price": { "amount": 4233416, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour trọn gói khám phá cung đường Hà Giang Loop: Lũng Cú, Đồng Văn, Mèo Vạc và sông Nho Quế, bao gồm xe khứ hồi Hà Nội – Hà Giang, xe máy (có tài xế hoặc tự lái), chỗ ở, các bữa ăn và hướng dẫn viên.",
+      "includes": ["xe khứ hồi Hà Nội – Hà Giang", "xe máy (tự lái hoặc có tài xế)", "chỗ ở", "các bữa ăn theo chương trình", "hướng dẫn viên"],
+      "excludes": ["chi phí cá nhân", "đồ uống ngoài chương trình"],
+      "image_url": null,
+      "difficulty": "moderate",
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "e95398ab-479c-4225-b611-7ea9e6e8eaa2",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Tour cao nguyên đá Đồng Văn 2N1Đ (ghép, khởi hành từ TP. Hà Giang)",
+      "duration": "2 ngày 1 đêm (không bao gồm xe khứ hồi Hà Nội)",
+      "price": { "amount": 3232993, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour ghép dành cho khách đã có mặt tại TP. Hà Giang, khám phá trọng tâm cao nguyên đá Đồng Văn: dinh thự họ Vương, phố cổ Đồng Văn, cột cờ Lũng Cú và đèo Mã Pí Lèng trong 2 ngày.",
+      "includes": ["xe máy hoặc ô tô theo chương trình", "chỗ ở 1 đêm", "hướng dẫn viên", "vé tham quan theo chương trình"],
+      "excludes": ["xe khứ hồi Hà Nội – Hà Giang", "chi phí cá nhân"],
+      "image_url": null,
+      "difficulty": "easy",
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "28b0dac4-f3bc-4b31-922f-18d86fb0f8a3",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Tour xe máy phượt Hà Giang 3N3Đ — Yên Minh, Mã Pí Lèng, Du Già, Lũng Tám",
+      "duration": "3 ngày 3 đêm (hoặc 3 ngày 2 đêm tùy lịch khởi hành)",
+      "price": { "amount": 5554433, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour xe máy dành cho khách yêu thích phượt, mở rộng cung đường qua rừng thông Yên Minh, đèo Mã Pí Lèng, thung lũng Du Già và làng nghề Lũng Tám, phù hợp người muốn trải nghiệm sâu hơn ngoài cung Loop tiêu chuẩn.",
+      "includes": ["xe máy", "xăng xe", "chỗ ở", "một số bữa ăn theo chương trình", "hướng dẫn viên/lái xe kinh nghiệm"],
+      "excludes": ["chi phí cá nhân", "bảo hiểm du lịch"],
+      "image_url": null,
+      "difficulty": "hard",
+      "price_note": "Nguồn: Traveloka"
+    },
+    {
+      "id": "889b3d73-adc1-4f7b-942f-8b917a1ba70f",
+      "city_id": "019f10ce-2dc5-7125-8351-568ac170d6e1",
+      "name": "Tour Hà Giang mùa hoa tam giác mạch 4N4Đ (khứ hồi Hà Nội)",
+      "duration": "4 ngày 4 đêm",
+      "price": { "amount": 6304037, "currency": "VND", "per": "person" },
+      "group_size": null,
+      "description": "Tour dài ngày nhất trong mùa hoa tam giác mạch (tháng 10–11), phủ trọn cung đường Hà Giang Loop kèm các thung lũng hoa nổi bật như Sủng Là, Lũng Cẩm, phù hợp khách muốn khám phá kỹ và chụp ảnh mùa hoa.",
+      "includes": ["xe khứ hồi Hà Nội – Hà Giang", "xe máy/ô tô theo chương trình", "chỗ ở", "các bữa ăn theo chương trình", "hướng dẫn viên"],
+      "excludes": ["chi phí cá nhân", "đồ uống ngoài chương trình"],
+      "image_url": null,
+      "difficulty": "moderate",
+      "price_note": "Nguồn: Traveloka"
+    }
+  ]
+}

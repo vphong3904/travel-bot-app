@@ -15,6 +15,7 @@ import 'web/screens/rag_monitoring_screen.dart';
 import 'web/screens/city_mapping_screen.dart';
 import 'web/screens/intent_patterns_screen.dart';
 import 'web/screens/destinations_screen.dart';
+import 'web/screens/city_screen.dart';
 import 'web/screens/hotels_screen.dart';
 import 'web/screens/tours_screen.dart';
 import 'web/screens/foods_screen.dart';
@@ -146,6 +147,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/content/destinations',
             name: 'content-destinations',
             builder: (_, __) => const DestinationsScreen(),
+          ),
+          GoRoute(
+            path: '/content/city',
+            name: 'content-city',
+            builder: (_, __) => const CityScreen(),
           ),
           GoRoute(
             path: '/content/hotels',

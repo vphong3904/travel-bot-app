@@ -1,16 +1,20 @@
 {
   "_meta": {
     "city": "lao-cai-sapa",
-    "last_updated": "2026-06-29",
+    "last_updated": "2026-07-13",
     "agent_task": "T-002 (+ T-037 điểm vui chơi)",
-    "status": "complete",
+    "status": "partial",
     "missing_fields": [
-      "coordinates các điểm vui chơi (chưa verify — để null)"
+      "coordinates các điểm vui chơi (chưa verify — để null)",
+      "coordinates Bản Tả Van, Nhà thờ đá, Đèo Ô Quy Hồ (chưa verify — để null)",
+      "entry_fee Đèo Ô Quy Hồ (giá thấy trên vài trang thứ 3 nhưng không thuộc danh sách nguồn cho phép — để null)"
     ],
     "data_sources": [
-      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026)",
-      "Google Maps (06/2026)",
-      "T-037: Sun World Fansipan Legend — vecaptreofansipansapa.com & Traveloka (2025)"
+      "Vietnam Tourism: vietnamtourism.gov.vn (06/2026, 07/2026)",
+      "Google Maps (06/2026, 07/2026) — chỉ dùng chéo kiểm địa chỉ/giờ mở cửa",
+      "Traveloka (07/2026)",
+      "TripAdvisor (07/2026)",
+      "T-037: Sun World Fansipan Legend — Traveloka (2025-2026)"
     ]
   },
   "data": [
@@ -33,7 +37,7 @@
         "review_count": 3400
       },
       "verified": true,
-      "entry_fee": "Liên hệ điểm đến để có giá cập nhật"
+      "entry_fee": "Vé cáp treo khứ hồi: người lớn 850.000đ (900.000đ vào thứ 7 & ngày lễ), trẻ em 1m–1,4m 550.000đ, dưới 1m miễn phí. Vé tàu hỏa leo núi Mường Hoa khứ hồi 200.000đ (Nguồn: Traveloka)"
     },
     {
       "id": "019ef658-6c00-7202-8202-b12345678903",
@@ -54,7 +58,7 @@
         "review_count": 1850
       },
       "verified": true,
-      "entry_fee": "Liên hệ điểm đến để có giá cập nhật"
+      "entry_fee": "150.000đ/người lớn, 70.000đ/trẻ em cao 1m-1,4m, dưới 1m miễn phí (Nguồn: TripAdvisor)"
     },
     {
       "id": "019ef658-6c00-7203-8203-b12345678904",
@@ -138,7 +142,70 @@
         "review_count": null
       },
       "verified": true,
-      "entry_fee": "Cáp treo (khách ngoại tỉnh): người lớn & trẻ >1m4 750.000đ, trẻ 1m–1m4 550.000đ, dưới 1m miễn phí. Tàu Mường Hoa ~100.000đ/lượt. (nguồn: vecaptreofansipansapa.com & Traveloka, 2025 — có thể thay đổi)"
+      "entry_fee": "Cáp treo khứ hồi: người lớn 850.000đ (900.000đ thứ 7 & lễ), trẻ em 1m–1,4m 550.000đ. Combo cáp treo + buffet trưa 1.100.000đ; combo cáp treo + tàu Mường Hoa + buffet 1.250.000đ (Nguồn: Traveloka)"
+    },
+    {
+      "id": "019ef658-6c00-7206-8206-b12345678930",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Bản Tả Van",
+      "type": "culture",
+      "address": "Xã Tả Van, cách trung tâm Sa Pa khoảng 12km, giữa thung lũng Mường Hoa",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cả ngày — xác nhận trước khi đến",
+      "description": "Bản làng của người Giáy, H'Mông và Dao Đỏ nằm giữa lòng thung lũng Mường Hoa, nổi tiếng với cầu treo Cầu Mây bắc qua suối Mường Hoa, ruộng bậc thang trải dài và bãi đá cổ khắc hình bí ẩn hơn 2.000 năm tuổi gần đó.",
+      "tips": "Đi bộ (trek) từ Bản Cát Cát hoặc Lao Chải sang Tả Van mất khoảng nửa ngày; nên ở lại homestay qua đêm để ngắm thung lũng lúc sáng sớm và chiều tà đẹp nhất. Có thể tắm lá thuốc, thuê trang phục dân tộc chụp ảnh tại Cầu Mây.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "019ef658-6c00-7207-8207-b12345678931",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Nhà thờ đá Sa Pa",
+      "type": "temple",
+      "address": "Đường Fansipan, trung tâm thị trấn Sa Pa, Lào Cai",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cả ngày — giờ lễ và giờ mở cửa bên trong xác nhận trước khi đến",
+      "description": "Nhà thờ Công giáo cổ kính do người Pháp xây dựng đầu thế kỷ 20, hoàn toàn bằng đá đẽo, là công trình kiến trúc biểu tượng và trung tâm sinh hoạt của thị trấn Sa Pa, nằm ngay quảng trường trung tâm gần chợ đêm và chợ tình.",
+      "tips": "Ghé buổi tối khi khu quảng trường trước nhà thờ lên đèn và nhộn nhịp chợ đêm; đây cũng là điểm hẹn của chợ tình Sa Pa vào tối thứ 7.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": null
+    },
+    {
+      "id": "019ef658-6c00-7208-8208-b12345678932",
+      "city_id": "019ef658-6c00-7100-8100-a12345678901",
+      "name": "Đèo Ô Quy Hồ (Cổng Trời)",
+      "type": "mountain",
+      "address": "Ranh giới Sa Pa (Lào Cai) và Tam Đường (Lai Châu), cách trung tâm Sa Pa khoảng 15-18km",
+      "coordinates": {
+        "lat": null,
+        "lng": null
+      },
+      "hours": "Cả ngày — nên tránh giờ có sương mù dày để đảm bảo an toàn và tầm nhìn",
+      "description": "Một trong 'tứ đại đỉnh đèo' hiểm trở và hùng vĩ bậc nhất Việt Nam, dài khoảng 50km nối Lào Cai với Lai Châu, đỉnh đèo ở độ cao khoảng 2.000m mang tên Cổng Trời — điểm ngắm toàn cảnh dãy Hoàng Liên Sơn và đỉnh Fansipan.",
+      "tips": "Không nên di chuyển qua đèo vào ngày mưa/sương mù dày vì đường đèo quanh co và có vực sâu; thời điểm đẹp nhất để ngắm cảnh là tháng 3-5 hoặc 9-11 khi trời quang.",
+      "image_url": null,
+      "stats": {
+        "rating_avg": null,
+        "review_count": null
+      },
+      "verified": true,
+      "entry_fee": null
     }
   ]
 }

@@ -1,15 +1,16 @@
 {
   "_meta": {
     "city": "tuyen-quang-ha-giang",
-    "last_updated": "2026-06-28",
+    "last_updated": "2026-07-13",
     "agent_task": "T-004",
     "status": "complete",
-    "partial_note": null,
+    "partial_note": "Đã cập nhật where_to_eat trỏ đúng UUID restaurants.json cùng thư mục; bổ sung 6 món mới bên cạnh 4 món sẵn có.",
     "missing_fields": [
-      "price_range (nhiều món chưa có nguồn xác thực)"
+      "price_range (chưa có nguồn xác thực đủ điều kiện cho phép)"
     ],
     "data_sources": [
       "vietnamtourism.gov.vn (06/2026)",
+      "Traveloka (07/2026)",
       "Kiến thức phổ biến — tên & mô tả đặc sản địa phương"
     ]
   },
@@ -19,66 +20,110 @@
       "local_name": "Thắng cố ngựa",
       "category": "main_dish",
       "description": "Món lẩu truyền thống của người H'Mông làm từ nội tạng và thịt ngựa hầm, ăn cùng lá thơm và rượu ngô.",
-      "where_to_eat": [
-        "Chợ phiên Đồng Văn",
-        "Chợ phiên Mèo Vạc"
-      ],
+      "where_to_eat": ["ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b"],
       "price_range": null,
       "must_try": true,
       "vegetarian": false,
-      "tags": [
-        "đặc sản",
-        "phiên chợ"
-      ]
+      "tags": ["đặc sản", "phiên chợ"]
     },
     {
       "name": "Mèn Mén",
       "local_name": "Mèn mén",
       "category": "main_dish",
       "description": "Cơm ngô đồ hấp của người H'Mông, ăn kèm canh rau rừng hoặc thắng cố, là lương thực chính vùng cao.",
-      "where_to_eat": [
-        "Các bản H'Mông quanh Đồng Văn",
-        "Nhà hàng địa phương Hà Giang"
-      ],
+      "where_to_eat": ["ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b"],
       "price_range": null,
       "must_try": true,
       "vegetarian": true,
-      "tags": [
-        "đặc sản dân tộc"
-      ]
+      "tags": ["đặc sản dân tộc"]
     },
     {
       "name": "Rượu Ngô Nàng Đôn",
       "local_name": "Rượu ngô",
       "category": "drink",
       "description": "Rượu ngô ủ men lá truyền thống của vùng cao nguyên đá, thường uống trong lễ tết và hội họp.",
-      "where_to_eat": [
-        "Chợ phiên Đồng Văn"
-      ],
+      "where_to_eat": ["bb7a7ecb-562d-46ad-bdd9-3364f62a5092"],
       "price_range": null,
       "must_try": false,
       "vegetarian": true,
-      "tags": [
-        "đồ uống",
-        "truyền thống"
-      ]
+      "tags": ["đồ uống", "truyền thống"]
     },
     {
       "name": "Lạp Xưởng Gác Bếp",
       "local_name": "Lạp xưởng gác bếp",
       "category": "specialty",
       "description": "Lạp xưởng hun khói truyền thống treo gác bếp, vị đậm đà, thường mang về làm quà.",
-      "where_to_eat": [
-        "Chợ Đồng Văn",
-        "Chợ Mèo Vạc"
-      ],
+      "where_to_eat": ["bb7a7ecb-562d-46ad-bdd9-3364f62a5092"],
       "price_range": null,
       "must_try": true,
       "vegetarian": false,
-      "tags": [
-        "mang về",
-        "quà tặng"
-      ]
+      "tags": ["mang về", "quà tặng"]
+    },
+    {
+      "name": "Cháo Ấu Tẩu",
+      "local_name": "Cháo ấu tẩu",
+      "category": "specialty",
+      "description": "Cháo ninh từ củ ấu tẩu (đã khử độc) cùng giò lợn, gạo nếp cái hoa vàng, có vị đắng nhẹ đặc trưng; được xem là món ăn vừa giải cảm vừa chống rét của vùng cao Hà Giang.",
+      "where_to_eat": ["d79ea105-3775-47c9-8011-0b04c6f49c65"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "giải cảm", "phố bảng"]
+    },
+    {
+      "name": "Bánh Tam Giác Mạch",
+      "local_name": "Bánh tam giác mạch",
+      "category": "snack",
+      "description": "Bánh làm từ hạt tam giác mạch xay mịn, hấp hoặc nướng trên bếp than, vị bùi nhẹ đặc trưng của vùng cao nguyên đá — gắn liền với mùa hoa tam giác mạch tháng 10–11.",
+      "where_to_eat": ["ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": true,
+      "tags": ["đặc sản", "mùa hoa tam giác mạch", "mang về"]
+    },
+    {
+      "name": "Thịt Trâu Gác Bếp",
+      "local_name": "Thịt trâu gác bếp",
+      "category": "specialty",
+      "description": "Thịt trâu tẩm ướp mắc khén, gừng, ớt rồi hun khói trên gác bếp nhiều ngày, dai và thơm đặc trưng — món quà mang về phổ biến nhất khi du lịch Hà Giang.",
+      "where_to_eat": ["ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b", "bb7a7ecb-562d-46ad-bdd9-3364f62a5092"],
+      "price_range": null,
+      "must_try": true,
+      "vegetarian": false,
+      "tags": ["đặc sản", "mang về", "quà tặng"]
+    },
+    {
+      "name": "Gà Đen (Gà H'Mông)",
+      "local_name": "Gà đen",
+      "category": "main_dish",
+      "description": "Giống gà bản địa da/thịt/xương màu đen đặc trưng của người H'Mông, thường chế biến hấp, nướng hoặc lẩu, thịt chắc và ngọt hơn gà thường.",
+      "where_to_eat": ["ab5bf49c-eb49-43e7-b83a-ccbe0d940a3b"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc sản", "gà bản địa"]
+    },
+    {
+      "name": "Cá Tầm / Cá Lăng Sông Lô",
+      "local_name": "Cá sông Lô",
+      "category": "main_dish",
+      "description": "Các loại cá nước ngọt đánh bắt/nuôi trên sông Lô, chế biến thành lẩu cá lăng hoặc cá tầm nướng — đặc sản của khu vực TP. Hà Giang ven sông.",
+      "where_to_eat": ["88b78486-a1c4-4aa6-a20e-762603902496"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc sản", "hải sản nước ngọt"]
+    },
+    {
+      "name": "Phở Tráng Mèo Vạc",
+      "local_name": "Phở tráng",
+      "category": "main_dish",
+      "description": "Bánh phở tráng thủ công tại chỗ ngay trong chợ Mèo Vạc, ăn nóng cùng thịt treo hoặc nước dùng xương — món sáng quen thuộc của người dân vùng cao nguyên đá.",
+      "where_to_eat": ["bb7a7ecb-562d-46ad-bdd9-3364f62a5092"],
+      "price_range": null,
+      "must_try": false,
+      "vegetarian": false,
+      "tags": ["đặc sản", "phiên chợ", "mèo vạc"]
     }
   ]
 }

@@ -74,7 +74,6 @@ async def send_message(
     current_user: User = Depends(get_current_user),
 ):
     await _assert_session_owner(db, session_id, current_user.id)
-    rag = get_rag()
 
     user_msg = ChatMessage(
         id=str(uuid_v7()),
@@ -95,6 +94,16 @@ async def send_message(
     planner = await trip_chat_planner.handle_planning_turn(
         db, str(current_user.id), history[:-1], payload.content
     )
+    # Bug đã sửa: get_rag() (import + khởi tạo RAGPipeline) trước đây được gọi
+    # NGAY ĐẦU HÀM, trước cả khi biết lượt này có phải Trip AI Planner hay
+    # không. Nếu RAG/Qdrant/Gemini có trục trặc (thiếu key, Qdrant sập, model
+    # embedding lỗi tải...), get_rag() ném lỗi → request 500 NGAY LẬP TỨC,
+    # trước khi user_msg kịp lưu — kể cả với những tin nhắn lẽ ra được planner
+    # xử lý và không hề đụng tới RAG. Hậu quả: chat thường lỗi, mà lượt
+    # planner trong chat (vd tin nhắn đầu tiên của 1 session mới) cũng lỗi
+    # lây, tin nhắn không được lưu → session vẫn 0 tin nhắn → bị ẩn khỏi danh
+    # sách (xem has_message filter ở chat_sessions.py) → trông như "không tạo
+    # được phiên chat mới". Chỉ gọi get_rag() ở ĐÚNG nhánh cần RAG (bên dưới).
     if planner is not None:
         assistant_msg = ChatMessage(
             id=str(uuid_v7()),
@@ -116,6 +125,7 @@ async def send_message(
         )
         return assistant_msg
 
+    rag = get_rag()
     nlp = preprocess(payload.content, history=history)
 
     t0 = time.monotonic()
@@ -194,12 +204,18 @@ async def stream_message(
     session_id_str = str(session_id)
     question = payload.content
     user_id_str = str(current_user.id)
-    rag = get_rag()
 
     # ── Req 2: phát hiện luồng lên lịch trình trước khi gọi RAG ───────────────
     planner = await trip_chat_planner.handle_planning_turn(
         db, user_id_str, history[:-1], question
     )
+    # Bug đã sửa: get_rag() (import + khởi tạo RAGPipeline, kéo theo
+    # google-genai/qdrant-client/sentence-transformers) trước đây được gọi ở
+    # đây — TRƯỚC khi biết lượt này có phải Trip AI Planner không. RAG/Qdrant
+    # có sự cố (thiếu key, Qdrant sập, model lỗi tải...) sẽ làm crash request
+    # ngay cả với lượt planner-only, KHÔNG hề đụng tới RAG. Chỉ khởi tạo khi
+    # thật sự cần (planner is None), ngay trước khi gọi rag.stream_query().
+    rag = get_rag() if planner is None else None
 
     async def event_generator() -> AsyncGenerator[str, None]:
         full_content: list[str] = []

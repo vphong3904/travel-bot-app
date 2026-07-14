@@ -1,53 +1,43 @@
 {
   "_meta": {
-    "city": "lam-dong-mui-ne",
-    "last_updated": "2026-06-24",
+    "city": "lao-cai-sapa",
+    "last_updated": "2026-07-13",
     "agent_task": "T-001",
     "status": "complete",
     "missing_fields": [],
-    "data_sources": ["Tổng cục Du lịch Việt Nam", "Dữ liệu địa lý tổng hợp"]
+    "data_sources": [
+      "Traveloka (07/2026)",
+      "vietnamtourism.gov.vn (07/2026)",
+      "TripAdvisor (07/2026)"
+    ],
+    "fix_note": "2026-07-13: city.json trước đó bị dán nhầm dữ liệu của lam-dong-mui-ne (id/nội dung không khớp city_id 019ef658-6c00-7100-8100-a12345678901 mà 7 file khác trong thư mục đều dùng). Đã khôi phục lại đúng id gốc của Sapa và ghi lại nội dung thành phố cho đúng."
   },
   "data": {
-    "id": "019f3b22-1000-7000-8000-000000000000",
-    "name": "Đà Lạt - Mũi Né (Lâm Đồng - Bình Thuận)",
-    "aliases": ["Lâm Đồng - Mũi Né", "Lên rừng xuống biển", "Da Lat - Mui Ne"],
-    "country": "Vietnam",
-    "region": "Tây Nguyên & Duyên hải Nam Trung Bộ",
-    "coordinates": {
-      "lat": 11.4500,
-      "lng": 108.3000
+    "id": "019ef658-6c00-7100-8100-a12345678901",
+    "name": "Sa Pa",
+    "slug": "lao-cai-sapa",
+    "province": "Lào Cai",
+    "region": "Trung du và miền núi phía Bắc",
+    "description": "Thị trấn trong sương mù trên dãy Hoàng Liên Sơn, nổi tiếng với đỉnh Fansipan — nóc nhà Đông Dương, ruộng bậc thang kỳ vĩ và văn hóa đa sắc tộc H'Mông, Dao Đỏ, Giáy, Tày.",
+    "special": "Nóc nhà Đông Dương Fansipan & ruộng bậc thang Mường Hoa",
+    "best_season": "Tháng 3–5 (hoa nở, khô ráo) và tháng 9–11 (lúa chín vàng ruộng bậc thang); tháng 12–1 se lạnh, đôi khi có băng tuyết trên đỉnh cao",
+    "best_months": [3, 4, 5, 9, 10, 11],
+    "weather": "Khí hậu á nhiệt đới núi cao mát mẻ quanh năm, nhiệt độ trung bình 15–18°C; mùa hè (6–8) mát dịu ban ngày nhưng có mưa; mùa đông (12–2) lạnh sâu, có thể xuống dưới 0°C và xuất hiện băng giá/tuyết trên đỉnh Fansipan, đèo Ô Quy Hồ.",
+    "cuisine_summary": "Thắng cố ngựa, lợn cắp nách nướng, cá hồi/cá tầm Sa Pa, khâu nhục, cơm lam, rau cải mèo, rượu táo mèo — đậm bản sắc ẩm thực Tây Bắc vùng cao.",
+    "budget": {
+      "low": 1800000,
+      "high": 5500000,
+      "currency": "VND",
+      "note": "Chi phí/người cho 3N2Đ (không bao gồm vé máy bay/tàu khứ hồi), tùy hạng lưu trú và phương tiện"
     },
-    "description": "Hành trình nối tuyến độc đáo mang tên 'Lên rừng xuống biển', kết hợp hoàn hảo giữa cái lạnh mờ sương, rừng thông ngút ngàn của cao nguyên Đà Lạt (Lâm Đồng) và nắng vàng, biển xanh, đồi cát mênh mông của Mũi Né (Bình Thuận).",
-    "best_time_to_visit": "Tháng 11 đến tháng 3 (Thời tiết khô ráo, Đà Lạt se lạnh mờ sương, Mũi Né nắng đẹp không quá gắt).",
-    "timezone": "Asia/Ho_Chi_Minh",
-    "currency": "VND",
-    "language": "Vietnamese",
-    "tags": [
-      "Nối tuyến",
-      "Lên rừng xuống biển",
-      "Nghỉ dưỡng",
-      "Thiên nhiên",
-      "Phượt đèo"
-    ],
-    "weather_avg": {
-      "dry_season": {
-        "months": "Tháng 11 - Tháng 4",
-        "temp_c_dalat": "14°C - 24°C",
-        "temp_c_muine": "25°C - 32°C",
-        "condition": "Đà Lạt lạnh về đêm, ban ngày nắng ấm. Mũi Né nắng đẹp, biển êm."
-      },
-      "rainy_season": {
-        "months": "Tháng 5 - Tháng 10",
-        "temp_c_dalat": "16°C - 25°C",
-        "temp_c_muine": "26°C - 33°C",
-        "condition": "Đà Lạt mưa rào vào chiều tối, Mũi Né có thể có mưa rải rác hoặc áp thấp."
-      }
+    "image_url": null,
+    "stats": {
+      "rating_avg": null,
+      "review_count": null,
+      "favorite_count": null,
+      "view_count": null
     },
-    "distance_info": {
-      "route": "Đà Lạt - Mũi Né",
-      "distance_km": 155,
-      "estimated_travel_time_hours": 3.5,
-      "main_roads": ["QL28B (Đèo Đại Ninh)", "QL28 (Đèo Gia Bắc)"]
-    }
+    "categories": ["nature", "mountain", "culture", "trekking", "explore"],
+    "is_active": true
   }
 }

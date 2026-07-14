@@ -116,6 +116,20 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning(f"[Startup] Warm-up embedding model failed: {e}")
 
+        # Bước 2a'': warm-up cross-encoder reranker (nếu bật RAG_RERANK) NGAY LÚC
+        # STARTUP thay vì lazy-load ở request đầu tiên — trước đây chỉ bge-m3
+        # được warm ở đây, còn reranker (hybrid_search._get_reranker) chưa có
+        # bước này nên request user đầu tiên chạm rerank sẽ tự dính ~40s load
+        # model. Warm cả 2 ở startup (nền, không chặn response) cho đồng nhất.
+        try:
+            from app.services.rag_pipeline import _RERANK_ENABLED
+            if _RERANK_ENABLED:
+                from app.services.hybrid_search import _get_reranker
+                await asyncio.to_thread(_get_reranker)
+                logger.info("[Startup] Cross-encoder reranker warm-up complete")
+        except Exception as e:
+            logger.warning(f"[Startup] Warm-up reranker failed: {e}")
+
         # Bước 2a': [OPT-2.4] nạp sẵn Q&A phổ biến vào cache (trả lời không cần API)
         try:
             from app.services.prewarm import prewarm_common_qa
