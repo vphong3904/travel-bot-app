@@ -127,8 +127,9 @@ class UnansweredList extends ConsumerWidget {
                         // TP-005/008: AI soạn sẵn draft KB để admin duyệt/sửa
                         if (!isPromoted && canPromote) ...[
                           OutlinedButton.icon(
-                            onPressed: () => _aiSuggest(
-                                context, ref, q['id'] as String),
+                            onPressed: () => _aiSuggest(context, ref,
+                                q['id'] as String,
+                                q['answer_message_id'] as String?),
                             icon: const Icon(Icons.auto_awesome, size: 14),
                             label: const Text('AI soạn draft',
                                 style: TextStyle(fontSize: 12)),
@@ -144,8 +145,9 @@ class UnansweredList extends ConsumerWidget {
                         OutlinedButton.icon(
                           onPressed: isPromoted
                               ? null
-                              : () => _promoteToKb(
-                                  context, ref, q['id'] as String),
+                              : () => _promoteToKb(context, ref,
+                                  q['id'] as String,
+                                  q['answer_message_id'] as String?),
                           icon: Icon(
                             isPromoted ? Icons.check : Icons.add,
                             size: 14,
@@ -173,10 +175,12 @@ class UnansweredList extends ConsumerWidget {
     );
   }
 
-  Future<void> _promoteToKb(
-      BuildContext context, WidgetRef ref, String questionId) async {
+  Future<void> _promoteToKb(BuildContext context, WidgetRef ref,
+      String questionId, String? answerMessageId) async {
     try {
-      await ref.read(chatRepositoryProvider).promoteToKb(questionId);
+      await ref
+          .read(chatRepositoryProvider)
+          .promoteToKb(questionId, answerMessageId: answerMessageId);
       ref.invalidate(unansweredQuestionsProvider);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -214,8 +218,8 @@ class UnansweredList extends ConsumerWidget {
   }
 
   // ── TP-005/008: AI soạn draft → dialog duyệt/sửa → lưu vào KB ──────────────
-  Future<void> _aiSuggest(
-      BuildContext context, WidgetRef ref, String questionId) async {
+  Future<void> _aiSuggest(BuildContext context, WidgetRef ref,
+      String questionId, String? answerMessageId) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -242,8 +246,10 @@ class UnansweredList extends ConsumerWidget {
       builder: (_) => _AiDraftDialog(
         question: res['question']?.toString() ?? '',
         draft: draft,
-        onSave: (edited) =>
-            ref.read(chatRepositoryProvider).promoteToKb(questionId, draft: edited),
+        onSave: (edited) => ref.read(chatRepositoryProvider).promoteToKb(
+            questionId,
+            draft: edited,
+            answerMessageId: answerMessageId),
       ),
     );
     if (saved == true && context.mounted) {

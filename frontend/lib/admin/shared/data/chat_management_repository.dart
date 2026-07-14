@@ -69,11 +69,17 @@ class ChatManagementRepository {
 
   /// Promote câu hỏi thành KB entry. `draft` (title/category/content) là
   /// nội dung admin đã duyệt từ AI — bỏ trống thì backend copy nguyên câu hỏi.
+  /// `answerMessageId` (field answer_message_id) để backend đánh dấu luôn
+  /// câu trả lời gốc là ĐÃ XỬ LÝ — nếu không truyền, câu này vẫn nằm trong
+  /// danh sách "chưa trả lời" dù đã được promote.
   Future<void> promoteToKb(String questionId,
-      {Map<String, dynamic>? draft}) async {
+      {Map<String, dynamic>? draft, String? answerMessageId}) async {
     await _dio.post<void>(
       '/admin/unanswered-questions/$questionId/promote-to-kb',
-      data: draft,
+      data: {
+        ...?draft,
+        if (answerMessageId != null) 'answer_message_id': answerMessageId,
+      },
     );
   }
 

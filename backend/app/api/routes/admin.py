@@ -107,12 +107,21 @@ async def _overview_data(db: AsyncSession, period: str) -> dict:
     pending_flagged = await db.scalar(
         select(func.count(ChatSession.id)).where(ChatSession.is_flagged == True)
     )
-    # Unanswered = user messages có feedback âm hoặc chưa có feedback
+    # Unanswered = câu trả lời độ tin thấp HOẶC bị chấm sai, CHƯA xử lý —
+    # khớp đúng logic /admin/unanswered-questions (trước đây đếm nhầm mọi tin
+    # nhắn user chưa có feedback, ra số ảo vì user hiếm khi bấm feedback).
     pending_unanswered = await db.scalar(
         select(func.count(ChatMessage.id)).where(
-            ChatMessage.role == "user",
-            ChatMessage.feedback == None,  # noqa: E711
+            ChatMessage.role == "assistant",
             ChatMessage.created_at >= since,
+            or_(
+                ChatMessage.confidence_score < 0.5,
+                ChatMessage.feedback == -1,
+            ),
+            or_(
+                ChatMessage.feedback_resolved.is_(None),
+                ChatMessage.feedback_resolved == False,  # noqa: E712
+            ),
         )
     )
 
@@ -2140,6 +2149,20 @@ async def promote_to_kb(
         category=body.get("category", "faq"),
         content=content or title,
     )
+    # Đã soạn KB từ câu hỏi này → coi như xử lý xong, bỏ khỏi danh sách
+    # "chưa trả lời" luôn (trước đây phải bấm thêm nút "Đã xử lý" riêng,
+    # khiến câu đã promote vẫn nằm lì trong tổng chưa xử lý).
+    answer_message_id = body.get("answer_message_id")
+    if answer_message_id:
+        try:
+            await db.execute(
+                update(ChatMessage)
+                .where(ChatMessage.id == answer_message_id)
+                .values(feedback_resolved=True)
+            )
+            await db.commit()
+        except Exception:
+            pass
     return {"id": entry.id, "status": "pending"}
 
 
@@ -2160,9 +2183,22 @@ async def ai_suggest_kb(
     if not question:
         raise HTTPException(400, "Câu hỏi rỗng")
 
+    # Tin nhắn NGAY TRƯỚC câu hỏi trong cùng session — làm ngữ cảnh cho AI,
+    # tránh suy diễn sai các phản hồi ngắn kiểu "uk"/"ừ" (xem kb_suggestion_service).
+    prev_msg = await db.scalar(
+        select(ChatMessage)
+        .where(
+            ChatMessage.session_id == msg.session_id,
+            ChatMessage.created_at < msg.created_at,
+        )
+        .order_by(ChatMessage.created_at.desc())
+        .limit(1)
+    )
+    context = (prev_msg.content or "").strip() if prev_msg else None
+
     from app.services.kb_suggestion_service import suggest_kb_draft
     try:
-        draft = await suggest_kb_draft(question)
+        draft = await suggest_kb_draft(question, context=context)
     except RuntimeError as e:
         raise HTTPException(502, str(e))
     return {"question": question[:300], "draft": draft}
